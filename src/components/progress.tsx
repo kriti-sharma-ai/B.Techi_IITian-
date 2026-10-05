@@ -89,7 +89,7 @@ function ContinueRow({ subject, topicSlug }: { subject: Subject; topicSlug?: str
     <Link href={href} className="card card-hover group flex items-center gap-4 p-4">
       <div className="min-w-0 flex-1">
         <p className="font-semibold">{subject.name}</p>
-        <p className="truncate text-sm text-muted">{found ? `Unit ${found.unit.number} · ${found.topic.title}` : "Overview"}</p>
+        <p className="truncate text-sm text-muted">{found ? `Week ${found.unit.number} · ${found.topic.title}` : "Overview"}</p>
         <div className="mt-3 flex items-center gap-3">
           <ProgressBar value={percent} label={`${subject.name} progress`} />
           <span className="w-9 text-right text-xs font-semibold tabular-nums">{Math.round(percent)}%</span>
@@ -117,12 +117,10 @@ export function ContinueLearning({ limit = 3 }: { limit?: number }) {
     );
 
   if (recent.length === 0) {
-    const starters = ["statistics", "python-for-data-science", "marketing-management"]
-      .map((s) => subjects.find((x) => x.slug === s)!)
-      .slice(0, limit);
+    const starters = subjects.filter((s) => s.level === "foundation").slice(0, limit);
     return (
       <div>
-        <p className="mb-3 text-sm text-muted">Nothing started yet. Popular places to begin:</p>
+        <p className="mb-3 text-sm text-muted">Nothing started yet. Begin with the Foundation Level:</p>
         <div className="grid gap-3 md:grid-cols-3">
           {starters.map((s) => (
             <ContinueRow key={s.slug} subject={s} />

@@ -1,422 +1,177 @@
 import type { Program, Subject } from "../types";
 
+// IIT Madras BS in Management and Data Science — official structure.
+// Source: study.iitm.ac.in academics page (course list, codes, credits).
+// Course content (weeks, topics, resources) is intentionally empty for now.
+
+export const PROGRAM_SLUG = "iitm-bs";
+
 export const programs: Program[] = [
   {
-    slug: "iit-mandi",
-    name: "IIT Mandi",
-    tagline: "Programs & Subjects",
+    slug: PROGRAM_SLUG,
+    name: "IIT Madras BS",
+    degree: "BS in Management and Data Science",
+    tagline: "Management & Data Science",
     description:
-      "Core engineering mathematics, programming and computer science courses for the B.Tech programme.",
-    university: "IIT Mandi",
-    degree: "B.Tech",
+      "Every course of the IIT Madras BS in Management and Data Science, organised level by level: Foundation, Diploma and BS Degree.",
+    university: "IIT Madras",
     accent: "yellow",
-    semesters: 8,
-  },
-  {
-    slug: "ba",
-    name: "B.A.",
-    tagline: "Arts & Humanities",
-    description: "Sociology, economics and political science, from foundation courses onwards.",
-    university: "BTechi Open Curriculum",
-    degree: "B.A.",
-    accent: "green",
-    semesters: 6,
-  },
-  {
-    slug: "management",
-    name: "Management",
-    tagline: "Business & Management",
-    description: "Principles of management, marketing and accounting for BBA students.",
-    university: "BTechi Open Curriculum",
-    degree: "BBA",
-    accent: "blue",
-    semesters: 6,
-  },
-  {
-    slug: "data-science",
-    name: "Data Science",
-    tagline: "Data & Analytics",
-    description: "Statistics, Python and machine learning, organised unit by unit.",
-    university: "BTechi Open Curriculum",
-    degree: "B.Sc. Data Science",
-    accent: "purple",
-    semesters: 6,
+    totalCredits: 142,
+    maxYears: 8,
+    levels: [
+      {
+        slug: "foundation",
+        name: "Foundation Level",
+        short: "Foundation",
+        accent: "yellow",
+        credits: 32,
+        cumulativeCredits: 32,
+        courses: "8 courses",
+        duration: "1–3 years",
+        effort: "10 hrs/course/week",
+        entry: "Clear the Qualifier Process",
+        exit: "Foundation Certificate from IITM CODE",
+      },
+      {
+        slug: "diploma",
+        name: "Diploma Level",
+        short: "Diploma",
+        accent: "blue",
+        credits: 60,
+        cumulativeCredits: 92,
+        courses: "14 courses + 2 projects",
+        duration: "1.5–3 years",
+        effort: "15 hrs/course/week",
+        entry: "All 8 Foundation courses completed",
+        exit: "Diploma in Data Analytics for Business",
+        groups: [
+          {
+            slug: "data-analytics-for-business",
+            name: "Diploma in Data Analytics for Business",
+            credits: 36,
+            summary: "8 courses + 2 projects: databases, analytics and core management applied to business problems.",
+          },
+          {
+            slug: "other-diploma-courses",
+            name: "Other Diploma Level courses",
+            credits: 24,
+            summary: "6 courses in economics, finance and management required to complete the Diploma Level.",
+          },
+        ],
+      },
+      {
+        slug: "degree",
+        name: "BS Degree Level",
+        short: "Degree",
+        accent: "purple",
+        credits: 50,
+        cumulativeCredits: 142,
+        courses: "Core + electives",
+        duration: "1–4 years",
+        effort: "15 hrs/course/week",
+        entry: "All Diploma courses and projects completed (CGPA ≥ 6.0, projects ≥ 7.0)",
+        exit: "BS in Management and Data Science",
+        groups: [
+          { slug: "core", name: "Core courses", credits: 24, summary: "6 core courses taken by every Degree Level learner." },
+          { slug: "electives", name: "Elective courses", credits: 26, summary: "Choose electives to complete the 50 Degree Level credits." },
+        ],
+      },
+    ],
   },
 ];
 
-const t = (slug: string, title: string, summary: string, minutes = 25) => ({
-  slug,
-  title,
-  summary,
-  minutes,
-});
+type Row = [name: string, slug: string, code: string | undefined, credits?: number];
+
+const make =
+  (level: string, prerequisites: string, group?: string, kind: Subject["kind"] = "course") =>
+  ([name, slug, code, credits = 4]: Row): Subject => ({
+    slug,
+    name,
+    code,
+    programSlug: PROGRAM_SLUG,
+    level,
+    group,
+    kind,
+    credits,
+    prerequisites,
+    units: [],
+  });
+
+const foundation: Row[] = [
+  ["Mathematics for Data Science I", "mathematics-for-data-science-1", "BSMA1001"],
+  ["Statistics for Data Science I", "statistics-for-data-science-1", "BSMA1002"],
+  ["Computational Thinking", "computational-thinking", "BSCS1001"],
+  ["English I", "english-1", "BSHS1001"],
+  ["Principles of Economics", "principles-of-economics", "BSMS1201"],
+  ["Financial Accounting", "financial-accounting", "BSMS1202"],
+  ["Business Statistics", "business-statistics", "BSMS1203"],
+  ["Management Thought and Practice", "management-thought-and-practice", "BSMS1204"],
+];
+
+const dab: Row[] = [
+  ["Python for Data Analytics", "python-for-data-analytics", "BSMS2201"],
+  ["Data Management", "data-management", "BSMS2202"],
+  ["Analysis of Economic Data", "analysis-of-economic-data", "BSMS2203"],
+  ["Marketing Analytics", "marketing-analytics", "BSMS3201"],
+  ["HR Analytics", "hr-analytics", "BSMS3202"],
+  ["Financial Analytics", "financial-analytics", "BSMS3203"],
+  ["Operations Management", "operations-management", "BSMS2204"],
+  ["Supply Chain Analytics", "supply-chain-analytics", "BSMS3204"],
+];
+
+const dabProjects: Row[] = [
+  ["Business Management Project", "business-management-project", "BSMS3901", 2],
+  ["Business Analytics Project", "business-analytics-project", "BSMS3902", 2],
+];
+
+const otherDiploma: Row[] = [
+  ["Corporate Finance", "corporate-finance", "BSMS2205"],
+  ["Organizational Behaviour", "organizational-behaviour", "BSMS2206"],
+  ["Money, Banking and Financial Markets", "money-banking-and-financial-markets", "BSMS3205"],
+  ["Marketing Management", "marketing-management", "BSMS2207"],
+  ["Macroeconomics", "macroeconomics", "BSMS2208"],
+  ["Managerial Economics", "managerial-economics", "BSMS3206"],
+];
+
+const core: Row[] = [
+  ["Strategies for Professional Growth", "strategies-for-professional-growth", "BSGN3001"],
+  ["GenAI for Business", "genai-for-business", "BSMS3207"],
+  ["Digital Business", "digital-business", "BSMS3208"],
+  ["Logistics and Supply Chain Management", "logistics-and-supply-chain-management", "BSMS3209"],
+  ["Applied Time Series Analysis", "applied-time-series-analysis", "BSMS4201"],
+  ["Market Intelligence", "market-intelligence", "BSMS4202"],
+];
+
+const electives: Row[] = [
+  ["Introduction to Game Theory", "introduction-to-game-theory", undefined],
+  ["Public Finance", "public-finance", undefined],
+  ["Economics of AI", "economics-of-ai", undefined],
+  ["Industrial Organisation", "industrial-organisation", undefined],
+  ["Research Design for Social Data Science", "research-design-for-social-data-science", undefined],
+  ["Project Finance", "project-finance", undefined],
+  ["Corporate Valuation", "corporate-valuation", undefined],
+  ["Financial Forensics", "financial-forensics", undefined],
+  ["ALM and Risk", "alm-and-risk", undefined],
+  ["Capital Markets and Derivatives", "capital-markets-and-derivatives", undefined],
+  ["Digital Marketing", "digital-marketing", undefined],
+  ["Brand Management", "brand-management", undefined],
+  ["Consumer Behavior", "consumer-behavior", undefined],
+  ["Design Thinking", "design-thinking", undefined],
+  ["Computational Optimization", "computational-optimization", undefined],
+  ["Business Research Methods", "business-research-methods", undefined],
+  ["Sustainable Business Models", "sustainable-business-models", undefined],
+  ["Digital Business Strategy and Models", "digital-business-strategy-and-models", undefined],
+  ["Family Business", "family-business", undefined],
+  ["Social Media Computing", "social-media-computing", undefined],
+  ["Performance Management", "performance-management", undefined],
+  ["Responsible AI", "responsible-ai", undefined],
+];
 
 export const subjects: Subject[] = [
-  // ───────────── Data Science ─────────────
-  {
-    slug: "statistics",
-    name: "Statistics",
-    programSlug: "data-science",
-    semester: 2,
-    credits: 4,
-    description:
-      "Descriptive statistics, probability, distributions, regression and inference: the base of every data science course after this one.",
-    units: [
-      {
-        id: "stat-u1",
-        number: 1,
-        title: "Introduction to Statistics",
-        topics: [
-          t("introduction", "Introduction", "What statistics is, and why data science depends on it.", 15),
-          t("population-and-sample", "Population & Sample", "Census vs sample, parameters vs statistics, sampling bias."),
-          t("data-types", "Data Types", "Nominal, ordinal, interval and ratio scales with examples.", 20),
-          t("descriptive-statistics", "Descriptive Statistics", "Mean, median, mode, variance, standard deviation and IQR.", 40),
-        ],
-      },
-      {
-        id: "stat-u2",
-        number: 2,
-        title: "Probability",
-        topics: [
-          t("basic-probability", "Basic Probability", "Sample spaces, events, axioms and counting.", 35),
-          t("conditional-probability", "Conditional Probability", "P(A|B), independence and the multiplication rule.", 35),
-          t("bayes-theorem", "Bayes' Theorem", "Updating beliefs with evidence; base-rate problems.", 40),
-        ],
-      },
-      {
-        id: "stat-u3",
-        number: 3,
-        title: "Random Variables & Distributions",
-        topics: [
-          t("random-variables", "Random Variables", "Discrete vs continuous, PMF, PDF, expectation and variance.", 35),
-          t("binomial-distribution", "Binomial Distribution", "Fixed independent trials with constant success probability.", 30),
-          t("poisson-distribution", "Poisson Distribution", "Counting rare events in a fixed interval.", 30),
-          t("normal-distribution", "Normal Distribution", "The bell curve, z-scores and the 68–95–99.7 rule.", 40),
-        ],
-      },
-      {
-        id: "stat-u4",
-        number: 4,
-        title: "Correlation & Regression",
-        topics: [
-          t("correlation", "Correlation", "Pearson's r, scatter plots, correlation vs causation.", 30),
-          t("linear-regression", "Simple Linear Regression", "Least squares line, slope, intercept and R².", 45),
-        ],
-      },
-      {
-        id: "stat-u5",
-        number: 5,
-        title: "Statistical Inference",
-        topics: [
-          t("sampling-distributions", "Sampling Distributions", "Standard error and the central limit theorem.", 35),
-          t("confidence-intervals", "Confidence Intervals", "Estimating a parameter with a margin of error.", 35),
-          t("hypothesis-testing", "Hypothesis Testing", "Null vs alternative, p-values, Type I and II errors.", 45),
-        ],
-      },
-    ],
-  },
-  {
-    slug: "python-for-data-science",
-    name: "Python for Data Science",
-    programSlug: "data-science",
-    semester: 1,
-    credits: 4,
-    description: "Python fundamentals, then NumPy, pandas and plotting for real datasets.",
-    units: [
-      {
-        id: "py-u1",
-        number: 1,
-        title: "Python Fundamentals",
-        topics: [
-          t("variables-and-types", "Variables & Types", "Numbers, strings, booleans and type conversion.", 20),
-          t("control-flow", "Control Flow", "if/elif/else, for and while loops.", 25),
-          t("functions", "Functions", "Parameters, return values, scope and lambdas.", 30),
-        ],
-      },
-      {
-        id: "py-u2",
-        number: 2,
-        title: "Data Structures",
-        topics: [
-          t("lists-and-tuples", "Lists & Tuples", "Indexing, slicing and comprehensions.", 25),
-          t("dictionaries-and-sets", "Dictionaries & Sets", "Hashing, lookups and membership.", 25),
-        ],
-      },
-      {
-        id: "py-u3",
-        number: 3,
-        title: "NumPy & pandas",
-        topics: [
-          t("numpy-arrays", "NumPy Arrays", "Vectorised operations and broadcasting.", 35),
-          t("pandas-dataframes", "pandas DataFrames", "Loading, filtering, grouping and joining data.", 45),
-        ],
-      },
-    ],
-  },
-  {
-    slug: "machine-learning",
-    name: "Machine Learning",
-    programSlug: "data-science",
-    semester: 3,
-    credits: 4,
-    description: "Supervised and unsupervised learning, model evaluation and the bias–variance trade-off.",
-    units: [
-      {
-        id: "ml-u1",
-        number: 1,
-        title: "Foundations",
-        topics: [
-          t("what-is-ml", "What is Machine Learning?", "Supervised, unsupervised and reinforcement learning.", 20),
-          t("bias-variance", "Bias–Variance Trade-off", "Underfitting, overfitting and model complexity.", 30),
-        ],
-      },
-      {
-        id: "ml-u2",
-        number: 2,
-        title: "Supervised Learning",
-        topics: [
-          t("logistic-regression", "Logistic Regression", "Classification with the sigmoid function.", 35),
-          t("decision-trees", "Decision Trees", "Splitting criteria, depth and pruning.", 35),
-        ],
-      },
-    ],
-  },
-
-  // ───────────── IIT Mandi ─────────────
-  {
-    slug: "engineering-mathematics-1",
-    name: "Engineering Mathematics I",
-    programSlug: "iit-mandi",
-    semester: 1,
-    credits: 4,
-    description: "Single-variable calculus, sequences and series, and an introduction to multivariable calculus.",
-    units: [
-      {
-        id: "em1-u1",
-        number: 1,
-        title: "Differential Calculus",
-        topics: [
-          t("limits-and-continuity", "Limits & Continuity", "Epsilon–delta intuition and standard limits.", 30),
-          t("derivatives", "Derivatives", "Rules of differentiation and applications.", 35),
-          t("mean-value-theorems", "Mean Value Theorems", "Rolle's, Lagrange's and Cauchy's theorems.", 35),
-        ],
-      },
-      {
-        id: "em1-u2",
-        number: 2,
-        title: "Integral Calculus",
-        topics: [
-          t("definite-integrals", "Definite Integrals", "Riemann sums and the fundamental theorem.", 35),
-          t("improper-integrals", "Improper Integrals", "Convergence tests and Beta/Gamma functions.", 35),
-        ],
-      },
-    ],
-  },
-  {
-    slug: "programming-with-python",
-    name: "Programming with Python",
-    programSlug: "iit-mandi",
-    semester: 1,
-    credits: 3,
-    description: "Problem solving with Python: algorithms, recursion and basic data structures.",
-    units: [
-      {
-        id: "pwp-u1",
-        number: 1,
-        title: "Problem Solving",
-        topics: [
-          t("algorithms-and-flowcharts", "Algorithms & Flowcharts", "Breaking problems into steps.", 20),
-          t("recursion", "Recursion", "Base cases, call stacks and recursive thinking.", 35),
-        ],
-      },
-    ],
-  },
-  {
-    slug: "linear-algebra",
-    name: "Linear Algebra",
-    programSlug: "iit-mandi",
-    semester: 2,
-    credits: 4,
-    description: "Vector spaces, linear maps, eigenvalues and diagonalisation.",
-    units: [
-      {
-        id: "la-u1",
-        number: 1,
-        title: "Matrices & Systems",
-        topics: [
-          t("gaussian-elimination", "Gaussian Elimination", "Row reduction and echelon forms.", 30),
-          t("rank-and-nullity", "Rank & Nullity", "The rank–nullity theorem.", 30),
-        ],
-      },
-      {
-        id: "la-u2",
-        number: 2,
-        title: "Eigenvalues",
-        topics: [
-          t("eigenvalues-and-eigenvectors", "Eigenvalues & Eigenvectors", "Characteristic polynomial and eigenspaces.", 40),
-          t("diagonalisation", "Diagonalisation", "When and how a matrix can be diagonalised.", 35),
-        ],
-      },
-    ],
-  },
-  {
-    slug: "data-structures-and-algorithms",
-    name: "Data Structures & Algorithms",
-    programSlug: "iit-mandi",
-    semester: 3,
-    credits: 4,
-    description: "Complexity analysis, linear structures, trees, graphs and sorting.",
-    units: [
-      {
-        id: "dsa-u1",
-        number: 1,
-        title: "Complexity & Linear Structures",
-        topics: [
-          t("big-o", "Big-O Notation", "Asymptotic analysis of algorithms.", 25),
-          t("stacks-and-queues", "Stacks & Queues", "LIFO and FIFO structures and their uses.", 30),
-        ],
-      },
-    ],
-  },
-
-  // ───────────── Management ─────────────
-  {
-    slug: "principles-of-management",
-    name: "Principles of Management",
-    programSlug: "management",
-    semester: 1,
-    credits: 4,
-    description: "Planning, organising, leading and controlling, from classical theory to modern practice.",
-    units: [
-      {
-        id: "pom-u1",
-        number: 1,
-        title: "Evolution of Management",
-        topics: [
-          t("classical-theories", "Classical Theories", "Taylor's scientific management and Fayol's principles.", 30),
-          t("functions-of-management", "Functions of Management", "Planning, organising, leading and controlling.", 25),
-        ],
-      },
-      {
-        id: "pom-u2",
-        number: 2,
-        title: "Planning & Decision Making",
-        topics: [
-          t("planning-process", "The Planning Process", "Objectives, premises and types of plans.", 25),
-          t("decision-making", "Decision Making", "Rational and bounded-rational models.", 25),
-        ],
-      },
-    ],
-  },
-  {
-    slug: "financial-accounting",
-    name: "Financial Accounting",
-    programSlug: "management",
-    semester: 1,
-    credits: 4,
-    description: "The accounting cycle, journals, ledgers and preparing final accounts.",
-    units: [
-      {
-        id: "fa-u1",
-        number: 1,
-        title: "Accounting Basics",
-        topics: [
-          t("accounting-equation", "The Accounting Equation", "Assets = Liabilities + Equity.", 20),
-          t("journal-and-ledger", "Journal & Ledger", "Double-entry recording and posting.", 35),
-        ],
-      },
-    ],
-  },
-  {
-    slug: "marketing-management",
-    name: "Marketing Management",
-    programSlug: "management",
-    semester: 2,
-    credits: 4,
-    description: "Market segmentation, the marketing mix, consumer behaviour and branding.",
-    units: [
-      {
-        id: "mm-u1",
-        number: 1,
-        title: "Marketing Fundamentals",
-        topics: [
-          t("marketing-concepts", "Marketing Concepts", "Needs, wants, demand and the marketing philosophies.", 25),
-          t("marketing-mix", "The Marketing Mix (4Ps)", "Product, price, place and promotion.", 30),
-        ],
-      },
-      {
-        id: "mm-u2",
-        number: 2,
-        title: "Segmentation & Positioning",
-        topics: [
-          t("stp", "Segmentation, Targeting, Positioning", "The STP framework with examples.", 35),
-        ],
-      },
-      {
-        id: "mm-u3",
-        number: 3,
-        title: "Consumer Behaviour",
-        topics: [
-          t("buying-process", "Consumer Buying Process", "The five-stage model.", 30),
-          t("brand-equity", "Brand Equity", "Awareness, associations and loyalty.", 30),
-        ],
-      },
-    ],
-  },
-
-  // ───────────── B.A. ─────────────
-  {
-    slug: "introduction-to-sociology",
-    name: "Introduction to Sociology",
-    programSlug: "ba",
-    semester: 1,
-    credits: 4,
-    description: "Society, culture, socialisation and the founding thinkers of sociology.",
-    units: [
-      {
-        id: "soc-u1",
-        number: 1,
-        title: "Foundations",
-        topics: [
-          t("sociological-imagination", "The Sociological Imagination", "C. Wright Mills and seeing the social in the personal.", 25),
-          t("founding-thinkers", "Founding Thinkers", "Durkheim, Marx and Weber.", 40),
-        ],
-      },
-    ],
-  },
-  {
-    slug: "principles-of-economics",
-    name: "Principles of Economics",
-    programSlug: "ba",
-    semester: 1,
-    credits: 4,
-    description: "Demand and supply, elasticity, market structures and national income.",
-    units: [
-      {
-        id: "eco-u1",
-        number: 1,
-        title: "Demand & Supply",
-        topics: [
-          t("law-of-demand", "Law of Demand", "Demand curves and their determinants.", 25),
-          t("elasticity", "Elasticity", "Price, income and cross elasticity.", 30),
-        ],
-      },
-    ],
-  },
-  {
-    slug: "indian-political-thought",
-    name: "Indian Political Thought",
-    programSlug: "ba",
-    semester: 2,
-    credits: 4,
-    description: "From Kautilya to Ambedkar: key ideas in Indian political philosophy.",
-    units: [
-      {
-        id: "ipt-u1",
-        number: 1,
-        title: "Classical Thought",
-        topics: [t("kautilya", "Kautilya's Arthashastra", "Statecraft and the saptanga theory.", 35)],
-      },
-    ],
-  },
+  ...foundation.map(make("foundation", "None")),
+  ...dab.map(make("diploma", "Foundation Level", "data-analytics-for-business")),
+  ...dabProjects.map(make("diploma", "Foundation Level", "data-analytics-for-business", "project")),
+  ...otherDiploma.map(make("diploma", "Foundation Level", "other-diploma-courses")),
+  ...core.map(make("degree", "Diploma Level", "core")),
+  ...electives.map(make("degree", "Core courses", "electives")),
 ];

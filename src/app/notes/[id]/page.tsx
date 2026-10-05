@@ -35,7 +35,7 @@ export default async function NotePage({ params }: PageProps<"/notes/[id]">) {
         items={[
           { label: program.name, href: `/programs/${program.slug}` },
           { label: subject.name, href: `/subjects/${subject.slug}` },
-          { label: "Notes", href: `/subjects/${subject.slug}?tab=notes` },
+          { label: "Notes", href: `/subjects/${subject.slug}?item=notes` },
           { label: note.title },
         ]}
       />
@@ -89,7 +89,7 @@ export default async function NotePage({ params }: PageProps<"/notes/[id]">) {
                   {subject.name}
                 </Link>
               </Row>
-              <Row label="Unit">{unitLabel(note.subjectSlug, note.unitId)}</Row>
+              <Row label="Week">{unitLabel(note.subjectSlug, note.unitId)}</Row>
               {note.topicSlug && (
                 <Row label="Topic">
                   <Link href={`/subjects/${subject.slug}/${note.topicSlug}`} className="font-medium hover:underline">

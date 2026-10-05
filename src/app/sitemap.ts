@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...["/programs", "/subjects", "/notes", "/videos", "/books", "/practice", "/pyqs", "/exam-prep"].map((p) => url(p, 0.8)),
     ...programs.flatMap((p) => [
       url(`/programs/${p.slug}`, 0.8),
-      ...Array.from({ length: p.semesters }, (_, i) => url(`/programs/${p.slug}/semester-${i + 1}`, 0.7)),
+      ...p.levels.map((l) => url(`/programs/${p.slug}/${l.slug}`, 0.8)),
     ]),
     ...subjects.flatMap((s) => [url(`/subjects/${s.slug}`, 0.9), ...allTopics(s).map(({ topic }) => url(`/subjects/${s.slug}/${topic.slug}`, 0.7))]),
     ...notes.map((n) => url(`/notes/${n.id}`, 0.7)),

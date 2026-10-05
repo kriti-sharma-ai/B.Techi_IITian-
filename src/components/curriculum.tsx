@@ -28,7 +28,7 @@ export function Curriculum({ subject, collapsed = false }: { subject: Subject; c
         <section key={unit.id} className="card overflow-hidden" aria-labelledby={unit.id}>
           <header className="flex items-baseline justify-between gap-4 border-b border-border px-5 py-4">
             <div>
-              <p className="eyebrow">Unit {unit.number}</p>
+              <p className="eyebrow">Week {unit.number}</p>
               <h3 id={unit.id} className="mt-0.5 font-bold">
                 {unit.title}
               </h3>
@@ -39,7 +39,7 @@ export function Curriculum({ subject, collapsed = false }: { subject: Subject; c
                 href={`/practice/session?subject=${subject.slug}&unit=${unit.id}`}
                 className="hidden font-medium text-purple hover:underline sm:inline"
               >
-                Unit practice
+                Week practice
               </Link>
             </div>
           </header>

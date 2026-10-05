@@ -40,7 +40,7 @@ export function UploadForm() {
   const [meta, setMeta] = useState({
     title: "",
     description: "",
-    subjectSlug: "statistics",
+    subjectSlug: subjects[0].slug,
     unitId: "",
     topicSlug: "",
     resourceType: "Lecture notes",
@@ -225,22 +225,22 @@ export function UploadForm() {
         <div className="card space-y-3 p-5">
           <h2 className="font-semibold">Placement</h2>
           <label className="block text-sm">
-            <span className="mb-1 block font-medium">Subject</span>
+            <span className="mb-1 block font-medium">Course</span>
             <select className={input} value={meta.subjectSlug} onChange={(e) => setMeta({ ...meta, subjectSlug: e.target.value, unitId: "", topicSlug: "" })}>
               {subjects.map((s) => (
                 <option key={s.slug} value={s.slug}>
-                  {s.name} (Sem {s.semester})
+                  {s.code ? `${s.code} · ` : ""}{s.name}
                 </option>
               ))}
             </select>
           </label>
           <label className="block text-sm">
-            <span className="mb-1 block font-medium">Unit</span>
+            <span className="mb-1 block font-medium">Week</span>
             <select className={input} value={meta.unitId} onChange={(e) => setMeta({ ...meta, unitId: e.target.value, topicSlug: "" })}>
-              <option value="">Whole subject</option>
+              <option value="">Whole course</option>
               {subj?.units.map((u) => (
                 <option key={u.id} value={u.id}>
-                  Unit {u.number}: {u.title}
+                  Week {u.number}: {u.title}
                 </option>
               ))}
             </select>
@@ -248,7 +248,7 @@ export function UploadForm() {
           <label className="block text-sm">
             <span className="mb-1 block font-medium">Topic</span>
             <select className={input} value={meta.topicSlug} onChange={(e) => setMeta({ ...meta, topicSlug: e.target.value })}>
-              <option value="">Whole unit</option>
+              <option value="">Whole week</option>
               {topics.map((t) => (
                 <option key={t.slug} value={t.slug}>
                   {t.title}

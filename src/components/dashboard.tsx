@@ -35,9 +35,9 @@ export function Dashboard() {
   const week = weeklyActivity(state);
   const maxDay = Math.max(1, ...week.map((d) => d.count));
 
-  // Courses: the student's semester plus anything they've opened.
+  // Courses: the student's current level plus anything they've opened.
   const courseSlugs = new Set<string>([
-    ...subjects.filter((s) => user && s.programSlug === user.program && s.semester === user.semester).map((s) => s.slug),
+    ...subjects.filter((s) => user && s.programSlug === user.program && s.level === user.level && s.kind === "course" && s.group !== "electives").map((s) => s.slug),
     ...visits.map((v) => v.subjectSlug),
   ]);
   const courses = [...courseSlugs].map(getSubject).filter((s) => s !== undefined);
@@ -50,7 +50,7 @@ export function Dashboard() {
 
   const pyqAttempts = new Set(attempts.filter((a) => pyqs.some((p) => p.questionIds.includes(a.questionId))).map((a) => a.questionId)).size;
   const badges = [
-    { t: "Statistics Starter", earned: completed.some((k) => k.startsWith("statistics/")), d: "Complete a Statistics topic" },
+    { t: "Foundation Starter", earned: completed.some((k) => getSubject(k.split("/")[0])?.level === "foundation"), d: "Complete a Foundation topic" },
     { t: "First 100 Questions", earned: attempts.length >= 100, d: `${Math.min(attempts.length, 100)}/100 attempts` },
     { t: "7-Day Streak", earned: streak >= 7, d: `${Math.min(streak, 7)}/7 days` },
     { t: "PYQ Master", earned: pyqAttempts >= 15, d: `${Math.min(pyqAttempts, 15)}/15 PYQ questions` },
@@ -66,7 +66,7 @@ export function Dashboard() {
             {greeting()}, {user ? user.name.split(" ")[0] : "Student"} 👋
           </h1>
           <p className="mt-1 text-muted">
-            {user && program ? `${program.name} · Semester ${user.semester}` : "Your progress is saved in this browser."}
+            {user && program ? `${program.name} · ${program.levels.find((l) => l.slug === user.level)?.name ?? ""}` : "Your progress is saved in this browser."}
           </p>
         </div>
         {user ? (
@@ -111,7 +111,7 @@ export function Dashboard() {
                   <Link href={`/subjects/${s.slug}`} className="block px-5 py-4 hover:bg-surface-2/50">
                     <div className="flex items-baseline justify-between gap-4">
                       <p className="font-semibold">{s.name}</p>
-                      <p className="text-xs text-muted">Sem {s.semester}</p>
+                      <p className="font-mono text-xs text-muted">{s.code}</p>
                     </div>
                     <SubjectProgressBar subject={s} className="mt-2" />
                   </Link>
@@ -154,7 +154,7 @@ export function Dashboard() {
           <ul className="card divide-y divide-border text-sm">
             {upcoming.map((a) => (
               <li key={a.id} className="px-5 py-3.5">
-                <Link href={`/subjects/${a.subjectSlug}?tab=assignments`} className="font-medium hover:underline">
+                <Link href={`/subjects/${a.subjectSlug}?item=week-${getSubject(a.subjectSlug)?.units.find((u) => u.id === a.unitId)?.number ?? 1}-graded`} className="font-medium hover:underline">
                   {a.title}
                 </Link>
                 <p className="text-xs text-muted">

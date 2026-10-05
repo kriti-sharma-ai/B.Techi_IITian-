@@ -68,7 +68,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/search">)
         <div className="mx-auto mt-10 max-w-2xl">
           <p className="eyebrow mb-3">Popular searches</p>
           <div className="flex flex-wrap gap-2">
-            {["Probability", "Statistics notes", "Bayes", "Python", "Marketing mix", "Regression", "PYQ 2025", "Eigenvalues"].map((s) => (
+            {["Statistics", "BSMA1002", "Python", "Economics", "Marketing", "Finance", "Foundation", "Elective"].map((s) => (
               <Link
                 key={s}
                 href={`/search?q=${encodeURIComponent(s)}`}

@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 
 export const primaryNav = [
   { href: "/programs", label: "Explore" },
-  { href: "/subjects", label: "Subjects" },
+  { href: "/subjects", label: "Courses" },
   { href: "/notes", label: "Notes" },
   { href: "/videos", label: "Videos" },
   { href: "/practice", label: "Practice" },
@@ -79,7 +79,7 @@ export function Navbar() {
   const staff = user && user.role !== "student";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-bg/85 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-border bg-bg">
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-brand focus:px-3 focus:py-2 focus:text-brand-ink">
         Skip to content
       </a>

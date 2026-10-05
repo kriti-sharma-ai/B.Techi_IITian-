@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, BookOpen, Clock, FileText, PenLine, PlayCircle, ScrollText } from "lucide-react";
 import { BookCard, NoteCard } from "@/components/cards";
-import { MarkCompleteButton, TopicStatus, VisitTracker } from "@/components/progress";
+import { MarkCompleteButton, VisitTracker } from "@/components/progress";
 import { BookmarkButton, ReportButton } from "@/components/resource-actions";
 import { Quiz } from "@/components/quiz";
 import { Badge, Breadcrumbs, buttonClass } from "@/components/ui";
@@ -13,7 +13,7 @@ import {
   booksForSubject,
   findTopic,
   forTopic,
-  getProgram,
+  subjectPlacement,
   getSubject,
   notes,
   pyqsForTopic,
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: PageProps<"/subjects/[subject
   if (!r) return {};
   return {
     title: `${r.topic.title}: ${r.subject.name} Notes, Video & Practice`,
-    description: `${r.topic.summary} Notes, video, book chapters, practice questions and PYQs for ${r.topic.title} (${r.subject.name}, Unit ${r.unit.number}).`,
+    description: `${r.topic.summary} Notes, video, book chapters, practice questions and PYQs for ${r.topic.title} (${r.subject.name}, Week ${r.unit.number}).`,
     alternates: { canonical: `/subjects/${r.subject.slug}/${r.topic.slug}` },
   };
 }
@@ -50,7 +50,7 @@ export default async function TopicPage({ params }: PageProps<"/subjects/[subjec
   const r = await load(params);
   if (!r) notFound();
   const { subject, unit, topic } = r;
-  const program = getProgram(subject.programSlug)!;
+  const { program, level } = subjectPlacement(subject);
 
   const topicNotes = forTopic(notes, subject.slug, topic.slug);
   const topicVideos = forTopic(videos, subject.slug, topic.slug);
@@ -76,57 +76,20 @@ export default async function TopicPage({ params }: PageProps<"/subjects/[subjec
   return (
     <>
       <VisitTracker subjectSlug={subject.slug} topicSlug={topic.slug} />
-      <div className="container-page py-8">
+      <div className="px-4 py-6 md:px-8 lg:py-8">
         <Breadcrumbs
           items={[
             { label: program.name, href: `/programs/${program.slug}` },
-            { label: `Semester ${subject.semester}`, href: `/programs/${program.slug}/semester-${subject.semester}` },
+            { label: level.name, href: `/programs/${program.slug}/${level.slug}` },
             { label: subject.name, href: base },
             { label: topic.title },
           ]}
         />
 
-        <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
-          {/* Curriculum sidebar */}
-          <aside className="hidden lg:block">
-            <nav aria-label={`${subject.name} curriculum`} className="sticky top-24 max-h-[calc(100dvh-8rem)] overflow-auto pr-2">
-              <Link href={`${base}?tab=curriculum`} className="mb-3 block text-sm font-semibold hover:underline">
-                {subject.name}
-              </Link>
-              {subject.units.map((u) => (
-                <div key={u.id} className="mb-4">
-                  <p className="eyebrow mb-1.5">
-                    Unit {u.number} · {u.title}
-                  </p>
-                  <ul>
-                    {u.topics.map((t) => {
-                      const on = t.slug === topic.slug;
-                      return (
-                        <li key={t.slug}>
-                          <Link
-                            href={`${base}/${t.slug}`}
-                            aria-current={on ? "page" : undefined}
-                            className={cn(
-                              "flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm",
-                              on ? "bg-surface font-semibold shadow-[inset_3px_0_0_var(--brand)]" : "text-muted hover:text-fg",
-                            )}
-                          >
-                            <TopicStatus subjectSlug={subject.slug} topicSlug={t.slug} />
-                            <span className="truncate">{t.title}</span>
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              ))}
-            </nav>
-          </aside>
-
-          <article className="min-w-0">
+        <article className="min-w-0 max-w-4xl">
             <header>
               <p className="eyebrow">
-                {subject.name} · Unit {unit.number}: {unit.title}
+                {subject.name} · Week {unit.number}: {unit.title}
               </p>
               <h1 className="mt-1 text-3xl font-extrabold tracking-tight md:text-4xl">{topic.title}</h1>
               <p className="mt-2 max-w-2xl text-muted">{topic.summary}</p>
@@ -179,7 +142,7 @@ export default async function TopicPage({ params }: PageProps<"/subjects/[subjec
                 </div>
               ) : unitNotes.length ? (
                 <div className="space-y-3">
-                  <p className="text-sm text-muted">No topic-specific notes yet. These Unit {unit.number} notes cover it:</p>
+                  <p className="text-sm text-muted">No topic-specific notes yet. These Week {unit.number} notes cover it:</p>
                   {unitNotes.map((n) => (
                     <NoteCard key={n.id} note={n} />
                   ))}
@@ -201,7 +164,7 @@ export default async function TopicPage({ params }: PageProps<"/subjects/[subjec
                 <Muted>
                   No questions for this topic yet.{" "}
                   <Link href={`/practice/session?subject=${subject.slug}&unit=${unit.id}`} className="font-medium text-fg underline">
-                    Try Unit {unit.number} practice →
+                    Try Week {unit.number} practice →
                   </Link>
                 </Muted>
               )}
@@ -263,8 +226,7 @@ export default async function TopicPage({ params }: PageProps<"/subjects/[subjec
                 </Link>
               )}
             </nav>
-          </article>
-        </div>
+        </article>
       </div>
     </>
   );

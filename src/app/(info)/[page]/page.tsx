@@ -9,8 +9,8 @@ const PAGES: Record<string, { title: string; description: string; body: string[]
     title: "About BTechi",
     description: "A structured academic platform where students learn, practise and prepare.",
     body: [
-      "BTechi started as the BTechi IITian YouTube channel: AI, automation, tech and education explained simply. This platform is the next step.",
-      "Instead of hunting through WhatsApp groups, Telegram channels and random Drive links, students get one structured place: Program → Semester → Subject → Unit → Topic, with notes, videos, books, practice and previous-year questions mapped to every topic.",
+      "BTechi started as the BTechi IITian YouTube channel: AI, automation, tech and education explained simply. This platform is the next step, starting with the IIT Madras BS in Management and Data Science.",
+      "Instead of hunting through WhatsApp groups, Telegram channels and random Drive links, students get one structured place: Level → Course → Week → Topic, with notes, videos, books, practice and previous-year questions mapped to every topic.",
     ],
     cta: { label: "Explore programs", href: "/programs" },
   },

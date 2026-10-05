@@ -5,7 +5,7 @@ import { PenLine, Timer } from "lucide-react";
 import { PdfViewer } from "@/components/pdf-viewer";
 import { BookmarkButton, DownloadButton, ReportButton } from "@/components/resource-actions";
 import { Badge, Breadcrumbs, buttonClass } from "@/components/ui";
-import { getProgram, getPyq, getSubject, pyqs, pyqTitle, questionsFor, topicTitle } from "@/lib/content";
+import { getLevel, getProgram, getPyq, getSubject, pyqs, pyqTitle, questionsFor, topicTitle } from "@/lib/content";
 
 export const dynamicParams = false;
 export const generateStaticParams = () => pyqs.map((p) => ({ id: p.id }));
@@ -40,9 +40,9 @@ export default async function PyqPage({ params }: PageProps<"/pyqs/[id]">) {
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div>
           <div className="flex gap-2">
-            <Badge tone={pyq.exam === "End-sem" ? "purple" : "blue"}>{pyq.exam}</Badge>
+            <Badge tone={pyq.exam === "End Term" ? "purple" : "blue"}>{pyq.exam}</Badge>
             <Badge>
-              {program.name} · Semester {subject.semester}
+              {[subject.code, getLevel(subject.programSlug, subject.level)?.short].filter(Boolean).join(" · ")}
             </Badge>
           </div>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight md:text-4xl">{title}</h1>

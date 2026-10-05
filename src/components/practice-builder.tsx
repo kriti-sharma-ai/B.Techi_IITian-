@@ -54,7 +54,7 @@ function Select({
 
 /** Question-bank filter (PRD §17): subject → unit → topic, difficulty, type. */
 export function PracticeBuilder() {
-  const [subject, setSubject] = useState("statistics");
+  const [subject, setSubject] = useState(questions[0]?.subjectSlug ?? "");
   const [unit, setUnit] = useState("");
   const [topic, setTopic] = useState("");
   const [difficulty, setDifficulty] = useState("");
@@ -93,7 +93,7 @@ export function PracticeBuilder() {
     <div className="card p-5 md:p-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <Select
-          label="Subject"
+          label="Course"
           value={subject}
           onChange={(v) => {
             setSubject(v);
@@ -103,14 +103,14 @@ export function PracticeBuilder() {
           options={subjects.filter((s) => questions.some((q) => q.subjectSlug === s.slug)).map((s) => ({ value: s.slug, label: s.name }))}
         />
         <Select
-          label="Unit"
+          label="Week"
           value={unit}
           disabled={!subject}
           onChange={(v) => {
             setUnit(v);
             setTopic("");
           }}
-          options={units.map((u) => ({ value: u.id, label: `Unit ${u.number}: ${u.title}` }))}
+          options={units.map((u) => ({ value: u.id, label: `Week ${u.number}: ${u.title}` }))}
         />
         <Select label="Topic" value={topic} disabled={!subject} onChange={setTopic} options={topics.map((t) => ({ value: t.slug, label: t.title }))} />
         <Select label="Difficulty" value={difficulty} onChange={setDifficulty} options={["Easy", "Medium", "Hard"].map((d) => ({ value: d, label: d }))} />

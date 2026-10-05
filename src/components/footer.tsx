@@ -9,7 +9,7 @@ const columns = [
     title: "Explore",
     links: [
       ["Programs", "/programs"],
-      ["Subjects", "/subjects"],
+      ["Courses", "/subjects"],
       ["Notes", "/notes"],
       ["Videos", "/videos"],
       ["Books", "/books"],
@@ -46,7 +46,8 @@ const columns = [
 
 export function Footer() {
   const pathname = usePathname();
-  if (pathname.startsWith("/admin")) return null;
+  // Course player pages (/subjects/<slug>/...) stay distraction-free.
+  if (pathname.startsWith("/admin") || /^\/subjects\/[^/]+/.test(pathname)) return null;
   return (
     <footer className="mt-20 border-t border-border bg-surface pb-24 md:pb-0">
       <div className="container-page grid gap-10 py-12 md:grid-cols-[1.4fr_repeat(4,1fr)]">

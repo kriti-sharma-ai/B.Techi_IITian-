@@ -31,11 +31,11 @@ export default async function BookPage({ params }: PageProps<"/books/[slug]">) {
     ["Publisher", book.publisher + (book.year ? `, ${book.year}` : "")],
     ["ISBN", book.isbn ?? "—"],
     [
-      "Subjects",
+      "Courses",
       subjectList.map((s, i) => (
         <span key={s.slug}>
           {i > 0 && ", "}
-          <Link href={`/subjects/${s.slug}?tab=books`} className="font-medium hover:underline">
+          <Link href={`/subjects/${s.slug}?item=books`} className="font-medium hover:underline">
             {s.name}
           </Link>
         </span>

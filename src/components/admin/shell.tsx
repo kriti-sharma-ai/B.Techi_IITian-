@@ -32,7 +32,7 @@ export const adminNav = [
       { href: "/admin/curriculum", label: "Curriculum builder", icon: GitBranch },
       { href: "/admin/upload", label: "Upload resource", icon: Upload },
       { href: "/admin/review", label: "Review queue", icon: Inbox },
-      { href: "/admin/subjects", label: "Subjects", icon: Library },
+      { href: "/admin/subjects", label: "Courses", icon: Library },
       { href: "/admin/notes", label: "Notes", icon: FileText },
       { href: "/admin/videos", label: "Videos", icon: PlayCircle },
       { href: "/admin/books", label: "Books", icon: BookOpen },

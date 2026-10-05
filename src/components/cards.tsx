@@ -1,47 +1,63 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  BarChart3,
-  Briefcase,
-  Eye,
-  FileText,
-  GraduationCap,
-  Landmark,
-  PenLine,
-  type LucideIcon,
-} from "lucide-react";
-import type { Book, Note, Program, Pyq, Question, Subject } from "@/lib/types";
-import { pyqTitle, subjectContext, subjectName, subjectStats, subjectsForProgram, unitLabel } from "@/lib/content";
+import { ArrowRight, ArrowUpRight, Award, Eye, FileText, GraduationCap, Layers, PenLine, type LucideIcon } from "lucide-react";
+import type { Book, Level, Note, Program, Pyq, Question, Subject } from "@/lib/types";
+import { hasContent, pyqTitle, subjectContext, subjectName, subjectPlacement, subjectStats, subjectsForLevel, unitLabel } from "@/lib/content";
 import { accentStyles, cn, formatNumber, formatSize } from "@/lib/utils";
 import { Badge, QualityBadge, buttonClass } from "./ui";
 import { BookmarkButton, DownloadButton } from "./resource-actions";
 import { SubjectProgressBar } from "./progress";
 
-export const programIcons: Record<string, LucideIcon> = {
-  "iit-mandi": GraduationCap,
-  ba: Landmark,
-  management: Briefcase,
-  "data-science": BarChart3,
-};
+/* ───────────── Level ───────────── */
+
+const levelIcons: Record<string, LucideIcon> = { foundation: Layers, diploma: Award, degree: GraduationCap };
+
+/** Foundation / Diploma / BS Degree card with credits and the exit award. */
+export function LevelCard({ programSlug, level, step }: { programSlug: string; level: Level; step: number }) {
+  const a = accentStyles[level.accent];
+  const Icon = levelIcons[level.slug] ?? GraduationCap;
+  const count = subjectsForLevel(programSlug, level.slug).length;
+  return (
+    <Link href={`/programs/${programSlug}/${level.slug}`} className="card card-hover group relative flex flex-col overflow-hidden p-5">
+      <span className={cn("absolute inset-x-0 top-0 h-1", a.bar)} aria-hidden />
+      <div className="mb-5 flex items-center justify-between">
+        <span className={cn("grid size-11 place-items-center rounded-xl", a.soft, a.text)}>
+          <Icon className="size-5" aria-hidden />
+        </span>
+        <span className="text-xs font-semibold text-muted">Level {step}</span>
+      </div>
+      <h3 className="text-lg font-bold tracking-tight">{level.name}</h3>
+      <p className="text-sm text-muted">
+        {level.courses} · {level.credits} credits
+      </p>
+      <p className="mt-4 rounded-lg bg-surface-2 px-3 py-2 text-xs">
+        <span className="text-muted">Exit with </span>
+        <span className="font-semibold">{level.exit}</span>
+      </p>
+      <div className="mt-auto flex items-center justify-between pt-5 text-sm">
+        <span className="text-muted">{count} courses listed</span>
+        <span className="inline-flex items-center gap-1 font-semibold">
+          Explore <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+        </span>
+      </div>
+    </Link>
+  );
+}
 
 /* ───────────── Program ───────────── */
 
 export function ProgramCard({ program }: { program: Program }) {
   const a = accentStyles[program.accent];
-  const Icon = programIcons[program.slug] ?? GraduationCap;
-  const count = subjectsForProgram(program.slug).length;
   return (
     <Link href={`/programs/${program.slug}`} className="card card-hover group relative flex flex-col overflow-hidden p-5">
       <span className={cn("absolute inset-x-0 top-0 h-1", a.bar)} aria-hidden />
       <span className={cn("mb-6 grid size-11 place-items-center rounded-xl", a.soft, a.text)}>
-        <Icon className="size-5" aria-hidden />
+        <GraduationCap className="size-5" aria-hidden />
       </span>
       <h3 className="text-lg font-bold tracking-tight">{program.name}</h3>
-      <p className="text-sm text-muted">{program.tagline}</p>
+      <p className="text-sm text-muted">{program.degree}</p>
       <div className="mt-5 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 text-sm">
         <span className="text-muted">
-          {program.semesters} semesters · {count} subjects
+          {program.levels.length} levels · {program.totalCredits} credits
         </span>
         <span className="inline-flex items-center gap-1 font-semibold">
           Explore <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
@@ -51,46 +67,35 @@ export function ProgramCard({ program }: { program: Program }) {
   );
 }
 
-/* ───────────── Subject ───────────── */
+/* ───────────── Subject (course) ───────────── */
 
-export function SubjectCard({ subject, showProgram = true }: { subject: Subject; showProgram?: boolean }) {
+export function SubjectCard({ subject, showLevel = true }: { subject: Subject; showLevel?: boolean }) {
   const s = subjectStats(subject);
+  const { level } = subjectPlacement(subject);
+  const ready = hasContent(subject);
   return (
     <Link href={`/subjects/${subject.slug}`} className="card card-hover group flex flex-col p-5">
-      <div className="mb-3 flex items-center gap-2">
-        <Badge>Sem {subject.semester}</Badge>
-        {showProgram && <span className="text-xs text-muted">{subjectContext(subject.slug).split(" · ")[1]}</span>}
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        {subject.code ? <Badge className="font-mono tracking-tight">{subject.code}</Badge> : <Badge>Elective</Badge>}
+        {subject.kind === "project" && <Badge tone="teal">Project</Badge>}
+        {showLevel && <span className="text-xs text-muted">{level.short}</span>}
         <span className="ml-auto text-xs text-muted">{subject.credits} credits</span>
       </div>
       <h3 className="font-bold tracking-tight">{subject.name}</h3>
-      <p className="mt-1 line-clamp-2 text-sm text-muted">{subject.description}</p>
-      <dl className="mt-4 flex gap-4 text-xs text-muted">
-        <div>
-          <dt className="sr-only">Units</dt>
-          <dd>
-            <span className="font-semibold text-fg">{s.units}</span> units
-          </dd>
-        </div>
-        <div>
-          <dt className="sr-only">Topics</dt>
-          <dd>
-            <span className="font-semibold text-fg">{s.topics}</span> topics
-          </dd>
-        </div>
-        <div>
-          <dt className="sr-only">Notes</dt>
-          <dd>
-            <span className="font-semibold text-fg">{s.notes}</span> notes
-          </dd>
-        </div>
-        <div>
-          <dt className="sr-only">Questions</dt>
-          <dd>
+      {subject.description && <p className="mt-1 line-clamp-2 text-sm text-muted">{subject.description}</p>}
+      <div className="mt-auto pt-4">
+        {ready ? (
+          <p className="text-xs text-muted">
+            <span className="font-semibold text-fg">{s.units}</span> weeks · <span className="font-semibold text-fg">{s.notes}</span> notes ·{" "}
             <span className="font-semibold text-fg">{s.questions}</span> Qs
-          </dd>
-        </div>
-      </dl>
-      <SubjectProgressBar subject={subject} className="mt-4" />
+          </p>
+        ) : (
+          <p className="inline-flex items-center gap-1.5 text-xs text-muted">
+            <span className="size-1.5 rounded-full bg-brand" aria-hidden /> Content coming soon
+          </p>
+        )}
+        <SubjectProgressBar subject={subject} className="mt-3" />
+      </div>
     </Link>
   );
 }
@@ -190,8 +195,10 @@ export function PyqCard({ pyq }: { pyq: Pyq }) {
   return (
     <article className="card flex flex-col p-5">
       <div className="flex items-start justify-between">
-        <p className="text-3xl font-extrabold tracking-tight tabular-nums">{pyq.year}</p>
-        <Badge tone={pyq.exam === "End-sem" ? "purple" : "blue"}>{pyq.exam}</Badge>
+        <p className="text-3xl font-extrabold tracking-tight tabular-nums">
+          {pyq.year} <span className="text-sm font-semibold text-muted">{pyq.term}</span>
+        </p>
+        <Badge tone={pyq.exam === "End Term" ? "purple" : "blue"}>{pyq.exam}</Badge>
       </div>
       <h3 className="mt-2 font-semibold">{subjectName(pyq.subjectSlug)}</h3>
       <p className="text-sm text-muted">

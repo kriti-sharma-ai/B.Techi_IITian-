@@ -12,6 +12,7 @@ export default function AdminDashboard() {
   const resources = notes.length + videos.length + books.length + pyqs.length + questions.length;
   const downloads = notes.reduce((n, x) => n + x.downloads, 0);
   const topics = subjects.reduce((n, s) => n + allTopics(s).length, 0);
+  const pct = (n: number) => (notes.length ? (n / notes.length) * 100 : 0);
   const quality = {
     verified: notes.filter((n) => n.quality === "verified").length,
     review: notes.filter((n) => n.quality === "needs-review").length,
@@ -38,7 +39,7 @@ export default function AdminDashboard() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Resources" value={resources} hint={`${notes.length} notes · ${videos.length} videos · ${questions.length} questions`} />
         <StatCard label="Downloads" value={downloads} hint="All-time, across all notes" />
-        <StatCard label="Subjects" value={subjects.length} hint={`${topics} topics mapped`} />
+        <StatCard label="Courses" value={subjects.length} hint={`${subjects.filter((s) => s.units.length).length} with published content`} />
         <StatCard label="PYQ papers" value={pyqs.length} hint={`${new Set(pyqs.map((p) => p.subjectSlug)).size} subjects covered`} />
       </div>
 
@@ -50,9 +51,9 @@ export default function AdminDashboard() {
         <section className="card p-5">
           <h2 className="mb-4 font-semibold">Content quality</h2>
           <div className="flex h-3 overflow-hidden rounded-full">
-            <span className="bg-green" style={{ width: `${(quality.verified / notes.length) * 100}%` }} />
-            <span className="bg-muted/40" style={{ width: `${(quality.review / notes.length) * 100}%` }} />
-            <span className="bg-amber" style={{ width: `${(quality.outdated / notes.length) * 100}%` }} />
+            <span className="bg-green" style={{ width: `${pct(quality.verified)}%` }} />
+            <span className="bg-muted/40" style={{ width: `${pct(quality.review)}%` }} />
+            <span className="bg-amber" style={{ width: `${pct(quality.outdated)}%` }} />
           </div>
           <dl className="mt-4 grid grid-cols-3 gap-3 text-sm">
             <div>

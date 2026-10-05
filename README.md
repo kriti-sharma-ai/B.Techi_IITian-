@@ -1,6 +1,6 @@
 # BTechi
 
-A structured academic platform: **Program → Semester → Subject → Unit → Topic → Resources**.
+A structured study companion for the **IIT Madras BS in Management and Data Science**: **Level → Course → Week → Topic → Resources**.
 Students find curriculum, notes, videos, books, practice questions and PYQs in 3–4 clicks; admins manage it all from a CMS.
 
 Built with Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4 and pdf.js.
@@ -20,14 +20,14 @@ Optional: set `NEXT_PUBLIC_SITE_URL` (used for canonical URLs, sitemap and JSON-
 | Area | Route |
 |---|---|
 | Homepage (hero, search, programs, continue learning, notes, practice, videos, PYQs) | `/` |
-| Programs → semesters → subjects | `/programs`, `/programs/[program]`, `/programs/[program]/semester-N` |
-| Subject (overview, curriculum, notes, videos, books, PYQs, practice, assignments) | `/subjects/[subject]?tab=…` |
+| Program → levels (Foundation, Diploma, Degree) → courses | `/programs/iitm-bs`, `/programs/iitm-bs/[level]` |
+| Course page (code, credits, prerequisites; tabs for curriculum, notes, videos, books, PYQs, practice, assignments) | `/subjects/[course]?tab=…` |
 | Topic learning page (video + notes + quiz + books + PYQs, prev/next) | `/subjects/[subject]/[topic]` |
 | Notes library with filters + pdf.js viewer (zoom, pages, in-document search, fullscreen, download, share) | `/notes`, `/notes/[id]` |
 | Videos (lazy YouTube embed), Books (legal links only) | `/videos`, `/books`, `/books/[slug]` |
 | PYQs with most-repeated-topic analysis; practise any paper | `/pyqs`, `/pyqs/[id]` |
 | Practice: 6 modes, question-bank builder, 6 question types, "Why?" explanations, timed tests, weak-topic summary | `/practice`, `/practice/session` |
-| Exam prep (program → semester → subject → exam) | `/exam-prep` |
+| Exam prep (level → course → Quiz 1 / Quiz 2 / End Term) | `/exam-prep` |
 | Categorised global search | `/search` |
 | Login / signup, student dashboard, saved resources | `/login`, `/signup`, `/dashboard`, `/saved` |
 | Admin CMS: dashboard, analytics, curriculum builder, upload, review queue, reports, users, content tables | `/admin/*` |
@@ -46,13 +46,15 @@ src/components/         design system + feature components
 supabase/schema.sql     production schema with row-level security
 ```
 
+## Content status
+
+The full official course list (50 courses: 8 Foundation, 10 Diploma in Data Analytics for Business incl. 2 projects, 6 other Diploma, 6 Degree core, 22 electives) is in `src/lib/data/curriculum.ts`. **No course content is published yet**: weeks, topics, notes, videos, PYQs and questions are empty, and every course shows a "coming soon" page. Add content via the CMS or the seed files.
+
 ## Demo mode: what's not real yet
 
 - **Auth** is simulated in the browser (`/login` → "Sign in as demo admin" opens the CMS). The admin gate is UI-only.
 - **Student data and CMS edits** are saved to `localStorage`, not a server.
 - **Download counts** in admin come from the seed data.
-- **Videos**: only one entry has a real YouTube ID. The rest show "Coming soon" until linked to BTechi IITian uploads in `src/lib/data/resources.ts`.
-- **PDFs**: two generated sample files in `public/files`. Notes without a `fileUrl` show the "temporarily unavailable" state.
 
 ## Going to production (Supabase)
 

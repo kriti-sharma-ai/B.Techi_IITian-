@@ -23,7 +23,7 @@ export type SearchDoc = {
 };
 
 export const categoryLabels: Record<SearchCategory, string> = {
-  subjects: "Subjects",
+  subjects: "Courses",
   topics: "Topics",
   notes: "Notes",
   videos: "Videos",
@@ -41,7 +41,7 @@ function buildIndex(): SearchDoc[] {
       title: s.name,
       subtitle: subjectContext(s.slug),
       href: `/subjects/${s.slug}`,
-      text: `${s.name} ${s.description}`,
+      text: `${s.name} ${s.code ?? ""} ${s.description ?? ""} ${s.level} ${s.group?.replace(/-/g, " ") ?? ""} ${s.kind}`,
     });
     for (const u of s.units)
       for (const t of u.topics)
@@ -49,9 +49,9 @@ function buildIndex(): SearchDoc[] {
           id: `${s.slug}/${t.slug}`,
           category: "topics",
           title: t.title,
-          subtitle: `${s.name} · Unit ${u.number}`,
+          subtitle: `${s.name} · Week ${u.number}`,
           href: `/subjects/${s.slug}/${t.slug}`,
-          text: `${t.title} ${t.summary} ${u.title} ${s.name} unit ${u.number}`,
+          text: `${t.title} ${t.summary} ${u.title} ${s.name} week ${u.number}`,
         });
   }
   for (const n of notes)

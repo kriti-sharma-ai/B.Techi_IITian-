@@ -7,6 +7,7 @@ import { Badge, QualityBadge, buttonClass } from "@/components/ui";
 import {
   allTopics,
   books,
+  getLevel,
   getProgram,
   notes,
   popularNotes,
@@ -26,7 +27,7 @@ import { formatDate, formatNumber } from "@/lib/utils";
 const SECTIONS = {
   analytics: "Analytics",
   review: "Review queue",
-  subjects: "Subjects",
+  subjects: "Courses",
   notes: "Notes",
   videos: "Videos",
   books: "Books",
@@ -164,20 +165,20 @@ export default async function AdminSection({ params }: PageProps<"/admin/[sectio
             title={title}
             action={
               <Link href="/admin/curriculum" className={buttonClass("primary", "md")}>
-                Add subject
+                Add course
               </Link>
             }
           />
-          <Table head={["Subject", "Program", "Semester", "Units", "Topics", "Credits"]}>
+          <Table head={["Code", "Course", "Level", "Weeks", "Topics", "Credits"]}>
             {subjects.map((s) => (
               <tr key={s.slug}>
+                <Td className="font-mono text-xs text-muted">{s.code ?? "—"}</Td>
                 <Td>
                   <Link href={`/subjects/${s.slug}`} className="font-medium hover:underline">
                     {s.name}
                   </Link>
                 </Td>
-                <Td>{getProgram(s.programSlug)?.name}</Td>
-                <Td className="tabular-nums">{s.semester}</Td>
+                <Td>{getLevel(s.programSlug, s.level)?.short}</Td>
                 <Td className="tabular-nums">{s.units.length}</Td>
                 <Td className="tabular-nums">{allTopics(s).length}</Td>
                 <Td className="tabular-nums">{s.credits}</Td>
@@ -239,7 +240,7 @@ export default async function AdminSection({ params }: PageProps<"/admin/[sectio
       return (
         <>
           <AdminHeader title={title} action={addButton} />
-          <Table head={["Title", "Authors", "Subjects", "Access"]}>
+          <Table head={["Title", "Authors", "Courses", "Access"]}>
             {books.map((b) => (
               <tr key={b.slug}>
                 <Td>

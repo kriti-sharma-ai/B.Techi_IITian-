@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { actions, type Role } from "@/lib/store";
-import { programs } from "@/lib/content";
+import { PROGRAM_SLUG, programs } from "@/lib/content";
 import { Button, buttonClass } from "./ui";
 import { useToast } from "./toast";
 
@@ -81,7 +81,7 @@ export function LoginForm() {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
   const go = (name: string, mail: string, role: Role = "student") => {
-    actions.signIn({ name, email: mail, role, program: "data-science", semester: 2, university: "IIT Mandi" });
+    actions.signIn({ name, email: mail, role, program: PROGRAM_SLUG, level: "foundation", university: "IIT Madras" });
     toast(`Welcome back, ${name.split(" ")[0]}`);
     // Only allow internal redirects.
     router.push(next?.startsWith("/") && !next.startsWith("//") ? next : role === "student" ? "/dashboard" : "/admin");
@@ -161,7 +161,7 @@ export function LoginForm() {
 export function SignupForm() {
   const router = useRouter();
   const toast = useToast();
-  const [form, setForm] = useState({ name: "", email: "", password: "", university: "IIT Mandi", program: "data-science", semester: "1" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", university: "IIT Madras", program: PROGRAM_SLUG, level: "foundation" });
   const [errors, setErrors] = useState<Partial<Record<keyof typeof form, string>>>({});
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -181,7 +181,7 @@ export function SignupForm() {
       email: form.email.trim(),
       university: form.university.trim(),
       program: form.program,
-      semester: Number(form.semester),
+      level: form.level,
       role: "student",
     });
     toast("Account created. Welcome to BTechi!");
@@ -189,7 +189,7 @@ export function SignupForm() {
   };
 
   const google = () => {
-    actions.signIn({ name: "Student", email: "student@gmail.com", role: "student", program: form.program, semester: Number(form.semester) });
+    actions.signIn({ name: "Student", email: "student@gmail.com", role: "student", program: form.program, level: form.level });
     router.push("/dashboard");
   };
 
@@ -218,7 +218,7 @@ export function SignupForm() {
         <Field id="university" label="University">
           <input id="university" value={form.university} onChange={set("university")} className={input} />
         </Field>
-        <div className="grid grid-cols-[1fr_120px] gap-3">
+        <div className="grid grid-cols-[1fr_140px] gap-3">
           <Field id="program" label="Program">
             <select id="program" value={form.program} onChange={set("program")} className={input}>
               {programs.map((p) => (
@@ -228,11 +228,11 @@ export function SignupForm() {
               ))}
             </select>
           </Field>
-          <Field id="semester" label="Semester">
-            <select id="semester" value={form.semester} onChange={set("semester")} className={input}>
-              {Array.from({ length: program?.semesters ?? 8 }, (_, i) => (
-                <option key={i} value={i + 1}>
-                  {i + 1}
+          <Field id="level" label="Level">
+            <select id="level" value={form.level} onChange={set("level")} className={input}>
+              {(program?.levels ?? []).map((l) => (
+                <option key={l.slug} value={l.slug}>
+                  {l.short}
                 </option>
               ))}
             </select>

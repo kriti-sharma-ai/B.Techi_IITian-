@@ -3,15 +3,43 @@
 
 export type Accent = "yellow" | "blue" | "purple" | "green" | "teal";
 
+/** A group of courses inside a level, e.g. "Diploma in Data Analytics for Business". */
+export type CourseGroup = {
+  slug: string;
+  name: string;
+  credits: number;
+  summary: string;
+};
+
+/** IITM BS programs are organised by level, not semester. */
+export type Level = {
+  slug: string;
+  name: string;
+  short: string;
+  accent: Accent;
+  credits: number;
+  /** Cumulative credits on completing this level. */
+  cumulativeCredits: number;
+  courses: string;
+  duration: string;
+  effort: string;
+  entry: string;
+  exit: string;
+  groups?: CourseGroup[];
+};
+
 export type Program = {
   slug: string;
   name: string;
+  /** Full degree title. */
+  degree: string;
   tagline: string;
   description: string;
   university: string;
-  degree: string;
   accent: Accent;
-  semesters: number;
+  totalCredits: number;
+  maxYears: number;
+  levels: Level[];
 };
 
 export type Topic = {
@@ -31,10 +59,18 @@ export type Unit = {
 export type Subject = {
   slug: string;
   name: string;
+  /** Official course code, e.g. BSMA1001. Electives may not have one yet. */
+  code?: string;
   programSlug: string;
-  semester: number;
+  level: string;
+  /** Course group within the level (see Level.groups). */
+  group?: string;
+  kind: "course" | "project";
   credits: number;
-  description: string;
+  prerequisites: string;
+  /** Optional until the course page is written. */
+  description?: string;
+  /** Empty until the curriculum is published. */
   units: Unit[];
 };
 
@@ -64,7 +100,7 @@ export type Note = {
   updatedAt: string;
 };
 
-export type Level = "Beginner" | "Intermediate" | "Advanced";
+export type VideoLevel = "Beginner" | "Intermediate" | "Advanced";
 
 export type Video = {
   id: string;
@@ -75,7 +111,7 @@ export type Video = {
   /** YouTube video id. Embedded on demand, never re-hosted (PRD §15). */
   youtubeId?: string;
   duration: string;
-  level: Level;
+  level: VideoLevel;
   channel: string;
   views: number;
 };
@@ -130,12 +166,15 @@ export type Question = {
   source?: string;
 };
 
-export type ExamKind = "Mid-sem" | "End-sem" | "Quiz";
+/** IITM BS assessments: two in-person quizzes and an end-term exam per term. */
+export type ExamKind = "Quiz 1" | "Quiz 2" | "End Term";
+export type Term = "January" | "May" | "September";
 
 export type Pyq = {
   id: string;
   subjectSlug: string;
   year: number;
+  term: Term;
   exam: ExamKind;
   marks: number;
   durationMin: number;

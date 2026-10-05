@@ -8,41 +8,52 @@ import { programs, subjects } from "@/lib/content";
 import { academicFilters, matchesAcademic } from "@/lib/filters";
 
 export const metadata: Metadata = {
-  title: "All subjects",
-  description: "Every subject on BTechi with unit-wise curriculum, notes, videos, PYQs and practice questions.",
+  title: "All courses",
+  description: "Every IIT Madras BS Management and Data Science course, from Foundation to Degree, with course codes and credits.",
   alternates: { canonical: "/subjects" },
 };
 
 export default async function SubjectsPage({ searchParams }: PageProps<"/subjects">) {
   const sp = await searchParams;
   const list = subjects.filter((s) => matchesAcademic(s.slug, sp));
-  const filters = academicFilters(sp, { units: false }).filter((f) => f.name !== "subject");
+  const filters = academicFilters(sp, { units: false, subject: false });
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "Subjects" }]} title="Subjects" description="Pick a subject to see its curriculum, topic by topic.">
+      <PageHeader
+        crumbs={[{ label: "Courses" }]}
+        title="All courses"
+        description={`${subjects.length} courses across Foundation, Diploma and Degree levels.`}
+      >
         <Suspense>
           <FilterBar filters={filters} />
         </Suspense>
       </PageHeader>
       <div className="container-page space-y-12 py-10">
         {list.length === 0 && (
-          <EmptyState icon={<BookDashed className="size-6" />} title="No subjects match these filters." description="Try another semester or clear the filters." />
+          <EmptyState icon={<BookDashed className="size-6" />} title="No courses match these filters." description="Try another level or clear the filters." />
         )}
-        {programs.map((p) => {
-          const subs = list.filter((s) => s.programSlug === p.slug).sort((a, b) => a.semester - b.semester);
-          if (!subs.length) return null;
-          return (
-            <section key={p.slug}>
-              <h2 className="mb-4 text-lg font-bold">{p.name}</h2>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {subs.map((s) => (
-                  <SubjectCard key={s.slug} subject={s} showProgram={false} />
-                ))}
-              </div>
-            </section>
-          );
-        })}
+        {programs.flatMap((p) =>
+          p.levels.map((l) => {
+            const subs = list.filter((s) => s.programSlug === p.slug && s.level === l.slug);
+            if (!subs.length) return null;
+            return (
+              <section key={p.slug + l.slug}>
+                <div className="mb-4 flex flex-wrap items-baseline gap-x-3">
+                  <h2 className="text-lg font-bold">{l.name}</h2>
+                  <span className="text-sm text-muted">
+                    {l.credits} credits · {subs.length} courses
+                  </span>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {subs.map((s) => (
+                    <SubjectCard key={s.slug} subject={s} showLevel={false} />
+                  ))}
+                </div>
+              </section>
+            );
+          }),
+        )}
       </div>
     </>
   );

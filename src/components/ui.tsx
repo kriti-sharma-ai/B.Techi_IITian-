@@ -260,7 +260,7 @@ export function LinkTabs({ tabs, active }: { tabs: { id: string; label: string; 
             )}
           >
             {t.label}
-            {t.count !== undefined && <span className="text-xs text-muted">{t.count}</span>}
+            {!!t.count && <span className="text-xs text-muted">{t.count}</span>}
             {on && <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-brand" />}
           </Link>
         );

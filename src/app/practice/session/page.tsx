@@ -47,7 +47,7 @@ export default async function SessionPage({ searchParams }: PageProps<"/practice
       : topic && subjectSlug
         ? topicTitle(subjectSlug, topic)
         : unit
-          ? `Unit ${unit.number}: ${unit.title}`
+          ? `Week ${unit.number}: ${unit.title}`
           : (subject?.name ?? "Mixed practice");
 
   // Roughly two minutes per question for timed tests.
@@ -58,7 +58,7 @@ export default async function SessionPage({ searchParams }: PageProps<"/practice
       <Breadcrumbs
         items={[
           { label: "Practice", href: "/practice" },
-          ...(subject ? [{ label: subject.name, href: `/subjects/${subject.slug}?tab=practice` }] : []),
+          ...(subject ? [{ label: subject.name, href: `/subjects/${subject.slug}?item=practice` }] : []),
           { label: title },
         ]}
       />

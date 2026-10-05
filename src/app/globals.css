@@ -25,6 +25,8 @@
   --teal: #0f766e;
   --red: #dc2626;
   --amber: #b45309;
+  /* Landing-page maths backdrop accent: deeper yellow so it reads on white. */
+  --math-accent: #e0a800;
 }
 
 .dark {
@@ -42,6 +44,7 @@
   --teal: #2dd4bf;
   --red: #f87171;
   --amber: #fbbf24;
+  --math-accent: var(--brand);
   color-scheme: dark;
 }
 
@@ -152,4 +155,49 @@
       linear-gradient(90deg, color-mix(in srgb, currentColor 10%, transparent) 1px, transparent 1px);
     background-size: 18px 18px;
   }
+}
+
+/*
+ * Landing-page maths backdrop (src/components/math-background.tsx).
+ * Everything animates transform / translate / rotate only, so it stays on the GPU.
+ */
+@keyframes math-float {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  33% { translate: 6px -14px; rotate: 4deg; }
+  66% { translate: -5px -6px; rotate: -3deg; }
+}
+.math-float {
+  animation: math-float 8s ease-in-out infinite;
+  will-change: translate, rotate;
+}
+.math-layer {
+  will-change: transform;
+}
+
+/* Scroll parallax + spin, driven by the page scroll off the main thread. */
+@keyframes math-parallax {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, calc(var(--speed) * var(--max-scroll, 0px)), 0); }
+}
+@keyframes math-spin {
+  from { rotate: 0deg; }
+  to { rotate: var(--spin); }
+}
+@supports (animation-timeline: scroll()) {
+  .math-layer {
+    animation: math-parallax linear both;
+    animation-timeline: scroll(root block);
+  }
+  .math-spin {
+    animation: math-spin linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+.math-paused .math-float {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .math-float, .math-layer, .math-spin { animation: none !important; }
 }

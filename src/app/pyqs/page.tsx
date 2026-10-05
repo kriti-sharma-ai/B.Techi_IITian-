@@ -5,7 +5,7 @@ import { BarChart3, ScrollText } from "lucide-react";
 import { PyqCard } from "@/components/cards";
 import { FilterBar } from "@/components/filter-bar";
 import { PyqAnalysis } from "@/components/pyq-analysis";
-import { EmptyState, PageHeader } from "@/components/ui";
+import { EmptyState, PageHeader, buttonClass } from "@/components/ui";
 import { getSubject, pyqs } from "@/lib/content";
 import { academicFilters, matchesAcademic, param } from "@/lib/filters";
 
@@ -31,7 +31,7 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
   const filters = [
     ...academicFilters(sp, { units: false }),
     { name: "year", label: "Year", options: years.map((y) => ({ value: String(y), label: String(y) })) },
-    { name: "exam", label: "Exam", options: ["Mid-sem", "End-sem", "Quiz"].map((e) => ({ value: e, label: e })) },
+    { name: "exam", label: "Exam", options: ["Quiz 1", "Quiz 2", "End Term"].map((e) => ({ value: e, label: e })) },
   ];
 
   return (
@@ -48,7 +48,20 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
       <div className="container-page grid gap-10 py-8 lg:grid-cols-[1fr_380px]">
         <div className="min-w-0">
           {byYear.length === 0 ? (
-            <EmptyState icon={<ScrollText className="size-6" />} title="No papers match these filters." description="Try another year or exam." />
+            pyqs.length === 0 ? (
+              <EmptyState
+                icon={<ScrollText className="size-6" />}
+                title="No papers published yet."
+                description="We're collecting Quiz 1, Quiz 2 and End Term papers for every course. Have one? Share it and help everyone."
+                action={
+                  <Link href="/contribute" className={buttonClass("secondary")}>
+                    Contribute a paper →
+                  </Link>
+                }
+              />
+            ) : (
+              <EmptyState icon={<ScrollText className="size-6" />} title="No papers match these filters." description="Try another year or exam." />
+            )
           ) : (
             <div className="space-y-10">
               {byYear.map((g) => (
@@ -75,7 +88,7 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
             <PyqAnalysis subjectSlug={subject} />
           ) : (
             <div className="card p-5">
-              <p className="text-sm text-muted">Pick a subject to see which topics come up most often.</p>
+              <p className="text-sm text-muted">{subjectsWithPyqs.length ? "Pick a course to see which topics come up most often." : "Once papers are added, this shows the topics that repeat most across Quiz and End Term papers."}</p>
               <ul className="mt-3 flex flex-wrap gap-2">
                 {subjectsWithPyqs.map((s) => (
                   <li key={s}>

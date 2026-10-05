@@ -14,7 +14,8 @@ export type User = {
   email: string;
   university?: string;
   program?: string;
-  semester?: number;
+  /** Current level slug, e.g. foundation. */
+  level?: string;
   role: Role;
 };
 
@@ -50,7 +51,9 @@ export type CustomSubject = {
   slug: string;
   name: string;
   programSlug: string;
-  semester: number;
+  level: string;
+  group?: string;
+  code?: string;
   credits: number;
   description: string;
   at: string;
@@ -70,7 +73,7 @@ export type State = {
   customSubjects: CustomSubject[];
 };
 
-const KEY = "btechi:v1";
+const KEY = "btechi:v2";
 
 const EMPTY: State = {
   user: null,

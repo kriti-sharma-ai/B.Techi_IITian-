@@ -5,7 +5,7 @@ import { NoteCard, PyqCard } from "@/components/cards";
 import { PyqAnalysis } from "@/components/pyq-analysis";
 import { Badge, EmptyState, PageHeader, buttonClass } from "@/components/ui";
 import { VideoCard } from "@/components/video-card";
-import { forSubject, getProgram, getSubject, notes, programs, pyqs, pyqTopicFrequency, questions, subjects, topicTitle, videos } from "@/lib/content";
+import { PROGRAM_SLUG, forSubject, getProgram, getSubject, notes, pyqs, pyqTopicFrequency, questions, subjects, topicTitle, videos } from "@/lib/content";
 import { param } from "@/lib/filters";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/exam-prep" },
 };
 
-const EXAMS = ["Mid-sem", "End-sem"] as const;
+const EXAMS = ["Quiz 1", "Quiz 2", "End Term"] as const;
 
 function Step({ n, label, done, children }: { n: number; label: string; done: boolean; children: React.ReactNode }) {
   return (
@@ -56,17 +56,17 @@ export default async function ExamPrepPage({ searchParams }: PageProps<"/exam-pr
   const sp = await searchParams;
   const subjectSlug = param(sp, "subject");
   const subject = subjectSlug ? getSubject(subjectSlug) : undefined;
-  const programSlug = subject?.programSlug ?? param(sp, "program");
-  const program = programSlug ? getProgram(programSlug) : undefined;
-  const sem = subject?.semester ?? (Number(param(sp, "semester")) || undefined);
+  const program = getProgram(subject?.programSlug ?? param(sp, "program") ?? PROGRAM_SLUG)!;
+  const levelSlug = subject?.level ?? param(sp, "level");
+  const level = levelSlug ? program.levels.find((l) => l.slug === levelSlug) : undefined;
   const exam = param(sp, "exam");
 
-  const q = (o: Record<string, string | number | undefined>) =>
+  const q = (o: Record<string, string | undefined>) =>
     "/exam-prep?" + new URLSearchParams(Object.entries(o).filter(([, v]) => v !== undefined) as [string, string][]).toString();
 
-  const semesters = program ? [...new Set(subjects.filter((s) => s.programSlug === program.slug).map((s) => s.semester))].sort() : [];
-  const subjectOptions = program && sem ? subjects.filter((s) => s.programSlug === program.slug && s.semester === sem) : [];
-
+  const courseOptions = level
+    ? subjects.filter((s) => s.programSlug === program.slug && s.level === level.slug && s.kind === "course")
+    : [];
   const ready = subject && exam;
 
   return (
@@ -74,40 +74,30 @@ export default async function ExamPrepPage({ searchParams }: PageProps<"/exam-pr
       <PageHeader
         crumbs={[{ label: "Exam prep" }]}
         title="Exam prep"
-        description="Tell us your exam. We'll show you what matters most, built from previous year papers."
+        description="Pick your course and exam. We'll show what matters most, built from previous Quiz and End Term papers."
       />
       <div className="container-page py-8">
         <div className="card p-5 md:p-6">
-          <Step n={1} label="Program" done={!!program}>
-            {programs.map((p) => (
-              <Pill key={p.slug} href={q({ program: p.slug })} on={program?.slug === p.slug}>
-                {p.name}
+          <Step n={1} label="Level" done={!!level}>
+            {program.levels.map((l) => (
+              <Pill key={l.slug} href={q({ level: l.slug })} on={level?.slug === l.slug}>
+                {l.short}
               </Pill>
             ))}
           </Step>
-          <Step n={2} label="Semester" done={!!sem}>
-            {program ? (
-              semesters.map((s) => (
-                <Pill key={s} href={q({ program: program.slug, semester: s })} on={sem === s}>
-                  Semester {s}
-                </Pill>
-              ))
-            ) : (
-              <span className="text-sm text-muted">Choose a program first</span>
-            )}
-          </Step>
-          <Step n={3} label="Subject" done={!!subject}>
-            {subjectOptions.length ? (
-              subjectOptions.map((s) => (
+          <Step n={2} label="Course" done={!!subject}>
+            {courseOptions.length ? (
+              courseOptions.map((s) => (
                 <Pill key={s.slug} href={q({ subject: s.slug })} on={subject?.slug === s.slug}>
+                  {s.code ? <span className="mr-1.5 font-mono text-xs opacity-70">{s.code}</span> : null}
                   {s.name}
                 </Pill>
               ))
             ) : (
-              <span className="text-sm text-muted">Choose a semester first</span>
+              <span className="text-sm text-muted">Choose a level first</span>
             )}
           </Step>
-          <Step n={4} label="Exam" done={!!exam}>
+          <Step n={3} label="Exam" done={!!exam}>
             {subject ? (
               EXAMS.map((e) => (
                 <Pill key={e} href={q({ subject: subject.slug, exam: e })} on={exam === e}>
@@ -115,7 +105,7 @@ export default async function ExamPrepPage({ searchParams }: PageProps<"/exam-pr
                 </Pill>
               ))
             ) : (
-              <span className="text-sm text-muted">Choose a subject first</span>
+              <span className="text-sm text-muted">Choose a course first</span>
             )}
           </Step>
         </div>

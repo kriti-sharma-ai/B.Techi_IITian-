@@ -19,7 +19,7 @@ create table profiles (
   name        text not null,
   university  text,
   program_id  uuid,
-  semester    int check (semester between 1 and 12),
+  level       text,  -- foundation | diploma | degree
   interests   text[] default '{}',
   role        user_role not null default 'student',
   created_at  timestamptz not null default now()
@@ -47,7 +47,29 @@ create table programs (
   tagline       text,
   description   text,
   accent        text not null default 'yellow',
-  semesters     int not null check (semesters between 1 and 12)
+  total_credits int,
+  max_years     int
+);
+
+-- IITM BS is organised by level (Foundation, Diploma, Degree) and course groups.
+create table levels (
+  id         uuid primary key default gen_random_uuid(),
+  program_id uuid not null references programs on delete cascade,
+  slug       text not null,
+  name       text not null,
+  position   int not null,
+  credits    int not null,
+  exit_award text,
+  unique (program_id, slug)
+);
+
+create table course_groups (
+  id       uuid primary key default gen_random_uuid(),
+  level_id uuid not null references levels on delete cascade,
+  slug     text not null,
+  name     text not null,
+  credits  int,
+  unique (level_id, slug)
 );
 
 alter table profiles add constraint profiles_program_fk foreign key (program_id) references programs on delete set null;
@@ -55,14 +77,18 @@ alter table profiles add constraint profiles_program_fk foreign key (program_id)
 create table subjects (
   id          uuid primary key default gen_random_uuid(),
   program_id  uuid not null references programs on delete cascade,
-  semester    int not null,
+  level_id    uuid not null references levels on delete restrict,
+  group_id    uuid references course_groups on delete set null,
+  code        text unique,          -- e.g. BSMA1001; null for some electives
+  kind        text not null default 'course' check (kind in ('course', 'project')),
+  prerequisites text,
   slug        text unique not null,
   name        text not null,
   credits     int not null default 0,
   description text,
   status      content_status not null default 'published'
 );
-create index on subjects (program_id, semester);
+create index on subjects (program_id, level_id);
 
 create table units (
   id         uuid primary key default gen_random_uuid(),
@@ -131,7 +157,8 @@ create table books  (
 create table pyqs (
   resource_id  uuid primary key references resources on delete cascade,
   year         int not null,
-  exam         text not null,
+  term         text not null check (term in ('January', 'May', 'September')),
+  exam         text not null check (exam in ('Quiz 1', 'Quiz 2', 'End Term')),
   marks        int,
   duration_min int
 );
@@ -230,6 +257,8 @@ create table notifications (
 alter table profiles          enable row level security;
 alter table universities      enable row level security;
 alter table programs          enable row level security;
+alter table levels            enable row level security;
+alter table course_groups     enable row level security;
 alter table subjects          enable row level security;
 alter table units             enable row level security;
 alter table topics            enable row level security;
@@ -251,7 +280,7 @@ alter table notifications     enable row level security;
 
 -- Curriculum: public read, moderators+ write.
 do $$ declare t text; begin
-  foreach t in array array['universities','programs','subjects','units','topics','assignments','pyq_topics'] loop
+  foreach t in array array['universities','programs','levels','course_groups','subjects','units','topics','assignments','pyq_topics'] loop
     execute format('create policy "%1$s read" on %1$I for select using (true)', t);
     execute format('create policy "%1$s write" on %1$I for all using (has_role(''moderator'')) with check (has_role(''moderator''))', t);
   end loop;
@@ -292,7 +321,7 @@ create policy "update own profile" on profiles for update using (id = auth.uid()
 -- (service role) — expose role changes through an admin-only server action.
 -- (A column-level revoke is not enough while a table-level grant exists.)
 revoke update on profiles from authenticated, anon;
-grant update (name, university, program_id, semester, interests) on profiles to authenticated;
+grant update (name, university, program_id, level, interests) on profiles to authenticated;
 
 do $$ declare t text; begin
   foreach t in array array['question_attempts','progress','bookmarks','notifications'] loop

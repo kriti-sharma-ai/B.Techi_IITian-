@@ -15,18 +15,18 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "BTechi: Your entire degree, organised in one place",
+    default: "BTechi: IIT Madras BS Management & Data Science, organised",
     template: "%s · BTechi",
   },
   description:
-    "Notes, curriculum, videos, books, previous-year questions and practice, organised by program, semester, subject and topic.",
+    "Every IIT Madras BS in Management and Data Science course, Foundation to Degree, with notes, videos, PYQs and practice, organised week by week.",
   applicationName: "BTechi",
-  keywords: ["BTechi", "IIT Mandi", "notes", "PYQ", "previous year questions", "statistics", "data science", "BBA", "B.A."],
+  keywords: ["BTechi", "IIT Madras BS", "IITM BS", "Management and Data Science", "IITM BS notes", "IITM BS PYQ", "quiz 1", "end term", "BSMA1001", "BSMS"],
   openGraph: {
     type: "website",
     siteName: "BTechi",
-    title: "BTechi: Your entire degree, organised in one place",
-    description: "Notes, videos, books, PYQs and practice, organised for your degree.",
+    title: "BTechi: IIT Madras BS Management & Data Science, organised",
+    description: "Notes, videos, PYQs and practice for every IITM BS course.",
   },
   twitter: { card: "summary_large_image" },
 };

@@ -1,12 +1,12 @@
 // Read-only query layer over the seed data. Every page goes through these
 // helpers, so moving to Supabase means re-implementing this file only.
 
-import { programs, subjects } from "./data/curriculum";
+import { PROGRAM_SLUG, programs, subjects } from "./data/curriculum";
 import { assignments, books, notes, pyqs, videos } from "./data/resources";
 import { questions } from "./data/questions";
 import type { Question, Subject, Topic, Unit } from "./types";
 
-export { programs, subjects, notes, videos, books, pyqs, questions, assignments };
+export { PROGRAM_SLUG, programs, subjects, notes, videos, books, pyqs, questions, assignments };
 
 export const getProgram = (slug: string) => programs.find((p) => p.slug === slug);
 export const getSubject = (slug: string) => subjects.find((s) => s.slug === slug);
@@ -18,8 +18,22 @@ export const getVideo = (id: string) => videos.find((v) => v.id === id);
 export const subjectsForProgram = (programSlug: string) =>
   subjects.filter((s) => s.programSlug === programSlug);
 
-export const subjectsForSemester = (programSlug: string, semester: number) =>
-  subjects.filter((s) => s.programSlug === programSlug && s.semester === semester);
+export const subjectsForLevel = (programSlug: string, level: string) =>
+  subjects.filter((s) => s.programSlug === programSlug && s.level === level);
+
+export const getLevel = (programSlug: string, level: string) =>
+  getProgram(programSlug)?.levels.find((l) => l.slug === level);
+
+/** The level + group a subject belongs to, for labels and breadcrumbs. */
+export function subjectPlacement(subject: Subject) {
+  const program = getProgram(subject.programSlug)!;
+  const level = program.levels.find((l) => l.slug === subject.level)!;
+  const group = level.groups?.find((g) => g.slug === subject.group);
+  return { program, level, group };
+}
+
+/** True once a course has a published curriculum. */
+export const hasContent = (subject: Subject) => subject.units.length > 0;
 
 export function findTopic(subject: Subject, topicSlug: string): { unit: Unit; topic: Topic } | undefined {
   for (const unit of subject.units) {
@@ -118,16 +132,17 @@ export const subjectName = (slug: string) => getSubject(slug)?.name ?? slug;
 export function subjectContext(slug: string) {
   const s = getSubject(slug);
   if (!s) return "";
-  return `Semester ${s.semester} · ${getProgram(s.programSlug)?.name ?? ""}`;
+  const { level } = subjectPlacement(s);
+  return [s.code, level.short].filter(Boolean).join(" · ");
 }
 
 export const unitLabel = (subjectSlug: string, unitId: string) => {
   const u = getSubject(subjectSlug)?.units.find((x) => x.id === unitId);
-  return u ? `Unit ${u.number}` : "";
+  return u ? `Week ${u.number}` : "";
 };
 
-export const pyqTitle = (p: { subjectSlug: string; year: number; exam: string }) =>
-  `${subjectName(p.subjectSlug)} ${p.exam} ${p.year}`;
+export const pyqTitle = (p: { subjectSlug: string; year: number; term: string; exam: string }) =>
+  `${subjectName(p.subjectSlug)} ${p.exam} (${p.term} ${p.year})`;
 
 /** Most popular notes by downloads, for the homepage and admin analytics. */
 export const popularNotes = (n = 4) => [...notes].sort((a, b) => b.downloads - a.downloads).slice(0, n);

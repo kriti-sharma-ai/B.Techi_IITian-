@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * BTechi design tokens.
+ * Rule of thumb: 85% neutral, 10% ink, 5% yellow + contextual accents.
+ * Yellow is a fill colour only (logo, primary CTA, progress, selection) —
+ * never body text on white, because it fails contrast.
+ */
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-2: #eef1f4;
+  --fg: #171717;
+  --muted: #667085;
+  --border: #e5e7eb;
+  --brand: #ffd21c;
+  --brand-ink: #0b0b0b;
+  --ink: #0b0b0b;
+
+  --blue: #2563eb;
+  --green: #15803d;
+  --purple: #7c3aed;
+  --teal: #0f766e;
+  --red: #dc2626;
+  --amber: #b45309;
+}
+
+.dark {
+  --bg: #0b0b0b;
+  --surface: #151515;
+  --surface-2: #1f1f1f;
+  --fg: #ffffff;
+  --muted: #a0a0a0;
+  --border: #2a2a2a;
+  --ink: #ffffff;
+
+  --blue: #60a5fa;
+  --green: #4ade80;
+  --purple: #a78bfa;
+  --teal: #2dd4bf;
+  --red: #f87171;
+  --amber: #fbbf24;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-ink: var(--ink);
+  --color-blue: var(--blue);
+  --color-green: var(--green);
+  --color-purple: var(--purple);
+  --color-teal: var(--teal);
+  --color-red: var(--red);
+  --color-amber: var(--amber);
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+
+  --animate-shimmer: shimmer 1.4s ease-in-out infinite;
+  --animate-fade-up: fade-up 0.35s ease-out both;
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--brand);
+    color: var(--brand-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 768px) {
+    .container-page { padding-inline: 1.5rem; }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .card-hover {
+    transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .card-hover:hover {
+    border-color: color-mix(in srgb, var(--fg) 22%, transparent);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px -12px rgb(0 0 0 / 0.18);
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface-2) 25%, var(--border) 50%, var(--surface-2) 75%);
+    background-size: 200% 100%;
+    animation: var(--animate-shimmer);
+    border-radius: 8px;
+  }
+
+  /* Gradient-free "thumbnail" used for video and book covers. */
+  .grid-pattern {
+    background-image:
+      linear-gradient(color-mix(in srgb, currentColor 10%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, currentColor 10%, transparent) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+}

@@ -1,0 +1,99 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [6 0 R 8 0 R 10 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Length 1093 >>
+stream
+q 1 0.824 0.11 rg 0 812 595 30 re f Q
+BT /F2 10 Tf 40 822 Td (BTechi  |  Statistics - Unit 2: Probability) Tj ET
+BT /F2 20 Tf 40 770 Td (1. Basic Probability) Tj ET
+BT /F2 13 Tf 40 735 Td (Sample space and events) Tj ET
+BT /F1 11 Tf 40 711 Td (The sample space S is the set of all possible outcomes of an experiment.) Tj ET
+BT /F1 11 Tf 40 694 Td (An event A is any subset of S. Example: rolling a die, S = {1,2,3,4,5,6}.) Tj ET
+BT /F2 13 Tf 40 677 Td (Axioms of probability) Tj ET
+BT /F1 11 Tf 40 653 Td (1. P\(A\) >= 0 for every event A.) Tj ET
+BT /F1 11 Tf 40 636 Td (2. P\(S\) = 1.) Tj ET
+BT /F1 11 Tf 40 619 Td (3. For mutually exclusive events, P\(A or B\) = P\(A\) + P\(B\).) Tj ET
+BT /F2 13 Tf 40 602 Td (Useful rules) Tj ET
+BT /F1 11 Tf 40 578 Td (Complement: P\(not A\) = 1 - P\(A\)) Tj ET
+BT /F1 11 Tf 40 561 Td (Addition: P\(A or B\) = P\(A\) + P\(B\) - P\(A and B\)) Tj ET
+BT /F2 13 Tf 40 544 Td (Worked example) Tj ET
+BT /F1 11 Tf 40 520 Td (A card is drawn from a standard deck. P\(heart or king\) = 13/52 + 4/52 - 1/52 = 16/52.) Tj ET
+BT /F1 9 Tf 270 30 Td (Page 1 of 3) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 1001 >>
+stream
+q 1 0.824 0.11 rg 0 812 595 30 re f Q
+BT /F2 10 Tf 40 822 Td (BTechi  |  Statistics - Unit 2: Probability) Tj ET
+BT /F2 20 Tf 40 770 Td (2. Conditional Probability) Tj ET
+BT /F2 13 Tf 40 735 Td (Definition) Tj ET
+BT /F1 11 Tf 40 711 Td (P\(A | B\) = P\(A and B\) / P\(B\), provided P\(B\) > 0.) Tj ET
+BT /F1 11 Tf 40 694 Td (We restrict the sample space to B and ask what fraction of it also lies in A.) Tj ET
+BT /F2 13 Tf 40 677 Td (Multiplication rule) Tj ET
+BT /F1 11 Tf 40 653 Td (P\(A and B\) = P\(A | B\) P\(B\) = P\(B | A\) P\(A\)) Tj ET
+BT /F2 13 Tf 40 636 Td (Independence) Tj ET
+BT /F1 11 Tf 40 612 Td (A and B are independent if P\(A and B\) = P\(A\) P\(B\), i.e. P\(A | B\) = P\(A\).) Tj ET
+BT /F1 11 Tf 40 595 Td (Mutually exclusive events with non-zero probability are never independent.) Tj ET
+BT /F2 13 Tf 40 578 Td (Worked example) Tj ET
+BT /F1 11 Tf 40 554 Td (P\(A\) = 0.5, P\(B\) = 0.4, independent: P\(A and B\) = 0.5 x 0.4 = 0.2.) Tj ET
+BT /F1 9 Tf 270 30 Td (Page 2 of 3) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
+endobj
+9 0 obj
+<< /Length 1045 >>
+stream
+q 1 0.824 0.11 rg 0 812 595 30 re f Q
+BT /F2 10 Tf 40 822 Td (BTechi  |  Statistics - Unit 2: Probability) Tj ET
+BT /F2 20 Tf 40 770 Td (3. Bayes' Theorem) Tj ET
+BT /F2 13 Tf 40 735 Td (Formula) Tj ET
+BT /F1 11 Tf 40 711 Td (P\(A | B\) = P\(B | A\) P\(A\) / P\(B\)) Tj ET
+BT /F1 11 Tf 40 694 Td (with P\(B\) = P\(B | A\) P\(A\) + P\(B | not A\) P\(not A\)  \(law of total probability\).) Tj ET
+BT /F2 13 Tf 40 677 Td (The base-rate trap) Tj ET
+BT /F1 11 Tf 40 653 Td (Disease prevalence 1%, test sensitivity 99%, false positive rate 5%.) Tj ET
+BT /F1 11 Tf 40 636 Td (P\(disease | positive\) = 0.0099 / \(0.0099 + 0.0495\) = 0.167, only about 17%.) Tj ET
+BT /F1 11 Tf 40 619 Td (Rare conditions produce more false positives than true positives.) Tj ET
+BT /F2 13 Tf 40 602 Td (Tree method) Tj ET
+BT /F1 11 Tf 40 578 Td (Draw branches for the prior, then for the evidence; multiply along paths,) Tj ET
+BT /F1 11 Tf 40 561 Td (then divide the path you care about by the total of all matching paths.) Tj ET
+BT /F1 9 Tf 270 30 Td (Page 3 of 3) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 9 0 R >>
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000128 00000 n 
+0000000198 00000 n 
+0000000273 00000 n 
+0000001417 00000 n 
+0000001553 00000 n 
+0000002605 00000 n 
+0000002741 00000 n 
+0000003837 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+3974
+%%EOF

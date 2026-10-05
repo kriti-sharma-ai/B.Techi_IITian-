@@ -1,0 +1,88 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [6 0 R 8 0 R 10 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Length 867 >>
+stream
+q 1 0.824 0.11 rg 0 812 595 30 re f Q
+BT /F2 10 Tf 40 822 Td (BTechi  |  Statistics - Unit 1: Introduction) Tj ET
+BT /F2 20 Tf 40 770 Td (1. What is Statistics?) Tj ET
+BT /F1 11 Tf 40 735 Td (Statistics is the science of collecting, organising, analysing and interpreting data.) Tj ET
+BT /F2 13 Tf 40 718 Td (Descriptive vs inferential) Tj ET
+BT /F1 11 Tf 40 694 Td (Descriptive statistics summarise data you have \(mean, median, charts\).) Tj ET
+BT /F1 11 Tf 40 677 Td (Inferential statistics draw conclusions about a population from a sample.) Tj ET
+BT /F2 13 Tf 40 660 Td (Population and sample) Tj ET
+BT /F1 11 Tf 40 636 Td (Population: the entire group of interest. Its measures are parameters \(mu, sigma\).) Tj ET
+BT /F1 11 Tf 40 619 Td (Sample: the subset we observe. Its measures are statistics \(x-bar, s\).) Tj ET
+BT /F1 9 Tf 270 30 Td (Page 1 of 3) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 607 >>
+stream
+q 1 0.824 0.11 rg 0 812 595 30 re f Q
+BT /F2 10 Tf 40 822 Td (BTechi  |  Statistics - Unit 1: Introduction) Tj ET
+BT /F2 20 Tf 40 770 Td (2. Data Types) Tj ET
+BT /F2 13 Tf 40 735 Td (Scales of measurement) Tj ET
+BT /F1 11 Tf 40 711 Td (Nominal: categories with no order \(blood group, city\).) Tj ET
+BT /F1 11 Tf 40 694 Td (Ordinal: ordered categories \(grades A, B, C\).) Tj ET
+BT /F1 11 Tf 40 677 Td (Interval: equal spacing, no true zero \(temperature in Celsius\).) Tj ET
+BT /F1 11 Tf 40 660 Td (Ratio: equal spacing with a true zero \(height, income\).) Tj ET
+BT /F1 9 Tf 270 30 Td (Page 2 of 3) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
+endobj
+9 0 obj
+<< /Length 899 >>
+stream
+q 1 0.824 0.11 rg 0 812 595 30 re f Q
+BT /F2 10 Tf 40 822 Td (BTechi  |  Statistics - Unit 1: Introduction) Tj ET
+BT /F2 20 Tf 40 770 Td (3. Descriptive Statistics) Tj ET
+BT /F2 13 Tf 40 735 Td (Central tendency) Tj ET
+BT /F1 11 Tf 40 711 Td (Mean = sum of values / n.  Median = middle value.  Mode = most frequent value.) Tj ET
+BT /F1 11 Tf 40 694 Td (The median is robust to outliers; the mean is not.) Tj ET
+BT /F2 13 Tf 40 677 Td (Dispersion) Tj ET
+BT /F1 11 Tf 40 653 Td (Range = max - min.  Variance = average squared deviation from the mean.) Tj ET
+BT /F1 11 Tf 40 636 Td (Standard deviation = square root of variance.) Tj ET
+BT /F1 11 Tf 40 619 Td (IQR = Q3 - Q1, the spread of the middle 50% of the data.) Tj ET
+BT /F2 13 Tf 40 602 Td (Example) Tj ET
+BT /F1 11 Tf 40 578 Td (Values 4, 8, 6, 2: mean = 20 / 4 = 5, median = \(4 + 6\) / 2 = 5.) Tj ET
+BT /F1 9 Tf 270 30 Td (Page 3 of 3) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 9 0 R >>
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000128 00000 n 
+0000000198 00000 n 
+0000000273 00000 n 
+0000001190 00000 n 
+0000001326 00000 n 
+0000001983 00000 n 
+0000002119 00000 n 
+0000003068 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+3205
+%%EOF

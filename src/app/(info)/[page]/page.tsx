@@ -62,7 +62,7 @@ const PAGES: Record<string, { title: string; description: string; body: string[]
     title: "Study guides",
     description: "Step-by-step guides for every semester.",
     body: ["Study guides are coming soon. For now, Exam Prep builds a plan for any subject from previous-year papers."],
-    cta: { label: "Open Exam Prep", href: "/exam-prep" },
+    cta: { label: "Open Exam Prep", href: "/practice?tab=exam" },
   },
 };
 

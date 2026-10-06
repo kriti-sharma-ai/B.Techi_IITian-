@@ -12,11 +12,11 @@ import type { NoteKind } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Notes",
-  description: "Lecture notes, cheat sheets and revision notes by program, semester, subject and unit. Preview free, download when you need.",
+  description: "Lecture notes, cheat sheets, formula sheets and revision notes by program, semester, subject and unit. Preview free, download when you need.",
   alternates: { canonical: "/notes" },
 };
 
-const KINDS: NoteKind[] = ["Lecture notes", "Cheat sheet", "Revision", "Lab manual"];
+const KINDS: NoteKind[] = ["Lecture notes", "Cheat sheet", "Formula sheet", "Revision", "Lab manual"];
 const PAGE_SIZE = 8;
 
 export default async function NotesPage({ searchParams }: PageProps<"/notes">) {

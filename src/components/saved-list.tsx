@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Bookmark, BookOpen, FileText, ListTree, PenLine, PlayCircle, ScrollText, Trash2 } from "lucide-react";
+import { Award, Bookmark, BookOpen, FileText, ListTree, PenLine, PlayCircle, ScrollText, Trash2 } from "lucide-react";
 import { actions, useHydrated, useStore } from "@/lib/store";
 import type { ResourceKind } from "@/lib/types";
 import { EmptyState, buttonClass } from "./ui";
@@ -15,6 +15,7 @@ const meta: Record<ResourceKind, { label: string; icon: typeof FileText; tone: s
   question: { label: "Questions", icon: PenLine, tone: "bg-purple/10 text-purple" },
   topic: { label: "Topics", icon: ListTree, tone: "bg-surface-2 text-fg" },
   pyq: { label: "PYQs", icon: ScrollText, tone: "bg-green/10 text-green" },
+  skill: { label: "Skills", icon: Award, tone: "bg-brand/20 text-fg" },
 };
 
 export function SavedList() {

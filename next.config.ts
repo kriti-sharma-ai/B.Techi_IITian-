@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  async redirects() {
+    // Exam prep merged into /practice as a tab; query (subject, level, exam) is carried over.
+    return [{ source: "/exam-prep", destination: "/practice?tab=exam", permanent: true }];
+  },
   async headers() {
     return [
       {

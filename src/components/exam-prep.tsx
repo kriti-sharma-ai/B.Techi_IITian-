@@ -1,19 +1,12 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Check, FileClock, Flame, Lightbulb, ScrollText, Zap } from "lucide-react";
 import { NoteCard, PyqCard } from "@/components/cards";
 import { PyqAnalysis } from "@/components/pyq-analysis";
-import { Badge, EmptyState, PageHeader, buttonClass } from "@/components/ui";
+import { Badge, EmptyState, buttonClass } from "@/components/ui";
 import { VideoCard } from "@/components/video-card";
 import { PROGRAM_SLUG, forSubject, getProgram, getSubject, notes, pyqs, pyqTopicFrequency, questions, subjects, topicTitle, videos } from "@/lib/content";
 import { param } from "@/lib/filters";
 import { cn } from "@/lib/utils";
-
-export const metadata: Metadata = {
-  title: "Exam prep",
-  description: "High-priority topics, important questions, PYQs, quick revision notes and mock tests for your next exam.",
-  alternates: { canonical: "/exam-prep" },
-};
 
 const EXAMS = ["Quiz 1", "Quiz 2", "End Term"] as const;
 
@@ -52,8 +45,8 @@ function Pill({ href, on, children }: { href: string; on: boolean; children: Rea
   );
 }
 
-export default async function ExamPrepPage({ searchParams }: PageProps<"/exam-prep">) {
-  const sp = await searchParams;
+/** The "Exam prep" tab of /practice: pick level → course → exam, then show a study plan. */
+export function ExamPrep({ sp }: { sp: Record<string, string | string[] | undefined> }) {
   const subjectSlug = param(sp, "subject");
   const subject = subjectSlug ? getSubject(subjectSlug) : undefined;
   const program = getProgram(subject?.programSlug ?? param(sp, "program") ?? PROGRAM_SLUG)!;
@@ -62,7 +55,7 @@ export default async function ExamPrepPage({ searchParams }: PageProps<"/exam-pr
   const exam = param(sp, "exam");
 
   const q = (o: Record<string, string | undefined>) =>
-    "/exam-prep?" + new URLSearchParams(Object.entries(o).filter(([, v]) => v !== undefined) as [string, string][]).toString();
+    "/practice?" + new URLSearchParams({ tab: "exam", ...Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) }).toString();
 
   const courseOptions = level
     ? subjects.filter((s) => s.programSlug === program.slug && s.level === level.slug && s.kind === "course")
@@ -70,49 +63,45 @@ export default async function ExamPrepPage({ searchParams }: PageProps<"/exam-pr
   const ready = subject && exam;
 
   return (
-    <>
-      <PageHeader
-        crumbs={[{ label: "Exam prep" }]}
-        title="Exam prep"
-        description="Pick your course and exam. We'll show what matters most, built from previous Quiz and End Term papers."
-      />
-      <div className="container-page py-8">
-        <div className="card p-5 md:p-6">
-          <Step n={1} label="Level" done={!!level}>
-            {program.levels.map((l) => (
-              <Pill key={l.slug} href={q({ level: l.slug })} on={level?.slug === l.slug}>
-                {l.short}
+    <div className="container-page py-8">
+      <p className="mb-4 max-w-2xl text-sm text-muted">
+        Pick your course and exam. We&apos;ll show what matters most, built from previous Quiz and End Term papers.
+      </p>
+      <div className="card p-5 md:p-6">
+        <Step n={1} label="Level" done={!!level}>
+          {program.levels.map((l) => (
+            <Pill key={l.slug} href={q({ level: l.slug })} on={level?.slug === l.slug}>
+              {l.short}
+            </Pill>
+          ))}
+        </Step>
+        <Step n={2} label="Course" done={!!subject}>
+          {courseOptions.length ? (
+            courseOptions.map((s) => (
+              <Pill key={s.slug} href={q({ subject: s.slug })} on={subject?.slug === s.slug}>
+                {s.code ? <span className="mr-1.5 font-mono text-xs opacity-70">{s.code}</span> : null}
+                {s.name}
               </Pill>
-            ))}
-          </Step>
-          <Step n={2} label="Course" done={!!subject}>
-            {courseOptions.length ? (
-              courseOptions.map((s) => (
-                <Pill key={s.slug} href={q({ subject: s.slug })} on={subject?.slug === s.slug}>
-                  {s.code ? <span className="mr-1.5 font-mono text-xs opacity-70">{s.code}</span> : null}
-                  {s.name}
-                </Pill>
-              ))
-            ) : (
-              <span className="text-sm text-muted">Choose a level first</span>
-            )}
-          </Step>
-          <Step n={3} label="Exam" done={!!exam}>
-            {subject ? (
-              EXAMS.map((e) => (
-                <Pill key={e} href={q({ subject: subject.slug, exam: e })} on={exam === e}>
-                  {e}
-                </Pill>
-              ))
-            ) : (
-              <span className="text-sm text-muted">Choose a course first</span>
-            )}
-          </Step>
-        </div>
-
-        {ready && <Plan subjectSlug={subject.slug} exam={exam} />}
+            ))
+          ) : (
+            <span className="text-sm text-muted">Choose a level first</span>
+          )}
+        </Step>
+        <Step n={3} label="Exam" done={!!exam}>
+          {subject ? (
+            EXAMS.map((e) => (
+              <Pill key={e} href={q({ subject: subject.slug, exam: e })} on={exam === e}>
+                {e}
+              </Pill>
+            ))
+          ) : (
+            <span className="text-sm text-muted">Choose a course first</span>
+          )}
+        </Step>
       </div>
-    </>
+
+      {ready && <Plan subjectSlug={subject.slug} exam={exam} />}
+    </div>
   );
 }
 

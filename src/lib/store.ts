@@ -6,6 +6,7 @@
 
 import { useSyncExternalStore } from "react";
 import type { ResourceKind } from "./types";
+import type { QualifierResponse } from "./qualifier";
 
 export type Role = "student" | "contributor" | "moderator" | "admin" | "super_admin";
 
@@ -46,6 +47,17 @@ export type Upload = {
   status: "draft" | "pending" | "published";
   at: string;
 };
+export type QualifierAttempt = {
+  id: string;
+  mockSlug: string;
+  responses: Record<string, QualifierResponse>;
+  /** Seconds spent before submitting (or the full duration on auto-submit). */
+  timeTakenSec: number;
+  /** Times the candidate left the exam tab — shown like a proctoring flag. */
+  tabSwitches: number;
+  autoSubmitted: boolean;
+  at: string;
+};
 export type CustomUnit = { id: string; subjectSlug: string; title: string; topics: string[] };
 export type CustomSubject = {
   slug: string;
@@ -71,6 +83,7 @@ export type State = {
   uploads: Upload[];
   customUnits: CustomUnit[];
   customSubjects: CustomSubject[];
+  qualifierAttempts: QualifierAttempt[];
 };
 
 const KEY = "btechi:v2";
@@ -87,6 +100,7 @@ const EMPTY: State = {
   uploads: [],
   customUnits: [],
   customSubjects: [],
+  qualifierAttempts: [],
 };
 
 let state: State = EMPTY;
@@ -235,6 +249,11 @@ export const actions = {
       customSubjects: s.customSubjects.filter((x) => x.slug !== slug),
       customUnits: s.customUnits.filter((u) => u.subjectSlug !== slug),
     }));
+  },
+  recordQualifierAttempt(a: Omit<QualifierAttempt, "id" | "at">) {
+    const id = crypto.randomUUID();
+    update((s) => ({ ...s, qualifierAttempts: [{ ...a, id, at: now() }, ...s.qualifierAttempts].slice(0, 50) }));
+    return id;
   },
   resetAll() {
     update(() => EMPTY);

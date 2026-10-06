@@ -20,6 +20,7 @@ import { BookCard, NoteCard, PyqCard } from "@/components/cards";
 import { PyqAnalysis } from "@/components/pyq-analysis";
 import { SubjectProgressPanel, VisitTracker } from "@/components/progress";
 import { Quiz } from "@/components/quiz";
+import { SkillCard } from "@/components/skill-card";
 import { BookmarkButton } from "@/components/resource-actions";
 import { Breadcrumbs, ButtonLink, buttonClass } from "@/components/ui";
 import { VideoCard } from "@/components/video-card";
@@ -33,6 +34,7 @@ import {
   notes,
   pyqs,
   questions,
+  skillsForSubject,
   subjectPlacement,
   subjectStats,
   videos,
@@ -117,6 +119,7 @@ function About({ subject }: { subject: Subject }) {
   const ready = hasContent(subject);
   const stats = subjectStats(subject);
   const firstTopic = allTopics(subject)[0];
+  const skills = skillsForSubject(subject.slug);
   const base = `/subjects/${subject.slug}`;
   const courseLd = {
     "@context": "https://schema.org",
@@ -206,6 +209,25 @@ function About({ subject }: { subject: Subject }) {
           graded assignment. Assessments include Quiz 1, Quiz 2 and an End Term exam.
         </p>
       </section>
+
+      {skills.length > 0 && (
+        <section>
+          <div className="mb-3 flex items-end justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold">Level up with Skills</h3>
+              <p className="text-sm text-muted">Free hands-on courses that reinforce {subject.name}.</p>
+            </div>
+            <Link href="/skills" className="hidden shrink-0 text-sm font-medium text-muted hover:text-fg sm:inline">
+              All skills →
+            </Link>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {skills.slice(0, 3).map((c) => (
+              <SkillCard key={c.slug} course={c} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

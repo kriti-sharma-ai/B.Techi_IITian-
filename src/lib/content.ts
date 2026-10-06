@@ -4,9 +4,11 @@
 import { PROGRAM_SLUG, programs, subjects } from "./data/curriculum";
 import { assignments, books, notes, pyqs, videos } from "./data/resources";
 import { questions } from "./data/questions";
-import type { Question, Subject, Topic, Unit } from "./types";
+import { skillCategories, skillCourses, skillPaths } from "./data/skills";
+import type { Question, SkillCourse, Subject, Topic, Unit } from "./types";
 
 export { PROGRAM_SLUG, programs, subjects, notes, videos, books, pyqs, questions, assignments };
+export { skillCategories, skillCourses, skillPaths };
 
 export const getProgram = (slug: string) => programs.find((p) => p.slug === slug);
 export const getSubject = (slug: string) => subjects.find((s) => s.slug === slug);
@@ -146,3 +148,33 @@ export const pyqTitle = (p: { subjectSlug: string; year: number; term: string; e
 
 /** Most popular notes by downloads, for the homepage and admin analytics. */
 export const popularNotes = (n = 4) => [...notes].sort((a, b) => b.downloads - a.downloads).slice(0, n);
+
+/* ───────────── Skills ───────────── */
+
+export const getSkill = (slug: string) => skillCourses.find((c) => c.slug === slug);
+export const getSkillCategory = (slug: string) => skillCategories.find((c) => c.slug === slug);
+
+export function skillStats(course: SkillCourse) {
+  const lectures = course.sections.flatMap((s) => s.lectures);
+  const minutes = lectures.reduce((n, l) => n + l.minutes, 0);
+  return {
+    sections: course.sections.length,
+    lectures: lectures.length,
+    minutes,
+    hours: Math.round((minutes / 60) * 10) / 10,
+    projects: lectures.filter((l) => l.kind === "project").length,
+    quizzes: lectures.filter((l) => l.kind === "quiz").length,
+    previews: lectures.filter((l) => l.preview).length,
+  };
+}
+
+export const skillsInCategory = (category: string) => skillCourses.filter((c) => c.category === category);
+
+export const relatedSkills = (course: SkillCourse, n = 4) =>
+  skillCourses
+    .filter((c) => c.slug !== course.slug)
+    .sort((a, b) => Number(b.category === course.category) - Number(a.category === course.category) || b.learners - a.learners)
+    .slice(0, n);
+
+/** Skill courses that support a degree course. */
+export const skillsForSubject = (subjectSlug: string) => skillCourses.filter((c) => c.relatedSubjects.includes(subjectSlug));

@@ -262,7 +262,7 @@ export function UploadForm() {
           <label className="block text-sm">
             <span className="mb-1 block font-medium">Resource type</span>
             <select className={input} value={meta.resourceType} onChange={(e) => setMeta({ ...meta, resourceType: e.target.value })}>
-              {["Lecture notes", "Cheat sheet", "Revision", "Lab manual", "PYQ paper", "Video", "Book link", "Assignment"].map((t) => (
+              {["Lecture notes", "Cheat sheet", "Formula sheet", "Revision", "Lab manual", "PYQ paper", "Video", "Book link", "Assignment"].map((t) => (
                 <option key={t}>{t}</option>
               ))}
             </select>

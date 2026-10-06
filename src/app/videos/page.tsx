@@ -18,12 +18,12 @@ const LEVELS = ["Beginner", "Intermediate", "Advanced"];
 export default async function VideosPage({ searchParams }: PageProps<"/videos">) {
   const sp = await searchParams;
   const unit = param(sp, "unit");
-  const level = param(sp, "level");
+  const difficulty = param(sp, "difficulty");
   const list = videos
-    .filter((v) => matchesAcademic(v.subjectSlug, sp) && (!unit || v.unitId === unit) && (!level || v.level === level))
+    .filter((v) => matchesAcademic(v.subjectSlug, sp) && (!unit || v.unitId === unit) && (!difficulty || v.level === difficulty))
     .sort((a, b) => Number(Boolean(b.youtubeId)) - Number(Boolean(a.youtubeId)) || b.views - a.views);
 
-  const filters = [...academicFilters(sp), { name: "level", label: "Level", options: LEVELS.map((l) => ({ value: l, label: l })) }];
+  const filters = [...academicFilters(sp), { name: "difficulty", label: "Difficulty", options: LEVELS.map((l) => ({ value: l, label: l })) }];
 
   return (
     <>

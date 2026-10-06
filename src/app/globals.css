@@ -70,6 +70,11 @@
 
   --animate-shimmer: shimmer 1.4s ease-in-out infinite;
   --animate-fade-up: fade-up 0.35s ease-out both;
+  --animate-nav-slide-down: nav-slide-down 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-mega-open: mega-open 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-drawer-item: drawer-item 0.3s ease-out both;
+  --animate-cta-shimmer: cta-shimmer 2s ease-in-out infinite;
+  --animate-icon-spin: icon-spin 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 
   @keyframes shimmer {
     0% { background-position: -200% 0; }
@@ -78,6 +83,26 @@
   @keyframes fade-up {
     from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: none; }
+  }
+  @keyframes nav-slide-down {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes mega-open {
+    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes drawer-item {
+    from { opacity: 0; transform: translateX(-12px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes cta-shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  @keyframes icon-spin {
+    from { transform: rotate(-90deg) scale(0.6); opacity: 0; }
+    to { transform: none; opacity: 1; }
   }
 }
 
@@ -200,4 +225,41 @@
 
 @media (prefers-reduced-motion: reduce) {
   .math-float, .math-layer, .math-spin { animation: none !important; }
+}
+
+/*
+ * Footer wordmark (src/components/footer-wordmark.tsx): the whole word rises
+ * out of its clipped row as one piece, the first time it scrolls into view.
+ */
+.footer-wordmark {
+  transform: translateY(100%);
+  opacity: 0;
+  transition:
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.8s ease-out;
+  will-change: transform;
+}
+.footer-wordmark[data-shown="true"] {
+  transform: none;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-wordmark { transform: none; opacity: 1; transition: none; }
+}
+
+/*
+ * Light mode: yellow stays a fill (a highlighter stroke behind "IITian"), never
+ * text on white. Dark mode: yellow type plus a soft glow behind the wordmark.
+ */
+.footer-wordmark-accent {
+  background: linear-gradient(transparent 52%, var(--brand) 52%, var(--brand) 80%, transparent 80%);
+}
+.dark .footer-wordmark-accent {
+  background: none;
+  color: var(--brand);
+}
+.dark .footer-glow {
+  background:
+    radial-gradient(60% 80% at 75% 100%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 70%),
+    radial-gradient(50% 70% at 15% 100%, color-mix(in srgb, var(--brand) 8%, transparent), transparent 70%);
 }

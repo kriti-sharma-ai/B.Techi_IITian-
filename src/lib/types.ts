@@ -80,7 +80,7 @@ export type Quality = "verified" | "needs-review" | "outdated";
 /** Publishing workflow state (PRD §33). */
 export type ContentStatus = "draft" | "pending" | "approved" | "published" | "rejected" | "archived";
 
-export type NoteKind = "Lecture notes" | "Cheat sheet" | "Revision" | "Lab manual";
+export type NoteKind = "Lecture notes" | "Cheat sheet" | "Formula sheet" | "Revision" | "Lab manual";
 
 export type Note = {
   id: string;
@@ -193,4 +193,98 @@ export type Assignment = {
   due?: string;
 };
 
-export type ResourceKind = "note" | "video" | "book" | "question" | "pyq" | "topic";
+export type ResourceKind = "note" | "video" | "book" | "question" | "pyq" | "topic" | "skill";
+
+/* ───────────── Skills (career courses outside the degree syllabus) ───────────── */
+
+export type SkillLevel = "Beginner" | "Intermediate" | "Advanced" | "All levels";
+
+export type SkillCategory = {
+  slug: string;
+  name: string;
+  description: string;
+  accent: Accent;
+};
+
+export type SkillLecture = {
+  title: string;
+  minutes: number;
+  kind: "video" | "reading" | "quiz" | "project";
+  /** Free preview before enrolling. */
+  preview?: boolean;
+};
+
+export type SkillSection = { title: string; lectures: SkillLecture[] };
+
+export type SkillCourse = {
+  slug: string;
+  title: string;
+  subtitle: string;
+  category: string;
+  level: SkillLevel;
+  accent: Accent;
+  /** Key into the icon map in components/skill-card.tsx. */
+  icon: string;
+  /** Short code or formula drawn on the thumbnail. */
+  snippet: string;
+  instructor: { name: string; title: string };
+  rating: number;
+  ratings: number;
+  learners: number;
+  updated: string;
+  language: string;
+  badge?: "bestseller" | "new" | "popular";
+  outcomes: string[];
+  requirements: string[];
+  description: string[];
+  sections: SkillSection[];
+  /** Degree courses this skill supports (Subject slugs). */
+  relatedSubjects: string[];
+  certificate: boolean;
+};
+
+export type SkillPath = {
+  slug: string;
+  title: string;
+  description: string;
+  accent: Accent;
+  courses: string[];
+};
+
+/* ───────────── Qualifier pack (Math 1 · Stats 1 · CT · English 1) ───────────── */
+
+/** IITM qualifier formats: single choice, multiple select, numerical answer. */
+export type QualifierQuestionType = "mcq" | "multi" | "numerical";
+
+export type QualifierQuestion = {
+  id: string;
+  type: QualifierQuestionType;
+  prompt: string;
+  /** Passage or data table shown above the prompt. */
+  context?: string;
+  /** Pseudocode, rendered monospaced. */
+  code?: string;
+  options?: string[];
+  /** mcq: option index. multi: option indices. numerical: the value (checked with `tolerance`). */
+  answer: number | number[];
+  tolerance?: number;
+  marks: number;
+  explanation: string;
+};
+
+export type QualifierSection = {
+  /** Subject slug of the Foundation course this section examines. */
+  subjectSlug: string;
+  title: string;
+  short: string;
+  questions: QualifierQuestion[];
+};
+
+export type QualifierMock = {
+  slug: string;
+  title: string;
+  description: string;
+  difficulty: "Standard" | "Challenging";
+  durationMin: number;
+  sections: QualifierSection[];
+};

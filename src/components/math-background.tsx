@@ -508,7 +508,16 @@ export function MathBackground({ variant = "hero" }: { variant?: "hero" | "page"
   }, [layers]);
 
   return (
-    <div ref={rootRef} aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden text-fg select-none">
+    <div
+      ref={rootRef}
+      aria-hidden
+      className={`pointer-events-none absolute inset-0 -z-10 overflow-hidden text-fg select-none ${
+        // Fade the hero out at the bottom and the page backdrop in at the top, so the two blend with no seam.
+        hero
+          ? "[mask-image:linear-gradient(black_70%,transparent)]"
+          : "[mask-image:linear-gradient(transparent,black_240px)]"
+      }`}
+    >
       {/* Grid fades out toward the bottom of the hero. */}
       {hero && <div className="grid-pattern absolute inset-0 opacity-40 [mask-image:linear-gradient(black_60%,transparent)]" />}
       {/* Accent glow that follows the cursor, moved by transform so it never repaints. */}

@@ -22,7 +22,7 @@ export default function HomePage() {
   return (
     <>
       {/* ───────── Hero ───────── */}
-      <section className="relative isolate overflow-hidden border-b border-border">
+      <section className="relative isolate overflow-hidden">
         <MathBackground variant="hero" />
         {/* Soft fade behind the headline so the sketches never compete with it. */}
         <div

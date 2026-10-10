@@ -4,27 +4,22 @@ import Link from "next/link";
 import { useState } from "react";
 import { AlertTriangle, ArrowRight, CheckCircle2, Clock, MinusCircle, RotateCcw, Trophy, XCircle } from "lucide-react";
 import { useHydrated, useStore } from "@/lib/store";
-import {
-  QUALIFIER_CUTOFF,
-  correctAnswerLabel,
-  allQualifierPapers,
-  formatClock,
-  hasResponse,
-  isCorrect,
-  isSingleSubject,
-  qualifierMocks,
-  responseLabel,
-  scoreMock,
-} from "@/lib/qualifier";
-import type { QualifierMock } from "@/lib/types";
+import { QUALIFIER_CUTOFF, correctAnswerLabel, formatClock, hasResponse, isCorrect, isSingleSubject, paperHref, responseLabel, scoreMock } from "@/lib/qualifier";
+import type { QualifierMock, QualifierQuestion } from "@/lib/types";
 import { Badge, Breadcrumbs, EmptyState, buttonClass } from "./ui";
 import { cn } from "@/lib/utils";
 import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
 
-export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; attemptId: string }) {
+const TYPE_SHORT: Record<QualifierQuestion["type"], string> = { mcq: "MCQ", multi: "MSQ", numerical: "NAT", text: "SA" };
+
+type NextPaper = Pick<QualifierMock, "slug" | "title" | "endTerm">;
+
+/** `next` is the paper to suggest afterwards and `revise` an End Term paper's course page; both are worked out on the server. */
+export function QualifierResult({ mock, attemptId, next, revise }: { mock: QualifierMock; attemptId: string; next?: NextPaper; revise?: string }) {
   const hydrated = useHydrated();
   const attempt = useStore((s) => s.qualifierAttempts.find((a) => a.id === attemptId && a.mockSlug === mock.slug));
   const [tab, setTab] = useState(0);
+  const home = mock.endTerm ? { label: "End Term PYQs", href: "/pyqs/end-term" } : { label: "Qualifier Pack", href: "/qualifier" };
 
   if (!hydrated) return <div className="container-page py-10"><div className="skeleton h-96" /></div>;
   if (!attempt)
@@ -33,26 +28,23 @@ export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; atte
         <EmptyState
           title="We couldn't find this attempt."
           description="Results are saved in this browser. They may have been cleared, or this attempt was taken on another device."
-          action={<Link href="/qualifier" className={buttonClass("secondary")}>Back to Qualifier Pack</Link>}
+          action={<Link href={home.href} className={buttonClass("secondary")}>Back to {home.label}</Link>}
         />
       </div>
     );
 
   const result = scoreMock(mock, attempt.responses);
   const weakest = [...result.sections].sort((a, b) => a.percent - b.percent)[0];
+  // End Term papers cover courses without a BTechi course page, so the server says whether one exists.
+  const reviseLink = mock.endTerm ? revise : `/subjects/${weakest.subjectSlug}`;
   const single = isSingleSubject(mock);
-  // Suggest the next paper of the same kind: mock after mock, same-subject PYQ after PYQ.
-  const group = single
-    ? allQualifierPapers.filter((m) => isSingleSubject(m) && m.sections[0].subjectSlug === mock.sections[0].subjectSlug)
-    : qualifierMocks;
-  const next = group[(group.findIndex((m) => m.slug === mock.slug) + 1) % group.length];
   const section = mock.sections[tab];
 
   return (
     <>
       <header className="border-b border-border bg-surface">
         <div className="container-page py-8 md:py-10">
-          <Breadcrumbs items={[{ label: "Qualifier Pack", href: "/qualifier" }, { label: `${mock.title} result` }]} />
+          <Breadcrumbs items={[home, { label: `${mock.title} result` }]} />
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div>
               <p className="eyebrow mb-2">{mock.title} · Result</p>
@@ -67,8 +59,12 @@ export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; atte
               <p className="mt-2 max-w-xl text-muted">
                 {single
                   ? result.qualified
-                    ? `You scored ${result.average}%, clearing the ${QUALIFIER_CUTOFF.perSubject}% course cutoff. Try another year's paper next.`
-                    : `You scored ${result.average}%. The course cutoff is ${QUALIFIER_CUTOFF.perSubject}%. Review the answers below, then retake.`
+                    ? mock.endTerm
+                      ? `You scored ${result.average}%, above ${QUALIFIER_CUTOFF.perSubject}%. Try another sitting's paper next.`
+                      : `You scored ${result.average}%, clearing the ${QUALIFIER_CUTOFF.perSubject}% course cutoff. Try another year's paper next.`
+                    : mock.endTerm
+                      ? `You scored ${result.average}%, below ${QUALIFIER_CUTOFF.perSubject}%. Review the answers below, then retake.`
+                      : `You scored ${result.average}%. The course cutoff is ${QUALIFIER_CUTOFF.perSubject}%. Review the answers below, then retake.`
                   : result.qualified
                   ? "You cleared the cutoff in every course and on average. Keep this up on exam day."
                   : `Weakest: ${weakest.title} at ${weakest.percent}%. Fix that first, then retake.`}
@@ -137,16 +133,16 @@ export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; atte
           </ul>
 
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link href={`/qualifier/${mock.slug}`} className={buttonClass("primary")}>
+            <Link href={paperHref(mock)} className={buttonClass("primary")}>
               <RotateCcw className="size-4" aria-hidden /> Retake {mock.title}
             </Link>
             {next && next.slug !== mock.slug && (
-              <Link href={`/qualifier/${next.slug}`} className={buttonClass("secondary")}>
+              <Link href={paperHref(next)} className={buttonClass("secondary")}>
                 Take {next.title} <ArrowRight className="size-4" aria-hidden />
               </Link>
             )}
-            {!result.qualified ? (
-              <Link href={`/subjects/${weakest.subjectSlug}`} className={buttonClass("ghost")}>
+            {!result.qualified && reviseLink ? (
+              <Link href={reviseLink} className={buttonClass("ghost")}>
                 Revise {weakest.short}
               </Link>
             ) : null}
@@ -194,7 +190,7 @@ export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; atte
                     ) : (
                       <Badge><MinusCircle className="size-3.5" aria-hidden /> Not answered</Badge>
                     )}
-                    <span className="text-xs text-muted">{q.type === "mcq" ? "MCQ" : q.type === "multi" ? "MSQ" : "NAT"} · {q.marks} marks</span>
+                    <span className="text-xs text-muted">{TYPE_SHORT[q.type]} · {q.marks} marks</span>
                   </div>
                   {q.context && q.context.includes("\n") && (
                     <pre className="mb-3 overflow-x-auto rounded-lg border border-border bg-surface-2 p-3 font-mono text-xs leading-relaxed">{q.context}</pre>

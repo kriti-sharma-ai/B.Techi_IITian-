@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { QualifierExam } from "@/components/qualifier-exam";
 import { QualifierResult } from "@/components/qualifier-result";
 import { param } from "@/lib/filters";
-import { allQualifierPapers, getQualifierMock } from "@/lib/qualifier";
+import { allQualifierPapers, getQualifierMock, nextQualifierPaper } from "@/lib/qualifier";
 
 export const generateStaticParams = () => allQualifierPapers.map((m) => ({ mock: m.slug }));
 
@@ -17,5 +17,5 @@ export default async function QualifierMockPage({ params, searchParams }: PagePr
   const mock = getQualifierMock((await params).mock);
   if (!mock) notFound();
   const attempt = param(await searchParams, "attempt");
-  return attempt ? <QualifierResult mock={mock} attemptId={attempt} /> : <QualifierExam mock={mock} />;
+  return attempt ? <QualifierResult mock={mock} attemptId={attempt} next={nextQualifierPaper(mock)} /> : <QualifierExam mock={mock} />;
 }

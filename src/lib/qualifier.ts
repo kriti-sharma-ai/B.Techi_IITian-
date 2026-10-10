@@ -22,8 +22,20 @@ export type QualifierResponse = number | number[] | string;
 
 export const getQualifierMock = (slug: string) => allQualifierPapers.find((m) => m.slug === slug);
 
+/** Where a paper is sat: End Term papers live under /pyqs, everything else in the qualifier pack. */
+export const paperHref = (mock: Pick<QualifierMock, "slug" | "endTerm">) => (mock.endTerm ? `/pyqs/end-term/${mock.slug}` : `/qualifier/${mock.slug}`);
+
 /** Single-subject papers (PYQs) are scored against the per-course cutoff only. */
 export const isSingleSubject = (mock: QualifierMock) => mock.sections.length === 1;
+
+/** The paper to suggest after this one: mock after mock, same-course PYQ after PYQ. */
+export function nextQualifierPaper(mock: QualifierMock) {
+  const group = isSingleSubject(mock)
+    ? allQualifierPapers.filter((m) => isSingleSubject(m) && m.sections[0].subjectSlug === mock.sections[0].subjectSlug)
+    : qualifierMocks;
+  const next = group[(group.findIndex((m) => m.slug === mock.slug) + 1) % group.length];
+  return next && next.slug !== mock.slug ? { slug: next.slug, title: next.title } : undefined;
+}
 
 /** Previous-year papers grouped by course, in exam order. Courses without papers are left out. */
 export const pyqGroups = QUALIFIER_SUBJECTS.map((subjectSlug) => ({
@@ -46,19 +58,25 @@ export function isCorrect(q: QualifierQuestion, r: QualifierResponse | undefined
     const want = [...(q.answer as number[])].sort().join(",");
     return Array.isArray(r) && [...r].sort().join(",") === want;
   }
+  if (q.type === "text") {
+    const norm = (x: string) => (q.caseSensitive ? x.trim() : x.trim().toLowerCase());
+    return (q.answer as string[]).some((a) => norm(a) === norm(String(r)));
+  }
   const v = Number(String(r).trim());
-  return String(r).trim() !== "" && Number.isFinite(v) && Math.abs(v - (q.answer as number)) <= (q.tolerance ?? 0) + 1e-9;
+  const accepted = q.accepts ?? [q.answer as number];
+  return String(r).trim() !== "" && Number.isFinite(v) && accepted.some((a) => Math.abs(v - a) <= (q.tolerance ?? 0) + 1e-9);
 }
 
 export function correctAnswerLabel(q: QualifierQuestion) {
-  if (q.type === "numerical") return String(q.answer);
+  if (q.type === "text") return (q.answer as string[]).join(" or ");
+  if (q.type === "numerical") return (q.accepts ?? [q.answer]).join(" or ");
   const idx = q.type === "multi" ? (q.answer as number[]) : [q.answer as number];
   return idx.map((i) => `${String.fromCharCode(65 + i)}. ${q.options![i]}`).join("; ");
 }
 
 export function responseLabel(q: QualifierQuestion, r: QualifierResponse | undefined) {
   if (!hasResponse(r)) return "Not answered";
-  if (q.type === "numerical") return String(r);
+  if (q.type === "numerical" || q.type === "text") return String(r);
   const idx = Array.isArray(r) ? [...r].sort() : [r as number];
   return idx.map((i) => `${String.fromCharCode(65 + i)}. ${q.options![i]}`).join("; ");
 }

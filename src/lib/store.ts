@@ -56,6 +56,11 @@ export type QualifierAttempt = {
   /** Times the candidate left the exam tab — shown like a proctoring flag. */
   tabSwitches: number;
   autoSubmitted: boolean;
+  /** Score (average across courses) at submission, so lists can show it without loading the paper. */
+  percent?: number;
+  /** Paper title and link at submission, for papers whose data isn't shipped to the browser (End Term PYQs). */
+  title?: string;
+  href?: string;
   at: string;
 };
 export type CustomUnit = { id: string; subjectSlug: string; title: string; topics: string[] };

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { BarChart3, ScrollText } from "lucide-react";
+import { ArrowRight, BarChart3, ScrollText } from "lucide-react";
 import { PyqCard } from "@/components/cards";
 import { FilterBar } from "@/components/filter-bar";
 import { PyqAnalysis } from "@/components/pyq-analysis";
 import { EmptyState, PageHeader, buttonClass } from "@/components/ui";
 import { getSubject, pyqs } from "@/lib/content";
+import { END_TERM_SUBJECTS, endTermPapers, endTermQuestionCount } from "@/lib/end-term";
 import { academicFilters, matchesAcademic, param } from "@/lib/filters";
 
 export const metadata: Metadata = {
@@ -47,6 +48,21 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
       </PageHeader>
       <div className="container-page grid gap-10 py-8 lg:grid-cols-[1fr_380px]">
         <div className="min-w-0">
+          <Link
+            href="/pyqs/end-term"
+            className="card group mb-8 flex flex-wrap items-center justify-between gap-4 p-5 transition-colors hover:border-fg/30 md:p-6"
+          >
+            <div className="min-w-0">
+              <p className="eyebrow mb-1">New · End Term papers</p>
+              <h2 className="text-xl font-bold tracking-tight">Sit real End Term papers for every course</h2>
+              <p className="mt-1 text-sm text-muted tabular-nums">
+                {endTermPapers.length} papers · {END_TERM_SUBJECTS.length} courses · {endTermQuestionCount.toLocaleString("en-IN")} questions with the official answer key
+              </p>
+            </div>
+            <span className={buttonClass("primary")}>
+              Browse papers <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+            </span>
+          </Link>
           {byYear.length === 0 ? (
             pyqs.length === 0 ? (
               <EmptyState

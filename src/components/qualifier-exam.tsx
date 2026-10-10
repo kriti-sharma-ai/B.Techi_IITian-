@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, Calculator as CalcIcon, Check, Clock, Delete, Info, LayoutGrid, Maximize, User, X } from "lucide-react";
 import { actions, useHydrated, useStore } from "@/lib/store";
-import { formatClock, hasResponse, mockMarks, mockQuestions, type QualifierResponse } from "@/lib/qualifier";
+import { formatClock, hasResponse, mockMarks, mockQuestions, paperHref, scoreMock, type QualifierResponse } from "@/lib/qualifier";
 import type { QualifierMock, QualifierQuestion } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
@@ -50,6 +50,7 @@ const TYPE_LABEL: Record<QualifierQuestion["type"], string> = {
   mcq: "Multiple Choice (single correct)",
   multi: "Multiple Select (one or more correct)",
   numerical: "Numerical Answer Type",
+  text: "Short Answer (type the exact answer)",
 };
 
 const STATUS_META: Record<Status, { label: string; chip: string }> = {
@@ -182,16 +183,28 @@ function Instructions({ mock, name, onBegin }: { mock: QualifierMock; name: stri
                 another question from the palette without saving, your selection is discarded.
               </li>
               <li>Questions you have answered and marked for review will be evaluated. Questions marked for review with no answer will not.</li>
-              <li>Use the section tabs at the top to move between Maths I, Stats I, CT and English I. You can switch sections at any time.</li>
+              {mock.sections.length > 1 && (
+                <li>Use the section tabs at the top to move between Maths I, Stats I, CT and English I. You can switch sections at any time.</li>
+              )}
               <li>
                 Question types: <b>MCQ</b> (one correct option), <b>MSQ</b> (one or more correct options, all must be selected) and{" "}
-                <b>NAT</b> (type a number with the on-screen keypad or your keyboard).
+                <b>NAT</b> (type a number with the on-screen keypad or your keyboard)
+                {mockQuestions(mock).some((q) => q.type === "text") && (
+                  <>
+                    , plus <b>SA</b> (type the exact word or phrase)
+                  </>
+                )}
+                .
               </li>
               <li>There is <b>no negative marking</b>. Use the on-screen calculator from the top bar for working.</li>
               {mock.sections.length > 1 ? (
                 <li>
                   To qualify you need <b>at least 40% in each course</b> and <b>at least 50% on average</b> across the four (general category; relaxed
                   for reserved categories).
+                </li>
+              ) : mock.endTerm ? (
+                <li>
+                  This is a previous-year End Term paper with the official answer key. Figures, code and formulas appear exactly as in the paper.
                 </li>
               ) : (
                 <li>
@@ -228,8 +241,8 @@ function Instructions({ mock, name, onBegin }: { mock: QualifierMock; name: stri
               >
                 I am ready to begin
               </button>
-              <Link href="/qualifier" className="text-sm font-medium text-muted hover:text-fg">
-                Not now, back to Qualifier Pack
+              <Link href={mock.endTerm ? "/pyqs/end-term" : "/qualifier"} className="text-sm font-medium text-muted hover:text-fg">
+                Not now, back to {mock.endTerm ? "End Term PYQs" : "Qualifier Pack"}
               </Link>
             </div>
           </div>
@@ -245,7 +258,7 @@ function PortalHeader({ mock, children }: { mock: QualifierMock; children?: Reac
       <span className="grid size-8 place-items-center rounded-lg bg-brand text-sm font-black text-brand-ink">B</span>
       <div className="min-w-0 flex-1 leading-tight">
         <p className="truncate text-sm font-bold">{mock.title}</p>
-        <p className="truncate text-[11px] opacity-70">BTechi Exam Portal · IITM BS Qualifier format</p>
+        <p className="truncate text-[11px] opacity-70">BTechi Exam Portal · IITM BS {mock.endTerm ? "End Term" : "Qualifier"} format</p>
       </div>
       {children}
     </header>
@@ -306,10 +319,13 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
         timeTakenSec: Math.min(elapsed, mock.durationMin * 60),
         tabSwitches: live.tabSwitches,
         autoSubmitted: auto,
+        percent: scoreMock(mock, live.responses).average,
+        title: mock.title,
+        href: paperHref(mock),
       });
       writeLive(mock.slug, null);
       if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
-      router.replace(`/qualifier/${mock.slug}?attempt=${id}`);
+      router.replace(`${paperHref(mock)}?attempt=${id}`);
     },
     [live, mock, router],
   );
@@ -610,6 +626,24 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
 const NAT_PATTERN = /^-?\d*\.?\d*$/;
 
 function Answer({ q, value, onChange }: { q: QualifierQuestion; value: QualifierResponse | undefined; onChange: (v: QualifierResponse | undefined) => void }) {
+  if (q.type === "text") {
+    return (
+      <div className="mt-6 max-w-sm">
+        <label htmlFor={`sa-${q.id}`} className="mb-2 block text-xs font-semibold uppercase tracking-wide text-muted">
+          Your answer{q.caseSensitive && " (case-sensitive)"}
+        </label>
+        <input
+          id={`sa-${q.id}`}
+          value={typeof value === "string" ? value : ""}
+          onChange={(e) => onChange(e.target.value === "" ? undefined : e.target.value)}
+          autoComplete="off"
+          autoCapitalize="off"
+          spellCheck={false}
+          className="h-12 w-full rounded-xl border-2 border-border bg-surface px-4 font-mono text-lg outline-none focus:border-fg"
+        />
+      </div>
+    );
+  }
   if (q.type === "numerical") {
     const text = typeof value === "string" ? value : "";
     const set = (v: string) => NAT_PATTERN.test(v) && onChange(v === "" ? undefined : v);

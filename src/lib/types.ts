@@ -253,8 +253,8 @@ export type SkillPath = {
 
 /* ───────────── Qualifier pack (Math 1 · Stats 1 · CT · English 1) ───────────── */
 
-/** IITM qualifier formats: single choice, multiple select, numerical answer. */
-export type QualifierQuestionType = "mcq" | "multi" | "numerical";
+/** IITM exam formats: single choice, multiple select, numerical answer, short text answer. */
+export type QualifierQuestionType = "mcq" | "multi" | "numerical" | "text";
 
 export type QualifierQuestion = {
   id: string;
@@ -269,9 +269,13 @@ export type QualifierQuestion = {
   /** Underlined part of the prompt, e.g. the word whose part of speech is asked. */
   emphasis?: string;
   options?: string[];
-  /** mcq: option index. multi: option indices. numerical: the value (checked with `tolerance`). */
-  answer: number | number[];
+  /** mcq: option index. multi: option indices. numerical: the value (checked with `tolerance`). text: accepted answers. */
+  answer: number | number[] | string[];
   tolerance?: number;
+  /** numerical: every value the official key accepts, when it lists more than one. */
+  accepts?: number[];
+  /** text: answers must match case exactly. */
+  caseSensitive?: boolean;
   marks: number;
   explanation: string;
 };
@@ -292,5 +296,7 @@ export type QualifierMock = {
   description: string;
   difficulty: "Standard" | "Challenging";
   durationMin: number;
+  /** Set on End Term previous-year papers, which live under /pyqs/end-term instead of the qualifier pack. */
+  endTerm?: { date: string; session: "FN" | "AN"; term: string };
   sections: QualifierSection[];
 };

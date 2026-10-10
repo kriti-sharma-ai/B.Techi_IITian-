@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowRight, History, Play, RotateCcw } from "lucide-react";
 import { useHydrated, useStore } from "@/lib/store";
-import { getQualifierMock, scoreMock } from "@/lib/qualifier";
+import { getQualifierMock, isSingleSubject, scoreMock } from "@/lib/qualifier";
 import { readLive } from "./qualifier-exam";
 import { Badge, buttonClass } from "./ui";
 
@@ -27,7 +27,7 @@ export function MockAction({ slug }: { slug: string }) {
       </Link>
       {best !== null && (
         <span className="text-sm text-muted">
-          Best average <b className="text-fg tabular-nums">{best}%</b> · {attempts.length} {attempts.length === 1 ? "attempt" : "attempts"}
+          Best {isSingleSubject(mock) ? "score" : "average"} <b className="text-fg tabular-nums">{best}%</b> · {attempts.length} {attempts.length === 1 ? "attempt" : "attempts"}
         </span>
       )}
     </div>
@@ -63,7 +63,7 @@ export function QualifierHistory() {
                       </span>
                     ))}
                   </span>
-                  <Badge tone={r.qualified ? "green" : "amber"}>{r.qualified ? "Qualified" : "Not yet"} · {r.average}%</Badge>
+                  <Badge tone={r.qualified ? "green" : "amber"}>{r.qualified ? (isSingleSubject(mock) ? "Cleared" : "Qualified") : "Not yet"} · {r.average}%</Badge>
                   <ArrowRight className="size-4 text-muted" aria-hidden />
                 </span>
               </Link>

@@ -16,7 +16,7 @@ import {
 import { MockAction, QualifierHistory } from "@/components/qualifier-attempts";
 import { Badge, Breadcrumbs, SectionHeader } from "@/components/ui";
 import { getSubject } from "@/lib/content";
-import { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS, mockMarks, mockQuestions, qualifierMocks } from "@/lib/qualifier";
+import { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS, mockMarks, mockQuestions, pyqGroups, qualifierMocks } from "@/lib/qualifier";
 
 export const metadata: Metadata = {
   title: "Qualifier Pack: Maths I, Stats I, CT, English I",
@@ -26,6 +26,12 @@ export const metadata: Metadata = {
 };
 
 const totalQuestions = qualifierMocks.reduce((n, m) => n + mockQuestions(m).length, 0);
+
+/** Per-course caveats shown under that course's previous-year papers. */
+const PYQ_NOTES: Record<string, string> = {
+  "english-1": "Listening questions are left out because the papers don't include their audio clips. Matching tables are typed out from the paper.",
+  "statistics-for-data-science-1": "Figures and tables are shown as they appear in the paper. Numerical answers accept the same range as the official key.",
+};
 
 const features = [
   { icon: MonitorCheck, title: "Real exam portal", text: "Full screen, section tabs, candidate panel. The same layout you'll see at the test centre." },
@@ -212,6 +218,45 @@ export default function QualifierPage() {
         </div>
       </section>
 
+      {/* ───────── Previous-year papers ───────── */}
+      <section id="pyqs" className="container-page scroll-mt-24 pb-14 md:pb-20">
+        <SectionHeader
+          eyebrow="Previous-year questions"
+          title="Previous-year papers, course by course"
+          description="Real papers from past terms with the same questions, options and official answer key. Sit them year by year in the exam portal."
+        />
+        <div className="space-y-10">
+          {pyqGroups.map(({ subjectSlug, papers }) => {
+            const s = getSubject(subjectSlug)!;
+            return (
+              <div key={subjectSlug} id={`pyqs-${subjectSlug}`} className="scroll-mt-24">
+                <h3 className="mb-4 flex flex-wrap items-baseline gap-x-3 text-lg font-bold tracking-tight">
+                  {s.name}
+                  <span className="text-sm font-normal text-muted">{papers.length} papers</span>
+                </h3>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {papers.map((p) => (
+                    <article key={p.slug} className="card flex flex-col p-5">
+                      <p className="eyebrow mb-1">{p.sections[0].short} · PYQ</p>
+                      <h4 className="text-lg font-bold tracking-tight">{p.title.split(" · ").at(-1)}</h4>
+                      <p className="mt-2 flex flex-1 flex-wrap content-start gap-x-3 gap-y-1 text-sm text-muted tabular-nums">
+                        <span>{mockQuestions(p).length} questions</span>
+                        <span>{mockMarks(p)} marks</span>
+                        <span>{p.durationMin} min</span>
+                      </p>
+                      <div className="mt-5 border-t border-border pt-4">
+                        <MockAction slug={p.slug} />
+                      </div>
+                    </article>
+                  ))}
+                </div>
+                {PYQ_NOTES[subjectSlug] && <p className="mt-4 text-xs text-muted">{PYQ_NOTES[subjectSlug]}</p>}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       {/* ───────── Real exam experience ───────── */}
       <section className="container-page pb-14 md:pb-20">
         <SectionHeader eyebrow="Exam-day experience" title="Feels like the real qualifier" description="Practise the interface too, so nothing on exam day is new." />
@@ -249,7 +294,8 @@ export default function QualifierPage() {
         </ol>
         <p className="mt-5 flex items-start gap-2 text-xs text-muted">
           <CheckCircle2 className="mt-0.5 size-3.5 shrink-0" aria-hidden />
-          BTechi is not affiliated with IIT Madras. Mock questions are original and written in the qualifier&apos;s style. Eligibility rules,
+          BTechi is not affiliated with IIT Madras. Mock questions are original and written in the qualifier&apos;s style; previous-year papers are
+          reproduced from past question papers. Eligibility rules,
           category-wise cutoffs and exam duration can change between terms, so always confirm them in the official student handbook.
         </p>
       </section>

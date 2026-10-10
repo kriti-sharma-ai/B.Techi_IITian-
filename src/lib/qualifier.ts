@@ -1,15 +1,35 @@
 // Qualifier pack: lookups and scoring. Pure functions so both the exam
 // (client) and the pack page (server) can use them.
 
-import { QUALIFIER_CUTOFF, qualifierMocks } from "./data/qualifier";
+import { ctPyqPapers } from "./data/ct-pyqs";
+import { englishPyqPapers } from "./data/english-pyqs";
+import { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, qualifierMocks } from "./data/qualifier";
+import { mathsPyqPapers } from "./data/maths-pyqs";
+import { statsPyqPapers } from "./data/stats-pyqs";
 import type { QualifierMock, QualifierQuestion } from "./types";
 
 export { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS, qualifierMocks } from "./data/qualifier";
+export { ctPyqPapers } from "./data/ct-pyqs";
+export { englishPyqPapers } from "./data/english-pyqs";
+export { mathsPyqPapers } from "./data/maths-pyqs";
+export { statsPyqPapers } from "./data/stats-pyqs";
+
+/** Every paper that can be sat in the exam portal: full mocks and single-subject PYQs. */
+export const allQualifierPapers = [...qualifierMocks, ...mathsPyqPapers, ...statsPyqPapers, ...ctPyqPapers, ...englishPyqPapers];
 
 /** mcq: option index. multi: option indices. numerical: the typed value. */
 export type QualifierResponse = number | number[] | string;
 
-export const getQualifierMock = (slug: string) => qualifierMocks.find((m) => m.slug === slug);
+export const getQualifierMock = (slug: string) => allQualifierPapers.find((m) => m.slug === slug);
+
+/** Single-subject papers (PYQs) are scored against the per-course cutoff only. */
+export const isSingleSubject = (mock: QualifierMock) => mock.sections.length === 1;
+
+/** Previous-year papers grouped by course, in exam order. Courses without papers are left out. */
+export const pyqGroups = QUALIFIER_SUBJECTS.map((subjectSlug) => ({
+  subjectSlug,
+  papers: allQualifierPapers.filter((m) => isSingleSubject(m) && m.sections[0].subjectSlug === subjectSlug),
+})).filter((g) => g.papers.length > 0);
 
 export const mockQuestions = (mock: QualifierMock) => mock.sections.flatMap((s) => s.questions);
 
@@ -84,7 +104,8 @@ export function scoreMock(mock: QualifierMock, responses: Record<string, Qualifi
   const average = Math.round((sections.reduce((n, s) => n + s.percent, 0) / sections.length) * 10) / 10;
   const score = sections.reduce((n, s) => n + s.score, 0);
   const total = sections.reduce((n, s) => n + s.total, 0);
-  const qualified = sections.every((s) => s.passed) && average >= QUALIFIER_CUTOFF.average;
+  // A single-subject paper has no average rule; the per-course cutoff decides.
+  const qualified = sections.every((s) => s.passed) && (sections.length === 1 || average >= QUALIFIER_CUTOFF.average);
   return { sections, average, score, total, qualified };
 }
 

@@ -264,6 +264,10 @@ export type QualifierQuestion = {
   context?: string;
   /** Pseudocode, rendered monospaced. */
   code?: string;
+  /** Reading passage or dialogue, rendered as prose (one paragraph per line). */
+  passage?: string;
+  /** Underlined part of the prompt, e.g. the word whose part of speech is asked. */
+  emphasis?: string;
   options?: string[];
   /** mcq: option index. multi: option indices. numerical: the value (checked with `tolerance`). */
   answer: number | number[];
@@ -277,6 +281,8 @@ export type QualifierSection = {
   subjectSlug: string;
   title: string;
   short: string;
+  /** Data shared by the whole section (e.g. dataset headers), one paragraph per line; shown as "Useful data". */
+  reference?: string;
   questions: QualifierQuestion[];
 };
 

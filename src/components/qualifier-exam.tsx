@@ -13,6 +13,7 @@ import { actions, useHydrated, useStore } from "@/lib/store";
 import { formatClock, hasResponse, mockMarks, mockQuestions, type QualifierResponse } from "@/lib/qualifier";
 import type { QualifierMock, QualifierQuestion } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
 
 /** nv: not visited · na: not answered · a: answered · m: marked · am: answered & marked */
 type Status = "nv" | "na" | "a" | "m" | "am";
@@ -139,7 +140,8 @@ function Instructions({ mock, name, onBegin }: { mock: QualifierMock; name: stri
           <p className="eyebrow mb-2">General instructions · Read carefully</p>
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">{mock.title}</h1>
           <p className="mt-1 text-muted">
-            Mathematics I · Statistics I · Computational Thinking · English I in one sitting
+            {mock.sections.map((s) => s.title).join(" · ")}
+            {mock.sections.length > 1 && " in one sitting"}
           </p>
 
           <div className="card mt-6 overflow-x-auto">
@@ -186,10 +188,16 @@ function Instructions({ mock, name, onBegin }: { mock: QualifierMock; name: stri
                 <b>NAT</b> (type a number with the on-screen keypad or your keyboard).
               </li>
               <li>There is <b>no negative marking</b>. Use the on-screen calculator from the top bar for working.</li>
-              <li>
-                To qualify you need <b>at least 40% in each course</b> and <b>at least 50% on average</b> across the four (general category; relaxed
-                for reserved categories).
-              </li>
+              {mock.sections.length > 1 ? (
+                <li>
+                  To qualify you need <b>at least 40% in each course</b> and <b>at least 50% on average</b> across the four (general category; relaxed
+                  for reserved categories).
+                </li>
+              ) : (
+                <li>
+                  This is a previous-year paper with the official answer key. Aim for <b>at least 40%</b>, the per-course cutoff in the qualifier.
+                </li>
+              )}
               <li>The exam runs in full screen. Leaving the exam tab is recorded and shown on your result.</li>
             </ol>
             <div className="card h-fit p-4">
@@ -429,7 +437,18 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
           </div>
 
           <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 md:px-6">
+            {section.reference && (
+              <details className="mx-auto mb-4 max-w-3xl rounded-xl border border-border bg-surface text-[15px] leading-relaxed">
+                <summary className="cursor-pointer px-4 py-2.5 text-sm font-semibold">Useful data</summary>
+                <QuestionPassage text={section.reference} className="max-h-[45vh] overflow-y-auto border-t border-border px-4 py-3" />
+              </details>
+            )}
             <div key={q.id} className="animate-fade-up mx-auto max-w-3xl">
+              {q.passage && (
+                <div className="mb-4 max-h-[45vh] overflow-y-auto rounded-xl border border-border bg-surface p-4 text-[15px] leading-relaxed">
+                  <QuestionPassage text={q.passage} />
+                </div>
+              )}
               {q.context &&
                 (q.context.includes("\n") ? (
                   <pre className="mb-4 overflow-x-auto rounded-xl border border-border bg-surface p-4 font-mono text-[13px] leading-relaxed">{q.context}</pre>
@@ -442,7 +461,7 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
               {q.code && (
                 <pre className="mb-4 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-[13px] leading-relaxed text-bg">{q.code}</pre>
               )}
-              <p className="text-[15px] font-medium leading-relaxed md:text-base">{q.prompt}</p>
+              <QuestionPrompt q={q} className="text-[15px] font-medium leading-relaxed md:text-base" />
               <Answer q={q} value={draft} onChange={setDraft} />
               {hasResponse(draft) && JSON.stringify(draft) !== JSON.stringify(live.responses[q.id]) && (
                 <p className="mt-4 text-xs text-muted">Not saved yet. Click Save &amp; Next to record this answer.</p>
@@ -661,7 +680,9 @@ function Answer({ q, value, onChange }: { q: QualifierQuestion; value: Qualifier
                 className="mt-0.5 size-4 shrink-0 accent-[var(--fg)]"
               />
               <span className="w-5 shrink-0 font-semibold text-muted">{String.fromCharCode(65 + i)}.</span>
-              <span className="min-w-0 flex-1 text-[15px] [overflow-wrap:anywhere]">{opt}</span>
+              <span className="min-w-0 flex-1 text-[15px] [overflow-wrap:anywhere]">
+                <RichText text={opt} />
+              </span>
             </label>
           );
         })}

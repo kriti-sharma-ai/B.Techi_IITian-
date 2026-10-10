@@ -4,10 +4,22 @@ import Link from "next/link";
 import { useState } from "react";
 import { AlertTriangle, ArrowRight, CheckCircle2, Clock, MinusCircle, RotateCcw, Trophy, XCircle } from "lucide-react";
 import { useHydrated, useStore } from "@/lib/store";
-import { QUALIFIER_CUTOFF, correctAnswerLabel, formatClock, hasResponse, isCorrect, qualifierMocks, responseLabel, scoreMock } from "@/lib/qualifier";
+import {
+  QUALIFIER_CUTOFF,
+  correctAnswerLabel,
+  allQualifierPapers,
+  formatClock,
+  hasResponse,
+  isCorrect,
+  isSingleSubject,
+  qualifierMocks,
+  responseLabel,
+  scoreMock,
+} from "@/lib/qualifier";
 import type { QualifierMock } from "@/lib/types";
 import { Badge, Breadcrumbs, EmptyState, buttonClass } from "./ui";
 import { cn } from "@/lib/utils";
+import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
 
 export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; attemptId: string }) {
   const hydrated = useHydrated();
@@ -28,7 +40,12 @@ export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; atte
 
   const result = scoreMock(mock, attempt.responses);
   const weakest = [...result.sections].sort((a, b) => a.percent - b.percent)[0];
-  const next = qualifierMocks.find((m) => m.slug !== mock.slug);
+  const single = isSingleSubject(mock);
+  // Suggest the next paper of the same kind: mock after mock, same-subject PYQ after PYQ.
+  const group = single
+    ? allQualifierPapers.filter((m) => isSingleSubject(m) && m.sections[0].subjectSlug === mock.sections[0].subjectSlug)
+    : qualifierMocks;
+  const next = group[(group.findIndex((m) => m.slug === mock.slug) + 1) % group.length];
   const section = mock.sections[tab];
 
   return (
@@ -43,17 +60,23 @@ export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; atte
                 <span className={cn("grid size-12 place-items-center rounded-2xl", result.qualified ? "bg-green/10 text-green" : "bg-amber/10 text-amber")}>
                   {result.qualified ? <Trophy className="size-6" aria-hidden /> : <AlertTriangle className="size-6" aria-hidden />}
                 </span>
-                <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{result.qualified ? "Qualified" : "Not qualified yet"}</h1>
+                <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+                  {single ? (result.qualified ? "Cleared" : "Below cutoff") : result.qualified ? "Qualified" : "Not qualified yet"}
+                </h1>
               </div>
               <p className="mt-2 max-w-xl text-muted">
-                {result.qualified
+                {single
+                  ? result.qualified
+                    ? `You scored ${result.average}%, clearing the ${QUALIFIER_CUTOFF.perSubject}% course cutoff. Try another year's paper next.`
+                    : `You scored ${result.average}%. The course cutoff is ${QUALIFIER_CUTOFF.perSubject}%. Review the answers below, then retake.`
+                  : result.qualified
                   ? "You cleared the cutoff in every course and on average. Keep this up on exam day."
                   : `Weakest: ${weakest.title} at ${weakest.percent}%. Fix that first, then retake.`}
               </p>
             </div>
             <dl className="grid grid-cols-3 gap-6 text-right">
               <div>
-                <dt className="text-xs text-muted">Average</dt>
+                <dt className="text-xs text-muted">{single ? "Percent" : "Average"}</dt>
                 <dd className="text-2xl font-bold tabular-nums">{result.average}%</dd>
               </div>
               <div>
@@ -80,7 +103,7 @@ export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; atte
       <div className="container-page space-y-10 py-8">
         {/* Section scorecards */}
         <section>
-          <h2 className="mb-4 text-xl font-bold tracking-tight">Course-wise score</h2>
+          {!single && <h2 className="mb-4 text-xl font-bold tracking-tight">Course-wise score</h2>}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {result.sections.map((s) => (
               <div key={s.subjectSlug} className="card p-5">
@@ -105,7 +128,7 @@ export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; atte
             {[
               { ok: result.sections.every((s) => s.passed), label: `At least ${QUALIFIER_CUTOFF.perSubject}% in every course` },
               { ok: result.average >= QUALIFIER_CUTOFF.average, label: `At least ${QUALIFIER_CUTOFF.average}% average across the four (you: ${result.average}%)` },
-            ].map((r) => (
+            ].slice(0, single ? 1 : 2).map((r) => (
               <li key={r.label} className="flex items-center gap-3 px-5 py-3.5 text-sm">
                 {r.ok ? <CheckCircle2 className="size-5 shrink-0 text-green" aria-hidden /> : <XCircle className="size-5 shrink-0 text-red" aria-hidden />}
                 <span className="font-medium">{r.label}</span>
@@ -117,7 +140,7 @@ export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; atte
             <Link href={`/qualifier/${mock.slug}`} className={buttonClass("primary")}>
               <RotateCcw className="size-4" aria-hidden /> Retake {mock.title}
             </Link>
-            {next && (
+            {next && next.slug !== mock.slug && (
               <Link href={`/qualifier/${next.slug}`} className={buttonClass("secondary")}>
                 Take {next.title} <ArrowRight className="size-4" aria-hidden />
               </Link>
@@ -149,6 +172,12 @@ export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; atte
               </button>
             ))}
           </div>
+          {section.reference && (
+            <details className="card mb-4 text-sm">
+              <summary className="cursor-pointer px-5 py-3 font-semibold">Useful data</summary>
+              <QuestionPassage text={section.reference} className="border-t border-border px-5 py-4 leading-relaxed" />
+            </details>
+          )}
           <ol className="space-y-4">
             {section.questions.map((q, i) => {
               const r = attempt.responses[q.id];
@@ -171,21 +200,33 @@ export function QualifierResult({ mock, attemptId }: { mock: QualifierMock; atte
                     <pre className="mb-3 overflow-x-auto rounded-lg border border-border bg-surface-2 p-3 font-mono text-xs leading-relaxed">{q.context}</pre>
                   )}
                   {q.code && <pre className="mb-3 overflow-x-auto rounded-lg bg-ink p-3 font-mono text-xs leading-relaxed text-bg">{q.code}</pre>}
-                  <p className="font-medium leading-relaxed">{q.prompt}</p>
+                  {q.passage && (
+                    <details className="mb-3 rounded-lg border border-border bg-surface-2 text-sm">
+                      <summary className="cursor-pointer px-3 py-2 font-medium text-muted">Show passage</summary>
+                      <QuestionPassage text={q.passage} className="border-t border-border px-3 py-3 leading-relaxed" />
+                    </details>
+                  )}
+                  <QuestionPrompt q={q} className="font-medium leading-relaxed" />
                   <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
                     <div className={cn("rounded-lg p-3", ok ? "bg-green/10" : answered ? "bg-red/10" : "bg-surface-2")}>
                       <dt className="text-xs text-muted">Your answer</dt>
-                      <dd className="mt-0.5 font-medium">{responseLabel(q, r)}</dd>
+                      <dd className="mt-0.5 font-medium">
+                        <RichText text={responseLabel(q, r)} />
+                      </dd>
                     </div>
                     <div className="rounded-lg bg-green/10 p-3">
                       <dt className="text-xs text-muted">Correct answer</dt>
-                      <dd className="mt-0.5 font-medium">{correctAnswerLabel(q)}</dd>
+                      <dd className="mt-0.5 font-medium">
+                        <RichText text={correctAnswerLabel(q)} />
+                      </dd>
                     </div>
                   </dl>
-                  <p className="mt-3 text-sm leading-relaxed text-muted">
-                    <span className="font-semibold text-fg">Explanation: </span>
-                    {q.explanation}
-                  </p>
+                  {q.explanation && (
+                    <p className="mt-3 text-sm leading-relaxed text-muted">
+                      <span className="font-semibold text-fg">Explanation: </span>
+                      {q.explanation}
+                    </p>
+                  )}
                 </li>
               );
             })}

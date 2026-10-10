@@ -7,16 +7,22 @@ import { PyqAnalysis } from "@/components/pyq-analysis";
 import { PaperRows } from "@/components/pyq-papers";
 import { Badge, PageHeader, buttonClass } from "@/components/ui";
 import { forSubject, pyqs } from "@/lib/content";
-import { PYQ_EXAMS, PYQ_LEVELS, getPyqCourse, pyqCourses, pyqCoursesForLevel } from "@/lib/pyq-index";
+import { PYQ_EXAMS, PYQ_LEVELS, getPyqIndex } from "@/lib/pyq-index";
 import { practiceHref } from "@/lib/pyq-practice";
 import { pyqLevelHref } from "@/lib/pyq-urls";
 
 export const dynamicParams = false;
-export const generateStaticParams = () => pyqCourses.map((c) => ({ level: c.level, course: c.slug }));
+// Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const { pyqCourses } = await getPyqIndex();
+  return pyqCourses.map((c) => ({ level: c.level, course: c.slug }));
+}
 
 async function load(params: Promise<{ level: string; course: string }>) {
   const { level, course } = await params;
-  const c = getPyqCourse(course);
+  const c = (await getPyqIndex()).getPyqCourse(course);
   return c && c.level === level ? c : undefined;
 }
 
@@ -38,7 +44,7 @@ export default async function PyqCoursePage({ params }: PageProps<"/pyqs/[level]
   const sections = PYQ_EXAMS.map((e) => ({ ...e, papers: c.papers.filter((p) => p.exam === e.slug) })).filter((e) => e.papers.length > 0);
   const uploaded = forSubject(pyqs, c.slug).sort((a, b) => b.year - a.year);
   const questions = c.papers.reduce((n, p) => n + p.questions, 0);
-  const related = pyqCoursesForLevel(c.level).filter((x) => x.slug !== c.slug && x.group === c.group);
+  const related = (await getPyqIndex()).pyqCoursesForLevel(c.level).filter((x) => x.slug !== c.slug && x.group === c.group);
 
   return (
     <>

@@ -8,22 +8,27 @@ import { QualifierResult } from "@/components/qualifier-result";
 import { BookmarkButton, DownloadButton, ReportButton } from "@/components/resource-actions";
 import { Badge, Breadcrumbs, buttonClass } from "@/components/ui";
 import { forSubject, getLevel, getSubject, pyqTitle, pyqs, questionsFor, topicTitle } from "@/lib/content";
-import { nextEndTermPaper, reviseHref } from "@/lib/end-term";
+import { reviseHref } from "@/lib/end-term";
 import { param } from "@/lib/filters";
-import { PYQ_LEVELS, findPaper, findUploadedPyq, getPyqCourse, pyqCourses, uploadedPyqHref, uploadedPyqSegment } from "@/lib/pyq-index";
-import { nextQualifierPaper } from "@/lib/qualifier";
+import { getPapers } from "@/lib/papers";
+import { PYQ_LEVELS, findUploadedPyq, getPyqIndex, uploadedPyqHref, uploadedPyqSegment, type CoursePyqs } from "@/lib/pyq-index";
 import { pyqLevelHref } from "@/lib/pyq-urls";
 import type { Pyq } from "@/lib/types";
 
-export const dynamicParams = false;
-export const generateStaticParams = () =>
-  pyqCourses.flatMap((c) => [
+// Papers added in Supabase after a build render on first visit.
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const { pyqCourses } = await getPyqIndex();
+  return pyqCourses.flatMap((c) => [
     ...c.papers.map((p) => ({ level: c.level, course: c.slug, paper: p.segment })),
     ...forSubject(pyqs, c.slug).map((p) => ({ level: c.level, course: c.slug, paper: uploadedPyqSegment(p) })),
   ]);
+}
 
 async function load(params: Promise<{ level: string; course: string; paper: string }>) {
   const { level, course, paper } = await params;
+  const { getPyqCourse, findPaper } = await getPyqIndex();
   const c = getPyqCourse(course);
   if (!c || c.level !== level) return undefined;
   const portal = findPaper(course, paper);
@@ -60,6 +65,7 @@ export default async function PyqPaperPage({ params, searchParams }: PageProps<"
   if (r.portal) {
     const attempt = param(await searchParams, "attempt");
     const paper = r.portal;
+    const { nextEndTermPaper, nextQualifierPaper } = await getPapers();
     return attempt ? (
       <QualifierResult
         mock={paper}
@@ -71,13 +77,12 @@ export default async function PyqPaperPage({ params, searchParams }: PageProps<"
       <QualifierExam mock={paper} />
     );
   }
-  return <UploadedPaper pyq={r.uploaded!} />;
+  return <UploadedPaper pyq={r.uploaded!} course={r.course} />;
 }
 
 /** A paper uploaded through the CMS: the PDF, the topics it examined and its questions in the bank. */
-function UploadedPaper({ pyq }: { pyq: Pyq }) {
+function UploadedPaper({ pyq, course }: { pyq: Pyq; course: CoursePyqs }) {
   const subject = getSubject(pyq.subjectSlug)!;
-  const course = getPyqCourse(subject.slug)!;
   const level = PYQ_LEVELS.find((l) => l.slug === course.level)!;
   const qs = questionsFor({ ids: pyq.questionIds });
   const title = pyqTitle(pyq);

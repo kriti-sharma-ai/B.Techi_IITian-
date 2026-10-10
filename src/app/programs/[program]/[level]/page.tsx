@@ -5,10 +5,12 @@ import { ArrowRight, ScrollText } from "lucide-react";
 import { SubjectCard } from "@/components/cards";
 import { PageHeader, buttonClass } from "@/components/ui";
 import { getLevel, getProgram, programs, subjectsForLevel } from "@/lib/content";
-import { pyqCoursesForLevel, type PyqLevel } from "@/lib/pyq-index";
+import { getPyqIndex, type PyqLevel } from "@/lib/pyq-index";
 import { pyqLevelHref } from "@/lib/pyq-urls";
 
 export const dynamicParams = false;
+// Paper counts come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
+export const revalidate = 300;
 export const generateStaticParams = () =>
   programs.flatMap((p) => p.levels.map((l) => ({ program: p.slug, level: l.slug })));
 
@@ -36,7 +38,7 @@ export default async function LevelPage({ params }: PageProps<"/programs/[progra
   const { program, level } = r;
   const subs = subjectsForLevel(program.slug, level.slug);
   const groups = level.groups ?? [{ slug: "", name: "Courses", credits: level.credits, summary: "" }];
-  const pyqCourses = pyqCoursesForLevel(level.slug as PyqLevel);
+  const pyqCourses = (await getPyqIndex()).pyqCoursesForLevel(level.slug as PyqLevel);
   const ownPyqs = pyqCourses.filter((c) => c.inCurriculum);
   const otherPyqs = pyqCourses.filter((c) => !c.inCurriculum);
   const pyqPaperCount = pyqCourses.reduce((n, c) => n + c.papers.length, 0);

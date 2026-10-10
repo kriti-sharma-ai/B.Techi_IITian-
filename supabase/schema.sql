@@ -2,6 +2,7 @@
 -- Mirrors src/lib/types.ts. Run in the Supabase SQL editor, then replace the
 -- seed reads in src/lib/content.ts and the localStorage slices in
 -- src/lib/store.ts with queries against these tables.
+-- Then run 0002_user_state_and_papers.sql.
 
 create extension if not exists pg_trgm;
 
@@ -112,6 +113,12 @@ create index on topics (unit_id, position);
 -- ───────────── Resources ─────────────
 -- One row per resource; type-specific details live in the child tables.
 -- Large files go to Storage — only the path/size/type is stored here.
+
+-- array_to_string is only STABLE, which generated columns reject; this wrapper
+-- is safe to mark IMMUTABLE because the separator is fixed.
+create or replace function tags_to_text(tags text[]) returns text
+language sql immutable set search_path = '' as $$ select array_to_string(tags, ' ') $$;
+
 create table resources (
   id           uuid primary key default gen_random_uuid(),
   kind         resource_kind not null,
@@ -134,7 +141,7 @@ create table resources (
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now(),
   search       tsvector generated always as (
-    to_tsvector('english', coalesce(title, '') || ' ' || coalesce(description, '') || ' ' || array_to_string(tags, ' '))
+    to_tsvector('english', coalesce(title, '') || ' ' || coalesce(description, '') || ' ' || coalesce(tags_to_text(tags), ''))
   ) stored
 );
 create index on resources using gin (search);
@@ -337,12 +344,12 @@ create policy "read reports" on reports for select using (user_id = auth.uid() o
 create policy "resolve reports" on reports for update using (has_role('moderator'));
 
 -- ───────────── Analytics views ─────────────
-create view resource_download_counts as
+create view resource_download_counts with (security_invoker = true) as
   select r.id, r.title, r.subject_id, count(d.id) as downloads
   from resources r left join downloads d on d.resource_id = r.id
   group by r.id;
 
-create view pyq_topic_frequency as
+create view pyq_topic_frequency with (security_invoker = true) as
   select s.id as subject_id, t.id as topic_id, t.title,
          count(*)::numeric / nullif((select count(*) from pyqs p2 join resources r2 on r2.id = p2.resource_id where r2.subject_id = s.id), 0) as share
   from pyq_topics pt
@@ -353,3 +360,23 @@ create view pyq_topic_frequency as
 
 -- Storage: create a private bucket "resources"; serve files via short-lived
 -- signed URLs from a server route that also inserts into `downloads`.
+
+-- ───────────── Auto-create a profile on sign-up ─────────────
+-- Every user-owned table references profiles, so the row must exist before the
+-- first saved attempt.
+create or replace function handle_new_user() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  insert into profiles (id, name, university, level)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data->>'name', new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1)),
+    new.raw_user_meta_data->>'university',
+    new.raw_user_meta_data->>'level'
+  );
+  return new;
+end $$;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function handle_new_user();

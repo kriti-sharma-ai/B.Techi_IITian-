@@ -17,7 +17,8 @@ import { MockAction, QualifierHistory } from "@/components/qualifier-attempts";
 import { Badge, Breadcrumbs, SectionHeader } from "@/components/ui";
 import { getSubject } from "@/lib/content";
 import { practiceHref } from "@/lib/pyq-practice";
-import { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS, mockMarks, mockQuestions, pyqGroups, qualifierMocks } from "@/lib/qualifier";
+import { getPapers } from "@/lib/papers";
+import { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS, answerKey, mockMarks, mockQuestions } from "@/lib/qualifier";
 
 export const metadata: Metadata = {
   title: "Qualifier Pack: Maths I, Stats I, CT, English I",
@@ -25,8 +26,6 @@ export const metadata: Metadata = {
     "Ace the IIT Madras BS qualifier. Full-length timed mocks for Mathematics I, Statistics I, Computational Thinking and English I in a real exam-portal interface, with course-wise cutoff checks and solutions.",
   alternates: { canonical: "/qualifier" },
 };
-
-const totalQuestions = qualifierMocks.reduce((n, m) => n + mockQuestions(m).length, 0);
 
 /** Per-course caveats shown under that course's previous-year papers. */
 const PYQ_NOTES: Record<string, string> = {
@@ -43,7 +42,12 @@ const features = [
   { icon: Target, title: "Cutoff check", text: "Course-wise score against the 40% per-course and 50% average rule, plus full solutions." },
 ];
 
-export default function QualifierPage() {
+// Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
+export const revalidate = 300;
+
+export default async function QualifierPage() {
+  const { qualifierMocks, pyqGroups, allQualifierPapers } = await getPapers();
+  const totalQuestions = qualifierMocks.reduce((n, m) => n + mockQuestions(m).length, 0);
   return (
     <>
       <header className="relative isolate overflow-hidden border-b border-border bg-surface">
@@ -65,7 +69,7 @@ export default function QualifierPage() {
                 the IIT Madras qualifier, then see exactly where you stand against the cutoff.
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
-                <MockAction slug={qualifierMocks[0].slug} />
+                <MockAction slug={qualifierMocks[0].slug} answerKey={answerKey(qualifierMocks[0])} />
                 <a href="#how-it-works" className="inline-flex items-center gap-1 text-sm font-semibold hover:underline">
                   How the qualifier works <ArrowRight className="size-4" aria-hidden />
                 </a>
@@ -212,7 +216,7 @@ export default function QualifierPage() {
                 ))}
               </div>
               <div className="mt-6 border-t border-border pt-5">
-                <MockAction slug={m.slug} />
+                <MockAction slug={m.slug} answerKey={answerKey(m)} />
               </div>
             </article>
           ))}
@@ -246,7 +250,7 @@ export default function QualifierPage() {
                         <span>{p.durationMin} min</span>
                       </p>
                       <div className="mt-5 border-t border-border pt-4">
-                        <MockAction slug={p.slug} />
+                        <MockAction slug={p.slug} answerKey={answerKey(p)} />
                       </div>
                     </article>
                   ))}
@@ -280,7 +284,7 @@ export default function QualifierPage() {
         </div>
       </section>
 
-      <QualifierHistory />
+      <QualifierHistory answerKeys={allQualifierPapers.map(answerKey)} />
 
       {/* ───────── How it works ───────── */}
       <section id="how-it-works" className="container-page scroll-mt-24 pb-14 md:pb-20">

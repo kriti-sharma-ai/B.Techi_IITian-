@@ -1,10 +1,14 @@
 import type { MetadataRoute } from "next";
 import { allTopics, books, notes, programs, pyqs, skillCourses, subjects } from "@/lib/content";
-import { PYQ_LEVELS, pyqCourses, pyqCoursesForLevel, uploadedPyqHref } from "@/lib/pyq-index";
+import { PYQ_LEVELS, getPyqIndex, uploadedPyqHref } from "@/lib/pyq-index";
 import { pyqLevelHref } from "@/lib/pyq-urls";
 import { SITE_URL } from "@/lib/utils";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+// PYQ courses come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
+export const revalidate = 300;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const { pyqCourses, pyqCoursesForLevel } = await getPyqIndex();
   const url = (path: string, priority = 0.6): MetadataRoute.Sitemap[number] => ({ url: `${SITE_URL}${path}`, priority });
   return [
     url("/", 1),

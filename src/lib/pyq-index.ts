@@ -1,12 +1,13 @@
 // One index of every previous-year paper that can be sat in the exam portal
 // (qualifier PYQs and End Term papers), organised by level and course. The
 // PYQ pages, programme level pages, course pages and practice pages all read
-// from here. Server-side only: it pulls in the End Term question data.
-// URLs are built in lib/pyq-urls.ts.
+// from here, through `await getPyqIndex()`. Server-side only: the papers come
+// from Supabase (lib/papers.ts). URLs are built in lib/pyq-urls.ts.
 
 import { forSubject, getSubject, pyqs, subjectPlacement, subjects } from "./content";
-import { END_TERM_SUBJECTS, endTermPapersFor, formatSittingDate } from "./end-term";
-import { mockMarks, mockQuestions, pyqGroups } from "./qualifier";
+import { END_TERM_SUBJECTS, formatSittingDate } from "./end-term";
+import { getPapers, type Papers } from "./papers";
+import { mockMarks, mockQuestions } from "./qualifier";
 import { paperHref, paperSegment, pyqCourseHref, qualifierTerm, type PyqLevel } from "./pyq-urls";
 import type { Pyq, QualifierMock } from "./types";
 
@@ -96,60 +97,6 @@ const DS_GROUP: Record<(typeof END_TERM_SUBJECTS)[number]["level"], string> = {
   degree: "BS in Data Science · Degree courses",
 };
 
-function papersFor(subjectSlug: string) {
-  const qualifier = pyqGroups.find((g) => g.subjectSlug === subjectSlug)?.papers ?? [];
-  return [...endTermPapersFor(subjectSlug).map((p) => summarise(p, "end-term")), ...qualifier.map((p) => summarise(p, "qualifier"))].sort(newestFirst);
-}
-
-/** Every course with at least one paper: curriculum courses first (in curriculum order), then BS in Data Science courses. */
-export const pyqCourses: CoursePyqs[] = [
-  ...subjects
-    .map((s): CoursePyqs => {
-      const { level, group } = subjectPlacement(s);
-      const etSubject = END_TERM_SUBJECTS.find((e) => e.slug === s.slug);
-      return {
-        slug: s.slug,
-        name: s.name,
-        short: etSubject?.short ?? s.name,
-        code: s.code,
-        level: s.level as PyqLevel,
-        group: group?.name ?? `${level.short} courses`,
-        inCurriculum: true,
-        href: pyqCourseHref(s.slug, s.level as PyqLevel),
-        courseHref: `/subjects/${s.slug}`,
-        papers: papersFor(s.slug),
-      };
-    })
-    // Courses with only CMS-uploaded papers get a PYQ page too.
-    .filter((c) => c.papers.length > 0 || forSubject(pyqs, c.slug).length > 0),
-  ...END_TERM_SUBJECTS.filter((e) => !getSubject(e.slug)).map(
-    (e): CoursePyqs => ({
-      slug: e.slug,
-      name: e.name,
-      short: e.short,
-      level: END_TERM_LEVEL[e.level],
-      group: DS_GROUP[e.level],
-      inCurriculum: false,
-      href: pyqCourseHref(e.slug, END_TERM_LEVEL[e.level]),
-      papers: papersFor(e.slug),
-    }),
-  ),
-];
-
-export const getPyqCourse = (slug: string) => pyqCourses.find((c) => c.slug === slug);
-
-export const pyqCoursesForLevel = (level: PyqLevel) => pyqCourses.filter((c) => c.level === level);
-
-export const pyqPapersFor = (slug: string, exam?: PyqExam) => (getPyqCourse(slug)?.papers ?? []).filter((p) => !exam || p.exam === exam);
-
-export const allPyqPapers = pyqCourses.flatMap((c) => c.papers.map((p) => ({ ...p, course: c })));
-
-export const pyqTotals = {
-  courses: pyqCourses.length,
-  papers: allPyqPapers.length,
-  questions: allPyqPapers.reduce((n, p) => n + p.questions, 0),
-};
-
 /** Courses grouped under their hub headings, keeping first-seen order. */
 export function groupCourses(courses: CoursePyqs[]) {
   const groups = new Map<string, CoursePyqs[]>();
@@ -157,10 +104,80 @@ export function groupCourses(courses: CoursePyqs[]) {
   return [...groups.entries()].map(([name, list]) => ({ name, courses: list }));
 }
 
-/** The full paper (questions and key) behind /pyqs/<level>/<course>/<segment>. */
-export function findPaper(courseSlug: string, segment: string): QualifierMock | undefined {
-  const qualifier = pyqGroups.find((g) => g.subjectSlug === courseSlug)?.papers ?? [];
-  return [...endTermPapersFor(courseSlug), ...qualifier].find((p) => paperSegment(p) === segment);
+function buildIndex({ pyqGroups, endTermPapersFor }: Papers) {
+  function papersFor(subjectSlug: string) {
+    const qualifier = pyqGroups.find((g) => g.subjectSlug === subjectSlug)?.papers ?? [];
+    return [...endTermPapersFor(subjectSlug).map((p) => summarise(p, "end-term")), ...qualifier.map((p) => summarise(p, "qualifier"))].sort(newestFirst);
+  }
+
+  /** Every course with at least one paper: curriculum courses first (in curriculum order), then BS in Data Science courses. */
+  const pyqCourses: CoursePyqs[] = [
+    ...subjects
+      .map((s): CoursePyqs => {
+        const { level, group } = subjectPlacement(s);
+        const etSubject = END_TERM_SUBJECTS.find((e) => e.slug === s.slug);
+        return {
+          slug: s.slug,
+          name: s.name,
+          short: etSubject?.short ?? s.name,
+          code: s.code,
+          level: s.level as PyqLevel,
+          group: group?.name ?? `${level.short} courses`,
+          inCurriculum: true,
+          href: pyqCourseHref(s.slug, s.level as PyqLevel),
+          courseHref: `/subjects/${s.slug}`,
+          papers: papersFor(s.slug),
+        };
+      })
+      // Courses with only CMS-uploaded papers get a PYQ page too.
+      .filter((c) => c.papers.length > 0 || forSubject(pyqs, c.slug).length > 0),
+    ...END_TERM_SUBJECTS.filter((e) => !getSubject(e.slug)).map(
+      (e): CoursePyqs => ({
+        slug: e.slug,
+        name: e.name,
+        short: e.short,
+        level: END_TERM_LEVEL[e.level],
+        group: DS_GROUP[e.level],
+        inCurriculum: false,
+        href: pyqCourseHref(e.slug, END_TERM_LEVEL[e.level]),
+        papers: papersFor(e.slug),
+      }),
+    ),
+  ];
+
+  const getPyqCourse = (slug: string) => pyqCourses.find((c) => c.slug === slug);
+
+  const pyqCoursesForLevel = (level: PyqLevel) => pyqCourses.filter((c) => c.level === level);
+
+  const pyqPapersFor = (slug: string, exam?: PyqExam) => (getPyqCourse(slug)?.papers ?? []).filter((p) => !exam || p.exam === exam);
+
+  const allPyqPapers = pyqCourses.flatMap((c) => c.papers.map((p) => ({ ...p, course: c })));
+
+  const pyqTotals = {
+    courses: pyqCourses.length,
+    papers: allPyqPapers.length,
+    questions: allPyqPapers.reduce((n, p) => n + p.questions, 0),
+  };
+
+  /** The full paper (questions and key) behind /pyqs/<level>/<course>/<segment>. */
+  function findPaper(courseSlug: string, segment: string): QualifierMock | undefined {
+    const qualifier = pyqGroups.find((g) => g.subjectSlug === courseSlug)?.papers ?? [];
+    return [...endTermPapersFor(courseSlug), ...qualifier].find((p) => paperSegment(p) === segment);
+  }
+
+  return { pyqCourses, getPyqCourse, pyqCoursesForLevel, pyqPapersFor, allPyqPapers, pyqTotals, findPaper };
+}
+
+export type PyqIndex = ReturnType<typeof buildIndex>;
+
+const built = new WeakMap<Papers, PyqIndex>();
+
+/** The PYQ index over the current papers (see lib/papers.ts), built once per load. */
+export async function getPyqIndex(): Promise<PyqIndex> {
+  const papers = await getPapers();
+  let index = built.get(papers);
+  if (!index) built.set(papers, (index = buildIndex(papers)));
+  return index;
 }
 
 /* ───────────── CMS-uploaded papers (PDF + topic analysis) ───────────── */

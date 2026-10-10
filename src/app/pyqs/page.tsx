@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { PyqHistory } from "@/components/qualifier-attempts";
 import { PageHeader } from "@/components/ui";
-import { PYQ_LEVELS, groupCourses, pyqCoursesForLevel, pyqTotals } from "@/lib/pyq-index";
+import { PYQ_LEVELS, getPyqIndex, groupCourses } from "@/lib/pyq-index";
 import { pyqLevelHref } from "@/lib/pyq-urls";
 
 export const metadata: Metadata = {
@@ -13,7 +13,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/pyqs" },
 };
 
-export default function PyqsPage() {
+// Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
+export const revalidate = 300;
+
+export default async function PyqsPage() {
+  const { pyqCoursesForLevel, pyqTotals } = await getPyqIndex();
   return (
     <>
       <PageHeader

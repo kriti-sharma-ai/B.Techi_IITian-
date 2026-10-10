@@ -8,8 +8,8 @@ import { Quiz } from "@/components/quiz";
 import { Breadcrumbs, EmptyState, buttonClass } from "@/components/ui";
 import { getPyq, getSubject, pyqTitle, questionsFor, topicTitle } from "@/lib/content";
 import { param } from "@/lib/filters";
-import { getPyqCourse } from "@/lib/pyq-index";
-import { buildPyqSet, courseExams, examFromParam, isPyqPracticeMode, practiceHref } from "@/lib/pyq-practice";
+import { getPyqIndex } from "@/lib/pyq-index";
+import { courseExams, examFromParam, getPyqPractice, isPyqPracticeMode, practiceHref } from "@/lib/pyq-practice";
 import type { Question } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -94,7 +94,8 @@ export default async function SessionPage({ searchParams }: PageProps<"/practice
 }
 
 /** A set of real previous-year questions for one course and exam (lib/pyq-practice.ts). */
-function PyqSession({ courseSlug, exam: examParam, mode, seed: seedParam }: { courseSlug: string; exam?: string; mode?: string; seed?: string }) {
+async function PyqSession({ courseSlug, exam: examParam, mode, seed: seedParam }: { courseSlug: string; exam?: string; mode?: string; seed?: string }) {
+  const [{ getPyqCourse }, { buildPyqSet }] = await Promise.all([getPyqIndex(), getPyqPractice()]);
   const course = getPyqCourse(courseSlug);
   if (!course) notFound();
   const asked = examFromParam(examParam);

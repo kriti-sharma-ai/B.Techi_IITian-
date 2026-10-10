@@ -7,7 +7,7 @@ import { Badge, EmptyState, buttonClass } from "@/components/ui";
 import { VideoCard } from "@/components/video-card";
 import { PROGRAM_SLUG, forSubject, getProgram, getSubject, notes, pyqs, pyqTopicFrequency, questions, subjects, topicTitle, videos } from "@/lib/content";
 import { param } from "@/lib/filters";
-import { pyqPapersFor } from "@/lib/pyq-index";
+import { getPyqIndex } from "@/lib/pyq-index";
 import { sessionHref } from "@/lib/pyq-practice";
 import { pyqCourseHref } from "@/lib/pyq-urls";
 import { cn } from "@/lib/utils";
@@ -113,7 +113,8 @@ export function ExamPrep({ sp }: { sp: Record<string, string | string[] | undefi
   );
 }
 
-function Plan({ subjectSlug, exam }: { subjectSlug: string; exam: string }) {
+async function Plan({ subjectSlug, exam }: { subjectSlug: string; exam: string }) {
+  const { pyqPapersFor } = await getPyqIndex();
   const subject = getSubject(subjectSlug)!;
   const papers = forSubject(pyqs, subjectSlug).sort((a, b) => b.year - a.year);
   const sameExam = papers.filter((p) => p.exam === exam);

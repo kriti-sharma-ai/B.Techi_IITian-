@@ -757,7 +757,7 @@ export const english2EndTermPapers: QualifierMock[] = [
             id: "english-2-end-term-aug-2025-fn-q50",
             type: "mcq",
             marks: 1,
-            prompt: "Fill in the box (\u0000) in the following sentence with the appropriate punctuation mark.\n“Today may not be the best day. However \u0000 there is always a tomorrow.”",
+            prompt: "Fill in the box (□) in the following sentence with the appropriate punctuation mark.\n“Today may not be the best day. However □ there is always a tomorrow.”",
             options: [
               "Full stop",
               "Ellipsis",
@@ -1654,7 +1654,7 @@ export const english2EndTermPapers: QualifierMock[] = [
             id: "english-2-end-term-aug-2025-an-q50",
             type: "mcq",
             marks: 1,
-            prompt: "Fill in the box (\u0000) in the following sentence with the appropriate punctuation mark.\n“Madam Prime Minister \u0000 please do not attend that meeting.”",
+            prompt: "Fill in the box (□) in the following sentence with the appropriate punctuation mark.\n“Madam Prime Minister □ please do not attend that meeting.”",
             options: [
               "Question mark",
               "Full stop",

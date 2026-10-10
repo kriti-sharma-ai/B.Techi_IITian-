@@ -7,6 +7,8 @@ import { allTopics, assignments, getProgram, getSubject, pyqs, subjects, topicKe
 import { ContinueLearning, SubjectProgressBar } from "./progress";
 import { Button, ProgressBar, Stat, buttonClass } from "./ui";
 import { cn, formatDate } from "@/lib/utils";
+import { supabase } from "@/lib/supabase/client";
+import { flushProgress } from "@/lib/supabase/sync";
 
 function greeting() {
   const h = new Date().getHours();
@@ -70,7 +72,15 @@ export function Dashboard() {
           </p>
         </div>
         {user ? (
-          <Button variant="ghost" size="sm" onClick={() => actions.signOut()}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={async () => {
+              actions.signOut();
+              await flushProgress();
+              await supabase.auth.signOut();
+            }}
+          >
             <LogOut className="size-4" aria-hidden /> Sign out
           </Button>
         ) : (

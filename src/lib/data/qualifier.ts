@@ -4,24 +4,7 @@ import type { QualifierMock, QualifierQuestion } from "../types";
 // examined in the IITM BS qualifier (weeks 1–4 of each). Every question is
 // original, written in the qualifier's style; none are copied from IITM papers.
 
-/** Subjects bundled in the pack, in exam order. */
-export const QUALIFIER_SUBJECTS = [
-  "mathematics-for-data-science-1",
-  "statistics-for-data-science-1",
-  "computational-thinking",
-  "english-1",
-] as const;
-
-/** General-category cutoff: minimum per course and minimum average across the four. */
-export const QUALIFIER_CUTOFF = { perSubject: 40, average: 50 };
-
-/** Weeks 1–4 syllabus examined per course. */
-export const QUALIFIER_SYLLABUS: Record<(typeof QUALIFIER_SUBJECTS)[number], string[]> = {
-  "mathematics-for-data-science-1": ["Sets, relations and functions", "Coordinate geometry and straight lines", "Quadratic functions", "Polynomials"],
-  "statistics-for-data-science-1": ["Types of data", "Describing categorical data", "Describing numerical data", "Association between two variables"],
-  "computational-thinking": ["Variables, iteration and filtering", "Datasets as cards and tables", "Flowcharts and pseudocode", "Procedures and multiple filters"],
-  "english-1": ["Sounds and pronunciation", "Parts of speech and grammar", "Vocabulary and usage", "Reading comprehension"],
-};
+export { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS } from "./qualifier-meta";
 
 const mcq = (id: string, marks: number, prompt: string, options: string[], answer: number, explanation: string, extra?: Partial<QualifierQuestion>): QualifierQuestion => ({
   id, type: "mcq", marks, prompt, options, answer, explanation, ...extra,

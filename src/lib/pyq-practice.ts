@@ -1,12 +1,12 @@
 // Practice sets built from real previous-year questions: the End Term or
 // qualifier papers of one course, with the official answer keys. Past papers
 // carry no topic or week tags, so a set is drawn from one course and one exam.
-// Server-side only: it reads every paper, and the session page sends the client
-// just the questions it picked.
+// Server-side only: it reads every paper (lib/papers.ts, via `await
+// getPyqPractice()`), and the session page sends the client just the questions it picked.
 
-import { endTermPapersFor, formatSittingDate } from "./end-term";
-import { PYQ_EXAMS, PYQ_LEVELS, getPyqCourse, type CoursePyqs, type PyqExam } from "./pyq-index";
-import { pyqGroups } from "./qualifier";
+import { formatSittingDate } from "./end-term";
+import { getPapers, type Papers } from "./papers";
+import { PYQ_EXAMS, PYQ_LEVELS, getPyqIndex, type CoursePyqs, type PaperSummary, type PyqExam, type PyqIndex } from "./pyq-index";
 import { paperHref } from "./pyq-urls";
 import type { QualifierMock, QualifierQuestion } from "./types";
 
@@ -57,21 +57,6 @@ function blocksOf(p: QualifierMock): Block[] {
       else blocks.push([item]);
     }
   return blocks;
-}
-
-const papersCache = new Map<string, Paper[]>();
-
-function papersOf(courseSlug: string): Paper[] {
-  let papers = papersCache.get(courseSlug);
-  if (!papers) {
-    const qualifier = pyqGroups.find((g) => g.subjectSlug === courseSlug)?.papers ?? [];
-    papers = [
-      ...endTermPapersFor(courseSlug).map((mock) => ({ mock, exam: "end-term" as const, blocks: blocksOf(mock) })),
-      ...qualifier.map((mock) => ({ mock, exam: "qualifier" as const, blocks: blocksOf(mock) })),
-    ];
-    papersCache.set(courseSlug, papers);
-  }
-  return papers;
 }
 
 /** Seeded PRNG (mulberry32), so a set's URL always rebuilds the same questions. */
@@ -191,24 +176,17 @@ export const sessionHref = (courseSlug: string, exam: PyqExam, mode: PyqPractice
 /** Exams a course has papers for. */
 export const courseExams = (course: CoursePyqs) => PYQ_EXAMS.map((e) => e.slug).filter((e) => course.papers.some((p) => p.exam === e));
 
-/** What the practice page shows for a course and exam: pool size, its real papers and the shape of a typical one. */
-export function practicePlan(courseSlug: string, exam: PyqExam) {
-  const course = getPyqCourse(courseSlug);
-  const papers = papersOf(courseSlug).filter((p) => p.exam === exam);
-  if (!course || papers.length === 0) return undefined;
-  return {
-    course,
-    level: PYQ_LEVELS.find((l) => l.slug === course.level)!,
-    exam: { slug: exam, ...PRACTICE_EXAMS[exam] },
-    questions: papers.reduce((n, p) => n + p.blocks.flat().length, 0),
-    /** The real papers, newest first. */
-    papers: course.papers.filter((p) => p.exam === exam),
-    paperLength: median(papers.map((p) => p.mock.sections.flatMap((s) => s.questions).length)),
-    durationMin: median(papers.map((p) => p.mock.durationMin)),
-  };
-}
-
-export type PracticePlan = NonNullable<ReturnType<typeof practicePlan>>;
+export type PracticePlan = {
+  course: CoursePyqs;
+  level: (typeof PYQ_LEVELS)[number];
+  exam: { slug: PyqExam } & (typeof PRACTICE_EXAMS)[PyqExam];
+  /** Questions in the pool. */
+  questions: number;
+  /** The real papers, newest first. */
+  papers: PaperSummary[];
+  paperLength: number;
+  durationMin: number;
+};
 
 export type PyqSet = {
   plan: PracticePlan;
@@ -224,24 +202,72 @@ export type PyqSet = {
   blueprint?: string;
 };
 
-export function buildPyqSet(courseSlug: string, exam: PyqExam, mode: PyqPracticeMode, seed: number): PyqSet | undefined {
-  const plan = practicePlan(courseSlug, exam);
-  if (!plan) return undefined;
-  const papers = papersOf(courseSlug).filter((p) => p.exam === exam);
-  const rand = random(seed);
-  const base = { plan, mode, title: MODE_TITLE[mode], test: false, drill: false };
-  switch (mode) {
-    case "quick":
-      return { ...base, items: draw(papers, QUICK_COUNT, rand) };
-    case "drill":
-      return { ...base, drill: true, items: draw(papers, DRILL_COUNT, rand) };
-    case "all":
-      return { ...base, items: draw(papers, plan.questions, rand) };
-    case "full":
-      return { ...base, test: true, items: draw(papers, plan.paperLength, rand) };
-    case "mock": {
-      const { items, blueprint } = mockExam(papers, rand);
-      return { ...base, test: true, items, durationMin: blueprint.durationMin, blueprint: blueprint.title };
+function buildPractice({ pyqGroups, endTermPapersFor }: Papers, { getPyqCourse }: PyqIndex) {
+  const papersCache = new Map<string, Paper[]>();
+
+  function papersOf(courseSlug: string): Paper[] {
+    let papers = papersCache.get(courseSlug);
+    if (!papers) {
+      const qualifier = pyqGroups.find((g) => g.subjectSlug === courseSlug)?.papers ?? [];
+      papers = [
+        ...endTermPapersFor(courseSlug).map((mock) => ({ mock, exam: "end-term" as const, blocks: blocksOf(mock) })),
+        ...qualifier.map((mock) => ({ mock, exam: "qualifier" as const, blocks: blocksOf(mock) })),
+      ];
+      papersCache.set(courseSlug, papers);
+    }
+    return papers;
+  }
+
+  /** What the practice page shows for a course and exam: pool size, its real papers and the shape of a typical one. */
+  function practicePlan(courseSlug: string, exam: PyqExam): PracticePlan | undefined {
+    const course = getPyqCourse(courseSlug);
+    const papers = papersOf(courseSlug).filter((p) => p.exam === exam);
+    if (!course || papers.length === 0) return undefined;
+    return {
+      course,
+      level: PYQ_LEVELS.find((l) => l.slug === course.level)!,
+      exam: { slug: exam, ...PRACTICE_EXAMS[exam] },
+      questions: papers.reduce((n, p) => n + p.blocks.flat().length, 0),
+      /** The real papers, newest first. */
+      papers: course.papers.filter((p) => p.exam === exam),
+      paperLength: median(papers.map((p) => p.mock.sections.flatMap((s) => s.questions).length)),
+      durationMin: median(papers.map((p) => p.mock.durationMin)),
+    };
+  }
+
+  function buildPyqSet(courseSlug: string, exam: PyqExam, mode: PyqPracticeMode, seed: number): PyqSet | undefined {
+    const plan = practicePlan(courseSlug, exam);
+    if (!plan) return undefined;
+    const papers = papersOf(courseSlug).filter((p) => p.exam === exam);
+    const rand = random(seed);
+    const base = { plan, mode, title: MODE_TITLE[mode], test: false, drill: false };
+    switch (mode) {
+      case "quick":
+        return { ...base, items: draw(papers, QUICK_COUNT, rand) };
+      case "drill":
+        return { ...base, drill: true, items: draw(papers, DRILL_COUNT, rand) };
+      case "all":
+        return { ...base, items: draw(papers, plan.questions, rand) };
+      case "full":
+        return { ...base, test: true, items: draw(papers, plan.paperLength, rand) };
+      case "mock": {
+        const { items, blueprint } = mockExam(papers, rand);
+        return { ...base, test: true, items, durationMin: blueprint.durationMin, blueprint: blueprint.title };
+      }
     }
   }
+
+  return { practicePlan, buildPyqSet };
+}
+
+export type PyqPractice = ReturnType<typeof buildPractice>;
+
+const built = new WeakMap<Papers, PyqPractice>();
+
+/** Practice plans and sets over the current papers (see lib/papers.ts). */
+export async function getPyqPractice(): Promise<PyqPractice> {
+  const [papers, index] = await Promise.all([getPapers(), getPyqIndex()]);
+  let practice = built.get(papers);
+  if (!practice) built.set(papers, (practice = buildPractice(papers, index)));
+  return practice;
 }

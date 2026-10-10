@@ -10,6 +10,7 @@ import type { QualifierMock, QualifierQuestion } from "@/lib/types";
 import { Badge, Breadcrumbs, EmptyState, buttonClass } from "./ui";
 import { cn } from "@/lib/utils";
 import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
+import { SaveProgressPrompt } from "./save-progress-prompt";
 
 const TYPE_SHORT: Record<QualifierQuestion["type"], string> = { mcq: "MCQ", multi: "MSQ", numerical: "NAT", text: "SA" };
 
@@ -31,7 +32,7 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
       <div className="container-page py-10">
         <EmptyState
           title="We couldn't find this attempt."
-          description="Results are saved in this browser. They may have been cleared, or this attempt was taken on another device."
+          description="Results are saved in this browser, and in your account when you're logged in. Log in with the account you took it on, or it may have been cleared."
           action={<Link href={home.href} className={buttonClass("secondary")}>Back to {home.label}</Link>}
         />
       </div>
@@ -101,6 +102,7 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
       </header>
 
       <div className="container-page space-y-10 py-8">
+        <SaveProgressPrompt />
         {/* Section scorecards */}
         <section>
           {!single && <h2 className="mb-4 text-xl font-bold tracking-tight">Course-wise score</h2>}

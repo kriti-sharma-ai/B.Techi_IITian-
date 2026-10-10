@@ -8,7 +8,7 @@ import { courseOutline } from "@/lib/course";
 export default async function SubjectLayout({ params, children }: LayoutProps<"/subjects/[subject]">) {
   const subject = getSubject((await params).subject);
   if (!subject) notFound();
-  const props = { title: subject.name, base: `/subjects/${subject.slug}`, sections: courseOutline(subject) };
+  const props = { title: subject.name, base: `/subjects/${subject.slug}`, sections: await courseOutline(subject) };
 
   return (
     <div className="lg:flex">

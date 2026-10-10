@@ -9,7 +9,7 @@ import { PaperRows } from "@/components/pyq-papers";
 import { Breadcrumbs } from "@/components/ui";
 import { param } from "@/lib/filters";
 import { getSubject, pyqs, pyqTitle, questions } from "@/lib/content";
-import { PYQ_LEVELS, getPyqCourse, groupCourses, pyqCourses, pyqCoursesForLevel, type CoursePyqs, type PyqExam } from "@/lib/pyq-index";
+import { PYQ_LEVELS, getPyqIndex, groupCourses, type CoursePyqs, type PyqExam, type PyqIndex } from "@/lib/pyq-index";
 import {
   DRILL_COUNT,
   PRACTICE_EXAMS,
@@ -17,9 +17,10 @@ import {
   courseExams,
   examFromParam,
   practiceHref,
-  practicePlan,
+  getPyqPractice,
   sessionHref,
   type PracticePlan,
+  type PyqPractice,
   type PyqPracticeMode,
 } from "@/lib/pyq-practice";
 import { isPyqLevel } from "@/lib/pyq-urls";
@@ -34,6 +35,7 @@ export const metadata: Metadata = {
 
 export default async function PracticePage({ searchParams }: PageProps<"/practice">) {
   const sp = await searchParams;
+  const [index, practice] = await Promise.all([getPyqIndex(), getPyqPractice()]);
 
   // The Exam prep tab is hidden until its revision content (notes, videos, topic data) is published.
   // Its old links (?tab=exam&subject=…&exam=Quiz 1) open the same course and exam here.
@@ -41,7 +43,7 @@ export default async function PracticePage({ searchParams }: PageProps<"/practic
     const subject = param(sp, "subject") ?? param(sp, "course");
     const level = param(sp, "level") ?? (subject ? getSubject(subject)?.level : undefined);
     if (!subject && !level) redirect("/practice");
-    const { course, exam } = resolveSelection(level, subject, param(sp, "exam"));
+    const { course, exam } = resolveSelection(index, level, subject, param(sp, "exam"));
     redirect(subject ? practiceHref(course.slug, exam) : `/practice?level=${course.level}`);
   }
 
@@ -54,13 +56,13 @@ export default async function PracticePage({ searchParams }: PageProps<"/practic
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Practice</h1>
         </div>
       </header>
-      <PracticeModes level={param(sp, "level")} course={param(sp, "course")} exam={param(sp, "exam")} />
+      <PracticeModes index={index} practice={practice} level={param(sp, "level")} course={param(sp, "course")} exam={param(sp, "exam")} />
     </>
   );
 }
 
 /** ?course= wins; ?level= opens that level's first course. End Term unless the course has the asked-for exam. */
-function resolveSelection(levelParam?: string, courseParam?: string, examParam?: string) {
+function resolveSelection({ getPyqCourse, pyqCoursesForLevel, pyqCourses }: PyqIndex, levelParam?: string, courseParam?: string, examParam?: string) {
   const course =
     getPyqCourse(courseParam ?? "") ?? pyqCoursesForLevel(levelParam && isPyqLevel(levelParam) ? levelParam : "foundation")[0] ?? pyqCourses[0];
   const exams = courseExams(course);
@@ -82,10 +84,10 @@ type Mode = { mode: PyqPracticeMode; icon: LucideIcon; title: string; descriptio
  * The chooser on the left (pinned on desktop); on the right, everything for the
  * chosen course and exam: what it covers, ways to practise, tests, and the real papers.
  */
-function PracticeModes(props: { level?: string; course?: string; exam?: string }) {
+function PracticeModes({ index, practice, ...props }: { index: PyqIndex; practice: PyqPractice; level?: string; course?: string; exam?: string }) {
   const live = questions.length > 0;
-  const { course, exam } = resolveSelection(props.level, props.course, props.exam);
-  const plan = practicePlan(course.slug, exam)!;
+  const { course, exam } = resolveSelection(index, props.level, props.course, props.exam);
+  const plan = practice.practicePlan(course.slug, exam)!;
   const latestPyqs = [...pyqs].sort((a, b) => b.year - a.year).slice(0, 4);
   const { source } = plan.exam;
 
@@ -134,7 +136,7 @@ function PracticeModes(props: { level?: string; course?: string; exam?: string }
       <div className="grid gap-8 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start xl:grid-cols-[20rem_minmax(0,1fr)]">
         {/* Scrolls on its own if it outgrows a short screen, so the whole chooser stays reachable while pinned. */}
         <aside className="space-y-4 lg:sticky lg:top-20 lg:-m-1 lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:p-1">
-          <Chooser plan={plan} />
+          <Chooser plan={plan} index={index} />
           <PracticeStats />
         </aside>
 
@@ -213,7 +215,7 @@ function Field({ n, label, children }: { n: number; label: string; children: Rea
 }
 
 /** Level → course → exam. Every option is a link, so the choice lives in the URL. */
-function Chooser({ plan }: { plan: PracticePlan }) {
+function Chooser({ plan, index: { pyqCoursesForLevel } }: { plan: PracticePlan; index: PyqIndex }) {
   const { course, exam } = plan;
   const levels = PYQ_LEVELS.filter((l) => pyqCoursesForLevel(l.slug).length > 0);
   // Switching course keeps the exam when the new course has papers for it.

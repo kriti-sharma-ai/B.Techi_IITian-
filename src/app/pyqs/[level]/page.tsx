@@ -5,18 +5,24 @@ import { ScrollText } from "lucide-react";
 import { CoursePyqCard } from "@/components/pyq-papers";
 import { EmptyState, LinkTabs, PageHeader, buttonClass } from "@/components/ui";
 import { param } from "@/lib/filters";
-import { PYQ_EXAMS, PYQ_LEVELS, groupCourses, pyqCoursesForLevel, type PyqExam } from "@/lib/pyq-index";
+import { PYQ_EXAMS, PYQ_LEVELS, getPyqIndex, groupCourses, type PyqExam } from "@/lib/pyq-index";
 import { isPyqLevel, pyqLevelHref } from "@/lib/pyq-urls";
 import { cn } from "@/lib/utils";
 
 export const dynamicParams = false;
-export const generateStaticParams = () => PYQ_LEVELS.filter((l) => pyqCoursesForLevel(l.slug).length > 0).map((l) => ({ level: l.slug }));
+// Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
+export const revalidate = 300;
+export async function generateStaticParams() {
+  const { pyqCoursesForLevel } = await getPyqIndex();
+  return PYQ_LEVELS.filter((l) => pyqCoursesForLevel(l.slug).length > 0).map((l) => ({ level: l.slug }));
+}
 
 const getLevel = (slug: string) => (isPyqLevel(slug) ? PYQ_LEVELS.find((l) => l.slug === slug) : undefined);
 
 export async function generateMetadata({ params }: PageProps<"/pyqs/[level]">): Promise<Metadata> {
   const level = getLevel((await params).level);
   if (!level) return {};
+  const { pyqCoursesForLevel } = await getPyqIndex();
   const courses = pyqCoursesForLevel(level.slug);
   return {
     title: `IIT Madras BS ${level.name} PYQs: Previous Year Papers`,
@@ -35,6 +41,7 @@ export default async function PyqLevelPage({ params, searchParams }: PageProps<"
   const examParam = param(await searchParams, "exam");
   const exam = PYQ_EXAMS.find((e) => e.slug === examParam)?.slug;
 
+  const { pyqCoursesForLevel } = await getPyqIndex();
   const courses = pyqCoursesForLevel(level.slug);
   const papersOf = (c: (typeof courses)[number], e: PyqExam | undefined = exam) => c.papers.filter((p) => !e || p.exam === e);
   const groups = groupCourses(courses.filter((c) => papersOf(c).length > 0));

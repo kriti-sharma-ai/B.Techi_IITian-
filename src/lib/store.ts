@@ -89,7 +89,14 @@ export type State = {
   customUnits: CustomUnit[];
   customSubjects: CustomSubject[];
   qualifierAttempts: QualifierAttempt[];
+  /** Account whose progress the personal slices hold; unset while they are a guest's. See lib/supabase/sync.ts. */
+  syncedUserId?: string;
 };
+
+/** Slices saved to the signed-in student's account (table user_state). The rest are CMS-side. */
+export const PERSONAL_KEYS = ["bookmarks", "completed", "attempts", "downloads", "watched", "visits", "qualifierAttempts"] as const;
+export type PersonalKey = (typeof PERSONAL_KEYS)[number];
+export type PersonalState = Pick<State, PersonalKey>;
 
 const KEY = "btechi:v2";
 
@@ -159,6 +166,23 @@ export function update(fn: (s: State) => State) {
   persist();
   listeners.forEach((l) => l());
 }
+
+/** Current state outside React, for the account sync. */
+export function readState() {
+  load();
+  return state;
+}
+
+/** Listen to changes made in this tab, outside React. Returns an unsubscribe function. */
+export function onStateChange(cb: () => void) {
+  listeners.add(cb);
+  return () => void listeners.delete(cb);
+}
+
+export const personalSlices = (s: State): PersonalState =>
+  Object.fromEntries(PERSONAL_KEYS.map((k) => [k, s[k]])) as PersonalState;
+
+export const EMPTY_PERSONAL: PersonalState = personalSlices(EMPTY);
 
 /** Returns false until the browser store has been read — use to avoid flashing empty states. */
 export function useHydrated() {

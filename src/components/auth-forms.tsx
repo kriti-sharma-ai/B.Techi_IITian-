@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { actions, type Role } from "@/lib/store";
+import { actions } from "@/lib/store";
 import { PROGRAM_SLUG, programs } from "@/lib/content";
+import { supabase } from "@/lib/supabase/client";
 import { Button, buttonClass } from "./ui";
 import { useToast } from "./toast";
 
@@ -62,45 +63,56 @@ function Divider() {
   );
 }
 
-function DemoNote() {
-  return (
-    <p className="mt-6 rounded-xl bg-surface-2 p-3 text-xs text-muted">
-      <strong className="text-fg">Demo mode:</strong> accounts are stored in this browser only. Connect Supabase Auth (see
-      README) to enable real Google and email sign-in.
-    </p>
-  );
+// Only allow internal redirects.
+const safeNext = (next: string | null) => (next?.startsWith("/") && !next.startsWith("//") ? next : "/dashboard");
+
+function useGoogle(redirectPath: string) {
+  const toast = useToast();
+  return async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin + redirectPath },
+    });
+    if (error) toast(error.message);
+  };
 }
 
 export function LoginForm() {
   const router = useRouter();
-  const next = useSearchParams().get("next");
+  const next = safeNext(useSearchParams().get("next"));
   const toast = useToast();
+  const google = useGoogle(next);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
-  const go = (name: string, mail: string, role: Role = "student") => {
-    actions.signIn({ name, email: mail, role, program: PROGRAM_SLUG, level: "foundation", university: "IIT Madras" });
-    toast(`Welcome back, ${name.split(" ")[0]}`);
-    // Only allow internal redirects.
-    router.push(next?.startsWith("/") && !next.startsWith("//") ? next : role === "student" ? "/dashboard" : "/admin");
-  };
-
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     const err: typeof errors = {};
     if (!EMAIL.test(email)) err.email = "Enter a valid email address.";
     if (password.length < 8) err.password = "Password must be at least 8 characters.";
     setErrors(err);
     if (Object.keys(err).length) return;
-    const name = email.split("@")[0].replace(/[._-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-    go(name, email);
+    setBusy(true);
+    const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    setBusy(false);
+    if (error) return setErrors({ password: error.message });
+    const name = data.user.user_metadata?.name ?? email.split("@")[0];
+    toast(`Welcome back, ${name.split(" ")[0]}`);
+    router.push(next);
+  };
+
+  // Preview-only: the CMS gate is UI-side, real admin rights come from profiles.role.
+  const demoAdmin = () => {
+    actions.signIn({ name: "BTechi Admin", email: "admin@btechi.in", role: "admin", program: PROGRAM_SLUG, level: "foundation" });
+    router.push("/admin");
   };
 
   return (
     <>
-      <GoogleButton onClick={() => go("Student", "student@gmail.com")} />
+      <GoogleButton onClick={google} />
       <Divider />
       <form onSubmit={submit} noValidate className="space-y-4">
         <Field id="email" label="Email" error={errors.email}>
@@ -137,8 +149,8 @@ export function LoginForm() {
             </button>
           </div>
         </Field>
-        <button type="submit" className={buttonClass("dark", "lg", "w-full")}>
-          Log in
+        <button type="submit" disabled={busy} className={buttonClass("dark", "lg", "w-full disabled:opacity-60")}>
+          {busy ? "Logging in…" : "Log in"}
         </button>
       </form>
       <p className="mt-6 text-center text-sm text-muted">
@@ -147,10 +159,9 @@ export function LoginForm() {
           Create an account
         </Link>
       </p>
-      <DemoNote />
       <p className="mt-3 text-center text-xs text-muted">
         Previewing the CMS?{" "}
-        <button type="button" onClick={() => go("BTechi Admin", "admin@btechi.in", "admin")} className="font-semibold text-fg underline">
+        <button type="button" onClick={demoAdmin} className="font-semibold text-fg underline">
           Sign in as demo admin
         </button>
       </p>
@@ -162,13 +173,15 @@ export function SignupForm() {
   const router = useRouter();
   const toast = useToast();
   const [form, setForm] = useState({ name: "", email: "", password: "", university: "IIT Madras", program: PROGRAM_SLUG, level: "foundation" });
+  const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof typeof form, string>>>({});
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const program = programs.find((p) => p.slug === form.program);
+  const google = useGoogle("/dashboard");
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     const err: typeof errors = {};
     if (form.name.trim().length < 2) err.name = "Enter your name.";
@@ -176,20 +189,21 @@ export function SignupForm() {
     if (form.password.length < 8) err.password = "Use at least 8 characters.";
     setErrors(err);
     if (Object.keys(err).length) return;
-    actions.signIn({
-      name: form.name.trim(),
+    setBusy(true);
+    // The on_auth_user_created trigger copies this metadata into profiles.
+    const { data, error } = await supabase.auth.signUp({
       email: form.email.trim(),
-      university: form.university.trim(),
-      program: form.program,
-      level: form.level,
-      role: "student",
+      password: form.password,
+      options: {
+        data: { name: form.name.trim(), university: form.university.trim(), program: form.program, level: form.level },
+        emailRedirectTo: window.location.origin + "/dashboard",
+      },
     });
+    setBusy(false);
+    if (error) return setErrors({ email: error.message });
+    // No session means "Confirm email" is on in Supabase.
+    if (!data.session) return toast("Check your inbox to confirm your email, then log in.");
     toast("Account created. Welcome to BTechi!");
-    router.push("/dashboard");
-  };
-
-  const google = () => {
-    actions.signIn({ name: "Student", email: "student@gmail.com", role: "student", program: form.program, level: form.level });
     router.push("/dashboard");
   };
 
@@ -238,8 +252,8 @@ export function SignupForm() {
             </select>
           </Field>
         </div>
-        <button type="submit" className={buttonClass("primary", "lg", "w-full")}>
-          Create account
+        <button type="submit" disabled={busy} className={buttonClass("primary", "lg", "w-full disabled:opacity-60")}>
+          {busy ? "Creating account…" : "Create account"}
         </button>
       </form>
       <p className="mt-6 text-center text-sm text-muted">
@@ -248,7 +262,6 @@ export function SignupForm() {
           Log in
         </Link>
       </p>
-      <DemoNote />
     </>
   );
 }

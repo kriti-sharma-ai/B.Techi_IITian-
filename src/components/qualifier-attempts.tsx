@@ -4,30 +4,30 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowRight, History, Play, RotateCcw } from "lucide-react";
 import { useHydrated, useStore } from "@/lib/store";
-import { getQualifierMock, isSingleSubject, scoreMock } from "@/lib/qualifier";
+import { isSingleSubject, scoreMock } from "@/lib/qualifier";
+import type { QualifierMock } from "@/lib/types";
 import type { QualifierAttempt } from "@/lib/store";
 import { readLive } from "./qualifier-exam";
 import { Badge, buttonClass } from "./ui";
 
-/** Score of an attempt: saved at submission, or worked out from the paper for older attempts. */
-const attemptPercent = (a: QualifierAttempt) => {
+/** Score of an attempt: saved at submission, or worked out from the answer key for older attempts. */
+const attemptPercent = (a: QualifierAttempt, key?: QualifierMock) => {
   if (a.percent !== undefined) return a.percent;
-  const mock = getQualifierMock(a.mockSlug);
-  return mock ? scoreMock(mock, a.responses).average : null;
+  return key ? scoreMock(key, a.responses).average : null;
 };
 
 /**
  * Start / Resume / Retake button for a paper, with the best score so far.
- * End Term papers aren't in the client bundle, so they pass `href` and `single` instead of being looked up.
+ * Papers aren't in the client bundle: pass the paper's answer key (lib/qualifier.ts answerKey), or `single` for papers without one.
  */
-export function MockAction({ slug, href, single }: { slug: string; href?: string; single?: boolean }) {
+export function MockAction({ slug, href, single, answerKey }: { slug: string; href?: string; single?: boolean; answerKey?: QualifierMock }) {
   const hydrated = useHydrated();
   const attempts = useStore((s) => s.qualifierAttempts.filter((a) => a.mockSlug === slug));
   const [inProgress, setInProgress] = useState(false);
   useEffect(() => setInProgress(!!readLive(slug)), [slug]);
 
-  const mock = getQualifierMock(slug);
-  const scores = attempts.map(attemptPercent).filter((p): p is number => p !== null);
+  const mock = answerKey;
+  const scores = attempts.map((a) => attemptPercent(a, mock)).filter((p): p is number => p !== null);
   const best = hydrated && scores.length ? Math.max(...scores) : null;
   const singleSubject = single ?? (mock ? isSingleSubject(mock) : true);
   const label = inProgress ? "Resume exam" : attempts.length ? "Retake" : "Start exam";
@@ -47,10 +47,12 @@ export function MockAction({ slug, href, single }: { slug: string; href?: string
   );
 }
 
-export function QualifierHistory() {
+/** Attempts at qualifier papers. `answerKeys` are the qualifier papers stripped by answerKey(), enough to score each attempt. */
+export function QualifierHistory({ answerKeys }: { answerKeys: QualifierMock[] }) {
   const hydrated = useHydrated();
   const attempts = useStore((s) => s.qualifierAttempts);
   if (!hydrated || attempts.length === 0) return null;
+  const getQualifierMock = (slug: string) => answerKeys.find((m) => m.slug === slug);
   return (
     <section className="container-page pb-14 md:pb-20">
       <h2 className="mb-4 flex items-center gap-2 text-xl font-bold tracking-tight md:text-2xl">

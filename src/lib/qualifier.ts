@@ -1,50 +1,32 @@
-// Qualifier pack: lookups and scoring. Pure functions so both the exam
-// (client) and the pack page (server) can use them.
+// Qualifier pack: scoring and paper helpers. Pure functions with no question
+// data, so both the exam (client) and the pages (server) can use them. The
+// papers themselves come from Supabase through lib/papers.ts.
 
-import { ctPyqPapers } from "./data/ct-pyqs";
-import { englishPyqPapers } from "./data/english-pyqs";
-import { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, qualifierMocks } from "./data/qualifier";
-import { mathsPyqPapers } from "./data/maths-pyqs";
-import { statsPyqPapers } from "./data/stats-pyqs";
-import { paperHref } from "./pyq-urls";
+import { QUALIFIER_CUTOFF } from "./data/qualifier-meta";
 import { hasResponse, isCorrect, type QualifierResponse } from "./grading";
 import type { QualifierMock } from "./types";
 
-export { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS, qualifierMocks } from "./data/qualifier";
+export { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS } from "./data/qualifier-meta";
 export { correctAnswerLabel, hasResponse, isCorrect, responseLabel, type QualifierResponse } from "./grading";
-export { ctPyqPapers } from "./data/ct-pyqs";
-export { englishPyqPapers } from "./data/english-pyqs";
-export { mathsPyqPapers } from "./data/maths-pyqs";
-export { statsPyqPapers } from "./data/stats-pyqs";
-
-/** Every paper that can be sat in the exam portal: full mocks and single-subject PYQs. */
-export const allQualifierPapers = [...qualifierMocks, ...mathsPyqPapers, ...statsPyqPapers, ...ctPyqPapers, ...englishPyqPapers];
-
-export const getQualifierMock = (slug: string) => allQualifierPapers.find((m) => m.slug === slug);
-
 export { paperHref } from "./pyq-urls";
 
 /** Single-subject papers (PYQs) are scored against the per-course cutoff only. */
 export const isSingleSubject = (mock: QualifierMock) => mock.sections.length === 1;
 
-/** The paper to suggest after this one: mock after mock, same-course PYQ after PYQ. */
-export function nextQualifierPaper(mock: QualifierMock) {
-  const group = isSingleSubject(mock)
-    ? allQualifierPapers.filter((m) => isSingleSubject(m) && m.sections[0].subjectSlug === mock.sections[0].subjectSlug)
-    : qualifierMocks;
-  const next = group[(group.findIndex((m) => m.slug === mock.slug) + 1) % group.length];
-  return next && next.slug !== mock.slug ? { title: next.title, href: paperHref(next) } : undefined;
-}
-
-/** Previous-year papers grouped by course, in exam order. Courses without papers are left out. */
-export const pyqGroups = QUALIFIER_SUBJECTS.map((subjectSlug) => ({
-  subjectSlug,
-  papers: allQualifierPapers.filter((m) => isSingleSubject(m) && m.sections[0].subjectSlug === subjectSlug),
-})).filter((g) => g.papers.length > 0);
-
 export const mockQuestions = (mock: QualifierMock) => mock.sections.flatMap((s) => s.questions);
 
 export const mockMarks = (mock: QualifierMock) => mockQuestions(mock).reduce((n, q) => n + q.marks, 0);
+
+/** Just what scoreMock needs, for client components that score saved attempts without receiving the question text. */
+export const answerKey = (mock: QualifierMock): QualifierMock => ({
+  ...mock,
+  sections: mock.sections.map(({ reference: _, ...s }) => ({
+    ...s,
+    questions: s.questions.map(({ id, type, marks, answer, tolerance, accepts, caseSensitive }) => ({
+      id, type, marks, answer, tolerance, accepts, caseSensitive, prompt: "", explanation: "",
+    })),
+  })),
+});
 
 export type SectionScore = {
   subjectSlug: string;

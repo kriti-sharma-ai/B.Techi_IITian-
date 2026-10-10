@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Award, Eye, FileText, GraduationCap, Layers, PenLine, ScrollText, type LucideIcon } from "lucide-react";
 import type { Book, Level, Note, Program, Pyq, Question, Subject } from "@/lib/types";
 import { hasContent, pyqTitle, subjectContext, subjectName, subjectPlacement, subjectStats, subjectsForLevel, unitLabel } from "@/lib/content";
-import { pyqPapersFor, uploadedPyqHref } from "@/lib/pyq-index";
+import { getPyqIndex, uploadedPyqHref } from "@/lib/pyq-index";
 import { accentStyles, cn, formatNumber, formatSize } from "@/lib/utils";
 import { Badge, QualityBadge, buttonClass } from "./ui";
 import { BookmarkButton, DownloadButton } from "./resource-actions";
@@ -70,11 +70,11 @@ export function ProgramCard({ program }: { program: Program }) {
 
 /* ───────────── Subject (course) ───────────── */
 
-export function SubjectCard({ subject, showLevel = true }: { subject: Subject; showLevel?: boolean }) {
+export async function SubjectCard({ subject, showLevel = true }: { subject: Subject; showLevel?: boolean }) {
   const s = subjectStats(subject);
   const { level } = subjectPlacement(subject);
   const ready = hasContent(subject);
-  const papers = pyqPapersFor(subject.slug).length;
+  const papers = (await getPyqIndex()).pyqPapersFor(subject.slug).length;
   return (
     <Link href={`/subjects/${subject.slug}`} className="card card-hover group flex flex-col p-5">
       <div className="mb-3 flex flex-wrap items-center gap-2">

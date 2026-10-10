@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
 import { useCountdown } from "./quiz";
 import { BookmarkButton, ReportButton } from "./resource-actions";
+import { SaveProgressPrompt } from "./save-progress-prompt";
 import { Badge, Button, ProgressBar, buttonClass } from "./ui";
 
 const TYPE_LABEL: Record<PyqItem["type"], string> = {
@@ -569,6 +570,7 @@ function Results({
           </Link>
         </div>
       </div>
+      <SaveProgressPrompt className="mt-4" />
 
       <h2 className="mt-8 mb-3 font-semibold">Review answers</h2>
       <ol className="space-y-3">

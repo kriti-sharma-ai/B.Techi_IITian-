@@ -3,7 +3,7 @@
 // practice questions and a graded assignment, whether or not content exists yet.
 
 import { assignments, books, forSubject, notes, pyqs, questions, videos } from "./content";
-import { pyqPapersFor } from "./pyq-index";
+import { getPyqIndex } from "./pyq-index";
 import type { Subject } from "./types";
 
 export const WEEKS = 12;
@@ -46,7 +46,8 @@ export function resolveItem(item?: string, tab?: string) {
 
 export const unitForWeek = (subject: Subject, week: number) => subject.units.find((u) => u.number === week);
 
-export function courseOutline(subject: Subject): OutlineSection[] {
+export async function courseOutline(subject: Subject): Promise<OutlineSection[]> {
+  const { pyqPapersFor } = await getPyqIndex();
   const base = `/subjects/${subject.slug}`;
   const q = forSubject(questions, subject.slug);
   const a = forSubject(assignments, subject.slug);

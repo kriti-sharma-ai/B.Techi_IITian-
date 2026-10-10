@@ -42,7 +42,7 @@ import {
 } from "@/lib/content";
 import { parseWeekItem, resolveItem, unitForWeek, WEEKS } from "@/lib/course";
 import { param } from "@/lib/filters";
-import { PYQ_EXAMS, getPyqCourse, pyqPapersFor } from "@/lib/pyq-index";
+import { PYQ_EXAMS, getPyqIndex } from "@/lib/pyq-index";
 import type { Subject } from "@/lib/types";
 import { formatDate, SITE_URL } from "@/lib/utils";
 
@@ -116,7 +116,8 @@ export default async function SubjectPage({ params, searchParams }: PageProps<"/
 
 /* ───────────── Items ───────────── */
 
-function About({ subject }: { subject: Subject }) {
+async function About({ subject }: { subject: Subject }) {
+  const { pyqPapersFor } = await getPyqIndex();
   const { program, level, group } = subjectPlacement(subject);
   const ready = hasContent(subject);
   const stats = subjectStats(subject);
@@ -329,7 +330,8 @@ function Books({ subject }: { subject: Subject }) {
   );
 }
 
-function Pyqs({ subject }: { subject: Subject }) {
+async function Pyqs({ subject }: { subject: Subject }) {
+  const { getPyqCourse, pyqPapersFor } = await getPyqIndex();
   const list = forSubject(pyqs, subject.slug).sort((a, b) => b.year - a.year);
   const portal = PYQ_EXAMS.map((e) => ({ ...e, papers: pyqPapersFor(subject.slug, e.slug) })).filter((e) => e.papers.length > 0);
   if (!list.length && !portal.length)

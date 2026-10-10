@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowRight, ScrollText } from "lucide-react";
 import { SubjectCard } from "@/components/cards";
-import { PageHeader } from "@/components/ui";
+import { PageHeader, buttonClass } from "@/components/ui";
 import { getLevel, getProgram, programs, subjectsForLevel } from "@/lib/content";
+import { pyqCoursesForLevel, type PyqLevel } from "@/lib/pyq-index";
+import { pyqLevelHref } from "@/lib/pyq-urls";
 
 export const dynamicParams = false;
 export const generateStaticParams = () =>
@@ -32,6 +36,10 @@ export default async function LevelPage({ params }: PageProps<"/programs/[progra
   const { program, level } = r;
   const subs = subjectsForLevel(program.slug, level.slug);
   const groups = level.groups ?? [{ slug: "", name: "Courses", credits: level.credits, summary: "" }];
+  const pyqCourses = pyqCoursesForLevel(level.slug as PyqLevel);
+  const ownPyqs = pyqCourses.filter((c) => c.inCurriculum);
+  const otherPyqs = pyqCourses.filter((c) => !c.inCurriculum);
+  const pyqPaperCount = pyqCourses.reduce((n, c) => n + c.papers.length, 0);
 
   const facts: [string, string][] = [
     ["Credits", `${level.credits}`],
@@ -91,6 +99,50 @@ export default async function LevelPage({ params }: PageProps<"/programs/[progra
             </section>
           );
         })}
+
+        {pyqCourses.length > 0 && (
+          <section aria-labelledby="level-pyqs" className="card p-5 md:p-6">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <h2 id="level-pyqs" className="flex items-center gap-2 text-lg font-bold">
+                  <ScrollText className="size-5 text-green" aria-hidden /> Previous-year papers
+                </h2>
+                <p className="mt-0.5 text-sm text-muted">
+                  {pyqPaperCount} papers with the official answer key, ready to sit in the exam portal.
+                </p>
+              </div>
+              <Link href={pyqLevelHref(level.slug as PyqLevel)} className={buttonClass("primary")}>
+                Open {level.short} papers <ArrowRight className="size-4" aria-hidden />
+              </Link>
+            </div>
+            {ownPyqs.length > 0 && (
+              <ul className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                {ownPyqs.map((c) => (
+                  <li key={c.slug}>
+                    <Link href={c.href} className="flex items-center justify-between gap-3 rounded-xl border border-border px-3.5 py-2.5 text-sm hover:border-fg/30">
+                      <span className="font-medium">{c.name}</span>
+                      <span className="shrink-0 text-xs text-muted tabular-nums">{c.papers.length}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {otherPyqs.length > 0 && (
+              <p className="mt-4 text-sm text-muted">
+                Also at this level:{" "}
+                {otherPyqs.map((c, i) => (
+                  <span key={c.slug}>
+                    {i > 0 && ", "}
+                    <Link href={c.href} className="font-medium text-fg hover:underline">
+                      {c.short}
+                    </Link>
+                  </span>
+                ))}{" "}
+                from the IIT Madras BS in Data Science, which sits the same End Term exam.
+              </p>
+            )}
+          </section>
+        )}
       </div>
     </>
   );

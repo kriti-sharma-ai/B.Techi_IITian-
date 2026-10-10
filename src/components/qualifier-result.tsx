@@ -5,6 +5,7 @@ import { useState } from "react";
 import { AlertTriangle, ArrowRight, CheckCircle2, Clock, MinusCircle, RotateCcw, Trophy, XCircle } from "lucide-react";
 import { useHydrated, useStore } from "@/lib/store";
 import { QUALIFIER_CUTOFF, correctAnswerLabel, formatClock, hasResponse, isCorrect, isSingleSubject, paperHref, responseLabel, scoreMock } from "@/lib/qualifier";
+import { pyqCourseHref } from "@/lib/pyq-urls";
 import type { QualifierMock, QualifierQuestion } from "@/lib/types";
 import { Badge, Breadcrumbs, EmptyState, buttonClass } from "./ui";
 import { cn } from "@/lib/utils";
@@ -12,14 +13,17 @@ import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
 
 const TYPE_SHORT: Record<QualifierQuestion["type"], string> = { mcq: "MCQ", multi: "MSQ", numerical: "NAT", text: "SA" };
 
-type NextPaper = Pick<QualifierMock, "slug" | "title" | "endTerm">;
+type NextPaper = { title: string; href: string };
 
 /** `next` is the paper to suggest afterwards and `revise` an End Term paper's course page; both are worked out on the server. */
 export function QualifierResult({ mock, attemptId, next, revise }: { mock: QualifierMock; attemptId: string; next?: NextPaper; revise?: string }) {
   const hydrated = useHydrated();
   const attempt = useStore((s) => s.qualifierAttempts.find((a) => a.id === attemptId && a.mockSlug === mock.slug));
   const [tab, setTab] = useState(0);
-  const home = mock.endTerm ? { label: "End Term PYQs", href: "/pyqs/end-term" } : { label: "Qualifier Pack", href: "/qualifier" };
+  // Single-course papers are PYQs, filed under their course; full mocks belong to the qualifier pack.
+  const home = isSingleSubject(mock)
+    ? { label: `${mock.sections[0].short} PYQs`, href: pyqCourseHref(mock.sections[0].subjectSlug) }
+    : { label: "Qualifier Pack", href: "/qualifier" };
 
   if (!hydrated) return <div className="container-page py-10"><div className="skeleton h-96" /></div>;
   if (!attempt)
@@ -136,8 +140,8 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
             <Link href={paperHref(mock)} className={buttonClass("primary")}>
               <RotateCcw className="size-4" aria-hidden /> Retake {mock.title}
             </Link>
-            {next && next.slug !== mock.slug && (
-              <Link href={paperHref(next)} className={buttonClass("secondary")}>
+            {next && (
+              <Link href={next.href} className={buttonClass("secondary")}>
                 Take {next.title} <ArrowRight className="size-4" aria-hidden />
               </Link>
             )}

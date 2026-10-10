@@ -49,7 +49,7 @@ const resourcesGroup: NavGroup = {
   label: "Resources",
   items: [
     { href: "/notes", label: "Notes", description: "Lecture notes & revision sheets", icon: FileText },
-    { href: "/pyqs", label: "PYQs", description: "Past year papers & analysis", icon: ScrollText },
+    { href: "/pyqs", label: "PYQs", description: "Qualifier & End Term papers, by level", icon: ScrollText },
     { href: "/notes?type=Cheat+sheet", label: "Cheat sheets", description: "One-page summaries per course", icon: StickyNote },
     { href: "/notes?type=Formula+sheet", label: "Formula sheets", description: "Every formula you need, in one place", icon: Sigma },
     { href: "/videos", label: "Videos", description: "Topic-mapped video lessons", icon: PlayCircle },

@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { BookCard, NoteCard, PyqCard } from "@/components/cards";
 import { PyqAnalysis } from "@/components/pyq-analysis";
+import { PaperRows } from "@/components/pyq-papers";
 import { SubjectProgressPanel, VisitTracker } from "@/components/progress";
 import { Quiz } from "@/components/quiz";
 import { SkillCard } from "@/components/skill-card";
@@ -41,6 +42,7 @@ import {
 } from "@/lib/content";
 import { parseWeekItem, resolveItem, unitForWeek, WEEKS } from "@/lib/course";
 import { param } from "@/lib/filters";
+import { PYQ_EXAMS, getPyqCourse, pyqPapersFor } from "@/lib/pyq-index";
 import type { Subject } from "@/lib/types";
 import { formatDate, SITE_URL } from "@/lib/utils";
 
@@ -145,7 +147,7 @@ function About({ subject }: { subject: Subject }) {
     { label: "Notes", n: stats.notes, item: "notes" },
     { label: "Videos", n: stats.videos, item: "videos" },
     { label: "Practice questions", n: stats.questions, item: "practice" },
-    { label: "Previous year papers", n: stats.pyqs, item: "pyqs" },
+    { label: "Previous year papers", n: stats.pyqs + pyqPapersFor(subject.slug).length, item: "pyqs" },
     { label: "Reference books", n: stats.books, item: "books" },
   ];
 
@@ -329,15 +331,35 @@ function Books({ subject }: { subject: Subject }) {
 
 function Pyqs({ subject }: { subject: Subject }) {
   const list = forSubject(pyqs, subject.slug).sort((a, b) => b.year - a.year);
-  if (!list.length) return <ComingSoon title="Previous year papers are coming soon" description="Quiz 1, Quiz 2 and End Term papers with topic-wise analysis." />;
+  const portal = PYQ_EXAMS.map((e) => ({ ...e, papers: pyqPapersFor(subject.slug, e.slug) })).filter((e) => e.papers.length > 0);
+  if (!list.length && !portal.length)
+    return <ComingSoon title="Previous year papers are coming soon" description="Quiz 1, Quiz 2 and End Term papers with topic-wise analysis." />;
   return (
-    <div className="grid gap-8 xl:grid-cols-[1fr_340px]">
-      <div className="grid gap-4 sm:grid-cols-2">
-        {list.map((p) => (
-          <PyqCard key={p.id} pyq={p} />
-        ))}
-      </div>
-      <PyqAnalysis subjectSlug={subject.slug} />
+    <div className="space-y-10">
+      {portal.map((e) => (
+        <section key={e.slug}>
+          <h2 className="text-lg font-bold">{e.label} papers</h2>
+          <p className="mt-0.5 text-sm text-muted">{e.description} Sit each one in the timed exam portal with the official answer key.</p>
+          <div className="card mt-4 px-5 py-1">
+            <PaperRows papers={e.papers} />
+          </div>
+        </section>
+      ))}
+      {portal.length > 0 && (
+        <Link href={getPyqCourse(subject.slug)!.href} className="inline-flex items-center gap-1 text-sm font-semibold hover:underline">
+          All {subject.name} PYQs <ArrowRight className="size-4" aria-hidden />
+        </Link>
+      )}
+      {list.length > 0 && (
+        <div className="grid gap-8 xl:grid-cols-[1fr_340px]">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {list.map((p) => (
+              <PyqCard key={p.id} pyq={p} />
+            ))}
+          </div>
+          <PyqAnalysis subjectSlug={subject.slug} />
+        </div>
+      )}
     </div>
   );
 }

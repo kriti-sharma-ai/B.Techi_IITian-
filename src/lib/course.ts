@@ -3,6 +3,7 @@
 // practice questions and a graded assignment, whether or not content exists yet.
 
 import { assignments, books, forSubject, notes, pyqs, questions, videos } from "./content";
+import { pyqPapersFor } from "./pyq-index";
 import type { Subject } from "./types";
 
 export const WEEKS = 12;
@@ -88,7 +89,7 @@ export function courseOutline(subject: Subject): OutlineSection[] {
     notes: forSubject(notes, subject.slug).length,
     videos: forSubject(videos, subject.slug).length,
     books: books.filter((b) => b.subjectSlugs.includes(subject.slug)).length,
-    pyqs: forSubject(pyqs, subject.slug).length,
+    pyqs: forSubject(pyqs, subject.slug).length + pyqPapersFor(subject.slug).length,
     practice: q.length,
   };
   const supLabels: Record<Supplementary, [string, OutlineKind]> = {

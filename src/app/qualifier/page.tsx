@@ -257,8 +257,8 @@ export default function QualifierPage() {
         </div>
         <p className="mt-8 text-sm text-muted">
           Through the qualifier already?{" "}
-          <Link href="/pyqs/end-term" className="inline-flex items-center gap-1 font-semibold text-fg hover:underline">
-            Full-syllabus End Term papers for every course <ArrowRight className="size-3.5" aria-hidden />
+          <Link href="/pyqs" className="inline-flex items-center gap-1 font-semibold text-fg hover:underline">
+            Every PYQ, level by level, including full-syllabus End Term papers <ArrowRight className="size-3.5" aria-hidden />
           </Link>
         </p>
       </section>

@@ -11,6 +11,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, Calculator as CalcIcon, Check, Clock, Delete, Info, LayoutGrid, Maximize, User, X } from "lucide-react";
 import { actions, useHydrated, useStore } from "@/lib/store";
 import { formatClock, hasResponse, mockMarks, mockQuestions, paperHref, scoreMock, type QualifierResponse } from "@/lib/qualifier";
+import { pyqCourseHref } from "@/lib/pyq-urls";
 import type { QualifierMock, QualifierQuestion } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
@@ -241,8 +242,11 @@ function Instructions({ mock, name, onBegin }: { mock: QualifierMock; name: stri
               >
                 I am ready to begin
               </button>
-              <Link href={mock.endTerm ? "/pyqs/end-term" : "/qualifier"} className="text-sm font-medium text-muted hover:text-fg">
-                Not now, back to {mock.endTerm ? "End Term PYQs" : "Qualifier Pack"}
+              <Link
+                href={mock.sections.length === 1 ? pyqCourseHref(mock.sections[0].subjectSlug) : "/qualifier"}
+                className="text-sm font-medium text-muted hover:text-fg"
+              >
+                Not now, back to {mock.sections.length === 1 ? `${mock.sections[0].short} PYQs` : "Qualifier Pack"}
               </Link>
             </div>
           </div>

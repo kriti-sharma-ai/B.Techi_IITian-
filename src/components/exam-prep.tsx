@@ -2,10 +2,13 @@ import Link from "next/link";
 import { Check, FileClock, Flame, Lightbulb, ScrollText, Zap } from "lucide-react";
 import { NoteCard, PyqCard } from "@/components/cards";
 import { PyqAnalysis } from "@/components/pyq-analysis";
+import { PaperRows } from "@/components/pyq-papers";
 import { Badge, EmptyState, buttonClass } from "@/components/ui";
 import { VideoCard } from "@/components/video-card";
 import { PROGRAM_SLUG, forSubject, getProgram, getSubject, notes, pyqs, pyqTopicFrequency, questions, subjects, topicTitle, videos } from "@/lib/content";
 import { param } from "@/lib/filters";
+import { pyqPapersFor } from "@/lib/pyq-index";
+import { pyqCourseHref } from "@/lib/pyq-urls";
 import { cn } from "@/lib/utils";
 
 const EXAMS = ["Quiz 1", "Quiz 2", "End Term"] as const;
@@ -114,8 +117,17 @@ function Plan({ subjectSlug, exam }: { subjectSlug: string; exam: string }) {
   const important = questions.filter((x) => x.subjectSlug === subjectSlug && x.source).slice(0, 6);
   const revision = forSubject(notes, subjectSlug).filter((n) => n.kind === "Revision" || n.kind === "Cheat sheet");
   const vids = forSubject(videos, subjectSlug).filter((v) => priority.some((p) => p.slug === v.topicSlug)).slice(0, 3);
+  // Papers in the exam portal. The qualifier examines weeks 1–4, the same ground as Quiz 1.
+  const endTerm = pyqPapersFor(subjectSlug, "end-term");
+  const qualifier = pyqPapersFor(subjectSlug, "qualifier");
+  const portal =
+    exam === "Quiz 1"
+      ? { papers: qualifier.length ? qualifier : endTerm, note: qualifier.length ? "Qualifier papers cover weeks 1–4, the same ground as Quiz 1." : "No Quiz 1 papers yet. End Term papers cover these weeks too." }
+      : exam === "Quiz 2"
+        ? { papers: endTerm, note: "No Quiz 2 papers yet. End Term papers cover the full syllabus, Quiz 2 weeks included." }
+        : { papers: endTerm.length ? endTerm : qualifier, note: endTerm.length ? "" : "No End Term papers yet. Start with the qualifier papers for weeks 1–4." };
 
-  if (papers.length === 0 && important.length === 0)
+  if (papers.length === 0 && important.length === 0 && portal.papers.length === 0)
     return (
       <EmptyState
         className="mt-8"
@@ -144,25 +156,46 @@ function Plan({ subjectSlug, exam }: { subjectSlug: string; exam: string }) {
         </Link>
       </div>
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        <div>
-          <h3 className="mb-3 flex items-center gap-2 font-bold">
-            <Flame className="size-5 text-red" aria-hidden /> High-priority topics
-          </h3>
-          <ol className="space-y-2">
-            {priority.map((t, i) => (
-              <li key={t.slug}>
-                <Link href={`/subjects/${subjectSlug}/${t.slug}`} className="card card-hover flex items-center gap-3 p-3.5">
-                  <span className="w-5 text-sm font-bold text-muted tabular-nums">{i + 1}</span>
-                  <span className="flex-1 font-medium">{t.title}</span>
-                  <Badge tone={t.percent >= 60 ? "red" : "amber"}>In {t.percent}% of papers</Badge>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </div>
-        <PyqAnalysis subjectSlug={subjectSlug} />
-      </section>
+      {portal.papers.length > 0 && (
+        <section>
+          <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h3 className="flex items-center gap-2 font-bold">
+                <ScrollText className="size-5 text-green" aria-hidden /> Sit a past paper
+              </h3>
+              {portal.note && <p className="mt-0.5 text-sm text-muted">{portal.note}</p>}
+            </div>
+            <Link href={pyqCourseHref(subjectSlug)} className="text-sm font-semibold hover:underline">
+              All papers for this course →
+            </Link>
+          </div>
+          <div className="card px-5 py-1">
+            <PaperRows papers={portal.papers} />
+          </div>
+        </section>
+      )}
+
+      {priority.length > 0 && (
+        <section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+          <div>
+            <h3 className="mb-3 flex items-center gap-2 font-bold">
+              <Flame className="size-5 text-red" aria-hidden /> High-priority topics
+            </h3>
+            <ol className="space-y-2">
+              {priority.map((t, i) => (
+                <li key={t.slug}>
+                  <Link href={`/subjects/${subjectSlug}/${t.slug}`} className="card card-hover flex items-center gap-3 p-3.5">
+                    <span className="w-5 text-sm font-bold text-muted tabular-nums">{i + 1}</span>
+                    <span className="flex-1 font-medium">{t.title}</span>
+                    <Badge tone={t.percent >= 60 ? "red" : "amber"}>In {t.percent}% of papers</Badge>
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <PyqAnalysis subjectSlug={subjectSlug} />
+        </section>
+      )}
 
       {important.length > 0 && (
         <section>

@@ -296,7 +296,7 @@ export type QualifierMock = {
   description: string;
   difficulty: "Standard" | "Challenging";
   durationMin: number;
-  /** Set on End Term previous-year papers, which live under /pyqs/end-term instead of the qualifier pack. */
+  /** Set on End Term previous-year papers, which are listed in the PYQ hub (/pyqs) instead of the qualifier pack. */
   endTerm?: { date: string; session: "FN" | "AN"; term: string };
   sections: QualifierSection[];
 };

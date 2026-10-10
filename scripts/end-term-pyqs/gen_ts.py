@@ -116,20 +116,28 @@ def main(out_dir, repo):
             fh.write(header + f"export const {var}: QualifierMock[] = " + to_ts(papers) + ";\n")
         index_imports.append(f'import {{ {var} }} from "./{prefix}";')
         index_spread.append(f"  ...{var},")
-        subject_rows.append(f'  {{ slug: "{subject_slug}", name: "{name}", short: "{short}", level: "{level}" }},')
+        subject_rows.append(f'  {{ slug: "{subject_slug}", prefix: "{prefix}", name: "{name}", short: "{short}", level: "{level}" }},')
 
+    subjects_ts = (
+        "// Courses with End Term papers. Kept apart from the question data so URL helpers\n"
+        "// (lib/pyq-urls.ts) and next.config redirects can use it without loading the papers.\n\n"
+        'export type EndTermLevel = "foundation" | "diploma-programming" | "diploma-data-science" | "degree";\n\n'
+        "/** `prefix` starts every paper slug of the course, e.g. stats-1-end-term-dec-2024-fn. */\n"
+        "export type EndTermSubject = { slug: string; prefix: string; name: string; short: string; level: EndTermLevel };\n\n"
+        "/** Courses with End Term papers, in curriculum order. */\n"
+        "export const END_TERM_SUBJECTS: EndTermSubject[] = [\n"
+        + "\n".join(subject_rows)
+        + "\n];\n"
+    )
+    with open(f"{data_dir}/subjects.ts", "w") as fh:
+        fh.write(subjects_ts)
     index = (
         'import type { QualifierMock } from "../../types";\n'
         + "\n".join(index_imports)
         + "\n\n"
         "// IIT Madras BS End Term previous-year papers, one single-course paper per subject per sitting.\n"
         "// Server-only: import through lib/end-term.ts so the question data stays out of client bundles.\n\n"
-        "export type EndTermLevel = \"foundation\" | \"diploma-programming\" | \"diploma-data-science\" | \"degree\";\n\n"
-        "export type EndTermSubject = { slug: string; name: string; short: string; level: EndTermLevel };\n\n"
-        "/** Courses with End Term papers, in curriculum order. */\n"
-        "export const END_TERM_SUBJECTS: EndTermSubject[] = [\n"
-        + "\n".join(subject_rows)
-        + "\n];\n\n"
+        'export { END_TERM_SUBJECTS, type EndTermLevel, type EndTermSubject } from "./subjects";\n\n'
         "export const endTermPapers: QualifierMock[] = [\n"
         + "\n".join(index_spread)
         + "\n];\n"

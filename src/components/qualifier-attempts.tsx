@@ -88,10 +88,10 @@ export function QualifierHistory() {
   );
 }
 
-/** Recent End Term PYQ attempts, from what was saved at submission (the papers aren't in the client bundle). */
-export function EndTermHistory() {
+/** Recent previous-year paper attempts for the PYQ pages, from what was saved at submission (the papers aren't in the client bundle). */
+export function PyqHistory() {
   const hydrated = useHydrated();
-  const attempts = useStore((s) => s.qualifierAttempts.filter((a) => a.href?.startsWith("/pyqs/end-term/")));
+  const attempts = useStore((s) => s.qualifierAttempts.filter((a) => a.href?.startsWith("/pyqs/")));
   if (!hydrated || attempts.length === 0) return null;
   return (
     <section className="container-page pb-14 md:pb-20">

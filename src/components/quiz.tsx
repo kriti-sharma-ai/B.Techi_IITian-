@@ -181,7 +181,7 @@ function Explanation({ q, result }: { q: Question; result: boolean | null }) {
   );
 }
 
-function useCountdown(seconds: number | undefined, running: boolean, onEnd: () => void) {
+export function useCountdown(seconds: number | undefined, running: boolean, onEnd: () => void) {
   const [left, setLeft] = useState(seconds ?? 0);
   // Keep the latest callback so time-up submits current answers, not the first render's.
   const end = useRef(onEnd);

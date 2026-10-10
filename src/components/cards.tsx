@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Award, Eye, FileText, GraduationCap, Layers, PenLine, type LucideIcon } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Award, Eye, FileText, GraduationCap, Layers, PenLine, ScrollText, type LucideIcon } from "lucide-react";
 import type { Book, Level, Note, Program, Pyq, Question, Subject } from "@/lib/types";
 import { hasContent, pyqTitle, subjectContext, subjectName, subjectPlacement, subjectStats, subjectsForLevel, unitLabel } from "@/lib/content";
+import { pyqPapersFor, uploadedPyqHref } from "@/lib/pyq-index";
 import { accentStyles, cn, formatNumber, formatSize } from "@/lib/utils";
 import { Badge, QualityBadge, buttonClass } from "./ui";
 import { BookmarkButton, DownloadButton } from "./resource-actions";
@@ -73,6 +74,7 @@ export function SubjectCard({ subject, showLevel = true }: { subject: Subject; s
   const s = subjectStats(subject);
   const { level } = subjectPlacement(subject);
   const ready = hasContent(subject);
+  const papers = pyqPapersFor(subject.slug).length;
   return (
     <Link href={`/subjects/${subject.slug}`} className="card card-hover group flex flex-col p-5">
       <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -92,6 +94,11 @@ export function SubjectCard({ subject, showLevel = true }: { subject: Subject; s
         ) : (
           <p className="inline-flex items-center gap-1.5 text-xs text-muted">
             <span className="size-1.5 rounded-full bg-brand" aria-hidden /> Content coming soon
+          </p>
+        )}
+        {papers > 0 && (
+          <p className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-green">
+            <ScrollText className="size-3.5" aria-hidden /> {papers} previous-year {papers === 1 ? "paper" : "papers"}
           </p>
         )}
         <SubjectProgressBar subject={subject} className="mt-3" />
@@ -205,7 +212,7 @@ export function PyqCard({ pyq }: { pyq: Pyq }) {
         {subjectContext(pyq.subjectSlug)} · {pyq.marks} marks · {pyq.durationMin / 60} h
       </p>
       <div className="mt-5 flex flex-wrap gap-2">
-        <Link href={`/pyqs/${pyq.id}`} className={buttonClass("secondary", "sm")}>
+        <Link href={uploadedPyqHref(pyq)} className={buttonClass("secondary", "sm")}>
           <Eye className="size-4" aria-hidden /> View paper
         </Link>
         <DownloadButton noteId={pyq.id} title={pyqTitle(pyq)} fileUrl={pyq.fileUrl} />

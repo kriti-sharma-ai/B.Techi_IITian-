@@ -1,126 +1,107 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
-import { ArrowRight, BarChart3, ScrollText } from "lucide-react";
-import { PyqCard } from "@/components/cards";
-import { FilterBar } from "@/components/filter-bar";
-import { PyqAnalysis } from "@/components/pyq-analysis";
-import { EmptyState, PageHeader, buttonClass } from "@/components/ui";
-import { getSubject, pyqs } from "@/lib/content";
-import { END_TERM_SUBJECTS, endTermPapers, endTermQuestionCount } from "@/lib/end-term";
-import { academicFilters, matchesAcademic, param } from "@/lib/filters";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { PyqHistory } from "@/components/qualifier-attempts";
+import { PageHeader } from "@/components/ui";
+import { PYQ_LEVELS, groupCourses, pyqCoursesForLevel, pyqTotals } from "@/lib/pyq-index";
+import { pyqLevelHref } from "@/lib/pyq-urls";
 
 export const metadata: Metadata = {
-  title: "Previous Year Questions (PYQs)",
-  description: "Previous year mid-sem and end-sem papers by subject and year, with most-repeated-topic analysis and practice mode.",
+  title: "IIT Madras BS PYQs: Previous Year Papers for Every Course",
+  description:
+    "Previous year question papers for every IIT Madras BS course, Foundation to Degree: Qualifier and End Term papers with the official answer key. Sit each paper in a timed exam portal.",
   alternates: { canonical: "/pyqs" },
 };
 
-export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
-  const sp = await searchParams;
-  const year = param(sp, "year");
-  const exam = param(sp, "exam");
-  const subject = param(sp, "subject");
-
-  const list = pyqs
-    .filter((p) => matchesAcademic(p.subjectSlug, sp) && (!year || String(p.year) === year) && (!exam || p.exam === exam))
-    .sort((a, b) => b.year - a.year || a.subjectSlug.localeCompare(b.subjectSlug));
-  const years = [...new Set(pyqs.map((p) => p.year))].sort((a, b) => b - a);
-  const byYear = years.map((y) => ({ year: y, papers: list.filter((p) => p.year === y) })).filter((g) => g.papers.length);
-  const subjectsWithPyqs = [...new Set(pyqs.map((p) => p.subjectSlug))];
-
-  const filters = [
-    ...academicFilters(sp, { units: false }),
-    { name: "year", label: "Year", options: years.map((y) => ({ value: String(y), label: String(y) })) },
-    { name: "exam", label: "Exam", options: ["Quiz 1", "Quiz 2", "End Term"].map((e) => ({ value: e, label: e })) },
-  ];
-
+export default function PyqsPage() {
   return (
     <>
       <PageHeader
         crumbs={[{ label: "PYQs" }]}
-        title="Previous year questions"
-        description="View the paper, download it, or practise it question by question with explanations."
+        eyebrow="Previous-year questions"
+        title="Previous year papers"
+        description="Real IIT Madras BS papers with the official answer key, organised by level and course. Pick a course, sit any paper in the timed exam portal, then review every answer."
       >
-        <Suspense>
-          <FilterBar filters={filters} />
-        </Suspense>
+        <dl className="grid grid-cols-3 gap-6 sm:max-w-xl">
+          {[
+            [String(pyqTotals.courses), "courses"],
+            [String(pyqTotals.papers), "papers"],
+            [pyqTotals.questions.toLocaleString("en-IN"), "questions"],
+          ].map(([v, l]) => (
+            <div key={l}>
+              <dt className="sr-only">{l}</dt>
+              <dd className="text-2xl font-bold tracking-tight tabular-nums">{v}</dd>
+              <p className="text-sm text-muted">{l}</p>
+            </div>
+          ))}
+        </dl>
       </PageHeader>
-      <div className="container-page grid gap-10 py-8 lg:grid-cols-[1fr_380px]">
-        <div className="min-w-0">
-          <Link
-            href="/pyqs/end-term"
-            className="card group mb-8 flex flex-wrap items-center justify-between gap-4 p-5 transition-colors hover:border-fg/30 md:p-6"
-          >
-            <div className="min-w-0">
-              <p className="eyebrow mb-1">New · End Term papers</p>
-              <h2 className="text-xl font-bold tracking-tight">Sit real End Term papers for every course</h2>
-              <p className="mt-1 text-sm text-muted tabular-nums">
-                {endTermPapers.length} papers · {END_TERM_SUBJECTS.length} courses · {endTermQuestionCount.toLocaleString("en-IN")} questions with the official answer key
-              </p>
-            </div>
-            <span className={buttonClass("primary")}>
-              Browse papers <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
-            </span>
-          </Link>
-          {byYear.length === 0 ? (
-            pyqs.length === 0 ? (
-              <EmptyState
-                icon={<ScrollText className="size-6" />}
-                title="No papers published yet."
-                description="We're collecting Quiz 1, Quiz 2 and End Term papers for every course. Have one? Share it and help everyone."
-                action={
-                  <Link href="/contribute" className={buttonClass("secondary")}>
-                    Contribute a paper →
-                  </Link>
-                }
-              />
-            ) : (
-              <EmptyState icon={<ScrollText className="size-6" />} title="No papers match these filters." description="Try another year or exam." />
-            )
-          ) : (
-            <div className="space-y-10">
-              {byYear.map((g) => (
-                <section key={g.year} aria-labelledby={`y-${g.year}`}>
-                  <h2 id={`y-${g.year}`} className="mb-3 text-sm font-semibold text-muted">
-                    {g.year}
-                  </h2>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {g.papers.map((p) => (
-                      <PyqCard key={p.id} pyq={p} />
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div>
-          )}
-        </div>
 
-        <aside id="analysis" className="scroll-mt-24 space-y-3">
-          <h2 className="flex items-center gap-2 font-bold">
-            <BarChart3 className="size-5" aria-hidden /> PYQ analysis
-          </h2>
-          {subject && pyqs.some((p) => p.subjectSlug === subject) ? (
-            <PyqAnalysis subjectSlug={subject} />
-          ) : (
-            <div className="card p-5">
-              <p className="text-sm text-muted">{subjectsWithPyqs.length ? "Pick a course to see which topics come up most often." : "Once papers are added, this shows the topics that repeat most across Quiz and End Term papers."}</p>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {subjectsWithPyqs.map((s) => (
-                  <li key={s}>
-                    <Link
-                      href={`/pyqs?subject=${s}#analysis`}
-                      className="inline-block rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:border-fg/30"
-                    >
-                      {getSubject(s)?.name}
+      <div className="container-page space-y-14 py-10 md:py-14">
+        {PYQ_LEVELS.map((level) => {
+          const courses = pyqCoursesForLevel(level.slug);
+          if (!courses.length) return null;
+          const papers = courses.reduce((n, c) => n + c.papers.length, 0);
+          return (
+            <section key={level.slug} aria-labelledby={`level-${level.slug}`}>
+              <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h2 id={`level-${level.slug}`} className="text-2xl font-bold tracking-tight">
+                    <Link href={pyqLevelHref(level.slug)} className="hover:underline">
+                      {level.name} PYQs
                     </Link>
-                  </li>
+                  </h2>
+                  <p className="mt-1 text-sm text-muted">
+                    {level.description} {courses.length} courses, {papers} papers.
+                  </p>
+                </div>
+                <Link href={pyqLevelHref(level.slug)} className="inline-flex items-center gap-1 text-sm font-semibold hover:underline">
+                  All {level.short} papers <ArrowRight className="size-4" aria-hidden />
+                </Link>
+              </div>
+              <div className="space-y-6">
+                {groupCourses(courses).map((g) => (
+                  <div key={g.name}>
+                    <h3 className="mb-2.5 text-sm font-semibold text-muted">{g.name}</h3>
+                    <ul className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+                      {g.courses.map((c) => (
+                        <li key={c.slug}>
+                          <Link href={c.href} className="card card-hover flex h-full flex-col p-4">
+                            <span className="text-xs font-semibold text-muted">
+                              {c.code ? <span className="font-mono">{c.code} · </span> : null}
+                              {c.short}
+                            </span>
+                            <span className="mt-1 font-semibold leading-snug">{c.name}</span>
+                            <span className="mt-auto pt-3 text-xs text-muted tabular-nums">
+                              {c.papers.length} {c.papers.length === 1 ? "paper" : "papers"}
+                            </span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
-            </div>
-          )}
-        </aside>
+              </div>
+            </section>
+          );
+        })}
       </div>
+
+      <PyqHistory />
+
+      <section className="container-page pb-14 md:pb-20">
+        <p className="flex items-start gap-2 text-xs text-muted">
+          <CheckCircle2 className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+          <span>
+            BTechi is not affiliated with IIT Madras. Papers are reproduced from past question papers with their official answer keys. Want full-length
+            qualifier mocks? See the{" "}
+            <Link href="/qualifier" className="font-medium text-fg underline-offset-2 hover:underline">
+              Qualifier Pack
+            </Link>
+            .
+          </span>
+        </p>
+      </section>
     </>
   );
 }

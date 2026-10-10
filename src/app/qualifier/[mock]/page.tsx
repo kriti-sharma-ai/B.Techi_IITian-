@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { QualifierExam } from "@/components/qualifier-exam";
 import { QualifierResult } from "@/components/qualifier-result";
 import { param } from "@/lib/filters";
-import { allQualifierPapers, getQualifierMock, nextQualifierPaper } from "@/lib/qualifier";
+import { getQualifierMock, isSingleSubject, nextQualifierPaper, paperHref, qualifierMocks } from "@/lib/qualifier";
 
-export const generateStaticParams = () => allQualifierPapers.map((m) => ({ mock: m.slug }));
+// Full mocks only: single-course PYQs live under /pyqs/<level>/<course>/<paper> (next.config redirects their old URLs).
+export const generateStaticParams = () => qualifierMocks.map((m) => ({ mock: m.slug }));
 
 export async function generateMetadata({ params }: PageProps<"/qualifier/[mock]">): Promise<Metadata> {
   const mock = getQualifierMock((await params).mock);
@@ -16,6 +17,7 @@ export async function generateMetadata({ params }: PageProps<"/qualifier/[mock]"
 export default async function QualifierMockPage({ params, searchParams }: PageProps<"/qualifier/[mock]">) {
   const mock = getQualifierMock((await params).mock);
   if (!mock) notFound();
+  if (isSingleSubject(mock)) permanentRedirect(paperHref(mock));
   const attempt = param(await searchParams, "attempt");
   return attempt ? <QualifierResult mock={mock} attemptId={attempt} next={nextQualifierPaper(mock)} /> : <QualifierExam mock={mock} />;
 }

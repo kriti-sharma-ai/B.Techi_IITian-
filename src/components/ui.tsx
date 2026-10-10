@@ -181,7 +181,7 @@ export function PageHeader({
 
 export type Crumb = { label: string; href?: string };
 
-export function Breadcrumbs({ items }: { items: Crumb[] }) {
+export function Breadcrumbs({ items, className = "mb-4" }: { items: Crumb[]; className?: string }) {
   const all: Crumb[] = [{ label: "Home", href: "/" }, ...items];
   const jsonLd = {
     "@context": "https://schema.org",
@@ -194,7 +194,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
     })),
   };
   return (
-    <nav aria-label="Breadcrumb" className="mb-4">
+    <nav aria-label="Breadcrumb" className={className}>
       <ol className="flex flex-wrap items-center gap-1 text-sm text-muted">
         {all.map((c, i) => (
           <li key={i} className="flex items-center gap-1">

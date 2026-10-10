@@ -8,6 +8,7 @@ import { PaperRows } from "@/components/pyq-papers";
 import { Badge, PageHeader, buttonClass } from "@/components/ui";
 import { forSubject, pyqs } from "@/lib/content";
 import { PYQ_EXAMS, PYQ_LEVELS, getPyqCourse, pyqCourses, pyqCoursesForLevel } from "@/lib/pyq-index";
+import { practiceHref } from "@/lib/pyq-practice";
 import { pyqLevelHref } from "@/lib/pyq-urls";
 
 export const dynamicParams = false;
@@ -66,15 +67,13 @@ export default async function PyqCoursePage({ params }: PageProps<"/pyqs/[level]
             ))}
           </dl>
           <div className="flex flex-wrap gap-2">
+            <Link href={practiceHref(c.slug)} className={buttonClass("secondary")}>
+              <Target className="size-4" aria-hidden /> Practise questions
+            </Link>
             {c.courseHref && (
-              <>
-                <Link href={c.courseHref} className={buttonClass("secondary")}>
-                  <BookOpen className="size-4" aria-hidden /> Course page
-                </Link>
-                <Link href={`/practice?tab=exam&subject=${c.slug}`} className={buttonClass("ghost")}>
-                  <Target className="size-4" aria-hidden /> Exam prep
-                </Link>
-              </>
+              <Link href={c.courseHref} className={buttonClass("ghost")}>
+                <BookOpen className="size-4" aria-hidden /> Course page
+              </Link>
             )}
           </div>
         </div>

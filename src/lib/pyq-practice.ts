@@ -175,9 +175,11 @@ export const PRACTICE_EXAMS: Record<PyqExam, { param: string; label: string; sco
   },
 };
 
-/** Reads ?exam=, which also accepts the internal exam names. */
-export const examFromParam = (s: string | undefined) =>
-  (Object.keys(PRACTICE_EXAMS) as PyqExam[]).find((e) => e === s || PRACTICE_EXAMS[e].param === s);
+/** Reads ?exam=: the URL value ("quiz-1"), the internal name ("qualifier") or a label ("Quiz 1", "End Term"). */
+export const examFromParam = (s: string | undefined) => {
+  const v = s?.trim().toLowerCase().replace(/\s+/g, "-");
+  return (Object.keys(PRACTICE_EXAMS) as PyqExam[]).find((e) => e === v || PRACTICE_EXAMS[e].param === v);
+};
 
 /** The practice page opened on a course and exam. End Term is the default exam, so it stays out of the URL. */
 export const practiceHref = (courseSlug: string, exam: PyqExam = "end-term") =>

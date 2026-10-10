@@ -23,7 +23,6 @@ const columns = [
     links: [
       ["Blog", "/blog"],
       ["Study Guides", "/study-guides"],
-      ["Exam Prep", "/practice?tab=exam"],
       ["Search", "/search"],
     ],
   },

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ArrowUp, FileClock, ListChecks, ListOrdered, ScrollText, Shuffle, Target } from "lucide-react";
+import { redirect } from "next/navigation";
+import { ArrowRight, ArrowUp, FileClock, ListChecks, ListOrdered, Shuffle, Target, type LucideIcon } from "lucide-react";
 import { ExamTag } from "@/components/exam-tag";
-import { ExamPrep } from "@/components/exam-prep";
 import { PracticeBuilder } from "@/components/practice-builder";
 import { PracticeStats } from "@/components/practice-stats";
 import { PaperRows } from "@/components/pyq-papers";
-import { PageHeader } from "@/components/ui";
+import { Breadcrumbs } from "@/components/ui";
 import { param } from "@/lib/filters";
-import { pyqs, pyqTitle, questions } from "@/lib/content";
+import { getSubject, pyqs, pyqTitle, questions } from "@/lib/content";
 import { PYQ_LEVELS, getPyqCourse, groupCourses, pyqCourses, pyqCoursesForLevel, type CoursePyqs, type PyqExam } from "@/lib/pyq-index";
 import {
   DRILL_COUNT,
@@ -28,48 +28,33 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Practice",
   description:
-    "Practise real IITM BS previous-year questions by level, course and exam, with the official answer keys: quick sets, drills, full tests and timed mock exams, plus exam prep.",
+    "Practise real IITM BS previous-year questions by level, course and exam, with the official answer keys: quick sets, drills, full tests and timed mock exams.",
   alternates: { canonical: "/practice" },
 };
 
-const tabs = [
-  { key: "practice", label: "Practice", href: "/practice" },
-  { key: "exam", label: "Exam prep", href: "/practice?tab=exam" },
-] as const;
-
 export default async function PracticePage({ searchParams }: PageProps<"/practice">) {
   const sp = await searchParams;
-  const tab = param(sp, "tab") === "exam" ? "exam" : "practice";
+
+  // The Exam prep tab is hidden until its revision content (notes, videos, topic data) is published.
+  // Its old links (?tab=exam&subject=…&exam=Quiz 1) open the same course and exam here.
+  if (param(sp, "tab") === "exam") {
+    const subject = param(sp, "subject") ?? param(sp, "course");
+    const level = param(sp, "level") ?? (subject ? getSubject(subject)?.level : undefined);
+    if (!subject && !level) redirect("/practice");
+    const { course, exam } = resolveSelection(level, subject, param(sp, "exam"));
+    redirect(subject ? practiceHref(course.slug, exam) : `/practice?level=${course.level}`);
+  }
 
   return (
     <>
-      <PageHeader
-        crumbs={[{ label: "Practice" }]}
-        title="Practice"
-        description="Pick your level, course and exam, then practise real IIT Madras BS previous-year questions with the official answer keys."
-      >
-        <nav aria-label="Practice sections" className="inline-flex rounded-xl border border-border bg-surface-2 p-1">
-          {tabs.map((t) => (
-            <Link
-              key={t.key}
-              href={t.href}
-              scroll={false}
-              aria-current={tab === t.key ? "page" : undefined}
-              className={cn(
-                "rounded-lg px-4 py-1.5 text-sm font-semibold transition-colors",
-                tab === t.key ? "bg-surface text-fg shadow-sm" : "text-muted hover:text-fg",
-              )}
-            >
-              {t.label}
-            </Link>
-          ))}
-        </nav>
-      </PageHeader>
-      {tab === "exam" ? (
-        <ExamPrep sp={sp} />
-      ) : (
-        <PracticeModes level={param(sp, "level")} course={param(sp, "course")} exam={param(sp, "exam")} />
-      )}
+      {/* A compact header: the chooser below already explains the page, so it skips PageHeader's description block. */}
+      <header className="border-b border-border bg-surface">
+        <div className="container-page py-4">
+          <Breadcrumbs items={[{ label: "Practice" }]} className="mb-1.5" />
+          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Practice</h1>
+        </div>
+      </header>
+      <PracticeModes level={param(sp, "level")} course={param(sp, "course")} exam={param(sp, "exam")} />
     </>
   );
 }
@@ -89,143 +74,145 @@ const EXAM_CHOICES: { label: string; exam?: PyqExam }[] = [{ label: "Quiz 1", ex
 
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
+const toneTile = (plan: PracticePlan) => (plan.exam.tone === "blue" ? "bg-blue/10 text-blue" : "bg-purple/10 text-purple");
+
+type Mode = { mode: PyqPracticeMode; icon: LucideIcon; title: string; description: string; meta: string };
+
+/**
+ * The chooser on the left (pinned on desktop); on the right, everything for the
+ * chosen course and exam: what it covers, ways to practise, tests, and the real papers.
+ */
 function PracticeModes(props: { level?: string; course?: string; exam?: string }) {
   const live = questions.length > 0;
   const { course, exam } = resolveSelection(props.level, props.course, props.exam);
   const plan = practicePlan(course.slug, exam)!;
   const latestPyqs = [...pyqs].sort((a, b) => b.year - a.year).slice(0, 4);
+  const { source } = plan.exam;
+
+  const practise: Mode[] = [
+    {
+      mode: "quick",
+      icon: Shuffle,
+      title: "Quick Practice",
+      description: `Random questions from past ${source} papers.`,
+      meta: plural(Math.min(QUICK_COUNT, plan.questions), "question"),
+    },
+    {
+      mode: "drill",
+      icon: Target,
+      title: "Drill Practice",
+      description: "Miss a question and it comes back until you get it right.",
+      meta: plural(Math.min(DRILL_COUNT, plan.questions), "question"),
+    },
+    {
+      mode: "all",
+      icon: ListOrdered,
+      title: "Every Question",
+      description: `All past ${source} questions of ${course.short}, one at a time.`,
+      meta: plural(plan.questions, "question"),
+    },
+  ];
+  const tests: Mode[] = [
+    {
+      mode: "full",
+      icon: ListChecks,
+      title: "Full Test",
+      description: "A full-length paper drawn from every past sitting. No timer.",
+      meta: plural(plan.paperLength, "question"),
+    },
+    {
+      mode: "mock",
+      icon: FileClock,
+      title: "Mock Exam",
+      description: `Timed, and laid out like a real ${source} paper.`,
+      meta: `${plan.durationMin} min`,
+    },
+  ];
 
   return (
-    <div className="container-page space-y-12 py-8">
-      <PracticeStats />
+    <div className="container-page pt-6 pb-8">
+      <div className="grid gap-8 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start xl:grid-cols-[20rem_minmax(0,1fr)]">
+        {/* Scrolls on its own if it outgrows a short screen, so the whole chooser stays reachable while pinned. */}
+        <aside className="space-y-4 lg:sticky lg:top-20 lg:-m-1 lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:p-1">
+          <Chooser plan={plan} />
+          <PracticeStats />
+        </aside>
 
-      {/* The bar stays pinned while any of this is on screen, so every mode and paper below reads as this course and exam. */}
-      <div>
-        <Chooser plan={plan} />
-        <SelectionBar plan={plan} />
-        <p className="mt-2 px-1 text-sm text-muted">{planSummary(plan)}</p>
-
-        <div className="mt-10 space-y-12">
-          <ModeGroup
-            title="Practise"
-            description="The official answer key after every question."
-            modes={[
-              {
-                icon: Shuffle,
-                t: "Quick Practice",
-                d: `${Math.min(QUICK_COUNT, plan.questions)} random questions from past ${plan.exam.source} papers.`,
-                mode: "quick",
-              },
-              {
-                icon: Target,
-                t: "Drill Practice",
-                d: `${Math.min(DRILL_COUNT, plan.questions)} ${plan.exam.label} questions. Miss one and it comes back until you get it right.`,
-                mode: "drill",
-              },
-              {
-                icon: ListOrdered,
-                t: "Every Question",
-                d: `All ${plan.questions} questions from past ${plan.course.short} ${plan.exam.source} papers, one at a time.`,
-                mode: "all",
-              },
-            ]}
-            plan={plan}
-          />
-
-          <ModeGroup
-            title="Test yourself"
-            description={`Graded at the end, like the real ${plan.exam.label}.`}
-            modes={[
-              {
-                icon: ListChecks,
-                t: "Full Test",
-                d: `A ${plan.paperLength}-question paper drawn from every past ${plan.exam.source} sitting. No timer.`,
-                mode: "full",
-              },
-              {
-                icon: FileClock,
-                t: "Mock Exam",
-                d: `${plan.durationMin} minutes on the clock, laid out like a real ${plan.exam.source} paper.`,
-                mode: "mock",
-              },
-              {
-                icon: ScrollText,
-                t: "Previous Year Paper",
-                d: `Sit one of the ${plural(plan.papers.length, `real ${plan.exam.source} paper`)} below in the timed exam portal.`,
-                href: "#papers",
-              },
-            ]}
-            plan={plan}
-          />
+        <div className="min-w-0 space-y-10">
+          <SelectionBar plan={plan} />
+          <CourseHeader plan={plan} />
+          <ModeList id="practise" title="Practise" description="The official answer key after every question." modes={practise} plan={plan} />
+          <ModeList id="test" title="Test yourself" description={`Graded at the end, like the real ${plan.exam.label}.`} modes={tests} plan={plan} />
 
           <section id="papers" className="scroll-mt-24" aria-labelledby="papers-title">
-            <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div className="mb-3 flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
               <div>
                 <h2 id="papers-title" className="flex flex-wrap items-center gap-2 text-lg font-bold">
-                  Real papers <ExamTag exam={plan.exam} />
+                  Real papers <ExamTag exam={plan.exam} size="sm" />
                 </h2>
-                <p className="text-sm text-muted">
-                  {plural(plan.papers.length, `past ${plan.course.short} ${plan.exam.source} paper`)}, each with the official answer key.
-                </p>
+                <p className="text-sm text-muted">Sit a past {source} paper in the timed exam portal.</p>
               </div>
-              <Link href={plan.course.href} className="inline-flex items-center gap-1 text-sm font-semibold hover:underline">
-                All {plan.course.short} papers <ArrowRight className="size-4" aria-hidden />
+              <Link href={course.href} className="inline-flex items-center gap-1 text-sm font-semibold hover:underline">
+                All {course.short} papers <ArrowRight className="size-4" aria-hidden />
               </Link>
             </div>
             <div className="card px-5 py-1">
               <PaperRows papers={plan.papers} />
             </div>
           </section>
+
+          {live && (
+            <section>
+              <h2 className="mb-1 text-lg font-bold">Build your own set</h2>
+              <p className="mb-4 text-sm text-muted">Filter the question bank by course, week, topic, difficulty and type.</p>
+              <PracticeBuilder />
+            </section>
+          )}
+
+          {latestPyqs.length > 0 && (
+            <section>
+              <h2 className="mb-4 text-lg font-bold">Practise a past paper</h2>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {latestPyqs.map((p) => (
+                  <Link key={p.id} href={`/practice/session?pyq=${p.id}`} className="card card-hover p-4">
+                    <span className="text-2xl font-extrabold tabular-nums">{p.year}</span>
+                    <span className="mt-1 block text-sm font-medium">{pyqTitle(p)}</span>
+                    <span className="text-xs text-muted">{p.questionIds.length} questions</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </div>
-
-      {live && (
-        <section>
-          <h2 className="mb-1 text-lg font-bold">Build your own set</h2>
-          <p className="mb-4 text-sm text-muted">Filter the question bank by course, week, topic, difficulty and type.</p>
-          <PracticeBuilder />
-        </section>
-      )}
-
-      {latestPyqs.length > 0 && (
-        <section>
-          <h2 className="mb-4 text-lg font-bold">Practise a past paper</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {latestPyqs.map((p) => (
-              <Link key={p.id} href={`/practice/session?pyq=${p.id}`} className="card card-hover p-4">
-                <span className="text-2xl font-extrabold tabular-nums">{p.year}</span>
-                <span className="mt-1 block text-sm font-medium">{pyqTitle(p)}</span>
-                <span className="text-xs text-muted">{p.questionIds.length} questions</span>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 }
 
+/** Level and course buttons, laid out in an even grid; long course names wrap inside their button. */
 const pill = (on: boolean) =>
   cn(
-    "shrink-0 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors",
+    "flex min-h-9 items-center justify-center rounded-lg border px-2 py-1.5 text-center text-sm leading-tight font-medium transition-colors",
     on ? "border-fg bg-ink text-bg" : "border-border bg-surface hover:border-fg/30",
   );
 
-function Step({ n, label, children }: { n: number; label: string; children: React.ReactNode }) {
+const pillGrid = "grid grid-cols-3 gap-1.5 sm:grid-cols-4 lg:grid-cols-3";
+
+function Field({ n, label, children }: { n: number; label: string; children: React.ReactNode }) {
   return (
-    <div className="grid gap-2.5 p-4 sm:grid-cols-[7rem_1fr] sm:gap-4 md:px-5">
-      <p className="flex items-center gap-2 text-sm font-semibold sm:h-9">
-        <span className="grid size-6 shrink-0 place-items-center rounded-full bg-brand text-xs font-bold text-brand-ink" aria-hidden>
+    <div>
+      <p className="mb-2 flex items-center gap-2 text-xs font-semibold tracking-wide text-muted uppercase">
+        <span className="grid size-5 shrink-0 place-items-center rounded-full bg-brand text-[11px] font-bold text-brand-ink" aria-hidden>
           {n}
         </span>
         {label}
       </p>
-      <div className="min-w-0">{children}</div>
+      {children}
     </div>
   );
 }
 
-/** Level → course → exam, then a plain statement of what the modes below will draw from. */
+/** Level → course → exam. Every option is a link, so the choice lives in the URL. */
 function Chooser({ plan }: { plan: PracticePlan }) {
   const { course, exam } = plan;
   const levels = PYQ_LEVELS.filter((l) => pyqCoursesForLevel(l.slug).length > 0);
@@ -233,27 +220,34 @@ function Chooser({ plan }: { plan: PracticePlan }) {
   const courseHref = (c: CoursePyqs) => practiceHref(c.slug, courseExams(c).includes(exam.slug) ? exam.slug : undefined);
 
   return (
-    <section id="choose" aria-labelledby="choose-title" className="card scroll-mt-24 overflow-hidden">
-      <h2 id="choose-title" className="sr-only">
-        Choose what to practise
+    <section id="choose" aria-labelledby="choose-title" className="card scroll-mt-24 p-4 md:p-5">
+      <h2 id="choose-title" className="font-bold">
+        What do you want to practise?
       </h2>
-      <div className="divide-y divide-border">
-        <Step n={1} label="Level">
-          <nav aria-label="Level" className="flex flex-wrap gap-1.5">
+      <div className="mt-4 space-y-5">
+        <Field n={1} label="Level">
+          <nav aria-label="Level" className="grid grid-cols-3 gap-1.5 sm:max-w-sm lg:max-w-none">
             {levels.map((l) => (
-              <Link key={l.slug} href={`/practice?level=${l.slug}`} scroll={false} aria-current={l.slug === course.level ? "true" : undefined} className={pill(l.slug === course.level)}>
-                {l.name}
+              <Link
+                key={l.slug}
+                href={`/practice?level=${l.slug}`}
+                scroll={false}
+                title={l.name}
+                aria-current={l.slug === course.level ? "true" : undefined}
+                className={pill(l.slug === course.level)}
+              >
+                {l.short}
               </Link>
             ))}
           </nav>
-        </Step>
+        </Field>
 
-        <Step n={2} label="Course">
+        <Field n={2} label="Course">
           <nav aria-label="Course" className="space-y-3">
             {groupCourses(pyqCoursesForLevel(course.level)).map((g) => (
               <div key={g.name}>
-                <p className="mb-1.5 text-xs font-medium text-muted">{g.name}</p>
-                <div className="flex flex-wrap gap-1.5">
+                <p className="mb-1.5 text-xs text-muted">{g.name}</p>
+                <div className={pillGrid}>
                   {g.courses.map((c) => (
                     <Link
                       key={c.slug}
@@ -270,23 +264,25 @@ function Chooser({ plan }: { plan: PracticePlan }) {
               </div>
             ))}
           </nav>
-        </Step>
+        </Field>
 
-        <Step n={3} label="Exam">
-          <nav aria-label="Exam" className="flex flex-wrap gap-2">
+        <Field n={3} label="Exam">
+          <nav aria-label="Exam" className="grid gap-1.5">
             {EXAM_CHOICES.map((choice) => {
               const papers = choice.exam ? course.papers.filter((p) => p.exam === choice.exam).length : 0;
-              const on = choice.exam === exam.slug;
               const info = choice.exam && papers ? PRACTICE_EXAMS[choice.exam] : undefined;
+              const on = choice.exam === exam.slug;
               const body = (
                 <>
-                  <span className="flex items-center gap-1.5 text-sm font-semibold">
-                    {info && <span className={cn("size-2 rounded-full", info.tone === "blue" ? "bg-blue" : "bg-purple")} aria-hidden />}
-                    {info?.label ?? choice.label}
+                  <span
+                    className={cn("size-2 shrink-0 rounded-full", info ? (info.tone === "blue" ? "bg-blue" : "bg-purple") : "border border-muted")}
+                    aria-hidden
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold">{info?.label ?? choice.label}</span>
+                    <span className={cn("block text-xs", on ? "text-bg/70" : "text-muted")}>{info ? info.scope : "No papers yet"}</span>
                   </span>
-                  <span className={cn("block text-xs", on ? "text-bg/70" : "text-muted")}>
-                    {info ? `${info.scope} · ${plural(papers, "paper")}` : "No papers yet"}
-                  </span>
+                  {info && <span className={cn("shrink-0 text-xs tabular-nums", on ? "text-bg/70" : "text-muted")}>{plural(papers, "paper")}</span>}
                 </>
               );
               return info ? (
@@ -296,43 +292,43 @@ function Chooser({ plan }: { plan: PracticePlan }) {
                   scroll={false}
                   aria-current={on ? "true" : undefined}
                   className={cn(
-                    "rounded-xl border px-3.5 py-2 transition-colors",
+                    "flex items-center gap-3 rounded-xl border px-3 py-2 transition-colors",
                     on ? "border-fg bg-ink text-bg" : "border-border bg-surface hover:border-fg/30",
                   )}
                 >
                   {body}
                 </Link>
               ) : (
-                <span key={choice.label} aria-disabled="true" className="cursor-not-allowed rounded-xl border border-dashed border-border px-3.5 py-2 text-muted">
+                <span
+                  key={choice.label}
+                  aria-disabled="true"
+                  className="flex cursor-not-allowed items-center gap-3 rounded-xl border border-dashed border-border px-3 py-2 text-muted"
+                >
                   {body}
                 </span>
               );
             })}
           </nav>
-        </Step>
+        </Field>
       </div>
     </section>
   );
 }
 
-/** What's selected, pinned under the navbar while scrolling through the modes and papers. */
+/** Phones only: the chooser is above the content there, so this keeps the choice in view while scrolling. */
 function SelectionBar({ plan }: { plan: PracticePlan }) {
-  const { course, exam, level } = plan;
+  const { course, exam } = plan;
   return (
     <div
       className={cn(
-        "sticky top-16 z-20 mt-4 rounded-xl border bg-bg/90 px-4 py-2.5 shadow-sm backdrop-blur",
+        "sticky top-16 z-20 rounded-xl border bg-bg/90 px-4 py-2.5 shadow-sm backdrop-blur lg:hidden",
         exam.tone === "blue" ? "border-blue/40" : "border-purple/40",
       )}
     >
       <p className="flex items-center gap-2.5 text-sm">
         <span className="hidden shrink-0 text-muted sm:inline">You&apos;re practising</span>
         <ExamTag exam={exam} />
-        <span className="min-w-0 truncate font-semibold">
-          <span className="sm:hidden">{course.short}</span>
-          <span className="hidden sm:inline">{course.name}</span>
-          <span className="hidden font-normal text-muted sm:inline"> · {level.short}</span>
-        </span>
+        <span className="min-w-0 truncate font-semibold">{course.name}</span>
         <a href="#choose" className="ml-auto inline-flex shrink-0 items-center gap-1 font-semibold text-muted hover:text-fg">
           <ArrowUp className="size-3.5" aria-hidden /> Change
         </a>
@@ -341,47 +337,76 @@ function SelectionBar({ plan }: { plan: PracticePlan }) {
   );
 }
 
-function planSummary({ questions, papers, exam }: PracticePlan) {
-  const range = papers.length > 1 ? `${papers.at(-1)!.label} to ${papers[0].label}` : papers[0].label;
-  const summary = `${questions} real questions from ${plural(papers.length, `${exam.source} paper`)} (${range}), with the official answer keys.`;
-  // Say why Qualifier papers are Quiz 1 practice.
-  return exam.source === exam.label ? summary : `${summary} ${exam.about}`;
+/** "22 Dec 2024" or "December 2024" → "Dec 2024". */
+const monthYear = (label: string) => {
+  const m = /(\w{3})\w* (\d{4})$/.exec(label);
+  return m ? `${m[1]} ${m[2]}` : label;
+};
+
+/** What the modes below draw on: the course, the exam and its past papers. */
+function CourseHeader({ plan }: { plan: PracticePlan }) {
+  const { course, exam, level, papers } = plan;
+  const [oldest, newest] = [monthYear(papers.at(-1)!.label), monthYear(papers[0].label)];
+  const range = oldest === newest ? newest : `${oldest} – ${newest}`;
+  return (
+    <header className={cn("card border-l-4 p-5 md:p-6", exam.tone === "blue" ? "border-l-blue" : "border-l-purple")}>
+      <p className="eyebrow">
+        {level.name}
+        {course.code && <span className="font-mono"> · {course.code}</span>}
+      </p>
+      <h2 className="mt-1 text-2xl font-extrabold tracking-tight">{course.name}</h2>
+      <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm">
+        <ExamTag exam={exam} />
+        <span className="text-muted">{exam.scope}</span>
+      </div>
+      <dl className="mt-4 flex flex-wrap gap-x-10 gap-y-3 border-t border-border pt-4">
+        {[
+          [String(plan.questions), "questions"],
+          [String(papers.length), papers.length === 1 ? `${exam.source} paper` : `${exam.source} papers`],
+          [range, "sittings"],
+        ].map(([value, label]) => (
+          <div key={label} className="flex flex-col-reverse">
+            <dt className="text-xs text-muted">{label}</dt>
+            <dd className="text-xl font-bold whitespace-nowrap tabular-nums">{value}</dd>
+          </div>
+        ))}
+      </dl>
+      {/* Say why Qualifier papers are Quiz 1 practice. */}
+      {exam.source !== exam.label && <p className="mt-4 text-sm text-muted">{exam.about}</p>}
+    </header>
+  );
 }
 
-type Mode = { icon: typeof Shuffle; t: string; d: string } & ({ mode: PyqPracticeMode } | { href: string });
-
-function ModeGroup({ title, description, modes, plan }: { title: string; description: string; modes: Mode[]; plan: PracticePlan }) {
+function ModeList({ id, title, description, modes, plan }: { id: string; title: string; description: string; modes: Mode[]; plan: PracticePlan }) {
   return (
-    <section>
-      <h2 className="flex flex-wrap items-center gap-2 text-lg font-bold">
-        {title} <ExamTag exam={plan.exam} />
-      </h2>
-      <p className="mb-4 text-sm text-muted">{description}</p>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {modes.map((m) => (
-          <Link
-            key={m.t}
-            href={"href" in m ? m.href : sessionHref(plan.course.slug, plan.exam.slug, m.mode)}
-            className="card card-hover flex gap-4 p-5"
-          >
-            <span
-              className={cn(
-                "grid size-10 shrink-0 place-items-center rounded-xl",
-                plan.exam.tone === "blue" ? "bg-blue/10 text-blue" : "bg-purple/10 text-purple",
-              )}
-            >
-              <m.icon className="size-5" aria-hidden />
-            </span>
-            <span>
-              <span className="block font-semibold">{m.t}</span>
-              <span className="mt-0.5 block text-sm text-muted">{m.d}</span>
-              <span className="mt-2.5 flex flex-wrap items-center gap-1.5 text-xs text-muted">
-                <ExamTag exam={plan.exam} size="sm" /> {plan.course.short}
-              </span>
-            </span>
-          </Link>
-        ))}
+    <section aria-labelledby={`${id}-title`}>
+      <div className="mb-3">
+        <h2 id={`${id}-title`} className="flex flex-wrap items-center gap-2 text-lg font-bold">
+          {title} <ExamTag exam={plan.exam} size="sm" />
+        </h2>
+        <p className="text-sm text-muted">{description}</p>
       </div>
+      <ul className="card divide-y divide-border overflow-hidden">
+        {modes.map((m) => (
+          <li key={m.mode}>
+            <Link
+              href={sessionHref(plan.course.slug, plan.exam.slug, m.mode)}
+              className="group flex items-center gap-4 px-4 py-3.5 transition-colors hover:bg-surface-2/60 md:px-5"
+            >
+              <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl", toneTile(plan))}>
+                <m.icon className="size-5" aria-hidden />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-semibold">{m.title}</span>
+                <span className="block text-sm text-muted">{m.description}</span>
+                <span className="mt-0.5 block text-xs text-muted tabular-nums sm:hidden">{m.meta}</span>
+              </span>
+              <span className="hidden shrink-0 text-sm text-muted tabular-nums sm:block">{m.meta}</span>
+              <ArrowRight className="size-4 shrink-0 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-fg" aria-hidden />
+            </Link>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

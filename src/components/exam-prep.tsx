@@ -8,6 +8,7 @@ import { VideoCard } from "@/components/video-card";
 import { PROGRAM_SLUG, forSubject, getProgram, getSubject, notes, pyqs, pyqTopicFrequency, questions, subjects, topicTitle, videos } from "@/lib/content";
 import { param } from "@/lib/filters";
 import { pyqPapersFor } from "@/lib/pyq-index";
+import { sessionHref } from "@/lib/pyq-practice";
 import { pyqCourseHref } from "@/lib/pyq-urls";
 import { cn } from "@/lib/utils";
 
@@ -48,7 +49,11 @@ function Pill({ href, on, children }: { href: string; on: boolean; children: Rea
   );
 }
 
-/** The "Exam prep" tab of /practice: pick level → course → exam, then show a study plan. */
+/**
+ * Exam prep: pick level → course → exam, then show a study plan. Not shown at the moment: the tab was
+ * hidden until revision content (notes, videos, topic-tagged papers) is published, and /practice?tab=exam
+ * links open Practice instead. The plan's sections are meant to come back as a "Revise" section of /practice.
+ */
 export function ExamPrep({ sp }: { sp: Record<string, string | string[] | undefined> }) {
   const subjectSlug = param(sp, "subject");
   const subject = subjectSlug ? getSubject(subjectSlug) : undefined;
@@ -127,6 +132,14 @@ function Plan({ subjectSlug, exam }: { subjectSlug: string; exam: string }) {
         ? { papers: endTerm, note: "No Quiz 2 papers yet. End Term papers cover the full syllabus, Quiz 2 weeks included." }
         : { papers: endTerm.length ? endTerm : qualifier, note: endTerm.length ? "" : "No End Term papers yet. Start with the qualifier papers for weeks 1–4." };
 
+  // A mock from the course's real papers (the qualifier's for Quiz 1); the question bank's mock until a course has papers.
+  const mockExam = exam === "Quiz 1" && qualifier.length ? "qualifier" : endTerm.length ? "end-term" : qualifier.length ? "qualifier" : undefined;
+  const mockHref = mockExam
+    ? sessionHref(subjectSlug, mockExam, "mock")
+    : questions.some((x) => x.subjectSlug === subjectSlug)
+      ? `/practice/session?subject=${subjectSlug}&mode=exam&count=12&mock=1`
+      : undefined;
+
   if (papers.length === 0 && important.length === 0 && portal.papers.length === 0)
     return (
       <EmptyState
@@ -151,9 +164,11 @@ function Plan({ subjectSlug, exam }: { subjectSlug: string; exam: string }) {
             {subject.name} · {exam}
           </h2>
         </div>
-        <Link href={`/practice/session?subject=${subjectSlug}&mode=exam&count=12&mock=1`} className={buttonClass("primary", "lg")}>
-          <FileClock className="size-4" aria-hidden /> Take a mock test
-        </Link>
+        {mockHref && (
+          <Link href={mockHref} className={buttonClass("primary", "lg")}>
+            <FileClock className="size-4" aria-hidden /> Take a mock test
+          </Link>
+        )}
       </div>
 
       {portal.papers.length > 0 && (

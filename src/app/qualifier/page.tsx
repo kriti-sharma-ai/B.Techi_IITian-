@@ -16,6 +16,7 @@ import {
 import { MockAction, QualifierHistory } from "@/components/qualifier-attempts";
 import { Badge, Breadcrumbs, SectionHeader } from "@/components/ui";
 import { getSubject } from "@/lib/content";
+import { practiceHref } from "@/lib/pyq-practice";
 import { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS, mockMarks, mockQuestions, pyqGroups, qualifierMocks } from "@/lib/qualifier";
 
 export const metadata: Metadata = {
@@ -167,7 +168,7 @@ export default function QualifierPage() {
                 </ul>
                 <div className="mt-5 flex gap-3 border-t border-border pt-4 text-sm font-semibold">
                   <Link href={`/subjects/${slug}`} className="hover:underline">Course</Link>
-                  <Link href={`/practice?tab=exam&subject=${slug}`} className="text-muted hover:text-fg hover:underline">Exam prep</Link>
+                  <Link href={practiceHref(slug, "qualifier")} className="text-muted hover:text-fg hover:underline">Practise</Link>
                 </div>
               </div>
             );

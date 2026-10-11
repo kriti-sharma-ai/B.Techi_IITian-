@@ -15,6 +15,8 @@ npm run build && npm start
 
 Optional: set `NEXT_PUBLIC_SITE_URL` (used for canonical URLs, sitemap and JSON-LD).
 
+By default the site ships with only the Qualifier Pack, Practice, PYQs, cheat sheets, Blog, accounts and admin. Programs, Skills, Courses, Notes, Videos, Books and Search are switched off (404 and hidden from navigation; see `src/lib/site.ts`). Turn them back on with `NEXT_PUBLIC_SECTIONS`, e.g. `NEXT_PUBLIC_SECTIONS=notes,videos`, or `NEXT_PUBLIC_SECTIONS=all` for the full site.
+
 ## What's in Phase 1
 
 | Area | Route |

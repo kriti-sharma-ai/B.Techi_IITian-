@@ -4,6 +4,7 @@
 
 import { END_TERM_SUBJECTS } from "./data/end-term/subjects";
 import { getSubject } from "./content";
+import { sectionEnabled } from "./site";
 
 export { END_TERM_SUBJECTS };
 
@@ -15,8 +16,9 @@ export const DS_GROUP: Record<(typeof END_TERM_SUBJECTS)[number]["level"], strin
   degree: "BS in Data Science · Degree courses",
 };
 
-/** Course page link, only for courses BTechi has a page for. */
-export const reviseHref = (subjectSlug: string) => (getSubject(subjectSlug) ? `/subjects/${subjectSlug}` : undefined);
+/** Course page link, only for courses BTechi has a page for (and only while course pages are switched on). */
+export const reviseHref = (subjectSlug: string) =>
+  sectionEnabled("subjects") && getSubject(subjectSlug) ? `/subjects/${subjectSlug}` : undefined;
 
 export const formatSittingDate = (iso: string) =>
   new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });

@@ -21,6 +21,7 @@ import { cheatSheetForSubject, cheatSheetHref } from "@/lib/data/cheat-notes";
 import { practiceHref } from "@/lib/pyq-practice";
 import { getPapers } from "@/lib/papers";
 import { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS, answerKey, mockMarks, mockQuestions } from "@/lib/qualifier";
+import { sectionEnabled } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Qualifier Pack: Maths I, Stats I, CT, English I",
@@ -173,8 +174,8 @@ export default async function QualifierPage() {
                   ))}
                 </ul>
                 <div className="mt-5 flex gap-3 border-t border-border pt-4 text-sm font-semibold">
-                  <Link href={`/subjects/${slug}`} className="hover:underline">Course</Link>
-                  <Link href={cheatSheetHref(cheatSheetForSubject(slug)!)} className="text-muted hover:text-fg hover:underline">Notes</Link>
+                  {sectionEnabled("subjects") && <Link href={`/subjects/${slug}`} className="hover:underline">Course</Link>}
+                  <Link href={cheatSheetHref(cheatSheetForSubject(slug)!)} className={sectionEnabled("subjects") ? "text-muted hover:text-fg hover:underline" : "hover:underline"}>Notes</Link>
                   <Link href={practiceHref(slug, "qualifier")} className="text-muted hover:text-fg hover:underline">Practise</Link>
                 </div>
               </div>

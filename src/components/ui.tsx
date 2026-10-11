@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 import { ArrowRight, BadgeCheck, ChevronRight, Clock, AlertTriangle } from "lucide-react";
+import { hrefEnabled } from "@/lib/site";
 import { cn, SITE_URL } from "@/lib/utils";
 import type { Quality } from "@/lib/types";
 
@@ -46,6 +47,16 @@ export function ButtonLink({
   ...props
 }: ComponentProps<typeof Link> & { variant?: Variant; size?: Size }) {
   return <Link className={buttonClass(variant, size, className)} {...props} />;
+}
+
+/** A Link, or the same content unlinked when it points into a section this deployment has switched off. */
+export function MaybeLink({ href, className, children, ...props }: ComponentProps<typeof Link> & { href: string }) {
+  if (!hrefEnabled(href)) return <span className={className}>{children}</span>;
+  return (
+    <Link href={href} className={className} {...props}>
+      {children}
+    </Link>
+  );
 }
 
 /* ───────────── Badges ───────────── */

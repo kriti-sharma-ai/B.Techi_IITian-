@@ -11,6 +11,7 @@ import { Badge, Breadcrumbs, buttonClass } from "@/components/ui";
 import { blogPostHref, getAllPosts, getPost, relatedPosts } from "@/lib/blog";
 import { blogCategoryHref, getBlogCategory } from "@/lib/blog/categories";
 import { SITE_URL, formatDate } from "@/lib/utils";
+import { hrefEnabled } from "@/lib/site";
 
 export const dynamicParams = false;
 export const generateStaticParams = () => getAllPosts().map((p) => ({ slug: p.slug }));
@@ -78,7 +79,8 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
   const cat = getBlogCategory(post.category)!;
   const href = blogPostHref(post.slug);
   const related = relatedPosts(post).map(toSummary);
-  const next = NEXT_STEP[post.category];
+  // Skip the next step when it points into a section this deployment has switched off.
+  const next = [NEXT_STEP[post.category]].find((n) => n && hrefEnabled(n.href));
   const h2s = post.toc.filter((t) => t.level === 2);
 
   const jsonLd = {

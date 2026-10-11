@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { MaybeLink } from "./ui";
 import { pyqTopicFrequency, forSubject, pyqs } from "@/lib/content";
 
 /** "Most repeated topics" bars (PRD §22), computed from tagged past papers. */
@@ -17,7 +17,7 @@ export function PyqAnalysis({ subjectSlug, limit = 8 }: { subjectSlug: string; l
       <ul className="space-y-3">
         {rows.map((r, i) => (
           <li key={r.slug}>
-            <Link href={`/subjects/${subjectSlug}/${r.slug}`} className="group grid grid-cols-[minmax(0,9rem)_1fr_3rem] items-center gap-3 text-sm sm:grid-cols-[12rem_1fr_3rem]">
+            <MaybeLink href={`/subjects/${subjectSlug}/${r.slug}`} className="group grid grid-cols-[minmax(0,9rem)_1fr_3rem] items-center gap-3 text-sm sm:grid-cols-[12rem_1fr_3rem]">
               <span className="truncate group-hover:underline">{r.title}</span>
               <span className="h-2.5 rounded-full bg-surface-2">
                 <span
@@ -26,7 +26,7 @@ export function PyqAnalysis({ subjectSlug, limit = 8 }: { subjectSlug: string; l
                 />
               </span>
               <span className="text-right font-semibold tabular-nums">{r.percent}%</span>
-            </Link>
+            </MaybeLink>
           </li>
         ))}
       </ul>

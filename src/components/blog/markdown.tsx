@@ -8,6 +8,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { AlertTriangle, Info, Lightbulb, OctagonAlert, Sparkles, type LucideIcon } from "lucide-react";
 import type { CalloutTone, MdBlock } from "@/lib/blog/markdown";
+import { hrefEnabled } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 /* ───────────── Inline ───────────── */
@@ -45,7 +46,10 @@ export function Inline({ text }: { text: string }): ReactNode {
       const [, label, href] = tok.match(/^\[([^\]]+)\]\(([^)\s]+)\)$/)!;
       const cls = "font-medium text-fg underline decoration-brand decoration-2 underline-offset-[3px] hover:decoration-fg";
       out.push(
-        href.startsWith("/") || href.startsWith("#") ? (
+        // A link into a section this deployment has switched off keeps its words but drops the link.
+        href.startsWith("/") && !hrefEnabled(href) ? (
+          <Inline key={key} text={label} />
+        ) : href.startsWith("/") || href.startsWith("#") ? (
           <Link key={key} href={href} className={cls}>
             <Inline text={label} />
           </Link>

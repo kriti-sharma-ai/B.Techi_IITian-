@@ -6,7 +6,8 @@ import { ArrowLeft, ArrowRight, Check, CheckCircle2, Clock, Lightbulb, RotateCcw
 import type { Question } from "@/lib/types";
 import { subjectName, topicTitle } from "@/lib/content";
 import { actions } from "@/lib/store";
-import { Badge, Button, ProgressBar, buttonClass } from "./ui";
+import { sectionEnabled } from "@/lib/site";
+import { Badge, Button, MaybeLink, ProgressBar, buttonClass } from "./ui";
 import { BookmarkButton, ReportButton } from "./resource-actions";
 import { cn } from "@/lib/utils";
 
@@ -422,11 +423,13 @@ function Results({
       {weak.length > 0 && (
         <section className="card mt-4 p-5">
           <h2 className="font-semibold">Revise these topics</h2>
-          <p className="text-sm text-muted">You scored under 60% here. Notes, videos and more questions are one click away.</p>
+          <p className="text-sm text-muted">
+            You scored under 60% here.{sectionEnabled("subjects") && " Notes, videos and more questions are one click away."}
+          </p>
           <ul className="mt-3 flex flex-wrap gap-2">
             {weak.map((w) => (
               <li key={w.subject + w.topic}>
-                <Link
+                <MaybeLink
                   href={`/subjects/${w.subject}/${w.topic}`}
                   className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:border-fg/30"
                 >
@@ -434,7 +437,7 @@ function Results({
                   <span className="text-xs text-red tabular-nums">
                     {w.right}/{w.total}
                   </span>
-                </Link>
+                </MaybeLink>
               </li>
             ))}
           </ul>

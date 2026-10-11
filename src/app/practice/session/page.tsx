@@ -12,6 +12,7 @@ import { getPyqIndex } from "@/lib/pyq-index";
 import { courseExams, examFromParam, getPyqPractice, isPyqPracticeMode, practiceHref, quiz1Fallback } from "@/lib/pyq-practice";
 import type { Question } from "@/lib/types";
 import { loadContent } from "@/lib/cms";
+import { sectionEnabled } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Practice session",
@@ -68,7 +69,7 @@ export default async function SessionPage({ searchParams }: PageProps<"/practice
       <Breadcrumbs
         items={[
           { label: "Practice", href: "/practice" },
-          ...(subject ? [{ label: subject.name, href: `/subjects/${subject.slug}?item=practice` }] : []),
+          ...(subject ? [{ label: subject.name, href: sectionEnabled("subjects") ? `/subjects/${subject.slug}?item=practice` : undefined }] : []),
           { label: title },
         ]}
       />

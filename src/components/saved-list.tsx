@@ -5,7 +5,8 @@ import { useState } from "react";
 import { Award, Bookmark, BookOpen, FileText, ListTree, PenLine, PlayCircle, ScrollText, Trash2 } from "lucide-react";
 import { actions, useHydrated, useStore } from "@/lib/store";
 import type { ResourceKind } from "@/lib/types";
-import { EmptyState, buttonClass } from "./ui";
+import { hrefEnabled } from "@/lib/site";
+import { EmptyState, MaybeLink, buttonClass } from "./ui";
 import { cn } from "@/lib/utils";
 
 const meta: Record<ResourceKind, { label: string; icon: typeof FileText; tone: string }> = {
@@ -32,7 +33,7 @@ export function SavedList() {
         title="Nothing saved yet."
         description="Tap the bookmark icon on any note, video, book, question, topic or PYQ to keep it here."
         action={
-          <Link href="/programs" className={buttonClass("secondary")}>
+          <Link href={hrefEnabled("/programs") ? "/programs" : "/qualifier"} className={buttonClass("secondary")}>
             Start exploring
           </Link>
         }
@@ -69,10 +70,10 @@ export function SavedList() {
               <span className={cn("grid size-9 shrink-0 place-items-center rounded-lg", m.tone)}>
                 <m.icon className="size-4" aria-hidden />
               </span>
-              <Link href={b.href} className="min-w-0 flex-1">
+              <MaybeLink href={b.href} className="min-w-0 flex-1">
                 <span className="block truncate font-medium hover:underline">{b.title}</span>
                 {b.subtitle && <span className="block truncate text-sm text-muted">{b.subtitle}</span>}
-              </Link>
+              </MaybeLink>
               <button
                 type="button"
                 onClick={() => actions.toggleBookmark(b)}

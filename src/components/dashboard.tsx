@@ -8,7 +8,7 @@ import type { CourseExamLinks } from "@/lib/pyq-practice";
 import { getStudyCourse } from "@/lib/study-courses";
 import { ContinueLearning, SubjectProgressBar } from "./progress";
 import { openStudySetup } from "./study-setup";
-import { Button, ProgressBar, Stat, buttonClass } from "./ui";
+import { Button, MaybeLink, ProgressBar, Stat, buttonClass } from "./ui";
 import { cn, formatDate } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
 import { flushProgress } from "@/lib/supabase/sync";
@@ -203,22 +203,22 @@ export function Dashboard({ exams }: { exams: CourseExamLinks[] }) {
             <ul className="card divide-y divide-border">
               {courses.map((s) => (
                 <li key={s.slug}>
-                  <Link href={`/subjects/${s.slug}`} className="block px-5 py-4 hover:bg-surface-2/50">
+                  <MaybeLink href={`/subjects/${s.slug}`} className="block px-5 py-4 hover:bg-surface-2/50">
                     <div className="flex items-baseline justify-between gap-4">
                       <p className="font-semibold">{s.name}</p>
                       <p className="font-mono text-xs text-muted">{s.code}</p>
                     </div>
                     <SubjectProgressBar subject={s} className="mt-2" />
-                  </Link>
+                  </MaybeLink>
                 </li>
               ))}
             </ul>
           ) : (
             <div className="card p-5 text-sm text-muted">
               {plan ? "Your study profile has no BTechi course pages yet." : "Open a subject and it will show up here."}{" "}
-              <Link href="/programs" className="font-semibold text-fg hover:underline">
+              <MaybeLink href="/programs" className="font-semibold text-fg hover:underline">
                 Explore programs →
-              </Link>
+              </MaybeLink>
             </div>
           )}
         </section>
@@ -249,9 +249,9 @@ export function Dashboard({ exams }: { exams: CourseExamLinks[] }) {
           <ul className="card divide-y divide-border text-sm">
             {upcoming.map((a) => (
               <li key={a.id} className="px-5 py-3.5">
-                <Link href={`/subjects/${a.subjectSlug}?item=week-${getSubject(a.subjectSlug)?.units.find((u) => u.id === a.unitId)?.number ?? 1}-graded`} className="font-medium hover:underline">
+                <MaybeLink href={`/subjects/${a.subjectSlug}?item=week-${getSubject(a.subjectSlug)?.units.find((u) => u.id === a.unitId)?.number ?? 1}-graded`} className="font-medium hover:underline">
                   {a.title}
-                </Link>
+                </MaybeLink>
                 <p className="text-xs text-muted">
                   {getSubject(a.subjectSlug)?.name} · Due {formatDate(a.due!)}
                 </p>

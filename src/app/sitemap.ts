@@ -6,6 +6,7 @@ import { blogPostHref, getAllPosts } from "@/lib/blog";
 import { blogCategories, blogCategoryHref } from "@/lib/blog/categories";
 import { PYQ_LEVELS, getPyqIndex, uploadedPyqHref } from "@/lib/pyq-index";
 import { pyqLevelHref } from "@/lib/pyq-urls";
+import { hrefEnabled } from "@/lib/site";
 import { SITE_URL } from "@/lib/utils";
 import { loadContent } from "@/lib/cms";
 
@@ -16,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   await loadContent();
   const { pyqCourses, pyqCoursesForLevel } = await getPyqIndex();
   const url = (path: string, priority = 0.6): MetadataRoute.Sitemap[number] => ({ url: `${SITE_URL}${path}`, priority });
-  return [
+  const entries = [
     url("/", 1),
     ...["/programs", "/subjects", "/notes", "/videos", "/books", "/practice", "/pyqs", "/skills", "/qualifier", "/qualifier/notes"].map((p) => url(p, 0.8)),
     ...cheatSheets.map((s) => url(cheatSheetHref(s), 0.8)),
@@ -38,4 +39,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...getAllPosts().map((p) => ({ ...url(blogPostHref(p.slug), 0.8), lastModified: p.updated })),
     ...["/about", "/contribute", "/contact", "/privacy", "/terms", "/copyright", "/disclaimer"].map((p) => url(p, 0.3)),
   ];
+  // Leave out sections this deployment has switched off.
+  return entries.filter((e) => hrefEnabled(e.url.slice(SITE_URL.length)));
 }

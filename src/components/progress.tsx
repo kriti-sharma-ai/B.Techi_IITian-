@@ -6,7 +6,7 @@ import { ArrowRight, CheckCircle2, Circle } from "lucide-react";
 import { actions, useHydrated, useStore } from "@/lib/store";
 import { allTopics, findTopic, getSubject, subjects, topicKey } from "@/lib/content";
 import type { Subject } from "@/lib/types";
-import { ProgressBar, buttonClass } from "./ui";
+import { MaybeLink, ProgressBar, buttonClass } from "./ui";
 import { useToast } from "./toast";
 import { cn } from "@/lib/utils";
 
@@ -86,7 +86,7 @@ function ContinueRow({ subject, topicSlug }: { subject: Subject; topicSlug?: str
   const found = topicSlug ? findTopic(subject, topicSlug) : undefined;
   const href = found ? `/subjects/${subject.slug}/${topicSlug}` : `/subjects/${subject.slug}`;
   return (
-    <Link href={href} className="card card-hover group flex items-center gap-4 p-4">
+    <MaybeLink href={href} className="card card-hover group flex items-center gap-4 p-4">
       <div className="min-w-0 flex-1">
         <p className="font-semibold">{subject.name}</p>
         <p className="truncate text-sm text-muted">{found ? `Week ${found.unit.number} · ${found.topic.title}` : "Overview"}</p>
@@ -96,7 +96,7 @@ function ContinueRow({ subject, topicSlug }: { subject: Subject; topicSlug?: str
         </div>
       </div>
       <ArrowRight className="size-5 shrink-0 text-muted transition-transform group-hover:translate-x-0.5" aria-hidden />
-    </Link>
+    </MaybeLink>
   );
 }
 

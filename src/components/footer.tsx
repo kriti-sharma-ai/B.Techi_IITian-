@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { hrefEnabled } from "@/lib/site";
 import { isAuthPage } from "@/lib/utils";
 import { Logo } from "./logo";
 import { FooterWordmark } from "./footer-wordmark";
@@ -11,6 +12,7 @@ const columns = [
     title: "Explore",
     links: [
       ["Programs", "/programs"],
+      ["Qualifier Pack", "/qualifier"],
       ["Courses", "/subjects"],
       ["Notes", "/notes"],
       ["Videos", "/videos"],
@@ -23,6 +25,7 @@ const columns = [
     title: "Resources",
     links: [
       ["Blog", "/blog"],
+      ["Cheat sheets", "/qualifier/notes"],
       ["Study Guides", "/study-guides"],
       ["Search", "/search"],
     ],
@@ -63,7 +66,7 @@ export function Footer() {
           <div key={col.title}>
             <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted dark:text-brand">{col.title}</h2>
             <ul className="space-y-2.5">
-              {col.links.map(([label, href]) => (
+              {col.links.filter(([, href]) => hrefEnabled(href)).map(([label, href]) => (
                 <li key={href}>
                   <Link href={href} className="text-[15px] text-fg/80 transition-colors hover:text-fg dark:hover:text-brand">
                     {label}

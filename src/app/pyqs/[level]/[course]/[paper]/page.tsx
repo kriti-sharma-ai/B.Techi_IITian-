@@ -6,7 +6,7 @@ import { PdfViewer } from "@/components/pdf-viewer";
 import { QualifierExam } from "@/components/qualifier-exam";
 import { QualifierResult } from "@/components/qualifier-result";
 import { BookmarkButton, DownloadButton, ReportButton } from "@/components/resource-actions";
-import { Badge, Breadcrumbs, buttonClass } from "@/components/ui";
+import { Badge, Breadcrumbs, MaybeLink, buttonClass } from "@/components/ui";
 import { forSubject, getLevel, getSubject, pyqTitle, pyqs, questionsFor, topicTitle } from "@/lib/content";
 import { reviseHref } from "@/lib/end-term";
 import { param } from "@/lib/filters";
@@ -127,12 +127,12 @@ function UploadedPaper({ pyq, course }: { pyq: Pyq; course: CoursePyqs }) {
         <ul className="flex flex-wrap gap-2">
           {pyq.topics.map((t) => (
             <li key={t}>
-              <Link
+              <MaybeLink
                 href={`/subjects/${subject.slug}/${t}`}
                 className="inline-block rounded-lg border border-border bg-surface px-3 py-1.5 text-sm font-medium hover:border-fg/30"
               >
                 {topicTitle(subject.slug, t)}
-              </Link>
+              </MaybeLink>
             </li>
           ))}
         </ul>

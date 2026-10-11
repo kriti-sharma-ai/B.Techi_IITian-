@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PageHeader, ButtonLink } from "@/components/ui";
+import { hrefEnabled } from "@/lib/site";
 import { PAGES } from "./content";
 
 export const dynamicParams = false;
@@ -22,7 +23,7 @@ export default async function InfoPage({ params }: PageProps<"/[page]">) {
       </PageHeader>
       <div className="container-page max-w-3xl py-10">
         <div className="blog-prose [&_a]:underline [&_a]:underline-offset-2 [&_h2]:scroll-mt-24">{p.body}</div>
-        {p.cta && (
+        {p.cta && hrefEnabled(p.cta.href) && (
           <div className="pt-8">
             <ButtonLink href={p.cta.href}>{p.cta.label}</ButtonLink>
           </div>

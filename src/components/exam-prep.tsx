@@ -3,7 +3,7 @@ import { Check, FileClock, Flame, Lightbulb, ScrollText, Zap } from "lucide-reac
 import { NoteCard, PyqCard } from "@/components/cards";
 import { PyqAnalysis } from "@/components/pyq-analysis";
 import { PaperRows } from "@/components/pyq-papers";
-import { Badge, EmptyState, buttonClass } from "@/components/ui";
+import { Badge, EmptyState, MaybeLink, buttonClass } from "@/components/ui";
 import { VideoCard } from "@/components/video-card";
 import { PROGRAM_SLUG, forSubject, getProgram, getSubject, notes, pyqs, pyqTopicFrequency, questions, subjects, topicTitle, videos } from "@/lib/content";
 import { param } from "@/lib/filters";
@@ -219,11 +219,11 @@ async function Plan({ subjectSlug, exam }: { subjectSlug: string; exam: string }
             <ol className="space-y-2">
               {priority.map((t, i) => (
                 <li key={t.slug}>
-                  <Link href={`/subjects/${subjectSlug}/${t.slug}`} className="card card-hover flex items-center gap-3 p-3.5">
+                  <MaybeLink href={`/subjects/${subjectSlug}/${t.slug}`} className="card card-hover flex items-center gap-3 p-3.5">
                     <span className="w-5 text-sm font-bold text-muted tabular-nums">{i + 1}</span>
                     <span className="flex-1 font-medium">{t.title}</span>
                     <Badge tone={t.percent >= 60 ? "red" : "amber"}>In {t.percent}% of papers</Badge>
-                  </Link>
+                  </MaybeLink>
                 </li>
               ))}
             </ol>

@@ -6,6 +6,7 @@ import { AlertTriangle, ArrowRight, CheckCircle2, Clock, MinusCircle, RotateCcw,
 import { useHydrated, useStore } from "@/lib/store";
 import { QUALIFIER_CUTOFF, correctAnswerLabel, formatClock, hasResponse, isCorrect, isSingleSubject, paperHref, responseLabel, scoreMock } from "@/lib/qualifier";
 import { pyqCourseHref } from "@/lib/pyq-urls";
+import { sectionEnabled } from "@/lib/site";
 import type { QualifierMock, QualifierQuestion } from "@/lib/types";
 import { Badge, Breadcrumbs, EmptyState, buttonClass } from "./ui";
 import { cn } from "@/lib/utils";
@@ -42,7 +43,8 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
   const weakest = [...result.sections].sort((a, b) => a.percent - b.percent)[0];
   // End Term and quiz papers cover courses without a BTechi course page, so the server says whether one exists.
   const pastPaper = Boolean(mock.endTerm || mock.quiz);
-  const reviseLink = pastPaper ? revise : `/subjects/${weakest.subjectSlug}`;
+  // Without course pages, the qualifier cheat sheets are the place to revise.
+  const reviseLink = pastPaper ? revise : sectionEnabled("subjects") ? `/subjects/${weakest.subjectSlug}` : "/qualifier/notes";
   const single = isSingleSubject(mock);
   const section = mock.sections[tab];
 

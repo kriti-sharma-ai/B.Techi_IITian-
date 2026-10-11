@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, Clock, FileText, PenLine, PlayCircle, ScrollText } from "lucide-react";
+import { ArrowRight, Award, BookOpen, Clock, FileText, Newspaper, PenLine, PlayCircle, ScrollText, StickyNote } from "lucide-react";
 import { MathBackground } from "@/components/math-background";
 import { SearchBar } from "@/components/search-bar";
 import { LevelExplorer } from "@/components/level-explorer";
@@ -7,6 +7,7 @@ import { SkillCard } from "@/components/skill-card";
 import { ButtonLink, SectionHeader } from "@/components/ui";
 import { PROGRAM_SLUG, getProgram, skillCategories, skillCourses } from "@/lib/content";
 import { loadContent } from "@/lib/cms";
+import { sectionEnabled } from "@/lib/site";
 
 const resources = [
   { icon: FileText, t: "Notes", c: "bg-teal/10 text-teal", href: "/notes" },
@@ -16,10 +17,20 @@ const resources = [
   { icon: BookOpen, t: "Books", c: "bg-amber/10 text-amber", href: "/books" },
 ];
 
+/** What the launch build offers while the course sections are switched off. */
+const launchResources = [
+  { icon: PenLine, t: "Practice", c: "bg-purple/10 text-purple", href: "/practice" },
+  { icon: ScrollText, t: "PYQs", c: "bg-green/10 text-green", href: "/pyqs" },
+  { icon: StickyNote, t: "Cheat sheets", c: "bg-teal/10 text-teal", href: "/qualifier/notes" },
+  { icon: Newspaper, t: "Blog", c: "bg-blue/10 text-blue", href: "/blog" },
+];
+
 export default async function HomePage() {
   await loadContent();
   const program = getProgram(PROGRAM_SLUG)!;
   const programHref = `/programs/${PROGRAM_SLUG}`;
+  const courses = sectionEnabled("subjects");
+  const programs = sectionEnabled("programs");
 
   return (
     <>
@@ -45,13 +56,28 @@ export default async function HomePage() {
               one place.
             </span>
           </h1>
-          <p className="mt-5 max-w-lg text-lg text-muted">Notes, videos, PYQs and practice for every course, week by week.</p>
+          <p className="mt-5 max-w-lg text-lg text-muted">
+            {courses
+              ? "Notes, videos, PYQs and practice for every course, week by week."
+              : "Mock qualifiers, past papers, cheat sheets and practice for your IITM BS exams."}
+          </p>
 
-          <SearchBar className="mt-9 w-full max-w-xl" />
+          {sectionEnabled("search") && <SearchBar className="mt-9 w-full max-w-xl" />}
 
-          <Link href="#levels" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold hover:underline">
-            Or browse courses by level <ArrowRight className="size-4" aria-hidden />
-          </Link>
+          {programs ? (
+            <Link href="#levels" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold hover:underline">
+              Or browse courses by level <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          ) : (
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
+              <ButtonLink href="/qualifier" size="lg">
+                <Award className="size-4" aria-hidden /> Qualifier Pack
+              </ButtonLink>
+              <ButtonLink href="/practice" size="lg" variant="secondary">
+                Start practising <ArrowRight className="size-4" aria-hidden />
+              </ButtonLink>
+            </div>
+          )}
         </div>
       </section>
 
@@ -59,18 +85,20 @@ export default async function HomePage() {
         <MathBackground variant="page" />
 
         {/* ───────── Levels + courses ───────── */}
-        <section id="levels" className="container-page scroll-mt-20 py-14 md:py-20">
-          <SectionHeader
-            title="Pick your level"
-            description="Foundation, Diploma or Degree. Open a level to see its courses."
-            href={programHref}
-            linkLabel="Program details"
-          />
-          <LevelExplorer programSlug={PROGRAM_SLUG} />
-        </section>
+        {programs && (
+          <section id="levels" className="container-page scroll-mt-20 py-14 md:py-20">
+            <SectionHeader
+              title="Pick your level"
+              description="Foundation, Diploma or Degree. Open a level to see its courses."
+              href={programHref}
+              linkLabel="Program details"
+            />
+            <LevelExplorer programSlug={PROGRAM_SLUG} />
+          </section>
+        )}
 
         {/* ───────── Qualifier pack ───────── */}
-        <section className="container-page pb-14 md:pb-20">
+        <section className={programs ? "container-page pb-14 md:pb-20" : "container-page py-14 md:py-20"}>
           <Link href="/qualifier" className="card card-hover group grid items-center gap-6 overflow-hidden p-6 md:grid-cols-[1fr_auto] md:p-8">
             <div>
               <p className="eyebrow mb-2">New · Qualifier Pack</p>
@@ -96,9 +124,9 @@ export default async function HomePage() {
 
         {/* ───────── What every course gets ───────── */}
         <section className="container-page pb-14 md:pb-20">
-          <SectionHeader title="Every course includes" />
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-            {resources.map((x) => (
+          <SectionHeader title={courses ? "Every course includes" : "Everything you need to prepare"} />
+          <div className={courses ? "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5" : "grid grid-cols-2 gap-3 lg:grid-cols-4"}>
+            {(courses ? resources : launchResources).map((x) => (
               <Link key={x.t} href={x.href} className="card card-hover flex items-center gap-3 p-4">
                 <span className={`grid size-9 place-items-center rounded-lg ${x.c}`}>
                   <x.icon className="size-5" aria-hidden />
@@ -110,37 +138,39 @@ export default async function HomePage() {
         </section>
 
         {/* ───────── Skills ───────── */}
-        <section className="container-page pb-14 md:pb-20">
-          <SectionHeader
-            eyebrow="New · BTechi Skills"
-            title="Skills beyond the syllabus"
-            description="Free, hands-on courses in Python, SQL, Excel, BI and AI, mapped to your degree."
-            href="/skills"
-            linkLabel="Browse all skills"
-          />
-          <div className="-mx-1 mb-5 flex gap-2 overflow-x-auto px-1 [scrollbar-width:none]">
-            {skillCategories.map((c) => (
-              <Link
-                key={c.slug}
-                href={`/skills?category=${c.slug}`}
-                className="shrink-0 rounded-full border border-border bg-surface px-3.5 py-1.5 text-sm font-medium text-muted transition-colors hover:border-fg/30 hover:text-fg"
-              >
-                {c.name}
-              </Link>
-            ))}
-          </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {[...skillCourses]
-              .sort((a, b) => b.learners - a.learners)
-              .slice(0, 4)
-              .map((c) => (
-                <SkillCard key={c.slug} course={c} />
+        {sectionEnabled("skills") && (
+          <section className="container-page pb-14 md:pb-20">
+            <SectionHeader
+              eyebrow="New · BTechi Skills"
+              title="Skills beyond the syllabus"
+              description="Free, hands-on courses in Python, SQL, Excel, BI and AI, mapped to your degree."
+              href="/skills"
+              linkLabel="Browse all skills"
+            />
+            <div className="-mx-1 mb-5 flex gap-2 overflow-x-auto px-1 [scrollbar-width:none]">
+              {skillCategories.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/skills?category=${c.slug}`}
+                  className="shrink-0 rounded-full border border-border bg-surface px-3.5 py-1.5 text-sm font-medium text-muted transition-colors hover:border-fg/30 hover:text-fg"
+                >
+                  {c.name}
+                </Link>
               ))}
-          </div>
-          <Link href="/skills" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold hover:underline sm:hidden">
-            Browse all skills <ArrowRight className="size-4" aria-hidden />
-          </Link>
-        </section>
+            </div>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {[...skillCourses]
+                .sort((a, b) => b.learners - a.learners)
+                .slice(0, 4)
+                .map((c) => (
+                  <SkillCard key={c.slug} course={c} />
+                ))}
+            </div>
+            <Link href="/skills" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold hover:underline sm:hidden">
+              Browse all skills <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          </section>
+        )}
 
         {/* ───────── CTA ───────── */}
         <section className="container-page">
@@ -178,10 +208,10 @@ export default async function HomePage() {
                   Create free account <ArrowRight className="size-4" aria-hidden />
                 </ButtonLink>
                 <Link
-                  href={programHref}
+                  href={programs ? programHref : "/qualifier"}
                   className="inline-flex h-12 items-center rounded-xl border border-border px-6 text-[15px] font-medium hover:bg-surface-2"
                 >
-                  Explore first
+                  {programs ? "Explore first" : "Try a mock first"}
                 </Link>
               </div>
             </div>

@@ -1,5 +1,6 @@
 import { ButtonLink } from "@/components/ui";
 import { SearchBar } from "@/components/search-bar";
+import { sectionEnabled } from "@/lib/site";
 
 export default function NotFound() {
   return (
@@ -10,11 +11,17 @@ export default function NotFound() {
         </p>
         <h1 className="mt-6 text-2xl font-bold">Looks like this topic went off the syllabus.</h1>
         <p className="mt-2 text-muted">The page you&apos;re looking for doesn&apos;t exist or has moved.</p>
-        <SearchBar size="md" className="mt-8" />
+        {sectionEnabled("search") && <SearchBar size="md" className="mt-8" />}
         <div className="mt-6 flex justify-center gap-2">
-          <ButtonLink href="/subjects" variant="dark">
-            Back to Subjects
-          </ButtonLink>
+          {sectionEnabled("subjects") ? (
+            <ButtonLink href="/subjects" variant="dark">
+              Back to Subjects
+            </ButtonLink>
+          ) : (
+            <ButtonLink href="/qualifier" variant="dark">
+              Qualifier Pack
+            </ButtonLink>
+          )}
           <ButtonLink href="/" variant="secondary">
             Home
           </ButtonLink>

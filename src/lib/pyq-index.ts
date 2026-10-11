@@ -8,6 +8,7 @@ import { forSubject, getSubject, pyqs, subjectPlacement, subjects } from "./cont
 import { PAPER_SUBJECTS } from "./data/paper-subjects";
 import { DS_GROUP, formatSittingDate } from "./end-term";
 import { getPapers, type Papers } from "./papers";
+import { sectionEnabled } from "./site";
 import { mockMarks, mockQuestions } from "./qualifier";
 import { paperExam, paperHref, paperSegment, pyqCourseHref, qualifierTerm, sittingOf, type PyqExam, type PyqLevel } from "./pyq-urls";
 import type { Pyq, QualifierMock } from "./types";
@@ -124,7 +125,7 @@ function buildIndex({ pyqGroups, endTermPapersFor, quizPapersFor }: Papers) {
           group: group?.name ?? `${level.short} courses`,
           inCurriculum: true,
           href: pyqCourseHref(s.slug, s.level as PyqLevel),
-          courseHref: `/subjects/${s.slug}`,
+          courseHref: sectionEnabled("subjects") ? `/subjects/${s.slug}` : undefined,
           papers: papersFor(s.slug),
         };
       })

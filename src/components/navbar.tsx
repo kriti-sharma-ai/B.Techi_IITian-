@@ -32,6 +32,7 @@ import { skillIcons } from "./skill-icons";
 import { ThemeToggle } from "./theme-toggle";
 import { buttonClass } from "./ui";
 import { skillCategories, skillCourses } from "@/lib/data/skills";
+import { hrefEnabled, sectionEnabled } from "@/lib/site";
 import { useHydrated, useStore } from "@/lib/store";
 import { cn, isAuthPage } from "@/lib/utils";
 
@@ -48,7 +49,7 @@ const qualifierLink = { href: "/qualifier", label: "Qualifier Pack", description
 
 const resourcesGroup: NavGroup = {
   label: "Resources",
-  items: [
+  items: ([
     { href: "/notes", label: "Notes", description: "Lecture notes & revision sheets", icon: FileText },
     { href: "/pyqs", label: "PYQs", description: "Qualifier & End Term papers, by level", icon: ScrollText },
     { href: "/qualifier/notes", label: "Cheat sheets", description: "Qualifier notes: Maths I, Stats I, CT, English I", icon: StickyNote },
@@ -56,7 +57,7 @@ const resourcesGroup: NavGroup = {
     { href: "/videos", label: "Videos", description: "Topic-mapped video lessons", icon: PlayCircle },
     { href: "/books", label: "Books", description: "Recommended texts & references", icon: BookOpen },
     { href: "/blog", label: "Blog", description: "Guides on the IITM BS, exams, data skills & careers", icon: Newspaper },
-  ],
+  ] satisfies NavItem[]).filter((i) => hrefEnabled(i.href)),
 };
 
 /** Practice and exam prep live on one page, as tabs. */
@@ -64,7 +65,7 @@ const practiceLink = { href: "/practice", label: "Practice" };
 
 /** Grouped list for the mobile drawer. */
 const mobileGroups: { label: string; items: { href: string; label: string }[] }[] = [
-  { label: "Learn", items: [programsLink, { href: "/skills", label: "Skills" }, practiceLink] },
+  { label: "Learn", items: [programsLink, { href: "/skills", label: "Skills" }, practiceLink].filter((i) => hrefEnabled(i.href)) },
   resourcesGroup,
   {
     label: "You",
@@ -440,7 +441,7 @@ export function Navbar() {
 
         {/* Desktop navigation */}
         <nav aria-label="Primary" className="ml-6 hidden items-center gap-0.5 lg:flex">
-          <TopLink pathname={pathname} {...programsLink} />
+          {hrefEnabled(programsLink.href) && <TopLink pathname={pathname} {...programsLink} />}
           {/* Qualifier Pack: same shape as other items, emphasised with weight and an accent icon */}
           <Link
             href={qualifierLink.href}
@@ -456,14 +457,14 @@ export function Navbar() {
               <span className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-brand" />
             )}
           </Link>
-          <SkillsDropdown pathname={pathname} />
+          {sectionEnabled("skills") && <SkillsDropdown pathname={pathname} />}
           <NavDropdown pathname={pathname} group={resourcesGroup} />
           <TopLink pathname={pathname} {...practiceLink} />
         </nav>
 
         {/* Right actions */}
         <div className="ml-auto flex items-center gap-1.5 max-lg:ml-0">
-          <NavSearch />
+          {sectionEnabled("search") && <NavSearch />}
           <div className="hidden sm:block">
             <ThemeToggle />
           </div>
@@ -513,29 +514,31 @@ export function Navbar() {
             </div>
 
             {/* Mobile search */}
-            <form
-              role="search"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const fd = new FormData(e.currentTarget);
-                const q = (fd.get("q") as string)?.trim();
-                if (q) {
-                  const router = window.location;
-                  router.href = `/search?q=${encodeURIComponent(q)}`;
-                }
-              }}
-              className="relative mb-4"
-              style={{ animationDelay: "0ms", animation: "drawer-item 0.3s ease-out both" }}
-            >
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden />
-              <input
-                name="q"
-                type="search"
-                placeholder="Search BTechi…"
-                aria-label="Search"
-                className="h-10 w-full rounded-xl border border-border bg-surface-2 pl-10 pr-3 text-sm outline-none placeholder:text-muted focus:border-fg/30 focus:bg-surface"
-              />
-            </form>
+            {sectionEnabled("search") && (
+              <form
+                role="search"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const fd = new FormData(e.currentTarget);
+                  const q = (fd.get("q") as string)?.trim();
+                  if (q) {
+                    const router = window.location;
+                    router.href = `/search?q=${encodeURIComponent(q)}`;
+                  }
+                }}
+                className="relative mb-4"
+                style={{ animationDelay: "0ms", animation: "drawer-item 0.3s ease-out both" }}
+              >
+                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden />
+                <input
+                  name="q"
+                  type="search"
+                  placeholder="Search BTechi…"
+                  aria-label="Search"
+                  className="h-10 w-full rounded-xl border border-border bg-surface-2 pl-10 pr-3 text-sm outline-none placeholder:text-muted focus:border-fg/30 focus:bg-surface"
+                />
+              </form>
+            )}
 
             <nav aria-label="Mobile" className="flex flex-col gap-4 overflow-y-auto">
               <Link
@@ -615,7 +618,9 @@ export function BottomNav() {
   if (pathname.startsWith("/admin") || isAuthPage(pathname)) return null;
   const items = [
     { href: "/", label: "Home", icon: Home },
-    { href: "/programs", label: "Explore", icon: Compass },
+    sectionEnabled("programs")
+      ? { href: "/programs", label: "Explore", icon: Compass }
+      : { href: qualifierLink.href, label: "Qualifier", icon: Award },
     { href: "/practice", label: "Practice", icon: PenLine },
     { href: "/saved", label: "Saved", icon: BookMarked },
     {

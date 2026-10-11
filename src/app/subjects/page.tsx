@@ -3,9 +3,12 @@ import { Suspense } from "react";
 import { BookDashed } from "lucide-react";
 import { SubjectCard } from "@/components/cards";
 import { FilterBar } from "@/components/filter-bar";
+import { ScopeSwitch } from "@/components/study-scope";
 import { EmptyState, PageHeader } from "@/components/ui";
 import { programs, subjects } from "@/lib/content";
 import { academicFilters, matchesAcademic } from "@/lib/filters";
+import { getStudyScope, narrow, scopeLinks } from "@/lib/study-scope";
+import { loadContent } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "All courses",
@@ -14,22 +17,33 @@ export const metadata: Metadata = {
 };
 
 export default async function SubjectsPage({ searchParams }: PageProps<"/subjects">) {
+  await loadContent();
   const sp = await searchParams;
-  const list = subjects.filter((s) => matchesAcademic(s.slug, sp));
+  const scoped = narrow(
+    await getStudyScope(sp),
+    subjects.filter((s) => matchesAcademic(s.slug, sp)),
+    (s) => s.slug,
+  );
+  const list = scoped.items;
   const filters = academicFilters(sp, { units: false, subject: false });
 
   return (
     <>
       <PageHeader
         crumbs={[{ label: "Courses" }]}
-        title="All courses"
-        description={`${subjects.length} courses across Foundation, Diploma and Degree levels.`}
+        title={scoped.narrowed ? "Your courses" : "All courses"}
+        description={
+          scoped.narrowed
+            ? `The courses in your study profile, out of ${subjects.length} across Foundation, Diploma and Degree levels.`
+            : `${subjects.length} courses across Foundation, Diploma and Degree levels.`
+        }
       >
         <Suspense>
           <FilterBar filters={filters} />
         </Suspense>
       </PageHeader>
       <div className="container-page space-y-12 py-10">
+        <ScopeSwitch list={scoped} links={scopeLinks("/subjects", sp)} className="-mb-4" />
         {list.length === 0 && (
           <EmptyState icon={<BookDashed className="size-6" />} title="No courses match these filters." description="Try another level or clear the filters." />
         )}

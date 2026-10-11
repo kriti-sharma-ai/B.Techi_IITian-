@@ -5,8 +5,11 @@ import { Badge } from "@/components/ui";
 import type { CoursePyqs, PaperSummary, PyqExam } from "@/lib/pyq-index";
 import { cn } from "@/lib/utils";
 
-const EXAM_BADGE: Record<PyqExam, { label: string; tone: "purple" | "blue" }> = {
+// Same colours as ExamTag (components/exam-tag.tsx).
+const EXAM_BADGE: Record<PyqExam, { label: string; tone: "purple" | "green" | "teal" | "blue" }> = {
   "end-term": { label: "End Term", tone: "purple" },
+  "quiz-2": { label: "Quiz 2", tone: "green" },
+  "quiz-1": { label: "Quiz 1", tone: "teal" },
   qualifier: { label: "Qualifier", tone: "blue" },
 };
 
@@ -35,7 +38,7 @@ export function PaperRows({ papers, className }: { papers: PaperSummary[]; class
               <span className="inline-flex items-center gap-1">
                 <Clock className="size-3.5" aria-hidden /> {p.durationMin} min
               </span>
-              {p.exam === "end-term" && p.term && <span>{p.term} term</span>}
+              {p.exam !== "qualifier" && p.term && <span>{p.term} term</span>}
             </p>
           </div>
           <div className="shrink-0">

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="330" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">The qualifier month at a glance</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">Same rhythm every week: learn, practise, submit, review. Weeks 1–3 assignments decide eligibility.</text>
+  <g font-size="13">
+    <g>
+      <rect class="bg2" x="40" y="86" width="170" height="190" rx="14" fill="#eef1f4"/>
+      <text class="t" x="56" y="112" font-weight="800" fill="#171717">Week 1</text>
+      <text class="tm" x="56" y="136" fill="#667085">Sets · Data types</text>
+      <text class="tm" x="56" y="156" fill="#667085">Datasets · Sounds</text>
+      <rect class="brand" x="56" y="176" width="138" height="26" rx="8" fill="#ffd21c"/>
+      <text class="ink" x="66" y="194" font-weight="700" fill="#0b0b0b">Assignment 1 counts</text>
+      <text class="tm" x="56" y="228" fill="#667085">Build your notes</text>
+      <text class="tm" x="56" y="248" fill="#667085">system from day 1</text>
+    </g>
+    <g>
+      <rect class="bg2" x="225" y="86" width="170" height="190" rx="14" fill="#eef1f4"/>
+      <text class="t" x="241" y="112" font-weight="800" fill="#171717">Week 2</text>
+      <text class="tm" x="241" y="136" fill="#667085">Relations, functions,</text>
+      <text class="tm" x="241" y="156" fill="#667085">lines · Charts · Grammar</text>
+      <rect class="brand" x="241" y="176" width="138" height="26" rx="8" fill="#ffd21c"/>
+      <text class="ink" x="251" y="194" font-weight="700" fill="#0b0b0b">Assignment 2 counts</text>
+      <text class="tm" x="241" y="228" fill="#667085">First PYQ section</text>
+      <text class="tm" x="241" y="248" fill="#667085">per course, untimed</text>
+    </g>
+    <g>
+      <rect class="bg2" x="410" y="86" width="170" height="190" rx="14" fill="#eef1f4"/>
+      <text class="t" x="426" y="112" font-weight="800" fill="#171717">Week 3</text>
+      <text class="tm" x="426" y="136" fill="#667085">Quadratics · Averages,</text>
+      <text class="tm" x="426" y="156" fill="#667085">spread · Procedures</text>
+      <rect class="brand" x="426" y="176" width="138" height="26" rx="8" fill="#ffd21c"/>
+      <text class="ink" x="436" y="194" font-weight="700" fill="#0b0b0b">Assignment 3 counts</text>
+      <text class="tm" x="426" y="228" fill="#667085">Gate check: best 2</text>
+      <text class="tm" x="426" y="248" fill="#667085">of 3 above minimum?</text>
+    </g>
+    <g>
+      <rect class="purple" x="595" y="86" width="170" height="190" rx="14" fill="#7c3aed"/>
+      <text x="611" y="112" font-weight="800" fill="#fff">Week 4 + exam</text>
+      <text x="611" y="136" fill="#fff">Polynomials · Association</text>
+      <text x="611" y="156" fill="#fff">· Nested loops · Reading</text>
+      <rect x="611" y="176" width="138" height="26" rx="8" fill="#fff"/>
+      <text x="621" y="194" font-weight="700" fill="#7c3aed">Full timed mocks</text>
+      <text x="611" y="228" fill="#fff">Weakest course first;</text>
+      <text x="611" y="248" fill="#fff">traps sheet last</text>
+    </g>
+  </g>
+  <text class="tm" x="40" y="306" font-size="11" fill="#667085">Topic order is indicative. Follow the official week-by-week course content for your term.</text>
+</svg>

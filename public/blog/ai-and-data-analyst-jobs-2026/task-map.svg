@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="400" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">Where AI fits in an analyst's week</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">Our assessment of today's tools, by task. Bars show how much of the task AI can draft well.</text>
+  <g font-size="13">
+    <g class="t" fill="#171717">
+      <text x="40" y="104">Writing SQL / pandas / formulas</text>
+      <text x="40" y="140">Cleaning and reshaping data</text>
+      <text x="40" y="176">First-draft charts and summaries</text>
+      <text x="40" y="212">Documentation and code comments</text>
+      <text x="40" y="248">Choosing the right question</text>
+      <text x="40" y="284">Knowing which data to trust</text>
+      <text x="40" y="320">Judgement and recommendation</text>
+      <text x="40" y="356">Getting stakeholders to act</text>
+    </g>
+    <g>
+      <rect class="bg2" x="300" y="92" width="380" height="16" rx="8" fill="#eef1f4"/><rect class="green" x="300" y="92" width="300" height="16" rx="8" fill="#15803d"/>
+      <rect class="bg2" x="300" y="128" width="380" height="16" rx="8" fill="#eef1f4"/><rect class="green" x="300" y="128" width="240" height="16" rx="8" fill="#15803d"/>
+      <rect class="bg2" x="300" y="164" width="380" height="16" rx="8" fill="#eef1f4"/><rect class="green" x="300" y="164" width="250" height="16" rx="8" fill="#15803d"/>
+      <rect class="bg2" x="300" y="200" width="380" height="16" rx="8" fill="#eef1f4"/><rect class="green" x="300" y="200" width="290" height="16" rx="8" fill="#15803d"/>
+      <rect class="bg2" x="300" y="236" width="380" height="16" rx="8" fill="#eef1f4"/><rect class="brand" x="300" y="236" width="80" height="16" rx="8" fill="#ffd21c"/>
+      <rect class="bg2" x="300" y="272" width="380" height="16" rx="8" fill="#eef1f4"/><rect class="brand" x="300" y="272" width="60" height="16" rx="8" fill="#ffd21c"/>
+      <rect class="bg2" x="300" y="308" width="380" height="16" rx="8" fill="#eef1f4"/><rect class="brand" x="300" y="308" width="70" height="16" rx="8" fill="#ffd21c"/>
+      <rect class="bg2" x="300" y="344" width="380" height="16" rx="8" fill="#eef1f4"/><rect class="brand" x="300" y="344" width="40" height="16" rx="8" fill="#ffd21c"/>
+    </g>
+    <g class="tm" fill="#667085" font-size="12">
+      <text x="690" y="104">AI drafts</text><text x="690" y="140">AI drafts</text><text x="690" y="176">AI drafts</text><text x="690" y="212">AI drafts</text>
+      <text x="690" y="248">You lead</text><text x="690" y="284">You lead</text><text x="690" y="320">You lead</text><text x="690" y="356">You lead</text>
+    </g>
+  </g>
+  <text class="tm" x="40" y="390" font-size="11" fill="#667085">Illustrative, not measured data. Even where AI drafts well, you still check every output.</text>
+</svg>

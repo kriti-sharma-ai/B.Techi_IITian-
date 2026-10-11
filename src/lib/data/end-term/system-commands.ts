@@ -1,12 +1,328 @@
 import type { QualifierMock } from "../../types";
 
-// System Commands: IIT Madras BS End Term papers (4 papers, 66 questions).
+// System Commands: IIT Madras BS End Term papers (5 papers, 86 questions).
 // Questions, options and answer keys are reproduced from the official question papers.
 // Figures, code and maths typeset as images are in public/pyq/<slug>/, embedded inline as
 // ![Figure](src#WxH). Range answers are stored as midpoint ± tolerance.
 // Generated from the paper PDFs; edit with care.
 
 export const systemCommandsEndTermPapers: QualifierMock[] = [
+  {
+    slug: "system-commands-end-term-aug-2025-fn",
+    title: "System Commands End Term · 31 Aug 2025 (FN)",
+    description: "End Term paper from the May 2025 term, forenoon session on 31 Aug 2025, with the official answer key.",
+    difficulty: "Standard",
+    durationMin: 90,
+    endTerm: {
+      date: "2025-08-31",
+      session: "FN",
+      term: "May 2025"
+    },
+    sections: [
+      {
+        subjectSlug: "system-commands",
+        title: "System Commands",
+        short: "System Commands",
+        questions: [
+          {
+            id: "system-commands-end-term-aug-2025-fn-q1",
+            type: "mcq",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q1-1.webp#408x55)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q1-opt1-1.webp#20x21)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q1-opt2-1.webp#90x26)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q1-opt3-1.webp#76x24)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q1-opt4-1.webp#25x25)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q2",
+            type: "mcq",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q2-1.webp#575x59)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q2-opt1-1.webp#157x30)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q2-opt2-1.webp#176x25)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q2-opt3-1.webp#392x29)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q2-opt4-1.webp#396x28)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q2-opt5-1.webp#160x24)"
+            ],
+            answer: 4,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q3",
+            type: "mcq",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q3-1.webp#575x85)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q3-opt1-1.webp#501x26)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q3-opt2-1.webp#523x23)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q3-opt3-1.webp#499x23)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q3-opt4-1.webp#235x26)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q4",
+            type: "mcq",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q4-1.webp#575x364)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q4-opt1-1.webp#329x150)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q4-opt2-1.webp#255x151)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q4-opt3-1.webp#298x153)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q4-opt4-1.webp#268x149)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q5",
+            type: "mcq",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q5-1.webp#575x522)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q5-opt1-1.webp#273x27)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q5-opt2-1.webp#265x22)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q5-opt3-1.webp#267x20)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q5-opt4-1.webp#268x22)"
+            ],
+            answer: 3,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q6",
+            type: "mcq",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q6-1.webp#575x82)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q6-opt1-1.webp#422x24)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q6-opt2-1.webp#378x23)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q6-opt3-1.webp#180x22)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q6-opt4-1.webp#335x22)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q7",
+            type: "mcq",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q7-1.webp#575x103)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q7-opt1-1.webp#404x24)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q7-opt2-1.webp#485x25)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q7-opt3-1.webp#414x23)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q7-opt4-1.webp#407x23)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q8",
+            type: "mcq",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q8-1.webp#458x86)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q8-opt1-1.webp#575x50)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q8-opt2-1.webp#441x24)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q8-opt3-1.webp#449x19)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q8-opt4-1.webp#369x25)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q9",
+            type: "mcq",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q9-1.webp#256x381)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q9-opt1-1.webp#117x24)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q9-opt2-1.webp#118x19)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q9-opt3-1.webp#116x19)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q9-opt4-1.webp#509x28)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q10",
+            type: "mcq",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q10-1.webp#567x63)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q10-opt1-1.webp#238x28)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q10-opt2-1.webp#490x23)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q10-opt3-1.webp#313x27)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q10-opt4-1.webp#261x22)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q11",
+            type: "mcq",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q11-1.webp#361x430)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q11-opt1-1.webp#80x25)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q11-opt2-1.webp#80x21)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q11-opt3-1.webp#83x23)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q11-opt4-1.webp#105x24)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q12",
+            type: "multi",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q12-1.webp#575x55)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q12-opt1-1.webp#292x21)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q12-opt2-1.webp#270x21)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q12-opt3-1.webp#533x25)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q12-opt4-1.webp#301x23)"
+            ],
+            answer: [
+              0,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q13",
+            type: "multi",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q13-1.webp#575x76)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q13-opt1-1.webp#575x26)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q13-opt2-1.webp#575x27)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q13-opt3-1.webp#437x25)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q13-opt4-1.webp#446x25)"
+            ],
+            answer: [
+              0,
+              1,
+              2,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q14",
+            type: "multi",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q14-1.webp#575x51)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q14-opt1-1.webp#255x25)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q14-opt2-1.webp#258x23)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q14-opt3-1.webp#270x23)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q14-opt4-1.webp#201x22)"
+            ],
+            answer: [
+              1,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q15",
+            type: "multi",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q15-1.webp#400x286)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q15-opt1-1.webp#125x22)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q15-opt2-1.webp#167x24)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q15-opt3-1.webp#398x28)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q15-opt4-1.webp#124x22)"
+            ],
+            answer: [
+              0,
+              2,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q16",
+            type: "multi",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q16-1.webp#519x281)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q16-opt1-1.webp#237x23)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q16-opt2-1.webp#279x24)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q16-opt3-1.webp#369x25)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q16-opt4-1.webp#291x22)"
+            ],
+            answer: [
+              1,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q17",
+            type: "multi",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q17-1.webp#575x90)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q17-opt1-1.webp#367x25)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q17-opt2-1.webp#510x51)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q17-opt3-1.webp#575x48)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q17-opt4-1.webp#575x51)"
+            ],
+            answer: [
+              0,
+              1,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q18",
+            type: "multi",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q18-1.webp#575x52)",
+            options: [
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q18-opt1-1.webp#367x24)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q18-opt2-1.webp#452x25)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q18-opt3-1.webp#340x27)",
+              "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q18-opt4-1.webp#325x18)"
+            ],
+            answer: [
+              0,
+              1,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q19",
+            type: "numerical",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q19-1.webp#380x214)",
+            answer: 4,
+            explanation: ""
+          },
+          {
+            id: "system-commands-end-term-aug-2025-fn-q20",
+            type: "numerical",
+            marks: 5,
+            prompt: "![Figure](/pyq/system-commands-end-term-aug-2025-fn/q20-1.webp#575x142)",
+            answer: 32,
+            explanation: ""
+          }
+        ]
+      }
+    ]
+  },
   {
     slug: "system-commands-end-term-aug-2025-an",
     title: "System Commands End Term · 31 Aug 2025 (AN)",

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="300" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">From application to your first Foundation term</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">Solid markers are confirmed. Hollow markers are expected, based on the Sep 2026 cycle.</text>
+  <line class="ln" x1="60" y1="150" x2="760" y2="150" stroke="#e5e7eb" stroke-width="6" stroke-linecap="round"/>
+  <!-- months: Oct..Jun at 60 + i*87.5 -->
+  <g class="tm" fill="#667085" font-size="12" text-anchor="middle">
+    <text x="60" y="180">Oct '26</text><text x="147" y="180">Nov</text><text x="235" y="180">Dec</text>
+    <text x="322" y="180">Jan '27</text><text x="410" y="180">Feb</text><text x="497" y="180">Mar</text>
+    <text x="585" y="180">Apr</text><text x="672" y="180">May</text><text x="760" y="180">Jun</text>
+  </g>
+  <!-- Now -->
+  <circle class="blue" cx="89" cy="150" r="9" fill="#2563eb"/>
+  <text class="blue" x="89" y="128" font-size="12" font-weight="700" fill="#2563eb" text-anchor="middle">Today</text>
+  <!-- Apply window -->
+  <rect class="brand" x="89" y="140" width="321" height="20" rx="10" fill="#ffd21c" opacity="0.6"/>
+  <text class="t" x="200" y="112" font-size="13" font-weight="700" fill="#171717" text-anchor="middle">Applications open</text>
+  <circle class="t" cx="406" cy="150" r="10" fill="#171717"/>
+  <text class="t" x="406" y="216" font-size="13" font-weight="700" fill="#171717" text-anchor="middle">29 Jan 2027</text>
+  <text class="tm" x="406" y="233" font-size="12" fill="#667085" text-anchor="middle">last date to apply</text>
+  <!-- qualifier weeks expected -->
+  <rect class="s-muted" x="408" y="88" width="132" height="34" rx="10" fill="none" stroke="#667085" stroke-width="2" stroke-dasharray="5 4"/>
+  <text class="t" x="474" y="110" font-size="12" font-weight="700" fill="#171717" text-anchor="middle">Qualifier weeks 1–4</text>
+  <circle class="s-muted bg" cx="530" cy="150" r="9" fill="#fff" stroke="#667085" stroke-width="3"/>
+  <text class="t" x="530" y="216" font-size="13" font-weight="700" fill="#171717" text-anchor="middle">Qualifier exam</text>
+  <text class="tm" x="530" y="233" font-size="12" fill="#667085" text-anchor="middle">expected ~March</text>
+  <!-- May term -->
+  <rect class="green" x="672" y="140" width="88" height="20" rx="10" fill="#15803d"/>
+  <text class="green" x="716" y="112" font-size="13" font-weight="700" fill="#15803d" text-anchor="middle">Foundation starts</text>
+  <text class="tm" x="716" y="128" font-size="12" fill="#667085" text-anchor="middle">May 2027 term</text>
+  <text class="tm" x="40" y="266" font-size="11" fill="#667085">Expected dates follow the Sep 2026 pattern: apply by 29 Sep → week 1 on 2 Oct → exam 15 Nov.</text>
+  <text class="tm" x="40" y="282" font-size="11" fill="#667085">Confirm on the official academic calendar before booking travel.</text>
+</svg>

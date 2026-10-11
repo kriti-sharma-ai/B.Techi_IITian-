@@ -6,6 +6,7 @@ import { LevelExplorer } from "@/components/level-explorer";
 import { SkillCard } from "@/components/skill-card";
 import { ButtonLink, SectionHeader } from "@/components/ui";
 import { PROGRAM_SLUG, getProgram, skillCategories, skillCourses } from "@/lib/content";
+import { loadContent } from "@/lib/cms";
 
 const resources = [
   { icon: FileText, t: "Notes", c: "bg-teal/10 text-teal", href: "/notes" },
@@ -15,7 +16,8 @@ const resources = [
   { icon: BookOpen, t: "Books", c: "bg-amber/10 text-amber", href: "/books" },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  await loadContent();
   const program = getProgram(PROGRAM_SLUG)!;
   const programHref = `/programs/${PROGRAM_SLUG}`;
 

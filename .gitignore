@@ -6,3 +6,6 @@ next-env.d.ts
 .env*.local
 .DS_Store
 public/pdf.worker.min.mjs
+
+# python
+__pycache__/

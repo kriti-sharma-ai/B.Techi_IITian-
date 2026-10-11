@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="360" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">Why a great average can still fail the qualifier</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">General category: at least 40% in every course and at least 50% on average.</text>
+  <!-- axes: y from 300 (0%) to 100 (100%) => 2px per % -->
+  <g class="ln" stroke="#e5e7eb" stroke-width="1">
+    <line x1="60" y1="300" x2="760" y2="300"/>
+    <line x1="60" y1="200" x2="760" y2="200" stroke-dasharray="4 4"/>
+    <line x1="60" y1="100" x2="760" y2="100" stroke-dasharray="4 4"/>
+  </g>
+  <line class="s-blue" x1="60" y1="220" x2="760" y2="220" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 6"/>
+  <text class="blue" x="764" y="224" font-size="12" fill="#2563eb" text-anchor="end" dy="-6">40% per course</text>
+  <g class="tm" fill="#667085" font-size="11" text-anchor="end">
+    <text x="54" y="304">0</text><text x="54" y="204">50</text><text x="54" y="104">100</text>
+  </g>
+  <!-- Candidate A: 85 80 75 38 -->
+  <text class="t" x="70" y="92" font-size="14" font-weight="700" fill="#171717">Candidate A · average 69.5% · NOT qualified</text>
+  <g>
+    <rect class="green" x="80" y="130" width="60" height="170" rx="6" fill="#15803d"/>
+    <rect class="green" x="155" y="140" width="60" height="160" rx="6" fill="#15803d"/>
+    <rect class="green" x="230" y="150" width="60" height="150" rx="6" fill="#15803d"/>
+    <rect class="red" x="305" y="224" width="60" height="76" rx="6" fill="#dc2626"/>
+  </g>
+  <g class="t" fill="#171717" font-size="12" font-weight="700" text-anchor="middle">
+    <text x="110" y="124">85</text><text x="185" y="134">80</text><text x="260" y="144">75</text><text x="335" y="218">38</text>
+  </g>
+  <g class="tm" fill="#667085" font-size="12" text-anchor="middle">
+    <text x="110" y="320">Maths I</text><text x="185" y="320">Stats I</text><text x="260" y="320">English I</text><text x="335" y="320">CT</text>
+  </g>
+  <!-- Candidate B: 52 55 60 48 -->
+  <text class="t" x="430" y="92" font-size="14" font-weight="700" fill="#171717">Candidate B · average 53.75% · qualified</text>
+  <g>
+    <rect class="green" x="440" y="196" width="60" height="104" rx="6" fill="#15803d"/>
+    <rect class="green" x="515" y="190" width="60" height="110" rx="6" fill="#15803d"/>
+    <rect class="green" x="590" y="180" width="60" height="120" rx="6" fill="#15803d"/>
+    <rect class="green" x="665" y="204" width="60" height="96" rx="6" fill="#15803d"/>
+  </g>
+  <g class="t" fill="#171717" font-size="12" font-weight="700" text-anchor="middle">
+    <text x="470" y="190">52</text><text x="545" y="184">55</text><text x="620" y="174">60</text><text x="695" y="198">48</text>
+  </g>
+  <g class="tm" fill="#667085" font-size="12" text-anchor="middle">
+    <text x="470" y="320">Maths I</text><text x="545" y="320">Stats I</text><text x="620" y="320">English I</text><text x="695" y="320">CT</text>
+  </g>
+  <text class="tm" x="40" y="348" font-size="11" fill="#667085">Illustrative scores. Cut-offs from study.iitm.ac.in admissions pages (January 2027 batch).</text>
+</svg>

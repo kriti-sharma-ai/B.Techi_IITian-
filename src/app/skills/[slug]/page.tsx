@@ -2,26 +2,28 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
+  ArrowRight,
   Award,
   BadgeCheck,
+  BookOpen,
   Calendar,
   Check,
   ChevronDown,
+  Clock,
   FileText,
   FolderKanban,
   Globe,
   Infinity as InfinityIcon,
   ListChecks,
-  MonitorPlay,
-  PlayCircle,
   Smartphone,
   Users,
   type LucideIcon,
 } from "lucide-react";
 import { Rating, SkillBadge, SkillCard, SkillThumb, Stars, formatHours } from "@/components/skill-card";
 import { SkillEnrollButton } from "@/components/skill-enroll";
-import { Breadcrumbs, Badge } from "@/components/ui";
+import { Breadcrumbs, Badge, buttonClass } from "@/components/ui";
 import { getSkill, getSkillCategory, getSubject, relatedSkills, skillCourses, skillStats } from "@/lib/content";
+import { getSkillNotes, skillLessonId, skillNotesHref, skillNotesStats } from "@/lib/data/skill-notes";
 import type { SkillLecture } from "@/lib/types";
 import { SITE_URL, formatDate, formatNumber } from "@/lib/utils";
 
@@ -34,13 +36,14 @@ export async function generateMetadata({ params }: PageProps<"/skills/[slug]">):
 }
 
 const lectureIcon: Record<SkillLecture["kind"], LucideIcon> = {
-  video: PlayCircle,
+  video: BookOpen,
   reading: FileText,
   quiz: ListChecks,
   project: FolderKanban,
 };
 
-const clock = (minutes: number) => `${Math.floor(minutes / 60) ? `${Math.floor(minutes / 60)}:` : ""}${String(minutes % 60).padStart(2, "0")}:00`;
+/** Lessons are text for now, so a "video" lecture reads as a lesson. */
+const lectureKind: Record<SkillLecture["kind"], string | null> = { video: null, reading: "reading", quiz: "practice", project: "project" };
 
 /** Plausible star split for a given average until real reviews exist. */
 function ratingSplit(rating: number) {
@@ -58,9 +61,13 @@ export default async function SkillPage({ params }: PageProps<"/skills/[slug]">)
   const category = getSkillCategory(course.category);
   const subjects = course.relatedSubjects.map(getSubject).filter((x) => x !== undefined);
   const related = relatedSkills(course);
+  const notes = getSkillNotes(course.slug);
+  const notesStats = notes && skillNotesStats(notes);
+  const notesHref = skillNotesHref(course.slug);
 
   const includes: { icon: LucideIcon; t: string }[] = [
-    { icon: MonitorPlay, t: `${formatHours(s.minutes)} of on-demand content` },
+    ...(notesStats ? [{ icon: BookOpen, t: `${notesStats.lessons} text lessons, about ${notesStats.minutes} min of reading` }] : []),
+    { icon: Clock, t: `${formatHours(s.minutes)} of guided study with exercises` },
     { icon: FolderKanban, t: `${s.projects} hands-on ${s.projects === 1 ? "project" : "projects"}` },
     { icon: ListChecks, t: `${s.quizzes} practice ${s.quizzes === 1 ? "quiz" : "quizzes"}` },
     { icon: Smartphone, t: "Access on mobile and desktop" },
@@ -78,6 +85,7 @@ export default async function SkillPage({ params }: PageProps<"/skills/[slug]">)
     aggregateRating: { "@type": "AggregateRating", ratingValue: course.rating, ratingCount: course.ratings },
     offers: { "@type": "Offer", price: 0, priceCurrency: "INR", category: "Free" },
     hasCourseInstance: { "@type": "CourseInstance", courseMode: "Online", courseWorkload: `PT${Math.ceil(s.minutes / 60)}H` },
+    ...(notes ? { hasPart: { "@type": "LearningResource", name: `${course.title.split(":")[0]} notes`, url: `${SITE_URL}${notesHref}` } } : {}),
   };
 
   return (
@@ -119,6 +127,11 @@ export default async function SkillPage({ params }: PageProps<"/skills/[slug]">)
               <span className="text-2xl font-extrabold">Free</span>
               <SkillEnrollButton course={course} className="flex-1" />
             </div>
+            {notes && (
+              <Link href={notesHref} className={buttonClass("secondary", "lg", "mt-3 w-full lg:hidden")}>
+                <BookOpen className="size-4" aria-hidden /> Start reading the notes
+              </Link>
+            )}
           </div>
         </div>
       </header>
@@ -162,7 +175,15 @@ export default async function SkillPage({ params }: PageProps<"/skills/[slug]">)
           <section>
             <h2 className="mb-1 text-xl font-bold tracking-tight">Course content</h2>
             <p className="mb-4 text-sm text-muted">
-              {s.sections} sections · {s.lectures} lectures · {formatHours(s.minutes)} total length
+              {s.sections} modules · {s.lectures} text lessons · {formatHours(s.minutes)} of guided study
+              {notes && (
+                <>
+                  {" · "}
+                  <Link href={notesHref} className="font-semibold text-fg underline decoration-brand decoration-2 underline-offset-2">
+                    Read all lessons
+                  </Link>
+                </>
+              )}
             </p>
             <div className="overflow-hidden rounded-2xl border border-border">
               {course.sections.map((sec, i) => {
@@ -173,19 +194,32 @@ export default async function SkillPage({ params }: PageProps<"/skills/[slug]">)
                       <ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden />
                       <span className="flex-1 font-semibold">{sec.title}</span>
                       <span className="shrink-0 text-xs text-muted">
-                        {sec.lectures.length} lectures · {formatHours(mins)}
+                        {sec.lectures.length} lessons · {formatHours(mins)}
                       </span>
                     </summary>
                     <ul className="divide-y divide-border/60 bg-surface">
                       {sec.lectures.map((l) => {
                         const Icon = lectureIcon[l.kind];
-                        return (
-                          <li key={l.title} className="flex items-center gap-3 px-4 py-2.5 text-sm">
+                        const body = (
+                          <>
                             <Icon className="size-4 shrink-0 text-muted" aria-hidden />
-                            <span className={l.preview ? "font-medium underline decoration-border underline-offset-2" : ""}>{l.title}</span>
-                            {l.kind !== "video" && <span className="text-xs text-muted capitalize">· {l.kind}</span>}
-                            {l.preview && <Badge tone="brand" className="ml-1">Preview</Badge>}
-                            <span className="ml-auto shrink-0 text-xs text-muted tabular-nums">{clock(l.minutes)}</span>
+                            <span>{l.title}</span>
+                            {lectureKind[l.kind] && <span className="text-xs text-muted">· {lectureKind[l.kind]}</span>}
+                            <span className="ml-auto shrink-0 text-xs text-muted tabular-nums">{l.minutes} min</span>
+                          </>
+                        );
+                        return (
+                          <li key={l.title}>
+                            {notes ? (
+                              <Link
+                                href={`${notesHref}#${skillLessonId(l.title)}`}
+                                className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-surface-2/60"
+                              >
+                                {body}
+                              </Link>
+                            ) : (
+                              <div className="flex items-center gap-3 px-4 py-2.5 text-sm">{body}</div>
+                            )}
                           </li>
                         );
                       })}
@@ -260,7 +294,7 @@ export default async function SkillPage({ params }: PageProps<"/skills/[slug]">)
             <div className="relative">
               <SkillThumb course={course} large />
               <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-surface/90 to-transparent px-4 pt-8 pb-2 text-center text-xs font-semibold">
-                {s.previews} free preview {s.previews === 1 ? "lesson" : "lessons"}
+                Every lesson free to read, no sign-up
               </span>
             </div>
             <div className="space-y-4 p-5">
@@ -269,6 +303,11 @@ export default async function SkillPage({ params }: PageProps<"/skills/[slug]">)
                 <span className="text-sm text-muted">for every BTechi learner</span>
               </p>
               <SkillEnrollButton course={course} />
+              {notes && (
+                <Link href={notesHref} className={buttonClass("secondary", "lg", "w-full")}>
+                  Start reading <ArrowRight className="size-4" aria-hidden />
+                </Link>
+              )}
               <div>
                 <p className="mb-2 text-sm font-bold">This course includes:</p>
                 <ul className="space-y-2 text-sm">

@@ -10,12 +10,14 @@ import {
   LayoutGrid,
   ListChecks,
   MonitorCheck,
+  NotebookPen,
   Target,
   Timer,
 } from "lucide-react";
 import { MockAction, QualifierHistory } from "@/components/qualifier-attempts";
 import { Badge, Breadcrumbs, SectionHeader } from "@/components/ui";
 import { getSubject } from "@/lib/content";
+import { cheatSheetForSubject, cheatSheetHref } from "@/lib/data/cheat-notes";
 import { practiceHref } from "@/lib/pyq-practice";
 import { getPapers } from "@/lib/papers";
 import { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS, answerKey, mockMarks, mockQuestions } from "@/lib/qualifier";
@@ -172,12 +174,23 @@ export default async function QualifierPage() {
                 </ul>
                 <div className="mt-5 flex gap-3 border-t border-border pt-4 text-sm font-semibold">
                   <Link href={`/subjects/${slug}`} className="hover:underline">Course</Link>
+                  <Link href={cheatSheetHref(cheatSheetForSubject(slug)!)} className="text-muted hover:text-fg hover:underline">Notes</Link>
                   <Link href={practiceHref(slug, "qualifier")} className="text-muted hover:text-fg hover:underline">Practise</Link>
                 </div>
               </div>
             );
           })}
         </div>
+        <Link href="/qualifier/notes" className="card card-hover mt-4 flex items-center gap-4 p-5">
+          <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-brand/20">
+            <NotebookPen className="size-5" aria-hidden />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-bold">Cheat notes & formula sheets</span>
+            <span className="block text-sm text-muted">Every formula, rule and repeating PYQ trap for all four courses, built for revising on your phone.</span>
+          </span>
+          <ArrowRight className="size-5 shrink-0 text-muted" aria-hidden />
+        </Link>
       </section>
 
       {/* ───────── Mocks ───────── */}

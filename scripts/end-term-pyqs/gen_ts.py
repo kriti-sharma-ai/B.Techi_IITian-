@@ -1,6 +1,8 @@
-"""Generate src/lib/data/end-term/*.ts from the extracted JSON.
+"""Add extracted papers to src/lib/data/end-term/*.ts.
 
 Usage: python -I gen_ts.py <out-json-dir> <repo-root>
+Papers already in a course file are kept as they are (hand fixes survive); only papers with a new
+slug are added. To regenerate a paper, delete it from its .ts file first.
 """
 import json, os, re, sys, glob
 
@@ -67,8 +69,23 @@ def to_ts(value):
     return re.sub(r'^(\s*)"([A-Za-z]+)": ', r"\1\2: ", s, flags=re.M)
 
 
+def from_ts(path):
+    """Papers already in a generated course file (inverse of to_ts)."""
+    if not os.path.exists(path):
+        return []
+    src = open(path).read()
+    body = src[src.index("= [") + 2 : src.rindex(";")]
+    return json.loads(re.sub(r'^(\s*)([A-Za-z]+): ', r'\1"\2": ', body, flags=re.M))
+
+
 def main(out_dir, repo):
+    data_dir = f"{repo}/src/lib/data/end-term"
     by_subject = {}
+    for section, (prefix, *_rest) in SUBJECTS.items():
+        existing = from_ts(f"{data_dir}/{prefix}.ts")
+        if existing:
+            by_subject[section] = existing
+    added = 0
     for f in sorted(glob.glob(f"{out_dir}/*.json")):
         d = json.load(open(f))
         key = d["sitting"]  # e.g. dec-2024-fn
@@ -76,6 +93,8 @@ def main(out_dir, repo):
         meta = SITTINGS[sit]
         for p in d["papers"]:
             prefix, subject_slug, name, short, level = SUBJECTS[p["section"]]
+            if any(x["slug"] == p["slug"] for x in by_subject.get(p["section"], [])):
+                continue
             code, word = SESSION[sess]
             paper = {
                 "slug": p["slug"],
@@ -88,12 +107,13 @@ def main(out_dir, repo):
                     "subjectSlug": subject_slug,
                     "title": name,
                     "short": short,
+                    **({"reference": p["reference"]} if p.get("reference") else {}),
                     "questions": [question(p["slug"], q) for q in p["questions"]],
                 }],
             }
             by_subject.setdefault(p["section"], []).append(paper)
+            added += 1
 
-    data_dir = f"{repo}/src/lib/data/end-term"
     os.makedirs(data_dir, exist_ok=True)
     index_imports, index_spread, subject_rows = [], [], []
     for section, (prefix, subject_slug, name, short, level) in SUBJECTS.items():
@@ -145,7 +165,7 @@ def main(out_dir, repo):
     with open(f"{data_dir}/index.ts", "w") as fh:
         fh.write(index)
     total = sum(len(v) for v in by_subject.values())
-    print("subjects", len(subject_rows), "papers", total)
+    print("subjects", len(subject_rows), "papers", total, "added", added)
 
 
 if __name__ == "__main__":

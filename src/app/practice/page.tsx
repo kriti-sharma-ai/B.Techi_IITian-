@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, ArrowUp, FileClock, ListChecks, ListOrdered, Shuffle, Target, type LucideIcon } from "lucide-react";
-import { ExamTag } from "@/components/exam-tag";
+import { EXAM_TONES, ExamTag } from "@/components/exam-tag";
 import { PracticeBuilder } from "@/components/practice-builder";
 import { PracticeStats } from "@/components/practice-stats";
 import { PaperRows } from "@/components/pyq-papers";
+import { ScopeToggle } from "@/components/study-scope";
 import { Breadcrumbs } from "@/components/ui";
 import { param } from "@/lib/filters";
 import { getSubject, pyqs, pyqTitle, questions } from "@/lib/content";
@@ -18,13 +19,17 @@ import {
   examFromParam,
   practiceHref,
   getPyqPractice,
+  quiz1Fallback,
   sessionHref,
   type PracticePlan,
   type PyqPractice,
   type PyqPracticeMode,
 } from "@/lib/pyq-practice";
-import { isPyqLevel } from "@/lib/pyq-urls";
+import { isPyqLevel, type PyqLevel } from "@/lib/pyq-urls";
+import { getStudyCourse } from "@/lib/study-courses";
+import { getStudyScope, keepScope, type StudyScope } from "@/lib/study-scope";
 import { cn } from "@/lib/utils";
+import { loadContent } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Practice",
@@ -34,8 +39,9 @@ export const metadata: Metadata = {
 };
 
 export default async function PracticePage({ searchParams }: PageProps<"/practice">) {
+  await loadContent();
   const sp = await searchParams;
-  const [index, practice] = await Promise.all([getPyqIndex(), getPyqPractice()]);
+  const [index, practice, scope] = await Promise.all([getPyqIndex(), getPyqPractice(), getStudyScope(sp)]);
 
   // The Exam prep tab is hidden until its revision content (notes, videos, topic data) is published.
   // Its old links (?tab=exam&subject=…&exam=Quiz 1) open the same course and exam here.
@@ -56,27 +62,54 @@ export default async function PracticePage({ searchParams }: PageProps<"/practic
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Practice</h1>
         </div>
       </header>
-      <PracticeModes index={index} practice={practice} level={param(sp, "level")} course={param(sp, "course")} exam={param(sp, "exam")} />
+      <PracticeModes
+        index={index}
+        practice={practice}
+        scope={scope}
+        level={param(sp, "level")}
+        course={param(sp, "course")}
+        exam={param(sp, "exam")}
+      />
     </>
   );
 }
 
-/** ?course= wins; ?level= opens that level's first course. End Term unless the course has the asked-for exam. */
-function resolveSelection({ getPyqCourse, pyqCoursesForLevel, pyqCourses }: PyqIndex, levelParam?: string, courseParam?: string, examParam?: string) {
+/**
+ * ?course= wins; ?level= opens that level's first course. Otherwise the student's
+ * own courses (`prefer`, from their study profile) come first. End Term unless
+ * the course has the asked-for exam; Quiz 1 falls back to the qualifier papers.
+ */
+function resolveSelection(
+  { getPyqCourse, pyqCoursesForLevel, pyqCourses }: PyqIndex,
+  levelParam?: string,
+  courseParam?: string,
+  examParam?: string,
+  prefer: { courses: CoursePyqs[]; level?: PyqLevel } = { courses: [] },
+) {
+  const level = levelParam && isPyqLevel(levelParam) ? levelParam : undefined;
   const course =
-    getPyqCourse(courseParam ?? "") ?? pyqCoursesForLevel(levelParam && isPyqLevel(levelParam) ? levelParam : "foundation")[0] ?? pyqCourses[0];
+    getPyqCourse(courseParam ?? "") ??
+    prefer.courses.find((c) => !level || c.level === level) ??
+    pyqCoursesForLevel(level ?? prefer.level ?? "foundation")[0] ??
+    pyqCourses[0];
   const exams = courseExams(course);
   const asked = examFromParam(examParam);
-  const exam: PyqExam = asked && exams.includes(asked) ? asked : exams.includes("end-term") ? "end-term" : exams[0];
+  const wanted = asked === "quiz-1" ? quiz1Fallback(exams) : asked;
+  const exam: PyqExam = wanted && exams.includes(wanted) ? wanted : exams.includes("end-term") ? "end-term" : exams[0];
   return { course, exam };
 }
 
-/** A course's exams in term order. Quiz 1 is practised with Qualifier papers (same weeks 1–4) where a course has them; Quiz 2 has no papers yet. */
-const EXAM_CHOICES: { label: string; exam?: PyqExam }[] = [{ label: "Quiz 1", exam: "qualifier" }, { label: "Quiz 2" }, { label: "End Term", exam: "end-term" }];
+/** A course's exams in term order. The Qualifier is listed only for the courses it examines; the others show "No papers yet" when empty. */
+const EXAM_CHOICES: { label: string; exam: PyqExam; onlyWithPapers?: boolean }[] = [
+  { label: "Qualifier", exam: "qualifier", onlyWithPapers: true },
+  { label: "Quiz 1", exam: "quiz-1" },
+  { label: "Quiz 2", exam: "quiz-2" },
+  { label: "End Term", exam: "end-term" },
+];
 
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
-const toneTile = (plan: PracticePlan) => (plan.exam.tone === "blue" ? "bg-blue/10 text-blue" : "bg-purple/10 text-purple");
+const toneTile = (plan: PracticePlan) => EXAM_TONES[plan.exam.tone].tile;
 
 type Mode = { mode: PyqPracticeMode; icon: LucideIcon; title: string; description: string; meta: string };
 
@@ -84,9 +117,23 @@ type Mode = { mode: PyqPracticeMode; icon: LucideIcon; title: string; descriptio
  * The chooser on the left (pinned on desktop); on the right, everything for the
  * chosen course and exam: what it covers, ways to practise, tests, and the real papers.
  */
-function PracticeModes({ index, practice, ...props }: { index: PyqIndex; practice: PyqPractice; level?: string; course?: string; exam?: string }) {
+function PracticeModes({
+  index,
+  practice,
+  scope,
+  ...props
+}: {
+  index: PyqIndex;
+  practice: PyqPractice;
+  scope: StudyScope;
+  level?: string;
+  course?: string;
+  exam?: string;
+}) {
   const live = questions.length > 0;
-  const { course, exam } = resolveSelection(index, props.level, props.course, props.exam);
+  // The student's courses that have papers to practise.
+  const mine = scope.courses.map((slug) => index.getPyqCourse(slug)).filter((c): c is CoursePyqs => !!c && c.papers.length > 0);
+  const { course, exam } = resolveSelection(index, props.level, props.course, props.exam, { courses: mine, level: scope.level });
   const plan = practice.practicePlan(course.slug, exam)!;
   const latestPyqs = [...pyqs].sort((a, b) => b.year - a.year).slice(0, 4);
   const { source } = plan.exam;
@@ -136,7 +183,7 @@ function PracticeModes({ index, practice, ...props }: { index: PyqIndex; practic
       <div className="grid gap-8 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start xl:grid-cols-[20rem_minmax(0,1fr)]">
         {/* Scrolls on its own if it outgrows a short screen, so the whole chooser stays reachable while pinned. */}
         <aside className="space-y-4 lg:sticky lg:top-20 lg:-m-1 lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:p-1">
-          <Chooser plan={plan} index={index} />
+          <Chooser plan={plan} index={index} scope={scope} mine={mine} />
           <PracticeStats />
         </aside>
 
@@ -167,7 +214,7 @@ function PracticeModes({ index, practice, ...props }: { index: PyqIndex; practic
             <section>
               <h2 className="mb-1 text-lg font-bold">Build your own set</h2>
               <p className="mb-4 text-sm text-muted">Filter the question bank by course, week, topic, difficulty and type.</p>
-              <PracticeBuilder />
+              <PracticeBuilder questions={questions.map(({ subjectSlug, unitId, topicSlug, difficulty, type }) => ({ subjectSlug, unitId, topicSlug, difficulty, type }))} />
             </section>
           )}
 
@@ -214,70 +261,118 @@ function Field({ n, label, children }: { n: number; label: string; children: Rea
   );
 }
 
-/** Level → course → exam. Every option is a link, so the choice lives in the URL. */
-function Chooser({ plan, index: { pyqCoursesForLevel } }: { plan: PracticePlan; index: PyqIndex }) {
+/**
+ * Level → course → exam. Every option is a link, so the choice lives in the URL.
+ * With a study profile, the student's own courses replace the level and course
+ * steps while one of them is picked; "All courses" brings the full chooser back.
+ */
+function Chooser({
+  plan,
+  index: { pyqCoursesForLevel },
+  scope,
+  mine,
+}: {
+  plan: PracticePlan;
+  index: PyqIndex;
+  scope: StudyScope;
+  mine: CoursePyqs[];
+}) {
   const { course, exam } = plan;
   const levels = PYQ_LEVELS.filter((l) => pyqCoursesForLevel(l.slug).length > 0);
+  const isMine = mine.some((c) => c.slug === course.slug);
+  const narrowed = isMine && !scope.showAll;
+  const keep = (href: string) => keepScope(href, scope);
   // Switching course keeps the exam when the new course has papers for it.
-  const courseHref = (c: CoursePyqs) => practiceHref(c.slug, courseExams(c).includes(exam.slug) ? exam.slug : undefined);
+  const courseHref = (c: CoursePyqs) => keep(practiceHref(c.slug, courseExams(c).includes(exam.slug) ? exam.slug : undefined));
+  const here = practiceHref(course.slug, exam.slug);
+  const noPapers = scope.courses.filter((slug) => !mine.some((c) => c.slug === slug)).map((slug) => getStudyCourse(slug)!.name);
 
   return (
     <section id="choose" aria-labelledby="choose-title" className="card scroll-mt-24 p-4 md:p-5">
       <h2 id="choose-title" className="font-bold">
         What do you want to practise?
       </h2>
+      {mine.length > 0 && (
+        <ScopeToggle
+          narrowed={narrowed}
+          links={{ mine: isMine ? here : "/practice", all: `${here}${here.includes("?") ? "&" : "?"}scope=all` }}
+          className="mt-3 grid w-full grid-cols-2"
+        />
+      )}
       <div className="mt-4 space-y-5">
-        <Field n={1} label="Level">
-          <nav aria-label="Level" className="grid grid-cols-3 gap-1.5 sm:max-w-sm lg:max-w-none">
-            {levels.map((l) => (
-              <Link
-                key={l.slug}
-                href={`/practice?level=${l.slug}`}
-                scroll={false}
-                title={l.name}
-                aria-current={l.slug === course.level ? "true" : undefined}
-                className={pill(l.slug === course.level)}
-              >
-                {l.short}
-              </Link>
-            ))}
-          </nav>
-        </Field>
+        {narrowed ? (
+          <Field n={1} label="Your course">
+            <nav aria-label="Course" className={pillGrid}>
+              {mine.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={courseHref(c)}
+                  scroll={false}
+                  title={c.name}
+                  aria-current={c.slug === course.slug ? "true" : undefined}
+                  className={pill(c.slug === course.slug)}
+                >
+                  {c.short}
+                </Link>
+              ))}
+            </nav>
+            {noPapers.length > 0 && <p className="mt-2 text-xs text-muted">No past papers yet for {new Intl.ListFormat("en").format(noPapers)}.</p>}
+          </Field>
+        ) : (
+          <>
+            <Field n={1} label="Level">
+              <nav aria-label="Level" className="grid grid-cols-3 gap-1.5 sm:max-w-sm lg:max-w-none">
+                {levels.map((l) => (
+                  <Link
+                    key={l.slug}
+                    href={keep(`/practice?level=${l.slug}`)}
+                    scroll={false}
+                    title={l.name}
+                    aria-current={l.slug === course.level ? "true" : undefined}
+                    className={pill(l.slug === course.level)}
+                  >
+                    {l.short}
+                  </Link>
+                ))}
+              </nav>
+            </Field>
 
-        <Field n={2} label="Course">
-          <nav aria-label="Course" className="space-y-3">
-            {groupCourses(pyqCoursesForLevel(course.level)).map((g) => (
-              <div key={g.name}>
-                <p className="mb-1.5 text-xs text-muted">{g.name}</p>
-                <div className={pillGrid}>
-                  {g.courses.map((c) => (
-                    <Link
-                      key={c.slug}
-                      href={courseHref(c)}
-                      scroll={false}
-                      title={c.name}
-                      aria-current={c.slug === course.slug ? "true" : undefined}
-                      className={pill(c.slug === course.slug)}
-                    >
-                      {c.short}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </nav>
-        </Field>
+            <Field n={2} label="Course">
+              <nav aria-label="Course" className="space-y-3">
+                {groupCourses(pyqCoursesForLevel(course.level)).map((g) => (
+                  <div key={g.name}>
+                    <p className="mb-1.5 text-xs text-muted">{g.name}</p>
+                    <div className={pillGrid}>
+                      {g.courses.map((c) => (
+                        <Link
+                          key={c.slug}
+                          href={courseHref(c)}
+                          scroll={false}
+                          title={c.name}
+                          aria-current={c.slug === course.slug ? "true" : undefined}
+                          className={pill(c.slug === course.slug)}
+                        >
+                          {c.short}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </nav>
+            </Field>
+          </>
+        )}
 
-        <Field n={3} label="Exam">
+        <Field n={narrowed ? 2 : 3} label="Exam">
           <nav aria-label="Exam" className="grid gap-1.5">
-            {EXAM_CHOICES.map((choice) => {
-              const papers = choice.exam ? course.papers.filter((p) => p.exam === choice.exam).length : 0;
-              const info = choice.exam && papers ? PRACTICE_EXAMS[choice.exam] : undefined;
+            {EXAM_CHOICES.filter((c) => !c.onlyWithPapers || course.papers.some((p) => p.exam === c.exam)).map((choice) => {
+              const papers = course.papers.filter((p) => p.exam === choice.exam).length;
+              const info = papers ? PRACTICE_EXAMS[choice.exam] : undefined;
               const on = choice.exam === exam.slug;
               const body = (
                 <>
                   <span
-                    className={cn("size-2 shrink-0 rounded-full", info ? (info.tone === "blue" ? "bg-blue" : "bg-purple") : "border border-muted")}
+                    className={cn("size-2 shrink-0 rounded-full", info ? EXAM_TONES[info.tone].dot : "border border-muted")}
                     aria-hidden
                   />
                   <span className="min-w-0 flex-1">
@@ -290,7 +385,7 @@ function Chooser({ plan, index: { pyqCoursesForLevel } }: { plan: PracticePlan; 
               return info ? (
                 <Link
                   key={choice.label}
-                  href={practiceHref(course.slug, choice.exam)}
+                  href={keep(practiceHref(course.slug, choice.exam))}
                   scroll={false}
                   aria-current={on ? "true" : undefined}
                   className={cn(
@@ -324,7 +419,7 @@ function SelectionBar({ plan }: { plan: PracticePlan }) {
     <div
       className={cn(
         "sticky top-16 z-20 rounded-xl border bg-bg/90 px-4 py-2.5 shadow-sm backdrop-blur lg:hidden",
-        exam.tone === "blue" ? "border-blue/40" : "border-purple/40",
+        EXAM_TONES[exam.tone].border,
       )}
     >
       <p className="flex items-center gap-2.5 text-sm">
@@ -351,7 +446,7 @@ function CourseHeader({ plan }: { plan: PracticePlan }) {
   const [oldest, newest] = [monthYear(papers.at(-1)!.label), monthYear(papers[0].label)];
   const range = oldest === newest ? newest : `${oldest} – ${newest}`;
   return (
-    <header className={cn("card border-l-4 p-5 md:p-6", exam.tone === "blue" ? "border-l-blue" : "border-l-purple")}>
+    <header className={cn("card border-l-4 p-5 md:p-6", EXAM_TONES[exam.tone].edge)}>
       <p className="eyebrow">
         {level.name}
         {course.code && <span className="font-mono"> · {course.code}</span>}
@@ -374,7 +469,7 @@ function CourseHeader({ plan }: { plan: PracticePlan }) {
         ))}
       </dl>
       {/* Say why Qualifier papers are Quiz 1 practice. */}
-      {exam.source !== exam.label && <p className="mt-4 text-sm text-muted">{exam.about}</p>}
+      {exam.slug === "qualifier" && <p className="mt-4 text-sm text-muted">{exam.about}</p>}
     </header>
   );
 }

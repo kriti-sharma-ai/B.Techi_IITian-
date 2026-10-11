@@ -40,8 +40,9 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
 
   const result = scoreMock(mock, attempt.responses);
   const weakest = [...result.sections].sort((a, b) => a.percent - b.percent)[0];
-  // End Term papers cover courses without a BTechi course page, so the server says whether one exists.
-  const reviseLink = mock.endTerm ? revise : `/subjects/${weakest.subjectSlug}`;
+  // End Term and quiz papers cover courses without a BTechi course page, so the server says whether one exists.
+  const pastPaper = Boolean(mock.endTerm || mock.quiz);
+  const reviseLink = pastPaper ? revise : `/subjects/${weakest.subjectSlug}`;
   const single = isSingleSubject(mock);
   const section = mock.sections[tab];
 
@@ -64,10 +65,10 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
               <p className="mt-2 max-w-xl text-muted">
                 {single
                   ? result.qualified
-                    ? mock.endTerm
+                    ? pastPaper
                       ? `You scored ${result.average}%, above ${QUALIFIER_CUTOFF.perSubject}%. Try another sitting's paper next.`
                       : `You scored ${result.average}%, clearing the ${QUALIFIER_CUTOFF.perSubject}% course cutoff. Try another year's paper next.`
-                    : mock.endTerm
+                    : pastPaper
                       ? `You scored ${result.average}%, below ${QUALIFIER_CUTOFF.perSubject}%. Review the answers below, then retake.`
                       : `You scored ${result.average}%. The course cutoff is ${QUALIFIER_CUTOFF.perSubject}%. Review the answers below, then retake.`
                   : result.qualified

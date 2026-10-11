@@ -39,6 +39,8 @@ export function mergePersonal(a: PersonalState, b: PersonalState): PersonalState
     // One entry per subject/topic, keeping the latest visit.
     visits: unionBy([...a.visits, ...b.visits].sort(newestFirst), [], (x) => `${x.subjectSlug}/${x.topicSlug ?? ""}`).slice(0, CAP.visits),
     qualifierAttempts: unionBy(a.qualifierAttempts, b.qualifierAttempts, (x) => x.id).sort(newestFirst).slice(0, CAP.qualifierAttempts),
+    // The study profile saved last wins.
+    plan: a.plan && b.plan ? (a.plan.updatedAt >= b.plan.updatedAt ? a.plan : b.plan) : (a.plan ?? b.plan),
   };
 }
 

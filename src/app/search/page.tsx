@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui";
 import { param } from "@/lib/filters";
 import { categoryLabels, search, type SearchCategory, type SearchDoc } from "@/lib/search";
 import { cn } from "@/lib/utils";
+import { loadContent } from "@/lib/cms";
 
 export async function generateMetadata({ searchParams }: PageProps<"/search">): Promise<Metadata> {
   const q = param(await searchParams, "q");
@@ -50,6 +51,7 @@ function Result({ doc }: { doc: SearchDoc }) {
 }
 
 export default async function SearchPage({ searchParams }: PageProps<"/search">) {
+  await loadContent();
   const sp = await searchParams;
   const q = param(sp, "q") ?? "";
   const cat = param(sp, "cat") as SearchCategory | undefined;

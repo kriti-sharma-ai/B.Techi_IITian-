@@ -15,6 +15,7 @@ import {
   Home,
   LayoutDashboard,
   Menu,
+  Newspaper,
   PenLine,
   PlayCircle,
   ScrollText,
@@ -32,7 +33,7 @@ import { ThemeToggle } from "./theme-toggle";
 import { buttonClass } from "./ui";
 import { skillCategories, skillCourses } from "@/lib/data/skills";
 import { useHydrated, useStore } from "@/lib/store";
-import { cn } from "@/lib/utils";
+import { cn, isAuthPage } from "@/lib/utils";
 
 /* ───────────── Navigation data ───────────── */
 
@@ -50,10 +51,11 @@ const resourcesGroup: NavGroup = {
   items: [
     { href: "/notes", label: "Notes", description: "Lecture notes & revision sheets", icon: FileText },
     { href: "/pyqs", label: "PYQs", description: "Qualifier & End Term papers, by level", icon: ScrollText },
-    { href: "/notes?type=Cheat+sheet", label: "Cheat sheets", description: "One-page summaries per course", icon: StickyNote },
-    { href: "/notes?type=Formula+sheet", label: "Formula sheets", description: "Every formula you need, in one place", icon: Sigma },
+    { href: "/qualifier/notes", label: "Cheat sheets", description: "Qualifier notes: Maths I, Stats I, CT, English I", icon: StickyNote },
+    { href: "/qualifier/notes#formula-sheets", label: "Formula sheets", description: "Every formula you need, in one place", icon: Sigma },
     { href: "/videos", label: "Videos", description: "Topic-mapped video lessons", icon: PlayCircle },
     { href: "/books", label: "Books", description: "Recommended texts & references", icon: BookOpen },
+    { href: "/blog", label: "Blog", description: "Guides on the IITM BS, exams, data skills & careers", icon: Newspaper },
   ],
 };
 
@@ -69,6 +71,7 @@ const mobileGroups: { label: string; items: { href: string; label: string }[] }[
     items: [
       { href: "/saved", label: "Saved resources" },
       { href: "/dashboard", label: "My dashboard" },
+      { href: "/profile", label: "Study profile" },
     ],
   },
 ];
@@ -608,7 +611,8 @@ export function BottomNav() {
   const pathname = usePathname();
   const user = useStore((s) => s.user);
   const hydrated = useHydrated();
-  if (pathname.startsWith("/admin")) return null;
+  // Auth pages are full-screen; the bar would cover their submit buttons.
+  if (pathname.startsWith("/admin") || isAuthPage(pathname)) return null;
   const items = [
     { href: "/", label: "Home", icon: Home },
     { href: "/programs", label: "Explore", icon: Compass },
@@ -630,7 +634,7 @@ export function BottomNav() {
           const on =
             isActive(pathname, href) ||
             (label === "Explore" && (pathname.startsWith("/subjects") || pathname.startsWith("/notes"))) ||
-            (label === "Profile" && pathname.startsWith("/dashboard"));
+            (label === "Profile" && (pathname.startsWith("/dashboard") || pathname.startsWith("/profile")));
           return (
             <li key={label}>
               <Link

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Code, Play, Star } from "lucide-react";
+import { BookOpen, Code, Star } from "lucide-react";
 import type { Accent, SkillCourse } from "@/lib/types";
 import { getSkillCategory, skillStats } from "@/lib/content";
 import { accentStyles, cn, formatNumber } from "@/lib/utils";
@@ -110,7 +110,7 @@ export function SkillCard({ course, priority = false }: { course: SkillCourse; p
         {/* Preview affordance on hover */}
         <span className="absolute inset-0 grid place-items-center bg-fg/0 opacity-0 transition-all duration-200 group-hover:bg-fg/5 group-hover:opacity-100" aria-hidden>
           <span className="grid size-11 place-items-center rounded-full bg-brand text-brand-ink shadow-lg transition-transform duration-200 group-hover:scale-105">
-            <Play className="size-5 translate-x-px fill-current" />
+            <BookOpen className="size-5" />
           </span>
         </span>
         <div className="absolute top-2.5 right-2.5 z-10">
@@ -130,7 +130,7 @@ export function SkillCard({ course, priority = false }: { course: SkillCourse; p
         <p className="mt-1 truncate text-xs text-muted">{course.instructor.name}</p>
         <Rating course={course} className="mt-1.5" />
         <p className="mt-1 text-xs text-muted">
-          {formatHours(s.minutes)} · {s.lectures} lectures · {course.level}
+          {formatHours(s.minutes)} · {s.lectures} lessons · {course.level}
         </p>
         <div className="mt-auto flex items-center gap-2 pt-3">
           <span className="text-base font-extrabold">Free</span>

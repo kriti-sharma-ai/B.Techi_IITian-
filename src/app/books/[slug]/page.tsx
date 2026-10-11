@@ -6,11 +6,16 @@ import { BookCover } from "@/components/cards";
 import { BookmarkButton, ReportButton } from "@/components/resource-actions";
 import { Badge, Breadcrumbs, buttonClass } from "@/components/ui";
 import { books, getBook, getSubject } from "@/lib/content";
+import { loadContent } from "@/lib/cms";
 
-export const dynamicParams = false;
-export const generateStaticParams = () => books.map((b) => ({ slug: b.slug }));
+// Books published in the CMS after the build are rendered on first visit.
+export async function generateStaticParams() {
+  await loadContent();
+  return books.map((b) => ({ slug: b.slug }));
+}
 
 export async function generateMetadata({ params }: PageProps<"/books/[slug]">): Promise<Metadata> {
+  await loadContent();
   const b = getBook((await params).slug);
   if (!b) return {};
   return {
@@ -21,6 +26,7 @@ export async function generateMetadata({ params }: PageProps<"/books/[slug]">): 
 }
 
 export default async function BookPage({ params }: PageProps<"/books/[slug]">) {
+  await loadContent();
   const book = getBook((await params).slug);
   if (!book) notFound();
   const subjectList = book.subjectSlugs.map(getSubject).filter((s) => s !== undefined);

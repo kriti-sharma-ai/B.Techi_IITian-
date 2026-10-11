@@ -9,8 +9,9 @@ import { Breadcrumbs, EmptyState, buttonClass } from "@/components/ui";
 import { getPyq, getSubject, pyqTitle, questionsFor, topicTitle } from "@/lib/content";
 import { param } from "@/lib/filters";
 import { getPyqIndex } from "@/lib/pyq-index";
-import { courseExams, examFromParam, getPyqPractice, isPyqPracticeMode, practiceHref } from "@/lib/pyq-practice";
+import { courseExams, examFromParam, getPyqPractice, isPyqPracticeMode, practiceHref, quiz1Fallback } from "@/lib/pyq-practice";
 import type { Question } from "@/lib/types";
+import { loadContent } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Practice session",
@@ -27,6 +28,7 @@ function shuffle<T>(arr: T[]) {
 }
 
 export default async function SessionPage({ searchParams }: PageProps<"/practice/session">) {
+  await loadContent();
   const sp = await searchParams;
   const course = param(sp, "course");
   if (course) return <PyqSession courseSlug={course} exam={param(sp, "exam")} mode={param(sp, "mode")} seed={param(sp, "seed")} />;
@@ -98,8 +100,10 @@ async function PyqSession({ courseSlug, exam: examParam, mode, seed: seedParam }
   const [{ getPyqCourse }, { buildPyqSet }] = await Promise.all([getPyqIndex(), getPyqPractice()]);
   const course = getPyqCourse(courseSlug);
   if (!course) notFound();
+  const exams = courseExams(course);
   const asked = examFromParam(examParam);
-  const exam = asked && courseExams(course).includes(asked) ? asked : "end-term";
+  const wanted = asked === "quiz-1" ? quiz1Fallback(exams) : asked;
+  const exam = wanted && exams.includes(wanted) ? wanted : exams.includes("end-term") ? "end-term" : exams[0];
   // The seed makes a set reproducible. Without one, draw a fresh set; the client pins its seed in the URL.
   const parsed = Number(seedParam);
   const seed = seedParam && Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : Math.floor(Math.random() * 2 ** 31);

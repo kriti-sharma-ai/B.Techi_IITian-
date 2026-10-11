@@ -1,6 +1,6 @@
 import type { QualifierMock } from "../../types";
 
-// Tools in Data Science: IIT Madras BS End Term papers (3 papers, 104 questions).
+// Tools in Data Science: IIT Madras BS End Term papers (4 papers, 138 questions).
 // Questions, options and answer keys are reproduced from the official question papers.
 // Figures, code and maths typeset as images are in public/pyq/<slug>/, embedded inline as
 // ![Figure](src#WxH). Range answers are stored as midpoint ± tolerance.
@@ -523,6 +523,530 @@ export const tdsEndTermPapers: QualifierMock[] = [
               "Research Query → Keyword Matching → Return Most Recent Papers",
               "Research Query → Multi-Modal Embedding (text + code + visual + data) → Cross-Disciplinary Retrieval → Concept Mapping → Synthesized Research Insights with Method Integration",
               "Research Query → Database Search → Template Response Generation"
+            ],
+            answer: 2,
+            explanation: ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    slug: "tds-end-term-aug-2025-an",
+    title: "TDS End Term · 31 Aug 2025 (AN)",
+    description: "End Term paper from the May 2025 term, afternoon session on 31 Aug 2025, with the official answer key.",
+    difficulty: "Standard",
+    durationMin: 90,
+    endTerm: {
+      date: "2025-08-31",
+      session: "AN",
+      term: "May 2025"
+    },
+    sections: [
+      {
+        subjectSlug: "tools-in-data-science",
+        title: "Tools in Data Science",
+        short: "TDS",
+        questions: [
+          {
+            id: "tds-end-term-aug-2025-an-q1",
+            type: "mcq",
+            marks: 1,
+            prompt: "In a data science team using Git with feature branches, what is the recommended approach for integrating experimental analysis without disrupting the main workflow?",
+            options: [
+              "Commit directly to main branch with descriptive messages",
+              "Create feature branch, conduct experiments, squash commits, and merge via pull request after peer review",
+              "Use git stash for all experimental work",
+              "Create separate repository for each experiment"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q2",
+            type: "mcq",
+            marks: 2,
+            prompt: "A retail analyst wants to find the total sales per store from a Pandas DataFrame df with columns store_id and sales_amount. Which is the most efficient Pandas command?",
+            options: [
+              "df['sales_amount'].sum()",
+              "df.groupby('store_id')['sales_amount'].sum()",
+              "df['sales_amount'].groupby('store_id')",
+              "df.pivot_table(index='sales_amount', values='store_id')"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q3",
+            type: "mcq",
+            marks: 1,
+            prompt: "A team is troubleshooting why a page loads slowly due to an API call taking a long time. Which Chrome DevTools tab should they use to find the slow request?",
+            options: [
+              "Sources",
+              "Network",
+              "Console",
+              "Application"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q4",
+            type: "mcq",
+            marks: 1,
+            prompt: "When standardizing inconsistent date formats in a dataset using OpenRefine, which\ntransformation approach is most effective for handling multiple date patterns?",
+            options: [
+              "Simple text replacement operations",
+              "GREL expressions with multiple conditional date parsing functions",
+              "Manual editing row by row",
+              "Export to Excel and use built-in date formatting"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q5",
+            type: "mcq",
+            marks: 2,
+            prompt: "For a MySQL database storing e-commerce analytics with complex joins and time-based queries, which indexing approach optimizes query performance?",
+            options: [
+              "Single primary key index per table",
+              "Composite indexes on frequently joined columns, covering indexes for common queries, and partitioning by date ranges",
+              "Unique indexes on all columns",
+              "No indexes to avoid write overhead"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q6",
+            type: "mcq",
+            marks: 1,
+            prompt: "When processing a streaming data source that generates CSV files every minute, which approach handles the data most efficiently without memory overflow?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q6-opt1-1.webp#393x21)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q6-opt2-1.webp#575x43)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q6-opt3-1.webp#307x23)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q6-opt4-1.webp#383x20)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q7",
+            type: "mcq",
+            marks: 1,
+            prompt: "When working with uv in a team environment, which approach ensures reproducible dependency management across different development machines?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q7-opt1-1.webp#351x22)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q7-opt2-1.webp#540x25)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q7-opt3-1.webp#380x21)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q7-opt4-1.webp#575x24)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q8",
+            type: "mcq",
+            marks: 1,
+            prompt: "For analyzing urban traffic patterns using GPS coordinate data, which combination of Python libraries provides the most comprehensive geospatial analysis capabilities?",
+            options: [
+              "Pandas + Matplotlib + NumPy",
+              "GeoPandas + Shapely + Folium + Contextily",
+              "Plotly + Seaborn + SciPy",
+              "Bokeh + PyProj"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q9",
+            type: "mcq",
+            marks: 2,
+            prompt: "For a web scraper that encounters 429 (Too Many Requests) status codes, which response strategy demonstrates ethical behavior?",
+            options: [
+              "Switch to different IP addresses to bypass the limit",
+              "Implement exponential backoff starting with the Retry-After header value, reduce request frequency permanently",
+              "Continue scraping but filter out 429 responses",
+              "Use browser automation to appear more human-like"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q10",
+            type: "mcq",
+            marks: 1,
+            prompt: "A data scientist accidentally committed sensitive credentials to a Git repository. Which sequence of commands safely removes the credentials from history?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q10-opt1-1.webp#425x24)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q10-opt2-1.webp#575x49)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q10-opt3-1.webp#353x27)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q10-opt4-1.webp#299x22)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q11",
+            type: "mcq",
+            marks: 1,
+            prompt: "For analyzing a massive time-series dataset that exceeds available RAM, which pandas strategy optimizes memory usage during aggregation operations?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q11-opt1-1.webp#360x24)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q11-opt2-1.webp#575x22)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q11-opt3-1.webp#392x21)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q11-opt4-1.webp#398x21)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q12",
+            type: "mcq",
+            marks: 1,
+            prompt: "For a machine learning API serving models with inconsistent response times, which monitoring strategy provides the most actionable insights?",
+            options: [
+              "Track only HTTP response status codes",
+              "Model inference time + request queue depth + resource utilization + error rate tracking",
+              "Monitor only successful prediction accuracy",
+              "Focus exclusively on network bandwidth usage"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q13",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 1: Healthcare Data Analytics Platform\nA hospital system is developing a HIPAA-compliant analytics platform to process electronic health records, predict patient outcomes, and support clinical decision-making while ensuring data privacy and regulatory compliance.\nBased on the above data, answer the given subquestions.",
+            prompt: "When designing prompts for a clinical AI assistant, which approach best balances medical accuracy with regulatory compliance?",
+            options: [
+              "Provide definitive medical diagnoses to assist doctors",
+              "Focus on pattern recognition while explicitly requiring human clinical judgment and including appropriate medical disclaimers",
+              "Restrict responses to general medical information only",
+              "Avoid medical topics entirely to prevent liability"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q14",
+            type: "multi",
+            marks: 2,
+            passage: "Scenario 1: Healthcare Data Analytics Platform\nA hospital system is developing a HIPAA-compliant analytics platform to process electronic health records, predict patient outcomes, and support clinical decision-making while ensuring data privacy and regulatory compliance.\nBased on the above data, answer the given subquestions.",
+            prompt: "Which factors most significantly impact computational costs when processing large-scale clinical datasets with LLMs?(Select all that apply)",
+            options: [
+              "Token density of clinical notes and medical terminology",
+              "Complexity of medical reasoning required for clinical insights",
+              "HIPAA compliance overhead and security measures",
+              "Context window usage for patient history analysis",
+              "Geographic location of healthcare facility"
+            ],
+            answer: [
+              0,
+              1,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q15",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 1: Healthcare Data Analytics Platform\nA hospital system is developing a HIPAA-compliant analytics platform to process electronic health records, predict patient outcomes, and support clinical decision-making while ensuring data privacy and regulatory compliance.\nBased on the above data, answer the given subquestions.",
+            prompt: "Which prompt engineering approach generates the most clinically valuable insights for patient care optimization?",
+            options: [
+              "\"Analyze patient symptoms\"",
+              "\"Review medical records\"",
+              "\"Based on this patient's lab results (glucose: 180 mg/dL, HbA1c: 8.2%), vital signs, and medication history, identify potential adjustment strategies for diabetes management while considering contraindications and monitoring requirements.\"",
+              "\"Suggest treatments for diabetes\""
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q16",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 2: Smart Manufacturing Quality Control System\nAn automotive manufacturer implements an IoT-based quality control system that monitors production line metrics, detects defects in real-time, and optimizes manufacturing processes across multiple assembly plants.\nSystem Architecture:\n● IoT sensors at production stations (coordinates provided for each plant)\n● Quality control hub: (42.3601^o N, 71.0589^o W)\n● Real-time data streams: temperature, pressure, vibration, visual inspection\n● ML models for defect prediction and process optimization\nBased on the above data, answer the given subquestions.",
+            prompt: "When a critical defect pattern is identified requiring immediate production line adjustment, which Git workflow ensures rapid deployment of updated quality parameters while maintaining manufacturing compliance?",
+            options: [
+              "Push changes directly to production branch to minimize downtime",
+              "Create quality-hotfix branch, implement changes with detailed validation, require quality engineer approval, and deploy with rollback capability",
+              "Apply temporary manual overrides and update version control later",
+              "Use email to communicate changes without version control"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q17",
+            type: "mcq",
+            marks: 2,
+            passage: "Scenario 2: Smart Manufacturing Quality Control System\nAn automotive manufacturer implements an IoT-based quality control system that monitors production line metrics, detects defects in real-time, and optimizes manufacturing processes across multiple assembly plants.\nSystem Architecture:\n● IoT sensors at production stations (coordinates provided for each plant)\n● Quality control hub: (42.3601^o N, 71.0589^o W)\n● Real-time data streams: temperature, pressure, vibration, visual inspection\n● ML models for defect prediction and process optimization\nBased on the above data, answer the given subquestions.",
+            prompt: "Quality engineers need to analyze sensor data to identify equipment performance degradation patterns. Which command-line approach efficiently processes large sensor log files to extract anomalous readings?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q17-opt1-1.webp#210x24)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q17-opt2-1.webp#575x51)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q17-opt3-1.webp#274x29)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q17-opt4-1.webp#255x23)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q18",
+            type: "mcq",
+            marks: 2,
+            passage: "Scenario 2: Smart Manufacturing Quality Control System\nAn automotive manufacturer implements an IoT-based quality control system that monitors production line metrics, detects defects in real-time, and optimizes manufacturing processes across multiple assembly plants.\nSystem Architecture:\n● IoT sensors at production stations (coordinates provided for each plant)\n● Quality control hub: (42.3601^o N, 71.0589^o W)\n● Real-time data streams: temperature, pressure, vibration, visual inspection\n● ML models for defect prediction and process optimization\nBased on the above data, answer the given subquestions.",
+            prompt: "For deploying the quality control system across geographically distributed manufacturing plants with strict latency and reliability requirements, which architecture approach ensures optimal performance?",
+            options: [
+              "Centralized cloud-only deployment",
+              "Edge computing with local ML inference, container orchestration, and federated data synchronization",
+              "Single server per plant without redundancy",
+              "Manual quality control without automated systems"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q19",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 2: Smart Manufacturing Quality Control System\nAn automotive manufacturer implements an IoT-based quality control system that monitors production line metrics, detects defects in real-time, and optimizes manufacturing processes across multiple assembly plants.\nSystem Architecture:\n● IoT sensors at production stations (coordinates provided for each plant)\n● Quality control hub: (42.3601^o N, 71.0589^o W)\n● Real-time data streams: temperature, pressure, vibration, visual inspection\n● ML models for defect prediction and process optimization\nBased on the above data, answer the given subquestions.",
+            prompt: "When detecting defects in real-time during high-speed production, which algorithmic approach best balances accuracy with processing speed requirements?",
+            options: [
+              "Data based statistical analysis",
+              "Optimized computer vision pipeline with cascaded classifiers and early rejection mechanisms",
+              "Manual visual inspection only",
+              "Random sampling for quality checks"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q20",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 2: Smart Manufacturing Quality Control System\nAn automotive manufacturer implements an IoT-based quality control system that monitors production line metrics, detects defects in real-time, and optimizes manufacturing processes across multiple assembly plants.\nSystem Architecture:\n● IoT sensors at production stations (coordinates provided for each plant)\n● Quality control hub: (42.3601^o N, 71.0589^o W)\n● Real-time data streams: temperature, pressure, vibration, visual inspection\n● ML models for defect prediction and process optimization\nBased on the above data, answer the given subquestions.",
+            prompt: "The system uses GPS coordinates to optimize supply chain logistics between plants. What is the computational advantage of using the Haversine formula in manufacturing logistics?",
+            options: [
+              "Accurate distance calculations for optimizing transportation routes and delivery scheduling",
+              "Calculating exact production times",
+              "Determining equipment maintenance schedules",
+              "Measuring network latency between plants"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q21",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 3: Gaming Platform User Behavior Analysis\nYou're analyzing server logs from a multiplayer gaming platform during a major tournament event. The logs contain player actions, performance metrics, and system resource utilization data.\n\n![Figure](/pyq/tds-end-term-aug-2025-an/q21-passage-1.webp#575x151)\n\nAnalysis Requirements:\n●Filter competitive gaming actions (kills, deaths, objectives) during tournament hours (14:00- 20:59)\n●Differentiate between PC and console gaming patterns\n●Track successful game events (status codes 200-299)\n●Analyze player performance across different game modes\nBased on the above data, answer the given subquestions.",
+            prompt: "Which log entry correctly represents a successful console objective action during the tournament window?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q21-opt1-1.webp#575x77)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q21-opt2-1.webp#575x78)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q21-opt3-1.webp#575x76)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q21-opt4-1.webp#575x73)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q22",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 3: Gaming Platform User Behavior Analysis\nYou're analyzing server logs from a multiplayer gaming platform during a major tournament event. The logs contain player actions, performance metrics, and system resource utilization data.\n\n![Figure](/pyq/tds-end-term-aug-2025-an/q21-passage-1.webp#575x151)\n\nAnalysis Requirements:\n●Filter competitive gaming actions (kills, deaths, objectives) during tournament hours (14:00- 20:59)\n●Differentiate between PC and console gaming patterns\n●Track successful game events (status codes 200-299)\n●Analyze player performance across different game modes\nBased on the above data, answer the given subquestions.",
+            prompt: "For analyzing \"competitive gaming actions during tournament hours with successful responses\", which log fields are essential?",
+            options: [
+              "PlayerIP, PlayerID, Platform, MatchID",
+              "Timestamp, ACTION, GameMode, StatusCode, ActionType",
+              "PlayerID, ResponseTime, UserAgent, Level",
+              "PlayerIP, Timestamp, Platform, ResponseTime"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q23",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 3: Gaming Platform User Behavior Analysis\nYou're analyzing server logs from a multiplayer gaming platform during a major tournament event. The logs contain player actions, performance metrics, and system resource utilization data.\n\n![Figure](/pyq/tds-end-term-aug-2025-an/q21-passage-1.webp#575x151)\n\nAnalysis Requirements:\n●Filter competitive gaming actions (kills, deaths, objectives) during tournament hours (14:00- 20:59)\n●Differentiate between PC and console gaming patterns\n●Track successful game events (status codes 200-299)\n●Analyze player performance across different game modes\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/tds-end-term-aug-2025-an/q23-1.webp#288x109)",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q23-opt1-1.webp#177x23)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q23-opt2-1.webp#206x23)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q23-opt3-1.webp#208x20)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q23-opt4-1.webp#215x20)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q24",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 3: Gaming Platform User Behavior Analysis\nYou're analyzing server logs from a multiplayer gaming platform during a major tournament event. The logs contain player actions, performance metrics, and system resource utilization data.\n\n![Figure](/pyq/tds-end-term-aug-2025-an/q21-passage-1.webp#575x151)\n\nAnalysis Requirements:\n●Filter competitive gaming actions (kills, deaths, objectives) during tournament hours (14:00- 20:59)\n●Differentiate between PC and console gaming patterns\n●Track successful game events (status codes 200-299)\n●Analyze player performance across different game modes\nBased on the above data, answer the given subquestions.",
+            prompt: "To filter gaming actions between 14:00 and 20:59 tournament hours, which condition correctly validates the time range?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q24-opt1-1.webp#265x21)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q24-opt2-1.webp#267x24)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q24-opt3-1.webp#445x22)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q24-opt4-1.webp#504x22)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q25",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 3: Gaming Platform User Behavior Analysis\nYou're analyzing server logs from a multiplayer gaming platform during a major tournament event. The logs contain player actions, performance metrics, and system resource utilization data.\n\n![Figure](/pyq/tds-end-term-aug-2025-an/q21-passage-1.webp#575x151)\n\nAnalysis Requirements:\n●Filter competitive gaming actions (kills, deaths, objectives) during tournament hours (14:00- 20:59)\n●Differentiate between PC and console gaming patterns\n●Track successful game events (status codes 200-299)\n●Analyze player performance across different game modes\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/tds-end-term-aug-2025-an/q25-1.webp#364x80)",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q25-opt1-1.webp#321x26)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q25-opt2-1.webp#214x24)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q25-opt3-1.webp#213x24)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q25-opt4-1.webp#214x24)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q26",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 3: Gaming Platform User Behavior Analysis\nYou're analyzing server logs from a multiplayer gaming platform during a major tournament event. The logs contain player actions, performance metrics, and system resource utilization data.\n\n![Figure](/pyq/tds-end-term-aug-2025-an/q21-passage-1.webp#575x151)\n\nAnalysis Requirements:\n●Filter competitive gaming actions (kills, deaths, objectives) during tournament hours (14:00- 20:59)\n●Differentiate between PC and console gaming patterns\n●Track successful game events (status codes 200-299)\n●Analyze player performance across different game modes\nBased on the above data, answer the given subquestions.",
+            prompt: "Which approach most accurately identifies console gaming platforms from the Platform field?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q26-opt1-1.webp#217x23)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q26-opt2-1.webp#575x51)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q26-opt3-1.webp#303x23)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q26-opt4-1.webp#282x25)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q27",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 3: Gaming Platform User Behavior Analysis\nYou're analyzing server logs from a multiplayer gaming platform during a major tournament event. The logs contain player actions, performance metrics, and system resource utilization data.\n\n![Figure](/pyq/tds-end-term-aug-2025-an/q21-passage-1.webp#575x151)\n\nAnalysis Requirements:\n●Filter competitive gaming actions (kills, deaths, objectives) during tournament hours (14:00- 20:59)\n●Differentiate between PC and console gaming patterns\n●Track successful game events (status codes 200-299)\n●Analyze player performance across different game modes\nBased on the above data, answer the given subquestions.",
+            prompt: "For identifying successful gaming events, which status code condition is most appropriate?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q27-opt1-1.webp#136x22)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q27-opt2-1.webp#255x20)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q27-opt3-1.webp#195x20)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q27-opt4-1.webp#133x19)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q28",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 3: Gaming Platform User Behavior Analysis\nYou're analyzing server logs from a multiplayer gaming platform during a major tournament event. The logs contain player actions, performance metrics, and system resource utilization data.\n\n![Figure](/pyq/tds-end-term-aug-2025-an/q21-passage-1.webp#575x151)\n\nAnalysis Requirements:\n●Filter competitive gaming actions (kills, deaths, objectives) during tournament hours (14:00- 20:59)\n●Differentiate between PC and console gaming patterns\n●Track successful game events (status codes 200-299)\n●Analyze player performance across different game modes\nBased on the above data, answer the given subquestions.",
+            prompt: "To efficiently count different action types (KILL, DEATH, OBJECTIVE) from filtered tournament data, which approach is optimal?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q28-opt1-1.webp#265x24)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q28-opt2-1.webp#413x50)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q28-opt3-1.webp#266x25)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q28-opt4-1.webp#222x45)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q29",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 3: Gaming Platform User Behavior Analysis\nYou're analyzing server logs from a multiplayer gaming platform during a major tournament event. The logs contain player actions, performance metrics, and system resource utilization data.\n\n![Figure](/pyq/tds-end-term-aug-2025-an/q21-passage-1.webp#575x151)\n\nAnalysis Requirements:\n●Filter competitive gaming actions (kills, deaths, objectives) during tournament hours (14:00- 20:59)\n●Differentiate between PC and console gaming patterns\n●Track successful game events (status codes 200-299)\n●Analyze player performance across different game modes\nBased on the above data, answer the given subquestions.",
+            prompt: "If tournament action counts appear inconsistently high, which systematic debugging approach identifies the issue?",
+            options: [
+              "Assume tournament data corruption and exclude results",
+              "Validate each filter systematically: time range → game mode → action type → status codes → platform detection",
+              "Reduce dataset randomly and extrapolate",
+              "Focus only on successful status codes"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q30",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 3: Gaming Platform User Behavior Analysis\nYou're analyzing server logs from a multiplayer gaming platform during a major tournament event. The logs contain player actions, performance metrics, and system resource utilization data.\n\n![Figure](/pyq/tds-end-term-aug-2025-an/q21-passage-1.webp#575x151)\n\nAnalysis Requirements:\n●Filter competitive gaming actions (kills, deaths, objectives) during tournament hours (14:00- 20:59)\n●Differentiate between PC and console gaming patterns\n●Track successful game events (status codes 200-299)\n●Analyze player performance across different game modes\nBased on the above data, answer the given subquestions.",
+            prompt: "For processing massive gaming log files (100GB+) with memory constraints, which Python approach provides optimal performance?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q30-opt1-1.webp#252x45)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q30-opt2-1.webp#425x107)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q30-opt3-1.webp#294x23)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q30-opt4-1.webp#277x46)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q31",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 4: Supply Chain Optimization RAG System.\nA global logistics company implements an advanced RAG system that integrates supplier data, transportation networks, demand forecasting, and regulatory information to optimize supply chain decisions across multiple industries and geographical regions.\nMulti-Modal Supply Chain RAG Architecture:\n●Supplier Intelligence: Vendor profiles, performance metrics, capacity data, compliance records ●Transportation Networks: Route optimization, carrier performance, fuel costs, delivery tracking ●Market Analysis: Demand forecasting, price volatility, seasonal patterns, economic indicators ●Regulatory Compliance: Trade regulations, customs requirements, sustainability standards ●Risk Assessment: Supply disruptions, geopolitical factors, weather impacts, financial stability Based on the above data, answer the given subquestions.",
+            prompt: "What is the primary advantage of multi-modal RAG systems for supply chain management compared to traditional ERP systems?",
+            options: [
+              "Lower implementation costs and simpler maintenance",
+              "Real-time integration of supplier performance, market dynamics, and regulatory changes for adaptive supply chain optimization",
+              "Exclusive focus on historical transaction data",
+              "Reduced data storage requirements"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q32",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 4: Supply Chain Optimization RAG System.\nA global logistics company implements an advanced RAG system that integrates supplier data, transportation networks, demand forecasting, and regulatory information to optimize supply chain decisions across multiple industries and geographical regions.\nMulti-Modal Supply Chain RAG Architecture:\n●Supplier Intelligence: Vendor profiles, performance metrics, capacity data, compliance records ●Transportation Networks: Route optimization, carrier performance, fuel costs, delivery tracking ●Market Analysis: Demand forecasting, price volatility, seasonal patterns, economic indicators ●Regulatory Compliance: Trade regulations, customs requirements, sustainability standards ●Risk Assessment: Supply disruptions, geopolitical factors, weather impacts, financial stability Based on the above data, answer the given subquestions.",
+            prompt: "Which system prompt design best supports strategic supply chain decision-making across multiple stakeholders?",
+            options: [
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q32-opt1-1.webp#575x52)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q32-opt2-1.webp#575x47)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q32-opt3-1.webp#575x127)",
+              "![Figure](/pyq/tds-end-term-aug-2025-an/q32-opt4-1.webp#575x24)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q33",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 4: Supply Chain Optimization RAG System.\nA global logistics company implements an advanced RAG system that integrates supplier data, transportation networks, demand forecasting, and regulatory information to optimize supply chain decisions across multiple industries and geographical regions.\nMulti-Modal Supply Chain RAG Architecture:\n●Supplier Intelligence: Vendor profiles, performance metrics, capacity data, compliance records ●Transportation Networks: Route optimization, carrier performance, fuel costs, delivery tracking ●Market Analysis: Demand forecasting, price volatility, seasonal patterns, economic indicators ●Regulatory Compliance: Trade regulations, customs requirements, sustainability standards ●Risk Assessment: Supply disruptions, geopolitical factors, weather impacts, financial stability Based on the above data, answer the given subquestions.",
+            prompt: "A supply chain manager asks: \"Given current semiconductor shortages, rising fuel costs, and new sustainability regulations, how should we restructure our electronics component sourcing strategy for the next quarter?\" Which response demonstrates optimal supply chain synthesis?",
+            options: [
+              "\"Semiconductor shortages require finding alternative suppliers and adjusting inventory levels.\"",
+              "\"Here are 20 suppliers with current pricing and availability data: [lists suppliers with specifications]\"",
+              "\"Let's analyze this systematically: Current semiconductor lead times average 16-24 weeks (vs. normal 4-6 weeks). Three strategic options emerge: 1) Dual-sourcing with 60% Asian suppliers, 40% nearshore (reduces risk but increases costs 12-18%), 2) Forward buying with 90-day inventory (capital impact: $2.3M, storage costs: $45K/month), 3) Design modifications using available components (6-week timeline, engineering costs). Fuel cost increases affect logistics by 8-15%. New EU sustainability regs require supplier carbon disclosure. Which risk tolerance and capital constraints guide your preference?\"",
+              "\"Supply chain restructuring requires comprehensive analysis of multiple interdependent factors.\""
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "tds-end-term-aug-2025-an-q34",
+            type: "mcq",
+            marks: 1,
+            passage: "Scenario 4: Supply Chain Optimization RAG System.\nA global logistics company implements an advanced RAG system that integrates supplier data, transportation networks, demand forecasting, and regulatory information to optimize supply chain decisions across multiple industries and geographical regions.\nMulti-Modal Supply Chain RAG Architecture:\n●Supplier Intelligence: Vendor profiles, performance metrics, capacity data, compliance records ●Transportation Networks: Route optimization, carrier performance, fuel costs, delivery tracking ●Market Analysis: Demand forecasting, price volatility, seasonal patterns, economic indicators ●Regulatory Compliance: Trade regulations, customs requirements, sustainability standards ●Risk Assessment: Supply disruptions, geopolitical factors, weather impacts, financial stability Based on the above data, answer the given subquestions.",
+            prompt: "Which processing sequence correctly describes the supply chain RAG system's comprehensive optimization workflow?",
+            options: [
+              "Supply Chain Query → Supplier Database Search → Cost Comparison Report",
+              "Supply Chain Query → Keyword Matching → Return Cheapest Options",
+              "Supply Chain Query → Multi-Modal Analysis (supplier performance + market conditions + regulatory requirements + risk factors) → Scenario Modeling → Optimization Recommendations with Risk-Adjusted Trade-offs",
+              "Supply Chain Query → Historical Data Retrieval → Standard Report Generation"
             ],
             answer: 2,
             explanation: ""

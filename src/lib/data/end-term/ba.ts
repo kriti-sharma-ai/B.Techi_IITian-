@@ -1,6 +1,6 @@
 import type { QualifierMock } from "../../types";
 
-// Business Analytics: IIT Madras BS End Term papers (3 papers, 96 questions).
+// Business Analytics: IIT Madras BS End Term papers (4 papers, 126 questions).
 // Questions, options and answer keys are reproduced from the official question papers.
 // Figures, code and maths typeset as images are in public/pyq/<slug>/, embedded inline as
 // ![Figure](src#WxH). Range answers are stored as midpoint ± tolerance.
@@ -422,6 +422,405 @@ export const baEndTermPapers: QualifierMock[] = [
             marks: 2,
             passage: "You are in the process of selecting an ideal car when a lot of options are available. For example, the three brands that have been on top of your mind are: Maruti, Hyundai, and Volkswagen. Similarly, there are 2 engine options that are highly efficient: 1000 CC and 1500 CC. Lastly, the type of automatic gearbox is another important variable in deciding the ideal car. There are 3 gearbox options available: AMT, AT and DSC. Also, assume that Maruti is the least preferred brand, and assume AMT is the least preferred gearbox. Based on the inputs available, you build a regression model, and the coefficients are given below in Figure 1.\n\n![Figure](/pyq/ba-end-term-aug-2025-fn/q29-passage-1.webp#575x461)\n\nBased on the above data, answer the given subquestions.",
             prompt: "How much is the weightage provided by the customer for the Gearbox?\n[Note: Enter your answer in decimal rounded to four decimal places. For example, if your answer is 0.635450, then enter the answer as “63.5450”]",
+            answer: 53.7,
+            tolerance: 0.05,
+            explanation: "Official answer key accepts any value from 53.65 to 53.75."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    slug: "ba-end-term-aug-2025-an",
+    title: "BA End Term · 31 Aug 2025 (AN)",
+    description: "End Term paper from the May 2025 term, afternoon session on 31 Aug 2025, with the official answer key.",
+    difficulty: "Standard",
+    durationMin: 90,
+    endTerm: {
+      date: "2025-08-31",
+      session: "AN",
+      term: "May 2025"
+    },
+    sections: [
+      {
+        subjectSlug: "business-analytics",
+        title: "Business Analytics",
+        short: "BA",
+        questions: [
+          {
+            id: "ba-end-term-aug-2025-an-q1",
+            type: "multi",
+            marks: 1,
+            prompt: "Which of the following Regression equations is/are MLR? (Choose all that is/are applicable)",
+            options: [
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q1-opt1-1.webp#342x29)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q1-opt2-1.webp#346x28)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q1-opt3-1.webp#458x30)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q1-opt4-1.webp#542x26)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q1-opt5-1.webp#575x27)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q1-opt6-1.webp#270x24)"
+            ],
+            answer: [
+              0,
+              1,
+              2,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q2",
+            type: "numerical",
+            marks: 1,
+            passage: "Given the confusion matrix in Table-1, answer the given subquestions\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q2-passage-1.webp#575x211)",
+            prompt: "What is the number of False Positives for Class-A?",
+            answer: 20,
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q3",
+            type: "numerical",
+            marks: 1,
+            passage: "Given the confusion matrix in Table-1, answer the given subquestions\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q2-passage-1.webp#575x211)",
+            prompt: "What is the precision for predicting Class-D? [Note: Enter your answer in “PERCENTAGE” rounded to two decimal places without the percentage symbol. For example, if your answer is 1.235% then enter the answer as “1.24”]",
+            answer: 51,
+            tolerance: 1,
+            explanation: "Official answer key accepts any value from 50 to 52."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q4",
+            type: "numerical",
+            marks: 1,
+            passage: "Given the confusion matrix in Table-1, answer the given subquestions\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q2-passage-1.webp#575x211)",
+            prompt: "What is the recall for predicting Class-B? [Note: Enter your answer in “PERCENTAGE” rounded to two decimal places without the percentage symbol. For example, if your answer is 1.235% then enter the answer as “1.24”]",
+            answer: 88,
+            tolerance: 1,
+            explanation: "Official answer key accepts any value from 87 to 89."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q5",
+            type: "numerical",
+            marks: 1,
+            passage: "Given the confusion matrix in Table-1, answer the given subquestions\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q2-passage-1.webp#575x211)",
+            prompt: "What is the accuracy of the model? [Note: Enter your answer in “PERCENTAGE” rounded to two decimal places without the percentage symbol. For example, if your answer is 1.235% then enter the answer as “1.24”]",
+            answer: 65,
+            tolerance: 1,
+            explanation: "Official answer key accepts any value from 64 to 66."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q6",
+            type: "numerical",
+            marks: 2,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical A manufacturer produces lenses for sunglasses. In a given day, a total of 100 products were produced. Products produced usually can have scratches. The manufacturer is interested to see if the length of the scratches on produced lenses is normally distributed. Hence, based on the production of 100 lenses, he has identified the length of scratch on each lens and the grouped data is presented to you in Table-2. Further, from sample, the manufacturer has computed the standard deviation to be 1.00. Based on the production lot of 100 units (given sample), you are asked to check if the “Length of Scratches on produced lenses” follows a Normal Distribution. Given this information, answer the given subquestions.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q6-passage-1.webp#575x208)",
+            prompt: "What would be the mean of the distribution, if you want to check the hypothesis “The length of scratches on a produced lens follows a Normal Distribution”? [Note: Enter your answer rounded to two decimal places. For example, if your answer is 1.235 then enter the answer as “1.24”]",
+            answer: 1.75,
+            tolerance: 0.15,
+            explanation: "Official answer key accepts any value from 1.6 to 1.9."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q7",
+            type: "numerical",
+            marks: 1,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical A manufacturer produces lenses for sunglasses. In a given day, a total of 100 products were produced. Products produced usually can have scratches. The manufacturer is interested to see if the length of the scratches on produced lenses is normally distributed. Hence, based on the production of 100 lenses, he has identified the length of scratch on each lens and the grouped data is presented to you in Table-2. Further, from sample, the manufacturer has computed the standard deviation to be 1.00. Based on the production lot of 100 units (given sample), you are asked to check if the “Length of Scratches on produced lenses” follows a Normal Distribution. Given this information, answer the given subquestions.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q6-passage-1.webp#575x208)",
+            prompt: "How many (count) of degrees of freedom will be presented for the computed test statistic for this problem if you want to check the hypothesis “The length of scratches on a produced lens follows a Normal Distribution”?",
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q8",
+            type: "numerical",
+            marks: 2,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical A manufacturer produces lenses for sunglasses. In a given day, a total of 100 products were produced. Products produced usually can have scratches. The manufacturer is interested to see if the length of the scratches on produced lenses is normally distributed. Hence, based on the production of 100 lenses, he has identified the length of scratch on each lens and the grouped data is presented to you in Table-2. Further, from sample, the manufacturer has computed the standard deviation to be 1.00. Based on the production lot of 100 units (given sample), you are asked to check if the “Length of Scratches on produced lenses” follows a Normal Distribution. Given this information, answer the given subquestions.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q6-passage-1.webp#575x208)",
+            prompt: "What would be expected frequency in the last bin of the frequency table (Hint: The frequency table is obtained by only modifying Table-2 without adding any new bins)? [Note: Enter your answer rounded to two decimal places. For example, if your answer is 1.235 then enter the answer as “1.24”]",
+            answer: 18.5,
+            tolerance: 0.5,
+            explanation: "Official answer key accepts any value from 18 to 19."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q9",
+            type: "multi",
+            marks: 1,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical A manufacturer produces lenses for sunglasses. In a given day, a total of 100 products were produced. Products produced usually can have scratches. The manufacturer is interested to see if the length of the scratches on produced lenses is normally distributed. Hence, based on the production of 100 lenses, he has identified the length of scratch on each lens and the grouped data is presented to you in Table-2. Further, from sample, the manufacturer has computed the standard deviation to be 1.00. Based on the production lot of 100 units (given sample), you are asked to check if the “Length of Scratches on produced lenses” follows a Normal Distribution. Given this information, answer the given subquestions.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q6-passage-1.webp#575x208)",
+            prompt: "Say the computed test statistic for the test is 12.3. Then, using Figure-2, at a significance level of 10% what will be concluded (choose all that are correct)?\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q9-1.webp#575x286)",
+            options: [
+              "Reject the Null Hypothesis",
+              "Do not Reject the Null Hypothesis",
+              "Reject the Alternative Hypothesis",
+              "Do not Reject the Alternative Hypothesis",
+              "Accept the Null Hypothesis",
+              "Accept the Alternative Hypothesis"
+            ],
+            answer: [
+              0
+            ],
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q10",
+            type: "numerical",
+            marks: 2,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical Table-2 provides the Cumulative Television Rating Points (CTRP), money spend on promotion (in Lakhs, denoted by “P”), and the advertisement revenue (in Lakhs, denoted by “R”) generated over a one-month period for 8 different television programs. The Revenue a TV show makes is the Dependent Variable. Using this data, answer the given subquestions.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q10-passage-1.webp#500x260)",
+            prompt: "What is the total variability in the dependent variable? [Note: Enter your answer in decimal rounded to two decimal places. For example, if your answer is 1.235 then enter the answer as “1.24”]",
+            answer: 19.5,
+            tolerance: 1.5,
+            explanation: "Official answer key accepts any value from 18 to 21."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q11",
+            type: "numerical",
+            marks: 1,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical Table-2 provides the Cumulative Television Rating Points (CTRP), money spend on promotion (in Lakhs, denoted by “P”), and the advertisement revenue (in Lakhs, denoted by “R”) generated over a one-month period for 8 different television programs. The Revenue a TV show makes is the Dependent Variable. Using this data, answer the given subquestions.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q10-passage-1.webp#500x260)",
+            prompt: "The correlation coefficient between “CTRP” and “P” is 0.19. Then, what will be the Adjusted R- Square for the model (built using data in Table-2), where “CTRP” is the response variable and “P” is the predictor? [Note: Enter your answer in decimal rounded to two decimal places. For example, if your answer is 1.235 then enter the answer as “1.24”]",
+            answer: -0.13,
+            tolerance: 0.01,
+            explanation: "Official answer key accepts any value from -0.14 to -0.12."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q12",
+            type: "numerical",
+            marks: 2,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical Table-2 provides the Cumulative Television Rating Points (CTRP), money spend on promotion (in Lakhs, denoted by “P”), and the advertisement revenue (in Lakhs, denoted by “R”) generated over a one-month period for 8 different television programs. The Revenue a TV show makes is the Dependent Variable. Using this data, answer the given subquestions.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q10-passage-1.webp#500x260)",
+            prompt: "![Figure](/pyq/ba-end-term-aug-2025-an/q12-1.webp#423x225)",
+            answer: 11.5,
+            tolerance: 0.5,
+            explanation: "Official answer key accepts any value from 11 to 12."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q13",
+            type: "numerical",
+            marks: 1,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical Milo The Goofball (MTG) is a company that makes footballs for “Recreation (R)” games and “Professional (P)” games. The process of making a football involves the following three stages Stage-1: Cutting and Dyeing\nStage-2: Sewing\nStage-3: Inspection\nIt is seen that making a R-game football requires 6 minutes in Stage-1, 15 minutes in Stage-2 and 6 minutes in Stage-3. On the other hand, the football for a P-game requires 12 minutes, 9 minutes and 6 minutes in Stages 1,2 and 3 respectively.\nFor the coming planning period of 4 weeks, MTG has 340 hours available in Stage-1, 480 hours available in Stage-2 and 300 hours available in Stage-3. Moreover, if required, MTG can avail more hours in Stage-1 at an additional cost of Rs. 200 per hour.\nMoreover, a R-game football generates a profit of Rs. 500 per piece and a P-game football generates a profit of Rs. 800 per piece. Furthermore, MTG has forecasted that the maximum number of footballs it can sell is 3000. With an objective to maximize the profit, formulate the problem as a Linear Program and answer the given subquestions.",
+            prompt: "How many decision variables are present in the standard form of the primal linear Programming Problem?",
+            answer: 3,
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q14",
+            type: "numerical",
+            marks: 1,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical Milo The Goofball (MTG) is a company that makes footballs for “Recreation (R)” games and “Professional (P)” games. The process of making a football involves the following three stages Stage-1: Cutting and Dyeing\nStage-2: Sewing\nStage-3: Inspection\nIt is seen that making a R-game football requires 6 minutes in Stage-1, 15 minutes in Stage-2 and 6 minutes in Stage-3. On the other hand, the football for a P-game requires 12 minutes, 9 minutes and 6 minutes in Stages 1,2 and 3 respectively.\nFor the coming planning period of 4 weeks, MTG has 340 hours available in Stage-1, 480 hours available in Stage-2 and 300 hours available in Stage-3. Moreover, if required, MTG can avail more hours in Stage-1 at an additional cost of Rs. 200 per hour.\nMoreover, a R-game football generates a profit of Rs. 500 per piece and a P-game football generates a profit of Rs. 800 per piece. Furthermore, MTG has forecasted that the maximum number of footballs it can sell is 3000. With an objective to maximize the profit, formulate the problem as a Linear Program and answer the given subquestions.",
+            prompt: "How many decision variables are present in the Dual Linear Programming Problem (which is developed based on the standard form of the problem)?",
+            answer: 4,
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q15",
+            type: "numerical",
+            marks: 1,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical Milo The Goofball (MTG) is a company that makes footballs for “Recreation (R)” games and “Professional (P)” games. The process of making a football involves the following three stages Stage-1: Cutting and Dyeing\nStage-2: Sewing\nStage-3: Inspection\nIt is seen that making a R-game football requires 6 minutes in Stage-1, 15 minutes in Stage-2 and 6 minutes in Stage-3. On the other hand, the football for a P-game requires 12 minutes, 9 minutes and 6 minutes in Stages 1,2 and 3 respectively.\nFor the coming planning period of 4 weeks, MTG has 340 hours available in Stage-1, 480 hours available in Stage-2 and 300 hours available in Stage-3. Moreover, if required, MTG can avail more hours in Stage-1 at an additional cost of Rs. 200 per hour.\nMoreover, a R-game football generates a profit of Rs. 500 per piece and a P-game football generates a profit of Rs. 800 per piece. Furthermore, MTG has forecasted that the maximum number of footballs it can sell is 3000. With an objective to maximize the profit, formulate the problem as a Linear Program and answer the given subquestions.",
+            prompt: "If the company decides to make 1500 P-game footballs, 1000 R-game footballs, then how many decision variables in the Dual Linear Programming Problem (which is developed based on the standard form of the problem) will have a value of “0”?",
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q16",
+            type: "numerical",
+            marks: 1,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical Milo The Goofball (MTG) is a company that makes footballs for “Recreation (R)” games and “Professional (P)” games. The process of making a football involves the following three stages Stage-1: Cutting and Dyeing\nStage-2: Sewing\nStage-3: Inspection\nIt is seen that making a R-game football requires 6 minutes in Stage-1, 15 minutes in Stage-2 and 6 minutes in Stage-3. On the other hand, the football for a P-game requires 12 minutes, 9 minutes and 6 minutes in Stages 1,2 and 3 respectively.\nFor the coming planning period of 4 weeks, MTG has 340 hours available in Stage-1, 480 hours available in Stage-2 and 300 hours available in Stage-3. Moreover, if required, MTG can avail more hours in Stage-1 at an additional cost of Rs. 200 per hour.\nMoreover, a R-game football generates a profit of Rs. 500 per piece and a P-game football generates a profit of Rs. 800 per piece. Furthermore, MTG has forecasted that the maximum number of footballs it can sell is 3000. With an objective to maximize the profit, formulate the problem as a Linear Program and answer the given subquestions.",
+            prompt: "If the company decides to make 1500 P-game footballs, 1000 R-game footballs, then what is the objective function value for the primal linear programming problem (which is in the standard form)? [Note: Enter your answer rounded to two decimal places. For example, if your answer is 1.235 then enter the answer as “1.24”]",
+            answer: -1238000,
+            accepts: [
+              -1238000,
+              1238000
+            ],
+            explanation: "Official answer key accepts -1238000 or 1238000."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q17",
+            type: "multi",
+            marks: 1,
+            passage: "The Following Comprehension and Related Subquestions are Purely Hypothetical Milo The Goofball (MTG) is a company that makes footballs for “Recreation (R)” games and “Professional (P)” games. The process of making a football involves the following three stages Stage-1: Cutting and Dyeing\nStage-2: Sewing\nStage-3: Inspection\nIt is seen that making a R-game football requires 6 minutes in Stage-1, 15 minutes in Stage-2 and 6 minutes in Stage-3. On the other hand, the football for a P-game requires 12 minutes, 9 minutes and 6 minutes in Stages 1,2 and 3 respectively.\nFor the coming planning period of 4 weeks, MTG has 340 hours available in Stage-1, 480 hours available in Stage-2 and 300 hours available in Stage-3. Moreover, if required, MTG can avail more hours in Stage-1 at an additional cost of Rs. 200 per hour.\nMoreover, a R-game football generates a profit of Rs. 500 per piece and a P-game football generates a profit of Rs. 800 per piece. Furthermore, MTG has forecasted that the maximum number of footballs it can sell is 3000. With an objective to maximize the profit, formulate the problem as a Linear Program and answer the given subquestions.",
+            prompt: "If the MTG decides to make 1500 P-game footballs, 1000 R-game footballs, then which of the following options is/are correct",
+            options: [
+              "MTG will purchase addition capacity in Stage-1",
+              "MTG will not purchase addition capacity in Stage-1",
+              "MTG will have excess capacity in Stage-1",
+              "MTG will have excess capacity in Stage-2",
+              "MTG will have excess capacity in Stage-3",
+              "MTG will have deficit capacity in Stage-2",
+              "MTG will have deficit capacity in Stage-3",
+              "MTG cannot make 1500 P-game footballs and 100 R-game footballs as it is an infeasible solution",
+              "Cannot say as more information is required"
+            ],
+            answer: [
+              0,
+              3,
+              4
+            ],
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q18",
+            type: "multi",
+            marks: 1.5,
+            passage: "Assume that you have trained a logistic regression model on a training dataset containing features X1 and X2. The coefficients obtained are given in Table 1.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q18-passage-1.webp#369x140)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "What is the correct interpretation of the coefficient β1?",
+            options: [
+              "If the X1 increases by 1 unit, the log of odds of the positive outcome increases by 0.3, assuming X2 to be constant.",
+              "If the X1 increases by 1 unit, the odds of the positive outcome increases by 35% (e^(0.3) = 1.35), assuming X2 to be constant.",
+              "Higher values of X1 are associated with an increased likelihood of the positive outcome",
+              "None of these"
+            ],
+            answer: [
+              0,
+              1,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q19",
+            type: "multi",
+            marks: 1.5,
+            passage: "Assume that you have trained a logistic regression model on a training dataset containing features X1 and X2. The coefficients obtained are given in Table 1.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q18-passage-1.webp#369x140)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "What is the correct interpretation of the coefficient β2?",
+            options: [
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q19-opt1-1.webp#368x76)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q19-opt2-1.webp#347x83)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q19-opt3-1.webp#372x85)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q19-opt4-1.webp#115x27)"
+            ],
+            answer: [
+              0,
+              1,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q20",
+            type: "mcq",
+            marks: 1.5,
+            prompt: "Assume that you are working on a classification problem where you are predicting whether the patient is suffering from cancer or not. As a business analyst, select the metric that is most appropriate.",
+            options: [
+              "Precision",
+              "Recall",
+              "R2",
+              "MAPE",
+              "All of these"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q21",
+            type: "mcq",
+            marks: 1.5,
+            prompt: "Assume that you are working on a classification problem where you are predicting whether the email is spam or not. As a business analyst, select the metric that is most appropriate.",
+            options: [
+              "Precision",
+              "Recall",
+              "R2",
+              "MAPE",
+              "All of these"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q22",
+            type: "numerical",
+            marks: 2,
+            passage: "There are six business units. There are two outputs and one input under consideration. You are solving the optimization problem for business unit 3, and you find that the efficiency is 0.8. You see that the dual variables corresponding to the constraints of business units 2 and 5 are non- zero, and the dual variables corresponding to the constraints of other units are zero. The dual variables corresponding to the constraints of business units 2 and 5 are 0.55 and 0.25, respectively. Based on Table 4, answers the given subquestions.\nHint: At every step, round off your answers to 4 decimal places.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q22-passage-1.webp#313x113)",
+            prompt: "How much will the Output 1 in HCU 3?\n[Note: Enter your answer in decimal rounded to four decimal places. For example, if your answer is 1000.63545, then enter the answer as “1000.6355”]",
+            answer: 7875,
+            tolerance: 1,
+            explanation: "Official answer key accepts any value from 7874 to 7876."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q23",
+            type: "numerical",
+            marks: 2,
+            passage: "There are six business units. There are two outputs and one input under consideration. You are solving the optimization problem for business unit 3, and you find that the efficiency is 0.8. You see that the dual variables corresponding to the constraints of business units 2 and 5 are non- zero, and the dual variables corresponding to the constraints of other units are zero. The dual variables corresponding to the constraints of business units 2 and 5 are 0.55 and 0.25, respectively. Based on Table 4, answers the given subquestions.\nHint: At every step, round off your answers to 4 decimal places.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q22-passage-1.webp#313x113)",
+            prompt: "How much will the Output 2 in HCU 3?\n[Note: Enter your answer in decimal rounded to four decimal places. For example, if your answer is 1000.63545, then enter the answer as “1000.6355”]",
+            answer: 17.2,
+            tolerance: 0.1,
+            explanation: "Official answer key accepts any value from 17.1 to 17.3."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q24",
+            type: "mcq",
+            marks: 2,
+            passage: "We are interested in understanding the efficiency of 5 Sales Offices. Each of the Sales Offices has an approved budget and a team size for achieving a fixed target of 10,00,000. As a Business Analyst, you must formulate a DEA problem using Linear programming for the Sales Office 3. Answer the given subquestions using the Table below.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q24-passage-1.webp#313x177)",
+            prompt: "What is the objective function?",
+            options: [
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q24-opt1-1.webp#284x27)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q24-opt2-1.webp#283x28)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q24-opt3-1.webp#197x27)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q24-opt4-1.webp#200x27)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q24-opt5-1.webp#132x27)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q25",
+            type: "mcq",
+            marks: 2,
+            passage: "We are interested in understanding the efficiency of 5 Sales Offices. Each of the Sales Offices has an approved budget and a team size for achieving a fixed target of 10,00,000. As a Business Analyst, you must formulate a DEA problem using Linear programming for the Sales Office 3. Answer the given subquestions using the Table below.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q24-passage-1.webp#313x177)",
+            prompt: "What is the type constraint?",
+            options: [
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q25-opt1-1.webp#253x26)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q25-opt2-1.webp#258x26)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q25-opt3-1.webp#259x24)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q25-opt4-1.webp#122x22)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q26",
+            type: "mcq",
+            marks: 2,
+            passage: "We are interested in understanding the efficiency of 5 Sales Offices. Each of the Sales Offices has an approved budget and a team size for achieving a fixed target of 10,00,000. As a Business Analyst, you must formulate a DEA problem using Linear programming for the Sales Office 3. Answer the given subquestions using the Table below.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q24-passage-1.webp#313x177)",
+            prompt: "Which of them is not a constraint for the LP problem pertaining to Sales Office 3?",
+            options: [
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q26-opt1-1.webp#405x21)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q26-opt2-1.webp#392x24)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q26-opt3-1.webp#386x26)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q26-opt4-1.webp#395x24)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q26-opt5-1.webp#398x27)",
+              "![Figure](/pyq/ba-end-term-aug-2025-an/q26-opt6-1.webp#123x27)"
+            ],
+            answer: 5,
+            explanation: ""
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q27",
+            type: "numerical",
+            marks: 2,
+            passage: "You are in the process of selecting an ideal Laptop when a lot of options are available. For example, the three brands that have been on top of your mind are Acer, HP, and Dell. Similarly, there are 2 RAM options available: 8 GB and 16 GB. Lastly, the processor is another important variable in deciding the ideal laptop. There are 3 processors available: i3, i5, and i7. Also, assume that Acer is the least preferred brand. Based on the inputs available, you build a regression model, and the coefficients are given below in Figure 1.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q27-passage-1.webp#575x448)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "What is the part worth to customers if he/she upgrades from an i3 to an i7 processor? [Note: Enter your answer in decimal rounded to four decimal places. For example, if your answer is 1000.63545, then enter the answer as “1000.6355”]",
+            answer: 4.83,
+            tolerance: 0.01,
+            explanation: "Official answer key accepts any value from 4.82 to 4.84."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q28",
+            type: "numerical",
+            marks: 2,
+            passage: "You are in the process of selecting an ideal Laptop when a lot of options are available. For example, the three brands that have been on top of your mind are Acer, HP, and Dell. Similarly, there are 2 RAM options available: 8 GB and 16 GB. Lastly, the processor is another important variable in deciding the ideal laptop. There are 3 processors available: i3, i5, and i7. Also, assume that Acer is the least preferred brand. Based on the inputs available, you build a regression model, and the coefficients are given below in Figure 1.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q27-passage-1.webp#575x448)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "How much is the weightage provided by the customer for the Brand?\n[Note: Enter your answer in decimal rounded to four decimal places. For example, if your answer is 0.63545, then enter the answer as “63.55”]",
+            answer: 20.37,
+            tolerance: 0.02,
+            explanation: "Official answer key accepts any value from 20.35 to 20.39."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q29",
+            type: "numerical",
+            marks: 2,
+            passage: "You are in the process of selecting an ideal Laptop when a lot of options are available. For example, the three brands that have been on top of your mind are Acer, HP, and Dell. Similarly, there are 2 RAM options available: 8 GB and 16 GB. Lastly, the processor is another important variable in deciding the ideal laptop. There are 3 processors available: i3, i5, and i7. Also, assume that Acer is the least preferred brand. Based on the inputs available, you build a regression model, and the coefficients are given below in Figure 1.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q27-passage-1.webp#575x448)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "How much is the weightage provided by the customer for the RAM?\n[Note: Enter your answer in decimal rounded to four decimal places. For example, if your answer is 0.63545, then enter the answer as “63.55”]",
+            answer: 25.93,
+            tolerance: 0.03,
+            explanation: "Official answer key accepts any value from 25.9 to 25.96."
+          },
+          {
+            id: "ba-end-term-aug-2025-an-q30",
+            type: "numerical",
+            marks: 2,
+            passage: "You are in the process of selecting an ideal Laptop when a lot of options are available. For example, the three brands that have been on top of your mind are Acer, HP, and Dell. Similarly, there are 2 RAM options available: 8 GB and 16 GB. Lastly, the processor is another important variable in deciding the ideal laptop. There are 3 processors available: i3, i5, and i7. Also, assume that Acer is the least preferred brand. Based on the inputs available, you build a regression model, and the coefficients are given below in Figure 1.\n\n![Figure](/pyq/ba-end-term-aug-2025-an/q27-passage-1.webp#575x448)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "How much is the weightage provided by the customer for the processor?\n[Note: Enter your answer in decimal rounded to four decimal places. For example, if your answer is 0.63545, then enter the answer as “63.55”]",
             answer: 53.7,
             tolerance: 0.05,
             explanation: "Official answer key accepts any value from 53.65 to 53.75."

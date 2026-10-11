@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 270" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="270" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">From chatbot to agent: a spectrum of autonomy</text>
+  <defs><linearGradient id="agents-spectrum-grad" x1="0" x2="1"><stop offset="0" stop-color="#eef1f4"/><stop offset="1" stop-color="#ffd21c"/></linearGradient></defs>
+  <rect x="40" y="70" width="720" height="14" rx="7" fill="url(#agents-spectrum-grad)"/>
+  <text class="tm" x="40" y="104" font-size="12" fill="#667085">Less autonomy · more predictable</text>
+  <text class="tm" x="760" y="104" font-size="12" fill="#667085" text-anchor="end">More autonomy · more risk to manage</text>
+  <g font-size="13">
+    <rect class="bg2" x="40" y="122" width="165" height="118" rx="14" fill="#eef1f4"/>
+    <text class="t" x="56" y="148" font-weight="800" fill="#171717">Chat assistant</text>
+    <text class="tm" x="56" y="170" fill="#667085">You ask, it answers.</text>
+    <text class="tm" x="56" y="188" fill="#667085">No actions in the</text>
+    <text class="tm" x="56" y="206" fill="#667085">world.</text>
+    <rect class="bg2" x="223" y="122" width="165" height="118" rx="14" fill="#eef1f4"/>
+    <text class="t" x="239" y="148" font-weight="800" fill="#171717">Tool use</text>
+    <text class="tm" x="239" y="170" fill="#667085">Calls one tool when</text>
+    <text class="tm" x="239" y="188" fill="#667085">needed: search, a</text>
+    <text class="tm" x="239" y="206" fill="#667085">calculator, code.</text>
+    <rect class="bg2" x="406" y="122" width="165" height="118" rx="14" fill="#eef1f4"/>
+    <text class="t" x="422" y="148" font-weight="800" fill="#171717">Workflow</text>
+    <text class="tm" x="422" y="170" fill="#667085">Fixed steps you</text>
+    <text class="tm" x="422" y="188" fill="#667085">designed; AI fills</text>
+    <text class="tm" x="422" y="206" fill="#667085">in each step.</text>
+    <rect class="brand" x="589" y="122" width="171" height="118" rx="14" fill="#ffd21c"/>
+    <text class="ink" x="605" y="148" font-weight="800" fill="#0b0b0b">Agent</text>
+    <text class="ink" x="605" y="170" fill="#0b0b0b">Plans its own steps,</text>
+    <text class="ink" x="605" y="188" fill="#0b0b0b">uses tools in a loop,</text>
+    <text class="ink" x="605" y="206" fill="#0b0b0b">stops when done.</text>
+  </g>
+  <text class="tm" x="40" y="262" font-size="11" fill="#667085">Most useful business systems today sit in the middle: workflows with a little agentic flexibility.</text>
+</svg>

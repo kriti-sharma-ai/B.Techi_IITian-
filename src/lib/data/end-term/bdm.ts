@@ -1,12 +1,346 @@
 import type { QualifierMock } from "../../types";
 
-// Business Data Management: IIT Madras BS End Term papers (3 papers, 71 questions).
+// Business Data Management: IIT Madras BS End Term papers (4 papers, 94 questions).
 // Questions, options and answer keys are reproduced from the official question papers.
 // Figures, code and maths typeset as images are in public/pyq/<slug>/, embedded inline as
 // ![Figure](src#WxH). Range answers are stored as midpoint ± tolerance.
 // Generated from the paper PDFs; edit with care.
 
 export const bdmEndTermPapers: QualifierMock[] = [
+  {
+    slug: "bdm-end-term-aug-2025-fn",
+    title: "BDM End Term · 31 Aug 2025 (FN)",
+    description: "End Term paper from the May 2025 term, forenoon session on 31 Aug 2025, with the official answer key.",
+    difficulty: "Standard",
+    durationMin: 90,
+    endTerm: {
+      date: "2025-08-31",
+      session: "FN",
+      term: "May 2025"
+    },
+    sections: [
+      {
+        subjectSlug: "business-data-management",
+        title: "Business Data Management",
+        short: "BDM",
+        questions: [
+          {
+            id: "bdm-end-term-aug-2025-fn-q1",
+            type: "mcq",
+            marks: 1,
+            prompt: "In the context of economic circular flow, what do firms primarily provide to the factor market?",
+            options: [
+              "Goods and services",
+              "Wages and rent",
+              "Raw materials",
+              "Capital investment"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q2",
+            type: "mcq",
+            marks: 1,
+            prompt: "Which Excel function would you use to find a value in the first column of a table and return a value from a specified column?",
+            options: [
+              "INDEX",
+              "MATCH",
+              "VLOOKUP",
+              "HLOOKUP"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q3",
+            type: "mcq",
+            marks: 1,
+            prompt: "Which of the following is a non-government source of economic data in India?",
+            options: [
+              "National Sample Survey (NSS)",
+              "Economic Census",
+              "Centre for Monitoring Indian Economy (CMIE)",
+              "Annual Survey of Industries (ASI)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q4",
+            type: "mcq",
+            marks: 1,
+            prompt: "What does a bimodal distribution in consumer spending data typically indicate?",
+            options: [
+              "Uniform spending across all consumers",
+              "Two distinct consumer groups with different spending patterns",
+              "Random spending behavior",
+              "Declining consumer confidence"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q5",
+            type: "mcq",
+            marks: 1,
+            prompt: "In a saturated market where 75% of existing customers show upgrade interest but new customer acquisition is limited, what should companies prioritize?",
+            options: [
+              "Aggressive new customer acquisition campaigns",
+              "Geographic expansion to untapped markets",
+              "Upgrade incentives and retention programs for existing customers",
+              "Price reduction strategies"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q6",
+            type: "mcq",
+            marks: 1,
+            prompt: "Days Sales Outstanding (DSO) primarily measures:",
+            options: [
+              "Average time to convert inventory to sales",
+              "Average time to collect accounts receivable",
+              "Average time to pay suppliers",
+              "Average production cycle time"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q7",
+            type: "mcq",
+            marks: 1,
+            prompt: "Which chart type is most appropriate for showing the relationship between two continuous variables?",
+            options: [
+              "Bar chart",
+              "Pie chart",
+              "Scatter plot",
+              "Histogram"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q8",
+            type: "mcq",
+            marks: 1,
+            prompt: "Internal Pool Sourcing refers to:",
+            options: [
+              "Hiring external consultants",
+              "Filling positions from within the organization",
+              "Outsourcing recruitment processes",
+              "Creating talent pools for future hiring"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q9",
+            type: "mcq",
+            marks: 1,
+            prompt: "To reduce credit losses, a FinTech company should:",
+            options: [
+              "Decrease credit score approval threshold",
+              "Increase credit score approval threshold",
+              "Eliminate credit checks",
+              "Approve all applications"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q10",
+            type: "mcq",
+            marks: 1,
+            prompt: "A customer purchases on ClipKart using HFCD Credit Card via PayBlade.\nWhat is the correct payment flow sequence?",
+            options: [
+              "Customer → HFCD → ClipKart",
+              "Customer → HFCD → PayBlade → ClipKart",
+              "Customer → PayBlade → HFCD → ClipKart",
+              "Customer → ClipKart → HFCD → PayBlade"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q11",
+            type: "mcq",
+            marks: 1,
+            prompt: "Personalized recommendations on e-commerce platforms primarily aim to:",
+            options: [
+              "Increase website traffic",
+              "Reduce server load",
+              "Improve conversion rates based on user behavior",
+              "Standardize user experience"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q12",
+            type: "mcq",
+            marks: 1,
+            prompt: "Which of the following best describes a lead indicator?",
+            options: [
+              "A metric that reflects past performance",
+              "A measure used to predict future trends",
+              "A statistic that measures current output",
+              "A financial result already realized"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q13",
+            type: "mcq",
+            marks: 1,
+            prompt: "Which Excel function would you use to calculate the average of a filtered range, ignoring hidden rows?",
+            options: [
+              "AVERAGE",
+              "SUBTOTAL",
+              "AGGREGATE",
+              "FILTER"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q14",
+            type: "mcq",
+            marks: 1,
+            prompt: "What is the primary objective of conducting an A/B test?",
+            options: [
+              "To test system scalability",
+              "To compare performance of two or more variants",
+              "To validate data quality",
+              "To measure user satisfaction"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q15",
+            type: "multi",
+            marks: 2,
+            prompt: "Which of the following is NOT a typical function of pivot tables?",
+            options: [
+              "Summarizing large datasets",
+              "Creating new records in source data",
+              "Grouping data by categories",
+              "Calculating aggregated values"
+            ],
+            answer: [
+              1
+            ],
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q16",
+            type: "mcq",
+            marks: 2,
+            prompt: "![Figure](/pyq/bdm-end-term-aug-2025-fn/q16-1.webp#534x138)",
+            options: [
+              "Treatment improved both metrics",
+              "Treatment improved conversion but reduced transaction value",
+              "Control performed better on all metrics",
+              "No significant difference between groups"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q17",
+            type: "mcq",
+            marks: 2,
+            prompt: "![Figure](/pyq/bdm-end-term-aug-2025-fn/q17-1.webp#531x155)",
+            options: [
+              "Campus Hiring",
+              "Job Portal",
+              "Employee Referral",
+              "Social Media"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q18",
+            type: "mcq",
+            marks: 2,
+            passage: "Based on the following sales data, answer the given subquestions\nProduct Sales Data (Rs. in thousands):\nProduct A: 45,000\nProduct B: 32,000\nProduct C: 58,000\nProduct D: 28,000\nProduct E: 37,000",
+            prompt: "What is the market share of Product C as a percentage?",
+            options: [
+              "27.5%",
+              "29.0%",
+              "30.5%",
+              "32.0%"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q19",
+            type: "mcq",
+            marks: 1,
+            passage: "Based on the following sales data, answer the given subquestions\nProduct Sales Data (Rs. in thousands):\nProduct A: 45,000\nProduct B: 32,000\nProduct C: 58,000\nProduct D: 28,000\nProduct E: 37,000",
+            prompt: "Which product has the second-highest market share?",
+            options: [
+              "Product A",
+              "Product B",
+              "Product D",
+              "Product E"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q20",
+            type: "numerical",
+            marks: 2,
+            passage: "![Figure](/pyq/bdm-end-term-aug-2025-fn/q20-passage-1.webp#498x150)",
+            prompt: "What is the total monthly revenue?",
+            answer: 1088000,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q21",
+            type: "mcq",
+            marks: 1,
+            passage: "![Figure](/pyq/bdm-end-term-aug-2025-fn/q20-passage-1.webp#498x150)",
+            prompt: "Which product has the highest Days of Inventory?",
+            options: [
+              "Alpha",
+              "Beta",
+              "Gamma",
+              "Delta"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q22",
+            type: "numerical",
+            marks: 2,
+            passage: "Based on the following product data, answer the given subquestions:\nPlanned Production Hours: 480\nLost Time Hours: 48\nDesign Speed: 200 units/hour\nActual Speed: 180 units/hour\nTotal Units Produced: 77,760\nGood Units: 74,772",
+            prompt: "Calculate Availability (in %)",
+            answer: 90,
+            explanation: ""
+          },
+          {
+            id: "bdm-end-term-aug-2025-fn-q23",
+            type: "numerical",
+            marks: 2,
+            passage: "Based on the following product data, answer the given subquestions:\nPlanned Production Hours: 480\nLost Time Hours: 48\nDesign Speed: 200 units/hour\nActual Speed: 180 units/hour\nTotal Units Produced: 77,760\nGood Units: 74,772",
+            prompt: "Calculate Overall Equipment Effectiveness (OEE) (in %)",
+            answer: 77.5,
+            tolerance: 0.5,
+            explanation: "Official answer key accepts any value from 77 to 78."
+          }
+        ]
+      }
+    ]
+  },
   {
     slug: "bdm-end-term-aug-2025-an",
     title: "BDM End Term · 31 Aug 2025 (AN)",

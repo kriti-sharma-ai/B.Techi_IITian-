@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="300" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">The AI-assisted analysis loop</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">Humans own the ends of the loop; AI speeds up the middle.</text>
+  <g font-size="14" text-anchor="middle">
+    <rect class="brand" x="40" y="100" width="130" height="80" rx="14" fill="#ffd21c"/>
+    <text class="ink" x="105" y="134" font-weight="700" fill="#0b0b0b">1. Frame</text>
+    <text class="ink" x="105" y="154" font-size="12" fill="#0b0b0b">the decision</text>
+    <rect class="bg2" x="195" y="100" width="130" height="80" rx="14" fill="#eef1f4"/>
+    <text class="t" x="260" y="134" font-weight="700" fill="#171717">2. Draft</text>
+    <text class="tm" x="260" y="154" font-size="12" fill="#667085">AI writes queries/code</text>
+    <rect class="bg2" x="350" y="100" width="130" height="80" rx="14" fill="#eef1f4"/>
+    <text class="t" x="415" y="134" font-weight="700" fill="#171717">3. Run</text>
+    <text class="tm" x="415" y="154" font-size="12" fill="#667085">on real data</text>
+    <rect class="red" x="505" y="100" width="130" height="80" rx="14" fill="#dc2626"/>
+    <text x="570" y="134" font-weight="700" fill="#fff">4. Verify</text>
+    <text x="570" y="154" font-size="12" fill="#fff">row counts, totals</text>
+    <rect class="brand" x="660" y="100" width="110" height="80" rx="14" fill="#ffd21c"/>
+    <text class="ink" x="715" y="134" font-weight="700" fill="#0b0b0b">5. Decide</text>
+    <text class="ink" x="715" y="154" font-size="12" fill="#0b0b0b">&amp; explain</text>
+  </g>
+  <g class="lf" stroke="#171717" stroke-width="2" fill="none">
+    <path d="M170 140 h20 M184 134 l6 6 -6 6"/><path d="M325 140 h20 M339 134 l6 6 -6 6"/>
+    <path d="M480 140 h20 M494 134 l6 6 -6 6"/><path d="M635 140 h20 M649 134 l6 6 -6 6"/>
+    <path d="M570 180 v40 h-310 v-34" stroke-dasharray="5 5"/><path d="M254 192 l6 -6 6 6"/>
+  </g>
+  <text class="tm" x="415" y="240" font-size="12" fill="#667085" text-anchor="middle">Wrong? Fix the prompt or the code and go round again</text>
+  <g font-size="12" class="tm" fill="#667085">
+    <text x="40" y="270">Yellow: human judgement. Grey: AI-accelerated.</text>
+    <text x="40" y="288">Red: the step most people skip, and the one that protects your credibility.</text>
+  </g>
+</svg>

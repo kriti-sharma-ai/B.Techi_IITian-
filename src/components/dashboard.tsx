@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Award, CalendarClock, Download, Flame, LogOut } from "lucide-react";
+import { ArrowRight, Award, CalendarClock, Download, Flame, LogOut, Settings2, Sparkles } from "lucide-react";
 import { actions, studyStreak, useHydrated, useStore, weeklyActivity } from "@/lib/store";
-import { allTopics, assignments, getProgram, getSubject, pyqs, subjects, topicKey } from "@/lib/content";
+import { PROGRAM_SLUG, allTopics, assignments, getProgram, getSubject, pyqs, subjects, topicKey } from "@/lib/content";
+import type { CourseExamLinks } from "@/lib/pyq-practice";
+import { getStudyCourse } from "@/lib/study-courses";
 import { ContinueLearning, SubjectProgressBar } from "./progress";
+import { openStudySetup } from "./study-setup";
 import { Button, ProgressBar, Stat, buttonClass } from "./ui";
 import { cn, formatDate } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
@@ -15,10 +18,12 @@ function greeting() {
   return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
 }
 
-export function Dashboard() {
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
+export function Dashboard({ exams }: { exams: CourseExamLinks[] }) {
   const hydrated = useHydrated();
   const state = useStore((s) => s);
-  const { user, attempts, completed, downloads, visits } = state;
+  const { user, attempts, completed, downloads, visits, plan } = state;
 
   if (!hydrated)
     return (
@@ -37,11 +42,17 @@ export function Dashboard() {
   const week = weeklyActivity(state);
   const maxDay = Math.max(1, ...week.map((d) => d.count));
 
-  // Courses: the student's current level plus anything they've opened.
-  const courseSlugs = new Set<string>([
-    ...subjects.filter((s) => user && s.programSlug === user.program && s.level === user.level && s.kind === "course" && s.group !== "electives").map((s) => s.slug),
-    ...visits.map((v) => v.subjectSlug),
-  ]);
+  // Courses: the student's study profile; without one, their level plus anything they've opened.
+  const courseSlugs = new Set<string>(
+    plan
+      ? plan.subjects
+      : [
+          ...subjects
+            .filter((s) => user && s.programSlug === user.program && s.level === user.level && s.kind === "course" && s.group !== "electives")
+            .map((s) => s.slug),
+          ...visits.map((v) => v.subjectSlug),
+        ],
+  );
   const courses = [...courseSlugs].map(getSubject).filter((s) => s !== undefined);
   const startedCourses = courses.filter((s) => allTopics(s).some(({ topic }) => completed.includes(topicKey(s.slug, topic.slug))));
 
@@ -58,7 +69,11 @@ export function Dashboard() {
     { t: "PYQ Master", earned: pyqAttempts >= 15, d: `${Math.min(pyqAttempts, 15)}/15 PYQ questions` },
   ];
 
-  const program = user?.program ? getProgram(user.program) : undefined;
+  const program = getProgram(user?.program ?? PROGRAM_SLUG);
+  const levelName = program?.levels.find((l) => l.slug === (plan?.level ?? user?.level))?.name;
+
+  const myExams = plan ? exams.filter((e) => plan.subjects.includes(e.slug)) : [];
+  const noPapers = plan ? plan.subjects.filter((s) => !exams.some((e) => e.slug === s)).map((s) => getStudyCourse(s)?.name ?? s) : [];
 
   return (
     <div className="space-y-10">
@@ -68,27 +83,53 @@ export function Dashboard() {
             {greeting()}, {user ? user.name.split(" ")[0] : "Student"} 👋
           </h1>
           <p className="mt-1 text-muted">
-            {user && program ? `${program.name} · ${program.levels.find((l) => l.slug === user.level)?.name ?? ""}` : "Your progress is saved in this browser."}
+            {user && program ? [program.name, levelName].filter(Boolean).join(" · ") : "Your progress is saved in this browser."}
           </p>
         </div>
-        {user ? (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={async () => {
-              actions.signOut();
-              await flushProgress();
-              await supabase.auth.signOut();
-            }}
-          >
-            <LogOut className="size-4" aria-hidden /> Sign out
-          </Button>
-        ) : (
-          <Link href="/signup" className={buttonClass("primary")}>
-            Create free account
-          </Link>
-        )}
+        <div className="flex flex-wrap items-center gap-1">
+          {plan && (
+            <Link href="/profile" className={buttonClass("ghost", "sm")}>
+              <Settings2 className="size-4" aria-hidden /> Study profile
+            </Link>
+          )}
+          {user ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={async () => {
+                actions.signOut();
+                await flushProgress();
+                await supabase.auth.signOut();
+              }}
+            >
+              <LogOut className="size-4" aria-hidden /> Sign out
+            </Button>
+          ) : (
+            <Link href="/signup" className={buttonClass("primary")}>
+              Create free account
+            </Link>
+          )}
+        </div>
       </div>
+
+      {!plan && (
+        <section aria-labelledby="setup-h" className="card flex flex-wrap items-center gap-4 border-brand/60 bg-brand/5 p-5">
+          <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-brand text-brand-ink">
+            <Sparkles className="size-5" aria-hidden />
+          </span>
+          <div className="min-w-[14rem] flex-1">
+            <h2 id="setup-h" className="font-semibold">
+              Set up your study environment
+            </h2>
+            <p className="text-sm text-muted">
+              Pick your level and this term&apos;s courses. BTechi will show just those courses, their past papers and practice.
+            </p>
+          </div>
+          <Button onClick={openStudySetup}>
+            Set up now <ArrowRight className="size-4" aria-hidden />
+          </Button>
+        </section>
+      )}
 
       <section aria-labelledby="learning-h" className="card grid grid-cols-2 gap-6 p-5 md:grid-cols-5">
         <h2 id="learning-h" className="sr-only">
@@ -105,6 +146,50 @@ export function Dashboard() {
           <p className="text-sm text-muted">Day streak</p>
         </div>
       </section>
+
+      {plan && (
+        <section aria-labelledby="exams-h">
+          <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
+            <h2 id="exams-h" className="text-lg font-bold">
+              Your exams
+            </h2>
+            {myExams.length > 0 && (
+              <Link href="/pyqs" className="inline-flex items-center gap-1 text-sm font-semibold hover:underline">
+                All your papers <ArrowRight className="size-4" aria-hidden />
+              </Link>
+            )}
+          </div>
+          {myExams.length > 0 ? (
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {myExams.map((e) => (
+                <li key={e.slug} className="card flex flex-col p-4">
+                  <p className="text-xs font-semibold text-muted">
+                    {e.code && <span className="font-mono">{e.code} · </span>}
+                    {e.exams.join(" · ")}
+                  </p>
+                  <p className="mt-1 leading-snug font-semibold">{e.name}</p>
+                  <p className="mt-1 text-xs text-muted tabular-nums">{plural(e.papers, "past paper")}</p>
+                  <div className="mt-auto flex gap-2 pt-4">
+                    <Link href={e.practiceHref} className={buttonClass("dark", "sm")}>
+                      Practise
+                    </Link>
+                    <Link href={e.href} className={buttonClass("secondary", "sm")}>
+                      Past papers
+                    </Link>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="card p-5 text-sm text-muted">
+              None of your courses have past papers yet. We&apos;ll list them here as they&apos;re added.
+            </div>
+          )}
+          {myExams.length > 0 && noPapers.length > 0 && (
+            <p className="mt-3 text-xs text-muted">No past papers yet for {new Intl.ListFormat("en").format(noPapers)}.</p>
+          )}
+        </section>
+      )}
 
       <section>
         <h2 className="mb-4 text-lg font-bold">Continue learning</h2>
@@ -130,7 +215,7 @@ export function Dashboard() {
             </ul>
           ) : (
             <div className="card p-5 text-sm text-muted">
-              Open a subject and it will show up here.{" "}
+              {plan ? "Your study profile has no BTechi course pages yet." : "Open a subject and it will show up here."}{" "}
               <Link href="/programs" className="font-semibold text-fg hover:underline">
                 Explore programs →
               </Link>
@@ -192,7 +277,12 @@ export function Dashboard() {
             {downloads.slice(0, 5).map((d, i) => (
               <li key={d.at + i} className="flex justify-between gap-3 px-5 py-3.5">
                 <span className="truncate font-medium">{d.title}</span>
-                <span className="shrink-0 text-xs text-muted">{new Date(d.at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</span>
+                <span className="shrink-0 text-xs text-muted">
+                  {new Date(d.at).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "short",
+                  })}
+                </span>
               </li>
             ))}
             {!downloads.length && <li className="px-5 py-3.5 text-muted">No downloads yet.</li>}

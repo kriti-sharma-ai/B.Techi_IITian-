@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { ContentSnapshot } from "@/components/content-snapshot";
 import { Providers } from "@/components/providers";
 import { BottomNav, Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { loadContent } from "@/lib/cms";
 import { SITE_URL } from "@/lib/utils";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -38,16 +40,20 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Questions stay on the server; pages hand them to client components as props.
+  const { questions: _, ...content } = await loadContent();
   return (
     <html lang="en" className={jakarta.variable} suppressHydrationWarning>
       <body className="min-h-dvh font-sans antialiased">
-        <Providers>
-          <Navbar />
-          <main id="main">{children}</main>
-          <Footer />
-          <BottomNav />
-        </Providers>
+        <ContentSnapshot content={content}>
+          <Providers>
+            <Navbar />
+            <main id="main">{children}</main>
+            <Footer />
+            <BottomNav />
+          </Providers>
+        </ContentSnapshot>
       </body>
     </html>
   );

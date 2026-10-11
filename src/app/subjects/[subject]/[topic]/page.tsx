@@ -22,13 +22,17 @@ import {
   subjects,
   videos,
 } from "@/lib/content";
+import { loadContent } from "@/lib/cms";
 import { cn } from "@/lib/utils";
 
-export const dynamicParams = false;
-export const generateStaticParams = () =>
-  subjects.flatMap((s) => allTopics(s).map(({ topic }) => ({ subject: s.slug, topic: topic.slug })));
+// Topics added in the CMS after the build are rendered on first visit.
+export async function generateStaticParams() {
+  await loadContent();
+  return subjects.flatMap((s) => allTopics(s).map(({ topic }) => ({ subject: s.slug, topic: topic.slug })));
+}
 
 async function load(params: PageProps<"/subjects/[subject]/[topic]">["params"]) {
+  await loadContent();
   const { subject: ss, topic: ts } = await params;
   const subject = getSubject(ss);
   const found = subject && findTopic(subject, ts);

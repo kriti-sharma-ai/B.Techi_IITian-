@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="340" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">Same first four courses, then the paths split</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">Foundation level of each programme (8 courses, 32 credits)</text>
+  <circle class="brand" cx="300" cy="195" r="125" fill="#ffd21c" opacity="0.35"/>
+  <circle class="blue" cx="500" cy="195" r="125" fill="#2563eb" opacity="0.22"/>
+  <text class="t" x="230" y="96" font-size="14" font-weight="800" fill="#171717" text-anchor="middle">Management &amp; DS</text>
+  <text class="t" x="570" y="96" font-size="14" font-weight="800" fill="#171717" text-anchor="middle">Data Science</text>
+  <g class="t" fill="#171717" font-size="13" text-anchor="middle">
+    <text x="245" y="160">Principles of</text><text x="245" y="176">Economics</text>
+    <text x="245" y="204">Financial</text><text x="245" y="220">Accounting</text>
+    <text x="245" y="248">Business Statistics</text>
+    <text x="245" y="276">Management Thought</text>
+    <text x="560" y="160">Maths II</text>
+    <text x="560" y="188">Stats II</text>
+    <text x="560" y="216">Programming</text><text x="560" y="232">in Python</text>
+    <text x="560" y="260">English II</text>
+  </g>
+  <g class="t" fill="#171717" font-size="13" font-weight="700" text-anchor="middle">
+    <text x="400" y="162">Maths I</text>
+    <text x="400" y="190">Stats I</text>
+    <text x="400" y="218">CT</text>
+    <text x="400" y="246">English I</text>
+  </g>
+  <text class="tm" x="400" y="290" font-size="11" fill="#667085" text-anchor="middle">= the qualifier</text>
+  <text class="tm" x="40" y="330" font-size="11" fill="#667085">Course lists from study.iitm.ac.in/mg and /ds academics pages, October 2026.</text>
+</svg>

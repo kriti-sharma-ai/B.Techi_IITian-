@@ -1,12 +1,14 @@
 "use client";
 
-// Per-student state (bookmarks, progress, attempts, downloads, reports).
-// Phase 1 keeps it in localStorage so the product works end-to-end without
-// a backend; each slice maps 1:1 to a table in supabase/schema.sql.
+// Per-student state (bookmarks, progress, attempts, downloads, study plan),
+// kept in localStorage and, for signed-in students, synced to the account by
+// lib/supabase/sync.ts. CMS data (uploads, curriculum, reports) lives in
+// Supabase and is managed in /admin.
 
 import { useSyncExternalStore } from "react";
 import type { ResourceKind } from "./types";
 import type { QualifierResponse } from "./qualifier";
+import type { StudyPlan } from "./study-plan";
 
 export type Role = "student" | "contributor" | "moderator" | "admin" | "super_admin";
 
@@ -23,30 +25,7 @@ export type User = {
 export type Bookmark = { kind: ResourceKind; id: string; title: string; href: string; subtitle?: string; savedAt: string };
 export type Attempt = { questionId: string; subjectSlug: string; topicSlug: string; correct: boolean | null; at: string };
 export type Download = { noteId: string; title: string; at: string };
-export type Report = {
-  id: string;
-  kind: ResourceKind;
-  resourceId: string;
-  title: string;
-  reason: string;
-  details: string;
-  at: string;
-  status: "open" | "resolved";
-};
 export type Visit = { subjectSlug: string; topicSlug?: string; at: string };
-export type Upload = {
-  id: string;
-  title: string;
-  type: string;
-  subjectSlug: string;
-  unitId?: string;
-  topicSlug?: string;
-  url?: string;
-  fileName?: string;
-  sizeKB?: number;
-  status: "draft" | "pending" | "published";
-  at: string;
-};
 export type QualifierAttempt = {
   id: string;
   mockSlug: string;
@@ -63,18 +42,6 @@ export type QualifierAttempt = {
   href?: string;
   at: string;
 };
-export type CustomUnit = { id: string; subjectSlug: string; title: string; topics: string[] };
-export type CustomSubject = {
-  slug: string;
-  name: string;
-  programSlug: string;
-  level: string;
-  group?: string;
-  code?: string;
-  credits: number;
-  description: string;
-  at: string;
-};
 
 export type State = {
   user: User | null;
@@ -83,18 +50,16 @@ export type State = {
   attempts: Attempt[];
   downloads: Download[];
   watched: string[];
-  reports: Report[];
   visits: Visit[];
-  uploads: Upload[];
-  customUnits: CustomUnit[];
-  customSubjects: CustomSubject[];
   qualifierAttempts: QualifierAttempt[];
+  /** Level and courses the student picked on /profile; null until they do. */
+  plan: StudyPlan | null;
   /** Account whose progress the personal slices hold; unset while they are a guest's. See lib/supabase/sync.ts. */
   syncedUserId?: string;
 };
 
-/** Slices saved to the signed-in student's account (table user_state). The rest are CMS-side. */
-export const PERSONAL_KEYS = ["bookmarks", "completed", "attempts", "downloads", "watched", "visits", "qualifierAttempts"] as const;
+/** Slices saved to the signed-in student's account (table user_state). */
+export const PERSONAL_KEYS = ["bookmarks", "completed", "attempts", "downloads", "watched", "visits", "qualifierAttempts", "plan"] as const;
 export type PersonalKey = (typeof PERSONAL_KEYS)[number];
 export type PersonalState = Pick<State, PersonalKey>;
 
@@ -107,12 +72,9 @@ const EMPTY: State = {
   attempts: [],
   downloads: [],
   watched: [],
-  reports: [],
   visits: [],
-  uploads: [],
-  customUnits: [],
-  customSubjects: [],
   qualifierAttempts: [],
+  plan: null,
 };
 
 let state: State = EMPTY;
@@ -124,7 +86,11 @@ function load() {
   loaded = true;
   try {
     const raw = window.localStorage.getItem(KEY);
-    if (raw) state = { ...EMPTY, ...JSON.parse(raw) };
+    if (raw) {
+      // Uploads, curriculum drafts and reports used to live here; they are in Supabase now.
+      const { reports: _r, uploads: _u, customUnits: _cu, customSubjects: _cs, ...saved } = JSON.parse(raw);
+      state = { ...EMPTY, ...saved };
+    }
   } catch {
     state = EMPTY;
   }
@@ -211,6 +177,12 @@ export const actions = {
   updateProfile(patch: Partial<User>) {
     update((s) => (s.user ? { ...s, user: { ...s.user, ...patch } } : s));
   },
+  setPlan(plan: Omit<StudyPlan, "updatedAt">) {
+    update((s) => ({ ...s, plan: { ...plan, updatedAt: now() } }));
+  },
+  clearPlan() {
+    update((s) => ({ ...s, plan: null }));
+  },
   toggleBookmark(b: Omit<Bookmark, "savedAt">) {
     update((s) => {
       const exists = s.bookmarks.some((x) => x.kind === b.kind && x.id === b.id);
@@ -246,37 +218,6 @@ export const actions = {
         { subjectSlug, topicSlug, at: now() },
         ...s.visits.filter((v) => !(v.subjectSlug === subjectSlug && v.topicSlug === topicSlug)),
       ].slice(0, 50),
-    }));
-  },
-  report(r: Omit<Report, "id" | "at" | "status">) {
-    update((s) => ({
-      ...s,
-      reports: [{ ...r, id: crypto.randomUUID(), at: now(), status: "open" }, ...s.reports],
-    }));
-  },
-  resolveReport(id: string) {
-    update((s) => ({ ...s, reports: s.reports.map((r) => (r.id === id ? { ...r, status: "resolved" } : r)) }));
-  },
-  addUpload(u: Omit<Upload, "id" | "at">) {
-    update((s) => ({ ...s, uploads: [{ ...u, id: crypto.randomUUID(), at: now() }, ...s.uploads] }));
-  },
-  setUploadStatus(id: string, status: Upload["status"]) {
-    update((s) => ({ ...s, uploads: s.uploads.map((u) => (u.id === id ? { ...u, status } : u)) }));
-  },
-  addCustomUnit(u: Omit<CustomUnit, "id">) {
-    update((s) => ({ ...s, customUnits: [...s.customUnits, { ...u, id: crypto.randomUUID() }] }));
-  },
-  removeCustomUnit(id: string) {
-    update((s) => ({ ...s, customUnits: s.customUnits.filter((u) => u.id !== id) }));
-  },
-  addCustomSubject(sub: Omit<CustomSubject, "at">) {
-    update((s) => ({ ...s, customSubjects: [...s.customSubjects, { ...sub, at: now() }] }));
-  },
-  removeCustomSubject(slug: string) {
-    update((s) => ({
-      ...s,
-      customSubjects: s.customSubjects.filter((x) => x.slug !== slug),
-      customUnits: s.customUnits.filter((u) => u.subjectSlug !== slug),
     }));
   },
   recordQualifierAttempt(a: Omit<QualifierAttempt, "id" | "at">) {

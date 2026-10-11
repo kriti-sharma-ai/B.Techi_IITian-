@@ -11,7 +11,7 @@ import { forSubject, getLevel, getSubject, pyqTitle, pyqs, questionsFor, topicTi
 import { reviseHref } from "@/lib/end-term";
 import { param } from "@/lib/filters";
 import { getPapers } from "@/lib/papers";
-import { PYQ_LEVELS, findUploadedPyq, getPyqIndex, uploadedPyqHref, uploadedPyqSegment, type CoursePyqs } from "@/lib/pyq-index";
+import { PYQ_EXAMS, PYQ_LEVELS, findUploadedPyq, getPyqIndex, uploadedPyqHref, uploadedPyqSegment, type CoursePyqs } from "@/lib/pyq-index";
 import { pyqLevelHref } from "@/lib/pyq-urls";
 import type { Pyq } from "@/lib/types";
 
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: PageProps<"/pyqs/[level]/[cou
   if (!r) return {};
   if (r.portal) {
     const p = r.course.papers.find((x) => x.slug === r.portal.slug)!;
-    const exam = p.exam === "end-term" ? "End Term" : "Qualifier";
+    const exam = PYQ_EXAMS.find((e) => e.slug === p.exam)!.label;
     return {
       title: `${r.course.name} ${exam} Paper, ${p.label}${p.session ? ` ${p.session}` : ""}`,
       description: `${r.portal.description} ${p.questions} questions, ${p.marks} marks; sit it in a timed exam portal.`,
@@ -65,12 +65,12 @@ export default async function PyqPaperPage({ params, searchParams }: PageProps<"
   if (r.portal) {
     const attempt = param(await searchParams, "attempt");
     const paper = r.portal;
-    const { nextEndTermPaper, nextQualifierPaper } = await getPapers();
+    const { nextPastPaper, nextQualifierPaper } = await getPapers();
     return attempt ? (
       <QualifierResult
         mock={paper}
         attemptId={attempt}
-        next={paper.endTerm ? nextEndTermPaper(paper) : nextQualifierPaper(paper)}
+        next={paper.endTerm || paper.quiz ? nextPastPaper(paper) : nextQualifierPaper(paper)}
         revise={reviseHref(paper.sections[0].subjectSlug)}
       />
     ) : (

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="300" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">How you get in: regular entry through the qualifier</text>
+  <g font-size="13">
+    <rect class="bg2" x="40" y="70" width="160" height="96" rx="14" fill="#eef1f4"/>
+    <text class="t" x="56" y="98" font-weight="700" fill="#171717">1. Apply</text>
+    <text class="tm" x="56" y="120" fill="#667085">Class 12 passed (or</text>
+    <text class="tm" x="56" y="138" fill="#667085">Class 11 done). Fee</text>
+    <text class="tm" x="56" y="156" fill="#667085">₹4,000 (General/OBC)</text>
+    <rect class="bg2" x="230" y="70" width="160" height="96" rx="14" fill="#eef1f4"/>
+    <text class="t" x="246" y="98" font-weight="700" fill="#171717">2. Four weeks</text>
+    <text class="tm" x="246" y="120" fill="#667085">Maths I, Stats I, CT,</text>
+    <text class="tm" x="246" y="138" fill="#667085">English I: videos +</text>
+    <text class="tm" x="246" y="156" fill="#667085">weekly assignments</text>
+    <rect class="bg2" x="420" y="70" width="160" height="96" rx="14" fill="#eef1f4"/>
+    <text class="t" x="436" y="98" font-weight="700" fill="#171717">3. Gate one</text>
+    <text class="tm" x="436" y="120" fill="#667085">Best 2 of first 3</text>
+    <text class="tm" x="436" y="138" fill="#667085">assignments ≥ 40%</text>
+    <text class="tm" x="436" y="156" fill="#667085">in every course*</text>
+    <rect class="brand" x="610" y="70" width="160" height="96" rx="14" fill="#ffd21c"/>
+    <text class="ink" x="626" y="98" font-weight="700" fill="#0b0b0b">4. Qualifier exam</text>
+    <text class="ink" x="626" y="120" fill="#0b0b0b">In person, 4 hours.</text>
+    <text class="ink" x="626" y="138" fill="#0b0b0b">≥ 40% each course,</text>
+    <text class="ink" x="626" y="156" fill="#0b0b0b">≥ 50% average*</text>
+  </g>
+  <g class="lf" stroke="#171717" stroke-width="2" fill="none">
+    <path d="M200 118 h26 M220 112 l6 6 -6 6"/>
+    <path d="M390 118 h26 M410 112 l6 6 -6 6"/>
+    <path d="M580 118 h26 M600 112 l6 6 -6 6"/>
+    <path d="M690 166 v24"/>
+  </g>
+  <rect class="green" x="420" y="190" width="300" height="56" rx="14" fill="#15803d"/>
+  <text x="436" y="214" font-size="14" font-weight="700" fill="#fff">5. Register for Foundation</text>
+  <text x="436" y="234" font-size="12" fill="#fff">Pass valid 3 terms (6 if still in Class 12)</text>
+  <text class="tm" x="40" y="214" font-size="13" fill="#667085">JEE Advanced-eligible candidates</text>
+  <text class="tm" x="40" y="232" font-size="13" fill="#667085">can skip steps 2–4 (direct entry).</text>
+  <text class="tm" x="40" y="272" font-size="11" fill="#667085">* General category. Lower cut-offs for OBC-NCL/EWS (35%/45%) and SC/ST/PwD (30%/40%).</text>
+  <text class="tm" x="40" y="288" font-size="11" fill="#667085">Source: study.iitm.ac.in admissions pages, October 2026.</text>
+</svg>

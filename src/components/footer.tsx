@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { isAuthPage } from "@/lib/utils";
 import { Logo } from "./logo";
 import { FooterWordmark } from "./footer-wordmark";
 
@@ -40,12 +41,13 @@ const legal = [
   ["Privacy", "/privacy"],
   ["Terms", "/terms"],
   ["Copyright", "/copyright"],
+  ["Disclaimer", "/disclaimer"],
 ];
 
 export function Footer() {
   const pathname = usePathname();
-  // Course player pages (/subjects/<slug>/...) stay distraction-free.
-  if (pathname.startsWith("/admin") || /^\/subjects\/[^/]+/.test(pathname)) return null;
+  // Course player pages (/subjects/<slug>/...) and the full-screen auth pages stay distraction-free.
+  if (pathname.startsWith("/admin") || isAuthPage(pathname) || /^\/subjects\/[^/]+/.test(pathname)) return null;
   return (
     <footer className="relative mt-20 overflow-hidden border-t border-border bg-surface pb-24 text-fg md:pb-0">
       <div aria-hidden className="footer-glow pointer-events-none absolute inset-x-0 bottom-0 h-[70%]" />
@@ -81,7 +83,7 @@ export function Footer() {
             <Logo />
             <p className="text-sm text-muted">© {new Date().getFullYear()} BTechi IITian. Built for students, by students.</p>
           </div>
-          <ul className="flex gap-5">
+          <ul className="flex flex-wrap gap-x-5 gap-y-2">
             {legal.map(([label, href]) => (
               <li key={href}>
                 <Link href={href} className="text-sm text-muted transition-colors hover:text-fg dark:hover:text-brand">

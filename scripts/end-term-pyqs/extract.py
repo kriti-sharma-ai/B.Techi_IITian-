@@ -322,11 +322,18 @@ def build(pdf, sitting, image_root, slug_of):
             continue
         images = Images(doc, image_root, slug)
         qs = []
+        refs = []  # zero-mark "Useful data" blocks (datasets, formula tables, notation)
         comp_cache = {}
         n = 0
         for q in sec["questions"]:
             body_text_raw = " ".join(r["text"] for r in q["body"])
-            if SUBJECT_CONFIRM.search(body_text_raw) or (q["marks"] == 0):
+            if SUBJECT_CONFIRM.search(body_text_raw):
+                continue
+            if q["marks"] == 0:
+                ref = render_rows(q["body"], images, "data" if not refs else f"data{len(refs) + 1}")
+                ref = re.sub(r"\n{2,}", "\n", ref)  # a section reference is one paragraph per line
+                if ref:
+                    refs.append(ref)
                 continue
             n += 1
             item = {"n": n, "srcNum": q["num"], "marks": q["marks"]}
@@ -408,7 +415,10 @@ def build(pdf, sitting, image_root, slug_of):
                 n -= 1
                 continue
             qs.append(item)
-        papers.append({"section": sec["name"], "slug": slug, "questions": qs})
+        paper = {"section": sec["name"], "slug": slug, "questions": qs}
+        if refs:
+            paper["reference"] = "\n".join(refs)
+        papers.append(paper)
     return papers, report
 
 

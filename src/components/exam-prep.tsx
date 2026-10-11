@@ -9,7 +9,7 @@ import { PROGRAM_SLUG, forSubject, getProgram, getSubject, notes, pyqs, pyqTopic
 import { param } from "@/lib/filters";
 import { getPyqIndex } from "@/lib/pyq-index";
 import { sessionHref } from "@/lib/pyq-practice";
-import { pyqCourseHref } from "@/lib/pyq-urls";
+import { pyqCourseHref, type PyqExam } from "@/lib/pyq-urls";
 import { cn } from "@/lib/utils";
 
 const EXAMS = ["Quiz 1", "Quiz 2", "End Term"] as const;
@@ -125,16 +125,35 @@ async function Plan({ subjectSlug, exam }: { subjectSlug: string; exam: string }
   const vids = forSubject(videos, subjectSlug).filter((v) => priority.some((p) => p.slug === v.topicSlug)).slice(0, 3);
   // Papers in the exam portal. The qualifier examines weeks 1–4, the same ground as Quiz 1.
   const endTerm = pyqPapersFor(subjectSlug, "end-term");
+  const quiz1 = pyqPapersFor(subjectSlug, "quiz-1");
+  const quiz2 = pyqPapersFor(subjectSlug, "quiz-2");
   const qualifier = pyqPapersFor(subjectSlug, "qualifier");
   const portal =
     exam === "Quiz 1"
-      ? { papers: qualifier.length ? qualifier : endTerm, note: qualifier.length ? "Qualifier papers cover weeks 1–4, the same ground as Quiz 1." : "No Quiz 1 papers yet. End Term papers cover these weeks too." }
+      ? quiz1.length
+        ? { papers: quiz1, note: "" }
+        : { papers: qualifier.length ? qualifier : endTerm, note: qualifier.length ? "No Quiz 1 papers yet. Qualifier papers cover weeks 1–4, the same ground." : "No Quiz 1 papers yet. End Term papers cover these weeks too." }
       : exam === "Quiz 2"
-        ? { papers: endTerm, note: "No Quiz 2 papers yet. End Term papers cover the full syllabus, Quiz 2 weeks included." }
+        ? quiz2.length
+          ? { papers: quiz2, note: "" }
+          : { papers: endTerm, note: "No Quiz 2 papers yet. End Term papers cover the full syllabus, Quiz 2 weeks included." }
         : { papers: endTerm.length ? endTerm : qualifier, note: endTerm.length ? "" : "No End Term papers yet. Start with the qualifier papers for weeks 1–4." };
 
-  // A mock from the course's real papers (the qualifier's for Quiz 1); the question bank's mock until a course has papers.
-  const mockExam = exam === "Quiz 1" && qualifier.length ? "qualifier" : endTerm.length ? "end-term" : qualifier.length ? "qualifier" : undefined;
+  // A mock from the course's real papers for this exam (or the closest ones); the question bank's mock until a course has papers.
+  const mockExam: PyqExam | undefined =
+    exam === "Quiz 1" && quiz1.length
+      ? "quiz-1"
+      : exam === "Quiz 1" && qualifier.length
+        ? "qualifier"
+        : exam === "Quiz 2" && quiz2.length
+          ? "quiz-2"
+          : endTerm.length
+            ? "end-term"
+            : qualifier.length
+              ? "qualifier"
+              : quiz1.length
+                ? "quiz-1"
+                : undefined;
   const mockHref = mockExam
     ? sessionHref(subjectSlug, mockExam, "mock")
     : questions.some((x) => x.subjectSlug === subjectSlug)

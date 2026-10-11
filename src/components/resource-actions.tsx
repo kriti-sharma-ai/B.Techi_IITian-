@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Bookmark, Download, Flag, Share2, X } from "lucide-react";
 import { actions, isBookmarked, useStore, type Bookmark as BookmarkT } from "@/lib/store";
+import { isCmsFile, signedFileUrl } from "@/lib/files";
+import { supabase } from "@/lib/supabase/client";
 import type { ResourceKind } from "@/lib/types";
 import { useToast } from "./toast";
 import { Button, buttonClass } from "./ui";
@@ -45,8 +47,8 @@ export function BookmarkButton({
 
 /**
  * Download goes through the browser so the file never has to be re-hosted.
- * The event is logged per user (PRD §27); with Supabase this becomes an
- * insert into `downloads` plus a signed, short-lived storage URL.
+ * CMS files are fetched through a short-lived signed URL; the file route logs
+ * the download in `downloads` (PRD §27). Each student also keeps their own log.
  */
 export function DownloadButton({
   noteId,
@@ -70,11 +72,19 @@ export function DownloadButton({
     );
   return (
     <a
-      href={fileUrl}
+      href={isCmsFile(fileUrl) ? `${fileUrl}?download=1` : fileUrl}
       download
-      onClick={() => {
+      onClick={async (e) => {
         actions.recordDownload(noteId, title);
-        toast("Download started");
+        if (!isCmsFile(fileUrl)) return toast("Download started");
+        // Fetch the signed URL ourselves so signed-in-only files work too.
+        e.preventDefault();
+        try {
+          window.location.assign(await signedFileUrl(fileUrl, { download: true }));
+          toast("Download started");
+        } catch (err) {
+          toast((err as Error).message);
+        }
       }}
       className={buttonClass(variant, size)}
     >
@@ -133,10 +143,15 @@ export function ReportButton({
   const [reason, setReason] = useState(REASONS[0]);
   const [details, setDetails] = useState("");
   const [done, setDone] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const d = ref.current;
-    const onClose = () => setDone(false);
+    const onClose = () => {
+      setDone(false);
+      setError("");
+    };
     d?.addEventListener("close", onClose);
     return () => d?.removeEventListener("close", onClose);
   }, []);
@@ -187,9 +202,21 @@ export function ReportButton({
             </div>
           ) : (
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                actions.report({ kind, resourceId, title, reason, details: details.trim().slice(0, 1000) });
+                setBusy(true);
+                setError("");
+                // Goes straight to the moderators' queue (/admin/reports); guests may report too.
+                const { error } = await supabase.from("reports").insert({
+                  kind,
+                  target_id: resourceId,
+                  title: title.slice(0, 300),
+                  href: window.location.pathname + window.location.search,
+                  reason,
+                  details: details.trim().slice(0, 1000) || null,
+                });
+                setBusy(false);
+                if (error) return setError("Couldn't send the report. Check your connection and try again.");
                 setDetails("");
                 setDone(true);
               }}
@@ -230,12 +257,17 @@ export function ReportButton({
                 className="mt-1.5 w-full rounded-lg border border-border bg-bg p-3 text-sm outline-none focus:border-fg/40"
                 placeholder="e.g. Page 4 uses last year's syllabus"
               />
+              {error && (
+                <p role="alert" className="mt-3 text-sm text-red">
+                  {error}
+                </p>
+              )}
               <div className="mt-4 flex justify-end gap-2">
                 <Button variant="ghost" onClick={() => ref.current?.close()}>
                   Cancel
                 </Button>
-                <button type="submit" className={buttonClass("dark")}>
-                  Submit report
+                <button type="submit" disabled={busy} className={buttonClass("dark", "md", "disabled:opacity-60")}>
+                  {busy ? "Sending…" : "Submit report"}
                 </button>
               </div>
             </form>

@@ -3,10 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ScrollText } from "lucide-react";
 import { CoursePyqCard } from "@/components/pyq-papers";
+import { ScopeSwitch } from "@/components/study-scope";
 import { EmptyState, LinkTabs, PageHeader, buttonClass } from "@/components/ui";
 import { param } from "@/lib/filters";
 import { PYQ_EXAMS, PYQ_LEVELS, getPyqIndex, groupCourses, type PyqExam } from "@/lib/pyq-index";
 import { isPyqLevel, pyqLevelHref } from "@/lib/pyq-urls";
+import { getStudyScope, keepScope, narrow, scopeLinks } from "@/lib/study-scope";
 import { cn } from "@/lib/utils";
 
 export const dynamicParams = false;
@@ -38,26 +40,27 @@ export async function generateMetadata({ params }: PageProps<"/pyqs/[level]">): 
 export default async function PyqLevelPage({ params, searchParams }: PageProps<"/pyqs/[level]">) {
   const level = getLevel((await params).level);
   if (!level) notFound();
-  const examParam = param(await searchParams, "exam");
-  const exam = PYQ_EXAMS.find((e) => e.slug === examParam)?.slug;
+  const sp = await searchParams;
+  const exam = PYQ_EXAMS.find((e) => e.slug === param(sp, "exam"))?.slug;
 
-  const { pyqCoursesForLevel } = await getPyqIndex();
-  const courses = pyqCoursesForLevel(level.slug);
+  const [{ pyqCoursesForLevel }, scope] = await Promise.all([getPyqIndex(), getStudyScope(sp)]);
+  const scoped = narrow(scope, pyqCoursesForLevel(level.slug), (c) => c.slug);
+  const courses = scoped.items;
   const papersOf = (c: (typeof courses)[number], e: PyqExam | undefined = exam) => c.papers.filter((p) => !e || p.exam === e);
   const groups = groupCourses(courses.filter((c) => papersOf(c).length > 0));
 
   const levelTabs = PYQ_LEVELS.filter((l) => pyqCoursesForLevel(l.slug).length > 0).map((l) => ({
     id: l.slug,
     label: l.short,
-    href: pyqLevelHref(l.slug),
+    href: keepScope(pyqLevelHref(l.slug), scope),
     count: pyqCoursesForLevel(l.slug).reduce((n, c) => n + c.papers.length, 0),
   }));
   const examPills = [
-    { slug: undefined, label: "All exams", href: pyqLevelHref(level.slug), count: courses.reduce((n, c) => n + papersOf(c, undefined).length, 0) },
+    { slug: undefined, label: "All exams", href: keepScope(pyqLevelHref(level.slug), scope), count: courses.reduce((n, c) => n + papersOf(c, undefined).length, 0) },
     ...PYQ_EXAMS.map((e) => ({
       slug: e.slug,
       label: e.label,
-      href: `${pyqLevelHref(level.slug)}?exam=${e.slug}`,
+      href: keepScope(`${pyqLevelHref(level.slug)}?exam=${e.slug}`, scope),
       count: courses.reduce((n, c) => n + papersOf(c, e.slug).length, 0),
     })),
   ].filter((e) => e.count > 0 || e.slug === exam);
@@ -97,13 +100,14 @@ export default async function PyqLevelPage({ params, searchParams }: PageProps<"
       </div>
 
       <div className="container-page space-y-12 py-10">
+        <ScopeSwitch list={scoped} links={scopeLinks(pyqLevelHref(level.slug), sp)} className="-mb-4" />
         {groups.length === 0 ? (
           <EmptyState
             icon={<ScrollText className="size-6" />}
             title="No papers of this kind at this level."
-            description="Qualifier papers are for the four qualifier courses only. Show every exam to see this level's End Term papers."
+            description="Not every course has papers from every exam yet. Show every exam to see all of this level's papers."
             action={
-              <Link href={pyqLevelHref(level.slug)} className={buttonClass("secondary")}>
+              <Link href={keepScope(pyqLevelHref(level.slug), scope)} className={buttonClass("secondary")}>
                 Show all exams
               </Link>
             }
@@ -117,7 +121,7 @@ export default async function PyqLevelPage({ params, searchParams }: PageProps<"
                 </h2>
                 {!g.courses[0].inCurriculum && (
                   <p className="mt-0.5 text-sm text-muted">
-                    Courses of the IIT Madras BS in Data Science, which sits the same End Term exam. Listed here so every paper is in one place.
+                    Courses of the IIT Madras BS in Data Science, which sits the same quizzes and End Term exams. Listed here so every paper is in one place.
                   </p>
                 )}
               </div>

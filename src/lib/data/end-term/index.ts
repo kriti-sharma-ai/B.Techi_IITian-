@@ -24,6 +24,20 @@ import { deepLearningEndTermPapers } from "./deep-learning";
 import { dlpEndTermPapers } from "./dlp";
 import { inlpEndTermPapers } from "./inlp";
 import { spgEndTermPapers } from "./spg";
+import { softwareEngineeringEndTermPapers } from "./software-engineering";
+import { aiSearchEndTermPapers } from "./ai-search";
+import { cProgrammingEndTermPapers } from "./c-programming";
+import { csdEndTermPapers } from "./csd";
+import { llmEndTermPapers } from "./llm";
+import { dlCvEndTermPapers } from "./dl-cv";
+import { mfgaiEndTermPapers } from "./mfgai";
+import { adsEndTermPapers } from "./ads";
+import { advancedAlgorithmsEndTermPapers } from "./advanced-algorithms";
+import { atbEndTermPapers } from "./atb";
+import { gameTheoryEndTermPapers } from "./game-theory";
+import { managerialEconomicsEndTermPapers } from "./managerial-economics";
+import { marketResearchEndTermPapers } from "./market-research";
+import { designThinkingEndTermPapers } from "./design-thinking";
 
 // IIT Madras BS End Term previous-year papers, one single-course paper per subject per sitting.
 // Server-only: import through lib/end-term.ts so the question data stays out of client bundles.
@@ -56,4 +70,18 @@ export const endTermPapers: QualifierMock[] = [
   ...dlpEndTermPapers,
   ...inlpEndTermPapers,
   ...spgEndTermPapers,
+  ...softwareEngineeringEndTermPapers,
+  ...aiSearchEndTermPapers,
+  ...cProgrammingEndTermPapers,
+  ...csdEndTermPapers,
+  ...llmEndTermPapers,
+  ...dlCvEndTermPapers,
+  ...mfgaiEndTermPapers,
+  ...adsEndTermPapers,
+  ...advancedAlgorithmsEndTermPapers,
+  ...atbEndTermPapers,
+  ...gameTheoryEndTermPapers,
+  ...managerialEconomicsEndTermPapers,
+  ...marketResearchEndTermPapers,
+  ...designThinkingEndTermPapers,
 ];

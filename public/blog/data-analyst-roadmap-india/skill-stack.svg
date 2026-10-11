@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="340" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">The analyst skill stack: build from the bottom</text>
+  <g font-size="14" text-anchor="middle">
+    <rect class="bg2" x="100" y="260" width="600" height="46" rx="10" fill="#eef1f4"/>
+    <text class="t" x="400" y="288" font-weight="700" fill="#171717">Foundations: Excel, statistics, business sense</text>
+    <rect class="blue" x="150" y="206" width="500" height="46" rx="10" fill="#2563eb"/>
+    <text x="400" y="234" font-weight="700" fill="#fff">SQL: get the right data, at the right grain</text>
+    <rect class="purple" x="200" y="152" width="400" height="46" rx="10" fill="#7c3aed"/>
+    <text x="400" y="180" font-weight="700" fill="#fff">BI + Python: analyse, automate, visualise</text>
+    <rect class="teal" x="250" y="98" width="300" height="46" rx="10" fill="#0f766e"/>
+    <text x="400" y="126" font-weight="700" fill="#fff">Judgement + verification</text>
+    <rect class="brand" x="300" y="56" width="200" height="34" rx="10" fill="#ffd21c"/>
+    <text class="ink" x="400" y="78" font-weight="800" fill="#0b0b0b">Influence</text>
+  </g>
+  <text class="tm" x="40" y="330" font-size="11" fill="#667085">Higher layers depend on lower ones. AI accelerates the middle layers; it doesn't replace the top two.</text>
+</svg>

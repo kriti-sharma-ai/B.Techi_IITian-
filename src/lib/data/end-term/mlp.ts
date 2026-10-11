@@ -1,6 +1,6 @@
 import type { QualifierMock } from "../../types";
 
-// Machine Learning Practice: IIT Madras BS End Term papers (2 papers, 64 questions).
+// Machine Learning Practice: IIT Madras BS End Term papers (3 papers, 90 questions).
 // Questions, options and answer keys are reproduced from the official question papers.
 // Figures, code and maths typeset as images are in public/pyq/<slug>/, embedded inline as
 // ![Figure](src#WxH). Range answers are stored as midpoint ± tolerance.
@@ -401,6 +401,400 @@ export const mlpEndTermPapers: QualifierMock[] = [
             answer: 3.95,
             tolerance: 0.15,
             explanation: "Official answer key accepts any value from 3.8 to 4.1."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    slug: "mlp-end-term-aug-2025-an",
+    title: "MLP End Term · 31 Aug 2025 (AN)",
+    description: "End Term paper from the May 2025 term, afternoon session on 31 Aug 2025, with the official answer key.",
+    difficulty: "Standard",
+    durationMin: 90,
+    endTerm: {
+      date: "2025-08-31",
+      session: "AN",
+      term: "May 2025"
+    },
+    sections: [
+      {
+        subjectSlug: "machine-learning-practice",
+        title: "Machine Learning Practice",
+        short: "MLP",
+        questions: [
+          {
+            id: "mlp-end-term-aug-2025-an-q1",
+            type: "mcq",
+            marks: 2,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q1-1.webp#575x214)",
+            options: [
+              "10",
+              "50",
+              "100",
+              "500"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q2",
+            type: "mcq",
+            marks: 2,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q2-1.webp#575x153)",
+            options: [
+              "Set ‘warm start=True’",
+              "Combine training data from different training sessions",
+              "Set ‘retain parameters=True’",
+              "This problem can not be solved."
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q3",
+            type: "mcq",
+            marks: 2,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q3-1.webp#575x99)",
+            options: [
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q3-opt1-1.webp#152x73)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q3-opt2-1.webp#162x81)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q3-opt3-1.webp#153x79)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q3-opt4-1.webp#161x72)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q4",
+            type: "mcq",
+            marks: 2,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q4-1.webp#575x151)",
+            options: [
+              "(200, 200, 3)",
+              "(40000, )",
+              "(200, 200, 1)",
+              "(40000, 3)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q5",
+            type: "mcq",
+            marks: 2,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q5-1.webp#575x70)",
+            options: [
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q5-opt1-1.webp#575x125)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q5-opt2-1.webp#575x80)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q5-opt3-1.webp#575x120)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q5-opt4-1.webp#575x115)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q5-opt5-1.webp#575x117)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q6",
+            type: "mcq",
+            marks: 2,
+            prompt: "Which of the following statements about the Augmented Dickey-Fuller (ADF) test is correct?",
+            options: [
+              "The test is used to detect seasonality in a time series",
+              "A low p-value (e.g., < 0.05) indicates the time series is non-stationary",
+              "The test’s null hypothesis is that the time series is stationary",
+              "A low p-value (e.g., < 0.05) indicates the time series is stationary"
+            ],
+            answer: 3,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q7",
+            type: "mcq",
+            marks: 1,
+            prompt: "How to change the loss function in SGDRegressor to Huber loss?",
+            options: [
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q7-opt1-1.webp#268x24)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q7-opt2-1.webp#303x24)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q7-opt3-1.webp#352x26)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q7-opt4-1.webp#240x24)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q8",
+            type: "mcq",
+            marks: 1,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q8-1.webp#575x46)",
+            options: [
+              "liblinear",
+              "lbfgs",
+              "saga",
+              "newton-cg"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q9",
+            type: "mcq",
+            marks: 1,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q9-1.webp#575x68)",
+            options: [
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q9-opt1-1.webp#454x64)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q9-opt2-1.webp#428x62)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q9-opt3-1.webp#479x64)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q9-opt4-1.webp#485x54)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q9-opt5-1.webp#455x64)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q10",
+            type: "mcq",
+            marks: 3,
+            prompt: "Which of the following best describes the components of a time series in a classical multiplicative decomposition model?",
+            options: [
+              "The series is a product of a trend component and an error component only",
+              "The series is a sum of a trend component, a seasonal component, and a cyclical component",
+              "The series is a product of a trend component, a seasonal component, and an error component",
+              "The series is a sum of a trend component, a seasonal component, and a error component"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q11",
+            type: "multi",
+            marks: 3,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q11-1.webp#575x92)",
+            options: [
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q11-opt1-1.webp#575x154)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q11-opt2-1.webp#575x115)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q11-opt3-1.webp#575x152)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q11-opt4-1.webp#575x84)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q11-opt5-1.webp#114x24)"
+            ],
+            answer: [
+              0,
+              1
+            ],
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q12",
+            type: "multi",
+            marks: 2,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q12-1.webp#575x49)",
+            options: [
+              "Saves computation time by reusing results of expensive transformations when inputs and parameters have not changed.",
+              "Helps speed up repeated runs of cross-validation involving the same transformation steps.",
+              "Reduces CPU usage by running transformations in parallel threads automatically.",
+              "Improves efficiency in hyperparameter search by avoiding redundant computations in pipeline steps.",
+              "Guarantees better generalization performance on the test set."
+            ],
+            answer: [
+              0,
+              1,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q13",
+            type: "multi",
+            marks: 2,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q13-1.webp#575x145)",
+            options: [
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q13-opt1-1.webp#459x21)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q13-opt2-1.webp#546x23)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q13-opt3-1.webp#434x21)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q13-opt4-1.webp#461x25)"
+            ],
+            answer: [
+              0,
+              1,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q14",
+            type: "multi",
+            marks: 2,
+            prompt: "A medical diagnosis model is used to detect a rare disease that occurs in 0.5% of the population. A model is trained on this data, which of the following evaluation metrics are suitable for measuring effectiveness of this model:",
+            options: [
+              "accuracy",
+              "precision",
+              "recall",
+              "F-1 score"
+            ],
+            answer: [
+              1,
+              2,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q15",
+            type: "multi",
+            marks: 2,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q15-1.webp#575x47)",
+            options: [
+              "The elbow method involves plotting the number of clusters against the inertia and identifying a point where the decrease in inertia slows down.",
+              "The elbow point represents the cluster count beyond which additional clusters do not significantly improve the model fit.",
+              "The metric used in the elbow method is the silhouette score.",
+              "The elbow point is always the smallest number of clusters in the plot.",
+              "The elbow method may sometimes be inconclusive if no clear bend is visible in the curve."
+            ],
+            answer: [
+              0,
+              1,
+              4
+            ],
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q16",
+            type: "numerical",
+            marks: 3,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q16-1.webp#575x219)",
+            answer: -12.5,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q17",
+            type: "numerical",
+            marks: 3,
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q17-1.webp#575x309)",
+            answer: 10,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q18",
+            type: "multi",
+            marks: 1,
+            passage: "![Figure](/pyq/mlp-end-term-aug-2025-an/q18-passage-1.webp#561x201)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q18-1.webp#320x74)",
+            options: [
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q18-opt1-1.webp#237x51)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q18-opt2-1.webp#236x50)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q18-opt3-1.webp#241x51)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q18-opt4-1.webp#226x46)"
+            ],
+            answer: [
+              0,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q19",
+            type: "mcq",
+            marks: 2,
+            passage: "![Figure](/pyq/mlp-end-term-aug-2025-an/q18-passage-1.webp#561x201)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q19-1.webp#306x79)",
+            options: [
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q19-opt1-1.webp#474x24)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q19-opt2-1.webp#472x22)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q19-opt3-1.webp#190x23)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q19-opt4-1.webp#471x23)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q20",
+            type: "multi",
+            marks: 2,
+            passage: "![Figure](/pyq/mlp-end-term-aug-2025-an/q18-passage-1.webp#561x201)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q20-1.webp#270x119)",
+            options: [
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q20-opt1-1.webp#575x24)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q20-opt2-1.webp#544x24)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q20-opt3-1.webp#575x21)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q20-opt4-1.webp#464x24)"
+            ],
+            answer: [
+              0,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q21",
+            type: "mcq",
+            marks: 2,
+            passage: "![Figure](/pyq/mlp-end-term-aug-2025-an/q21-passage-1.webp#575x268)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "select the appropriate values for A and B in the loss parameter to ensure that all model fits execute successfully.",
+            options: [
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q21-opt1-1.webp#153x24)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q21-opt2-1.webp#172x24)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q21-opt3-1.webp#216x24)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q21-opt4-1.webp#226x25)"
+            ],
+            answer: 3,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q22",
+            type: "multi",
+            marks: 2,
+            passage: "![Figure](/pyq/mlp-end-term-aug-2025-an/q21-passage-1.webp#575x268)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q22-1.webp#320x76)",
+            options: [
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q22-opt1-1.webp#88x21)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q22-opt2-1.webp#41x23)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q22-opt3-1.webp#124x20)",
+              "![Figure](/pyq/mlp-end-term-aug-2025-an/q22-opt4-1.webp#238x23)"
+            ],
+            answer: [
+              1,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q23",
+            type: "numerical",
+            marks: 1,
+            passage: "![Figure](/pyq/mlp-end-term-aug-2025-an/q21-passage-1.webp#575x268)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q23-1.webp#316x117)",
+            answer: 72,
+            explanation: ""
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q24",
+            type: "numerical",
+            marks: 1,
+            passage: "![Figure](/pyq/mlp-end-term-aug-2025-an/q24-passage-1.webp#575x506)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "Calculate and enter the value of X (truncated to two decimal places).",
+            answer: 0.98,
+            tolerance: 0.01,
+            explanation: "Official answer key accepts any value from 0.97 to 0.99."
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q25",
+            type: "numerical",
+            marks: 1,
+            passage: "![Figure](/pyq/mlp-end-term-aug-2025-an/q24-passage-1.webp#575x506)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "Calculate and enter the value of Y (truncated to two decimal places).",
+            answer: 0.82,
+            tolerance: 0.01,
+            explanation: "Official answer key accepts any value from 0.81 to 0.83."
+          },
+          {
+            id: "mlp-end-term-aug-2025-an-q26",
+            type: "numerical",
+            marks: 3,
+            passage: "![Figure](/pyq/mlp-end-term-aug-2025-an/q24-passage-1.webp#575x506)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/mlp-end-term-aug-2025-an/q26-1.webp#319x137)",
+            answer: 4.2,
+            tolerance: 0.1,
+            explanation: "Official answer key accepts any value from 4.1 to 4.3."
           }
         ]
       }

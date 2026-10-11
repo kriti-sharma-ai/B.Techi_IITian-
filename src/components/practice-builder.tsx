@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ChevronDown, Play } from "lucide-react";
-import { questions, subjects } from "@/lib/content";
+import { subjects } from "@/lib/content";
+import type { Question } from "@/lib/types";
 import { buttonClass } from "./ui";
 import { cn } from "@/lib/utils";
 
@@ -52,8 +53,11 @@ function Select({
   );
 }
 
+/** What the builder needs to know about each question in the bank. */
+export type BankEntry = Pick<Question, "subjectSlug" | "unitId" | "topicSlug" | "difficulty" | "type">;
+
 /** Question-bank filter (PRD §17): subject → unit → topic, difficulty, type. */
-export function PracticeBuilder() {
+export function PracticeBuilder({ questions }: { questions: BankEntry[] }) {
   const [subject, setSubject] = useState(questions[0]?.subjectSlug ?? "");
   const [unit, setUnit] = useState("");
   const [topic, setTopic] = useState("");
@@ -75,7 +79,7 @@ export function PracticeBuilder() {
           (!difficulty || q.difficulty === difficulty) &&
           (!type || q.type === type),
       ).length,
-    [subject, unit, topic, difficulty, type],
+    [questions, subject, unit, topic, difficulty, type],
   );
 
   const href = () => {

@@ -40,7 +40,7 @@ Also: dark mode, mobile bottom navigation, breadcrumbs with BreadcrumbList JSON-
 src/lib/types.ts        domain types (mirror supabase/schema.sql)
 src/lib/data/*          seed content — replace via the CMS/database
 src/lib/content.ts      read-only query layer; the only file pages read data through
-src/lib/store.ts        per-student state (progress, bookmarks, attempts…) — localStorage for now
+src/lib/store.ts        per-student state (progress, bookmarks, attempts…), synced to the account by lib/supabase/sync.ts
 src/lib/search.ts       search index + ranking
 src/components/         design system + feature components
 supabase/schema.sql     production schema with row-level security
@@ -50,19 +50,32 @@ supabase/schema.sql     production schema with row-level security
 
 The full official course list (50 courses: 8 Foundation, 10 Diploma in Data Analytics for Business incl. 2 projects, 6 other Diploma, 6 Degree core, 22 electives) is in `src/lib/data/curriculum.ts`. **No course content is published yet**: weeks, topics, notes, videos, PYQs and questions are empty, and every course shows a "coming soon" page. Add content via the CMS or the seed files.
 
-## Demo mode: what's not real yet
+## Supabase setup
 
-- **Auth** is simulated in the browser (`/login` → "Sign in as demo admin" opens the CMS). The admin gate is UI-only.
-- **Student data and CMS edits** are saved to `localStorage`, not a server.
-- **Download counts** in admin come from the seed data.
+1. In the Supabase SQL editor, run `supabase/schema.sql`, then `supabase/0002_user_state_and_papers.sql`, then `supabase/0003_cms.sql` (and any later numbered files) in order. 0003 is safe to re-run. It also creates the private Storage bucket `resources` and copies the official course list into `subjects`.
+2. Copy the project URL and anon key into `.env.local` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`). `SUPABASE_SERVICE_ROLE_KEY` is only needed by `npm run seed:papers`; the app itself never uses it.
+3. Sign up on the site, then make yourself the first super admin in the SQL editor:
+   `update profiles set role = 'super_admin' where id = (select id from auth.users where email = 'you@example.com');`
+   After that, give other people roles in `/admin/users`.
 
-## Going to production (Supabase)
+## Admin CMS (`/admin`)
 
-1. Create a Supabase project and run `supabase/schema.sql`. Create a private Storage bucket `resources`.
-2. Add `@supabase/ssr`, enable Google + email auth, and replace `actions.signIn` in `src/components/auth-forms.tsx`.
-3. Re-implement `src/lib/content.ts` with database queries (same function signatures), and the `actions` in `src/lib/store.ts` with inserts into `progress`, `bookmarks`, `question_attempts`, `downloads`, `reports`.
-4. **Security** (PRD §50): enforce roles server-side by checking the session in `src/proxy.ts` for `/admin/*` *and* in every server action (RLS is the final guard). Serve files through a route handler that checks visibility, logs the download, rate-limits, and redirects to a short-lived signed URL. Re-validate uploads on the server (MIME sniffing, 25 MB limit).
-5. Swap `search()` for Postgres full-text search on `resources.search`.
+| Role | Can |
+|---|---|
+| Contributor | Upload notes, videos and books; write questions; submit them for review; edit or delete their own unpublished items |
+| Moderator | Everything above, plus publish, request changes, unpublish, set quality flags, edit the curriculum and papers, resolve reports, analytics |
+| Admin | Everything above, plus users and roles (up to moderator), downloads, settings |
+| Super admin | Everything, including granting and removing admin rights |
+
+- **Access** is decided in the database: roles live in `profiles.role` (users can't change their own), every read runs under Row Level Security, and every write goes through a server action in `src/app/admin/actions.ts` that runs as the signed-in user. The `/admin` gate in the browser only decides what to show.
+- **Curriculum**: official courses come from `src/lib/data/curriculum.ts`. Weeks and topics for any course, and new courses (draft → published), are stored in `subjects`, `units` and `topics`.
+- **Resources and questions** move Draft → Pending review → Published. A moderator can also request changes (with a note) or unpublish. Files go straight to Storage under the uploader's folder. The server checks each file's real type from its first bytes and enforces the 25 MB limit.
+- **The site** reads everything published through `published_content()` (`src/lib/cms.ts`), merged with the seed in `src/lib/content.ts`. Publishing refreshes the site immediately; otherwise pages revalidate every 5 minutes.
+- **Files** are served by `/api/files/[id]` through signed URLs (1 hour to read, 5 minutes to download). Downloads are logged in `downloads` and counted on the resource.
+- **Reports** from the flag button (guests included) go to `reports` and appear in `/admin/reports`.
+- **Papers** (qualifier mocks and PYQs) can be edited as JSON in `/admin/papers`. `npm run seed:papers` copies the papers in the code back over those edits.
+
+Not done yet: per-user download rate limits, and Postgres full-text search for `/search` (it still searches in memory).
 
 ## Design rules
 

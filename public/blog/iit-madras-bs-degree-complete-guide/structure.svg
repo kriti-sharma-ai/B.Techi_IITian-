@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" font-family="system-ui, sans-serif">
+  <rect class="bg" x="0" y="0" width="800" height="330" fill="#fff"/>
+  <text class="t" x="40" y="42" font-size="20" font-weight="700" fill="#171717">BS in Management and Data Science: 142 credits in three levels</text>
+  <text class="tm" x="40" y="66" font-size="14" fill="#667085">Block width is proportional to credits. You can stop after any level with a credential.</text>
+  <!-- Foundation 32 -->
+  <rect class="brand" x="40" y="100" width="162" height="120" rx="14" fill="#ffd21c"/>
+  <text class="ink" x="56" y="132" font-size="16" font-weight="700" fill="#0b0b0b">Foundation</text>
+  <text class="ink" x="56" y="160" font-size="28" font-weight="800" fill="#0b0b0b">32</text>
+  <text class="ink" x="56" y="182" font-size="13" fill="#0b0b0b">credits · 8 courses</text>
+  <text class="ink" x="56" y="202" font-size="13" fill="#0b0b0b">₹48,000</text>
+  <!-- Diploma 60 -->
+  <rect class="blue" x="210" y="100" width="304" height="120" rx="14" fill="#2563eb"/>
+  <text x="226" y="132" font-size="16" font-weight="700" fill="#fff">Diploma</text>
+  <text x="226" y="160" font-size="28" font-weight="800" fill="#fff">60</text>
+  <text x="226" y="182" font-size="13" fill="#fff">credits · 14 courses + 2 projects</text>
+  <text x="226" y="202" font-size="13" fill="#fff">₹1,80,000</text>
+  <!-- Degree 50 -->
+  <rect class="purple" x="522" y="100" width="238" height="120" rx="14" fill="#7c3aed"/>
+  <text x="538" y="132" font-size="16" font-weight="700" fill="#fff">BS Degree</text>
+  <text x="538" y="160" font-size="28" font-weight="800" fill="#fff">50</text>
+  <text x="538" y="182" font-size="13" fill="#fff">credits · 6 core + electives</text>
+  <text x="538" y="202" font-size="13" fill="#fff">₹1,54,000–₹2,18,000</text>
+  <!-- exits -->
+  <g class="tm" fill="#667085" font-size="13">
+    <path class="lf" d="M121 228 v22" stroke="#171717" stroke-width="2"/>
+    <text x="40" y="270">Exit: Foundation</text>
+    <text x="40" y="288">Certificate</text>
+    <path class="lf" d="M362 228 v22" stroke="#171717" stroke-width="2"/>
+    <text x="270" y="270">Exit: Diploma in Data Analytics</text>
+    <text x="270" y="288">for Business (68 credits)</text>
+    <path class="lf" d="M641 228 v22" stroke="#171717" stroke-width="2"/>
+    <text x="560" y="270">Graduate: BS in Management</text>
+    <text x="560" y="288">and Data Science (142 credits)</text>
+  </g>
+  <text class="tm" x="40" y="318" font-size="11" fill="#667085">Fees without waivers, from study.iitm.ac.in/mg (checked Oct 2026). Degree range depends on which electives you take.</text>
+</svg>

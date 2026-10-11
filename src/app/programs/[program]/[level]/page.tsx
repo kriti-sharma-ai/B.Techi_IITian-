@@ -7,6 +7,7 @@ import { PageHeader, buttonClass } from "@/components/ui";
 import { getLevel, getProgram, programs, subjectsForLevel } from "@/lib/content";
 import { getPyqIndex, type PyqLevel } from "@/lib/pyq-index";
 import { pyqLevelHref } from "@/lib/pyq-urls";
+import { loadContent } from "@/lib/cms";
 
 export const dynamicParams = false;
 // Paper counts come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
@@ -21,6 +22,7 @@ function load(programSlug: string, levelSlug: string) {
 }
 
 export async function generateMetadata({ params }: PageProps<"/programs/[program]/[level]">): Promise<Metadata> {
+  await loadContent();
   const { program, level } = await params;
   const r = load(program, level);
   if (!r) return {};
@@ -32,6 +34,7 @@ export async function generateMetadata({ params }: PageProps<"/programs/[program
 }
 
 export default async function LevelPage({ params }: PageProps<"/programs/[program]/[level]">) {
+  await loadContent();
   const { program: ps, level: ls } = await params;
   const r = load(ps, ls);
   if (!r) notFound();

@@ -1,17 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CalendarDays, FileWarning, User } from "lucide-react";
-import { PdfViewer } from "@/components/pdf-viewer";
+import { CalendarDays, Lock, User } from "lucide-react";
+import { NoteFile } from "@/components/note-file";
 import { BookmarkButton, DownloadButton, ReportButton, ShareButton } from "@/components/resource-actions";
-import { Breadcrumbs, EmptyState, QualityBadge, buttonClass } from "@/components/ui";
+import { Breadcrumbs, QualityBadge, buttonClass } from "@/components/ui";
 import { getNote, getProgram, getSubject, notes, topicTitle, unitLabel } from "@/lib/content";
 import { formatDate, formatNumber, formatSize } from "@/lib/utils";
+import { loadContent } from "@/lib/cms";
 
-export const dynamicParams = false;
-export const generateStaticParams = () => notes.map((n) => ({ id: n.id }));
+// Notes published in the CMS after the build are rendered on first visit.
+export async function generateStaticParams() {
+  await loadContent();
+  return notes.map((n) => ({ id: n.id }));
+}
 
 export async function generateMetadata({ params }: PageProps<"/notes/[id]">): Promise<Metadata> {
+  await loadContent();
   const n = getNote((await params).id);
   if (!n) return {};
   const s = getSubject(n.subjectSlug);
@@ -23,6 +28,7 @@ export async function generateMetadata({ params }: PageProps<"/notes/[id]">): Pr
 }
 
 export default async function NotePage({ params }: PageProps<"/notes/[id]">) {
+  await loadContent();
   const note = getNote((await params).id);
   if (!note) notFound();
   const subject = getSubject(note.subjectSlug)!;
@@ -46,8 +52,15 @@ export default async function NotePage({ params }: PageProps<"/notes/[id]">) {
               <div className="mb-2 flex flex-wrap items-center gap-2">
                 <QualityBadge quality={note.quality} />
                 <span className="text-sm text-muted">
-                  {note.kind} · PDF · {note.pages} pages · {formatSize(note.sizeKB)}
+                  {[note.kind, fileLabel(note), note.pages > 0 && `${note.pages} pages`, note.sizeKB > 0 && formatSize(note.sizeKB)]
+                    .filter(Boolean)
+                    .join(" · ")}
                 </span>
+                {note.signInRequired && (
+                  <span className="inline-flex items-center gap-1 text-xs text-muted">
+                    <Lock className="size-3.5" aria-hidden /> Signed-in students
+                  </span>
+                )}
               </div>
               <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">{note.title}</h1>
               <p className="mt-1 text-muted">{note.description}</p>
@@ -64,20 +77,7 @@ export default async function NotePage({ params }: PageProps<"/notes/[id]">) {
             <BookmarkButton withLabel item={{ kind: "note", id: note.id, title: note.title, href: `/notes/${note.id}`, subtitle: subject.name }} />
             <ReportButton kind="note" resourceId={note.id} title={note.title} />
           </div>
-          {note.fileUrl ? (
-            <PdfViewer url={note.fileUrl} title={note.title} />
-          ) : (
-            <EmptyState
-              icon={<FileWarning className="size-6" />}
-              title="This resource is temporarily unavailable."
-              description="The file is being reviewed or re-uploaded. Check back soon, or request it to bump its priority."
-              action={
-                <Link href="/contribute" className={buttonClass("secondary")}>
-                  Request this resource →
-                </Link>
-              }
-            />
-          )}
+          <NoteFile note={note} />
         </div>
 
         <aside className="space-y-4">
@@ -138,6 +138,13 @@ export default async function NotePage({ params }: PageProps<"/notes/[id]">) {
       </div>
     </div>
   );
+}
+
+function fileLabel(note: { fileUrl?: string; fileType?: string; externalUrl?: string }) {
+  if (!note.fileUrl) return note.externalUrl ? "Link" : "PDF";
+  if (note.fileType?.startsWith("image/")) return "Image";
+  if (note.fileType && note.fileType !== "application/pdf") return "Word";
+  return "PDF";
 }
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {

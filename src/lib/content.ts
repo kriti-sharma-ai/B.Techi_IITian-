@@ -1,14 +1,55 @@
-// Read-only query layer over the seed data. Every page goes through these
-// helpers, so moving to Supabase means re-implementing this file only.
+// Read-only query layer: the seed data in ./data plus everything published in
+// the CMS (/admin). Every page goes through these helpers.
+//
+// CMS content is loaded from Supabase by lib/cms.ts and applied here with
+// applyContent(). The exports below are live bindings, so every helper and
+// importer sees the applied content. On the server, `await loadContent()`
+// before reading; in the browser, <ContentSnapshot> in the root layout applies
+// the same content before any page renders.
 
-import { PROGRAM_SLUG, programs, subjects } from "./data/curriculum";
-import { assignments, books, notes, pyqs, videos } from "./data/resources";
-import { questions } from "./data/questions";
+import { PROGRAM_SLUG, programs, subjects as codeSubjects } from "./data/curriculum";
+import * as seed from "./data/resources";
+import { questions as seedQuestions } from "./data/questions";
 import { skillCategories, skillCourses, skillPaths } from "./data/skills";
-import type { Question, SkillCourse, Subject, Topic, Unit } from "./types";
+import type { Book, Note, Question, SkillCourse, Subject, Topic, Unit, Video } from "./types";
 
-export { PROGRAM_SLUG, programs, subjects, notes, videos, books, pyqs, questions, assignments };
+export { PROGRAM_SLUG, programs, codeSubjects };
 export { skillCategories, skillCourses, skillPaths };
+export const { pyqs, assignments } = seed;
+
+/** Published CMS content. `questions` is left out of the browser copy (it is large); pages pass questions to client components as props. */
+export type CmsContent = {
+  version: string;
+  courses: Subject[];
+  units: (Unit & { subjectSlug: string })[];
+  notes: Note[];
+  videos: Video[];
+  books: Book[];
+  questions?: Question[];
+};
+
+export let subjects: Subject[] = codeSubjects;
+export let notes: Note[] = seed.notes;
+export let videos: Video[] = seed.videos;
+export let books: Book[] = seed.books;
+export let questions: Question[] = seedQuestions;
+/** Changes whenever different CMS content is applied; lets derived caches (search) rebuild. */
+export let contentVersion = "";
+
+export function applyContent(cms: CmsContent) {
+  if (cms.version === contentVersion) return;
+  const weeks = new Map<string, Unit[]>();
+  for (const { subjectSlug, ...unit } of cms.units) weeks.set(subjectSlug, [...(weeks.get(subjectSlug) ?? []), unit]);
+  subjects = [...codeSubjects, ...cms.courses].map((s) => {
+    const extra = weeks.get(s.slug);
+    return extra ? { ...s, units: [...s.units, ...extra].sort((a, b) => a.number - b.number) } : s;
+  });
+  notes = [...seed.notes, ...cms.notes];
+  videos = [...seed.videos, ...cms.videos];
+  books = [...seed.books, ...cms.books];
+  if (cms.questions) questions = [...seedQuestions, ...cms.questions];
+  contentVersion = cms.version;
+}
 
 export const getProgram = (slug: string) => programs.find((p) => p.slug === slug);
 export const getSubject = (slug: string) => subjects.find((s) => s.slug === slug);

@@ -1,12 +1,367 @@
 import type { QualifierMock } from "../../types";
 
-// Programming Concepts using Java: IIT Madras BS End Term papers (3 papers, 69 questions).
+// Programming Concepts using Java: IIT Madras BS End Term papers (4 papers, 92 questions).
 // Questions, options and answer keys are reproduced from the official question papers.
 // Figures, code and maths typeset as images are in public/pyq/<slug>/, embedded inline as
 // ![Figure](src#WxH). Range answers are stored as midpoint ± tolerance.
 // Generated from the paper PDFs; edit with care.
 
 export const javaEndTermPapers: QualifierMock[] = [
+  {
+    slug: "java-end-term-aug-2025-fn",
+    title: "Java End Term · 31 Aug 2025 (FN)",
+    description: "End Term paper from the May 2025 term, forenoon session on 31 Aug 2025, with the official answer key.",
+    difficulty: "Standard",
+    durationMin: 90,
+    endTerm: {
+      date: "2025-08-31",
+      session: "FN",
+      term: "May 2025"
+    },
+    sections: [
+      {
+        subjectSlug: "programming-concepts-using-java",
+        title: "Programming Concepts using Java",
+        short: "Java",
+        questions: [
+          {
+            id: "java-end-term-aug-2025-fn-q1",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q1-1.webp#575x472)",
+            options: [
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q2",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q2-1.webp#575x600)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q2-opt1-1.webp#575x115)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q2-opt2-1.webp#575x79)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q2-opt3-1.webp#575x140)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q2-opt4-1.webp#575x142)"
+            ],
+            answer: 3,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q3",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q3-1.webp#575x588)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q3-opt1-1.webp#336x74)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q3-opt2-1.webp#284x80)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q3-opt3-1.webp#575x46)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q3-opt4-1.webp#575x50)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q4",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q4-1.webp#575x754)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q4-opt1-1.webp#170x75)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q4-opt2-1.webp#162x66)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q4-opt3-1.webp#177x92)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q4-opt4-1.webp#170x69)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q5",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q5-1.webp#575x808)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q5-opt1-1.webp#289x56)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q5-opt2-1.webp#293x56)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q5-opt3-1.webp#287x75)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q5-opt4-1.webp#290x83)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q6",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q6-1.webp#575x539)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q6-opt1-1.webp#90x21)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q6-opt2-1.webp#87x23)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q6-opt3-1.webp#80x19)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q6-opt4-1.webp#147x25)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q7",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q7-1.webp#575x408)",
+            options: [
+              "8 10",
+              "9 11",
+              "7 9",
+              "7 11"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q8",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q8-1.webp#575x624)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q8-opt1-1.webp#444x25)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q8-opt2-1.webp#287x26)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q8-opt3-1.webp#315x27)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q8-opt4-1.webp#156x23)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q9",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q9-1.webp#575x824)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q9-opt1-1.webp#421x31)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q9-opt2-1.webp#546x22)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q9-opt3-1.webp#529x24)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q9-opt4-1.webp#334x27)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q10",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q10-1.webp#575x728)",
+            options: [
+              "It prints 100 five times, 200 five times, and 300 five times in an interleaved manner.",
+              "It prints 100 five times, followed by 200 five times and 300 five times in an interleaved manner.",
+              "It prints 100 and 200 (five times each) in an interleaved manner, followed by 300 printed five times.",
+              "It prints 100 five times, followed by 200 five times, followed by 300 five times."
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q11",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q11-1.webp#575x842)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q11-opt1-1.webp#178x22)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q11-opt2-1.webp#536x32)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q11-opt3-1.webp#532x26)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q11-opt4-1.webp#502x29)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q11-opt5-1.webp#342x30)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q12",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q12-1.webp#575x656)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q12-opt1-1.webp#514x28)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q12-opt2-1.webp#280x121)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q12-opt3-1.webp#287x120)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q12-opt4-1.webp#288x108)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q13",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q13-1.webp#575x601)\n\nWhat will the output be?",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q13-opt1-1.webp#252x26)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q13-opt2-1.webp#202x23)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q13-opt3-1.webp#172x23)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q13-opt4-1.webp#251x28)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q14",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q14-1.webp#575x758)\n\nChoose the correct option.",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q14-opt1-1.webp#160x74)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q14-opt2-1.webp#159x68)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q14-opt3-1.webp#158x72)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q14-opt4-1.webp#163x74)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q15",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q15-1.webp#575x602)\n\nChoose the correct option.",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q15-opt1-1.webp#357x29)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q15-opt2-1.webp#404x34)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q15-opt3-1.webp#332x26)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q15-opt4-1.webp#390x26)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q15-opt5-1.webp#409x26)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q16",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q16-1.webp#575x790)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q16-opt1-1.webp#208x25)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q16-opt2-1.webp#205x25)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q16-opt3-1.webp#378x21)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q16-opt4-1.webp#386x27)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q17",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q17-1.webp#552x662)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q17-opt1-1.webp#253x94)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q17-opt2-1.webp#245x98)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q17-opt3-1.webp#575x48)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q17-opt4-1.webp#575x52)"
+            ],
+            answer: 3,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q18",
+            type: "mcq",
+            marks: 6,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q18-1.webp#575x694)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q18-opt1-1.webp#575x48)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q18-opt2-1.webp#575x117)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q18-opt3-1.webp#285x98)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q18-opt4-1.webp#288x104)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q19",
+            type: "mcq",
+            marks: 6,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q19-1.webp#516x842)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q19-opt1-1.webp#332x76)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q19-opt2-1.webp#339x69)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q19-opt3-1.webp#343x72)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q19-opt4-1.webp#331x72)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q20",
+            type: "mcq",
+            marks: 5,
+            prompt: "Consider the Java code given below.\n\n![Figure](/pyq/java-end-term-aug-2025-fn/q20-1.webp#575x618)\n\nWhat will the output be?",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q20-opt1-1.webp#340x47)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q20-opt2-1.webp#349x47)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q20-opt3-1.webp#437x47)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q20-opt4-1.webp#342x46)"
+            ],
+            answer: 3,
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q21",
+            type: "multi",
+            marks: 5,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q21-1.webp#575x670)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q21-opt1-1.webp#575x27)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q21-opt2-1.webp#506x26)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q21-opt3-1.webp#575x21)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q21-opt4-1.webp#575x23)"
+            ],
+            answer: [
+              0,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q22",
+            type: "multi",
+            marks: 5,
+            prompt: "Consider the Java code below.\n\n![Figure](/pyq/java-end-term-aug-2025-fn/q22-1.webp#575x694)\n\n![Figure](/pyq/java-end-term-aug-2025-fn/q22-2.webp#575x363)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q22-opt1-1.webp#282x64)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q22-opt2-1.webp#280x66)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q22-opt3-1.webp#278x73)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q22-opt4-1.webp#194x73)"
+            ],
+            answer: [
+              0,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "java-end-term-aug-2025-fn-q23",
+            type: "multi",
+            marks: 5,
+            prompt: "![Figure](/pyq/java-end-term-aug-2025-fn/q23-1.webp#575x698)",
+            options: [
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q23-opt1-1.webp#299x116)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q23-opt2-1.webp#393x97)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q23-opt3-1.webp#393x103)",
+              "![Figure](/pyq/java-end-term-aug-2025-fn/q23-opt4-1.webp#396x124)"
+            ],
+            answer: [
+              0,
+              1,
+              3
+            ],
+            explanation: ""
+          }
+        ]
+      }
+    ]
+  },
   {
     slug: "java-end-term-aug-2025-an",
     title: "Java End Term · 31 Aug 2025 (AN)",

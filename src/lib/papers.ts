@@ -1,12 +1,12 @@
 // Every paper that can be sat in the exam portal (qualifier mocks, qualifier
-// PYQs and End Term PYQs), read from the Supabase `papers` table. Server-side
+// PYQs, quiz PYQs and End Term PYQs), read from the Supabase `papers` table. Server-side
 // only: client components get one paper as a prop. The table is filled from
 // src/lib/data by `npm run seed:papers`; after that, edits made in Supabase
 // show up on the site within REFRESH_SECONDS.
 
 import { createClient } from "@supabase/supabase-js";
 import { QUALIFIER_SUBJECTS } from "./data/qualifier-meta";
-import { paperHref } from "./pyq-urls";
+import { paperExam, paperHref } from "./pyq-urls";
 import { isSingleSubject } from "./qualifier";
 import type { QualifierMock } from "./types";
 
@@ -20,7 +20,7 @@ const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_
   auth: { persistSession: false, autoRefreshToken: false },
 });
 
-type Row = { kind: "mock" | "qualifier_pyq" | "end_term"; data: QualifierMock };
+type Row = { kind: "mock" | "qualifier_pyq" | "end_term" | "quiz"; data: QualifierMock };
 
 async function fetchRows() {
   const rows: Row[] = [];
@@ -41,6 +41,7 @@ function catalog(rows: Row[]) {
   const ofKind = (kind: Row["kind"]) => rows.filter((r) => r.kind === kind).map((r) => r.data);
   const qualifierMocks = ofKind("mock");
   const endTermPapers = ofKind("end_term");
+  const quizPapers = ofKind("quiz");
   /** Every qualifier paper: full mocks and single-subject PYQs. */
   const allQualifierPapers = [...qualifierMocks, ...ofKind("qualifier_pyq")];
 
@@ -65,9 +66,12 @@ function catalog(rows: Row[]) {
 
   const endTermPapersFor = (subjectSlug: string) => endTermPapers.filter((p) => p.sections[0].subjectSlug === subjectSlug);
 
-  /** The next paper of the same course, for the "take another paper" button on the result page. */
-  function nextEndTermPaper(mock: QualifierMock) {
-    const same = endTermPapersFor(mock.sections[0].subjectSlug);
+  const quizPapersFor = (subjectSlug: string) => quizPapers.filter((p) => p.sections[0].subjectSlug === subjectSlug);
+
+  /** The next End Term or quiz paper of the same course and exam, for the "take another paper" button on the result page. */
+  function nextPastPaper(mock: QualifierMock) {
+    const subjectSlug = mock.sections[0].subjectSlug;
+    const same = [...endTermPapersFor(subjectSlug), ...quizPapersFor(subjectSlug)].filter((p) => paperExam(p) === paperExam(mock));
     const next = same[(same.findIndex((p) => p.slug === mock.slug) + 1) % same.length];
     return next && next.slug !== mock.slug ? { title: next.title, href: paperHref(next) } : undefined;
   }
@@ -81,13 +85,20 @@ function catalog(rows: Row[]) {
     endTermPapers,
     getEndTermPaper,
     endTermPapersFor,
-    nextEndTermPaper,
+    quizPapers,
+    quizPapersFor,
+    nextPastPaper,
   };
 }
 
 export type Papers = ReturnType<typeof catalog>;
 
 let cached: { at: number; papers: Promise<Papers> } | undefined;
+
+/** Drops this process's copy so the next request reloads; called after papers are edited in /admin. */
+export function invalidatePapers() {
+  cached = undefined;
+}
 
 /** All papers, loaded once per server process and refreshed every REFRESH_SECONDS. */
 export function getPapers(): Promise<Papers> {

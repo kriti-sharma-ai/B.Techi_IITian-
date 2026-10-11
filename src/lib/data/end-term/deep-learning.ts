@@ -1,12 +1,254 @@
 import type { QualifierMock } from "../../types";
 
-// Deep Learning: IIT Madras BS End Term papers (2 papers, 50 questions).
+// Deep Learning: IIT Madras BS End Term papers (3 papers, 69 questions).
 // Questions, options and answer keys are reproduced from the official question papers.
 // Figures, code and maths typeset as images are in public/pyq/<slug>/, embedded inline as
 // ![Figure](src#WxH). Range answers are stored as midpoint ± tolerance.
 // Generated from the paper PDFs; edit with care.
 
 export const deepLearningEndTermPapers: QualifierMock[] = [
+  {
+    slug: "deep-learning-end-term-aug-2025-fn",
+    title: "Deep Learning End Term · 31 Aug 2025 (FN)",
+    description: "End Term paper from the May 2025 term, forenoon session on 31 Aug 2025, with the official answer key.",
+    difficulty: "Standard",
+    durationMin: 90,
+    endTerm: {
+      date: "2025-08-31",
+      session: "FN",
+      term: "May 2025"
+    },
+    sections: [
+      {
+        subjectSlug: "deep-learning",
+        title: "Deep Learning",
+        short: "Deep Learning",
+        questions: [
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q1",
+            type: "mcq",
+            marks: 2,
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q1-1.webp#575x499)",
+            options: [
+              "XOR",
+              "AND",
+              "OR",
+              "NAND",
+              "None of these"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q2",
+            type: "mcq",
+            marks: 2,
+            prompt: "Based on the two statements provided choose the correct option?\nStatement 1: Optimization’s primary goal is to reduce the training error.\nStatement 2: Regularization helps to prevent overfitting, which in turn reduces the training error.",
+            options: [
+              "Both Statement 1 and Statement 2 are false.",
+              "Statement 1 is true, but Statement 2 is false.",
+              "Statement 1 is false, but Statement 2 is true.",
+              "Both Statement 1 and Statement 2 are true."
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q3",
+            type: "mcq",
+            marks: 2,
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q3-1.webp#529x344)",
+            options: [
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q3-opt1-1.webp#271x42)",
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q3-opt2-1.webp#291x48)",
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q3-opt3-1.webp#284x44)",
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q3-opt4-1.webp#290x47)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q4",
+            type: "multi",
+            marks: 3,
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q4-1.webp#575x532)",
+            options: [
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q4-opt1-1.webp#318x32)",
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q4-opt2-1.webp#333x34)",
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q4-opt3-1.webp#278x38)",
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q4-opt4-1.webp#454x38)",
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q4-opt5-1.webp#333x33)",
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q4-opt6-1.webp#327x38)"
+            ],
+            answer: [
+              0,
+              1,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q5",
+            type: "numerical",
+            marks: 3,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q5-passage-1.webp#575x443)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q5-1.webp#341x56)",
+            answer: 10,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q6",
+            type: "numerical",
+            marks: 3,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q5-passage-1.webp#575x443)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q6-1.webp#431x121)",
+            answer: 1.56,
+            tolerance: 0.04,
+            explanation: "Official answer key accepts any value from 1.52 to 1.6."
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q7",
+            type: "numerical",
+            marks: 2,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q5-passage-1.webp#575x443)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q7-1.webp#531x191)",
+            answer: 3.99,
+            tolerance: 0.04,
+            explanation: "Official answer key accepts any value from 3.95 to 4.03."
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q8",
+            type: "mcq",
+            marks: 2,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q8-passage-1.webp#575x277)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "What is the output of the convolution layer after applying ReLU?",
+            options: [
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q8-opt1-1.webp#56x48)",
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q8-opt2-1.webp#50x48)",
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q8-opt3-1.webp#56x46)",
+              "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q8-opt4-1.webp#51x48)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q9",
+            type: "numerical",
+            marks: 1,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q8-passage-1.webp#575x277)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q9-1.webp#293x49)",
+            answer: 6,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q10",
+            type: "numerical",
+            marks: 2,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q8-passage-1.webp#575x277)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q10-1.webp#321x90)",
+            answer: 6,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q11",
+            type: "numerical",
+            marks: 2,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q11-passage-1.webp#575x283)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q11-1.webp#446x126)",
+            answer: 36.31,
+            tolerance: 35.69,
+            explanation: "Official answer key accepts any value from 0.62 to 72."
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q12",
+            type: "mcq",
+            marks: 2,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q11-passage-1.webp#575x283)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "The CBOW model is now used to generate a “sentence” or a string of words. First we pass the word “good” and retain the word with highest probability as the output, say word_1, which is in turn passed as input to the model. If the model is run this way for exactly three time steps, what is the sentence that it outputs? Note that the sentence here is “word_1 word_2 word_3”.\n\n![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q12-1.webp#395x211)",
+            options: [
+              "bad ugly good",
+              "good bad ugly",
+              "bad bad bad",
+              "good good good",
+              "bad ugly bad"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q13",
+            type: "mcq",
+            marks: 3,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q11-passage-1.webp#575x283)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "Now consider updating the word embeddings using the sample “good good”. The first “good” in the string is used as context and the second “good” as the true label. Use cross entropy as the loss function and run one iteration of gradient descent with η = 1 starting with the existing values for the embeddings.\nFind the updated word embedding for “good” and choose the most appropriate option from below. Note that you have to compute the updated word embedding for “good” and not its context embedding.",
+            options: [
+              "(1.76, -0.24)",
+              "(1.24, -0.76)",
+              "(1.76, 1.76)",
+              "(1.76, -1.76)",
+              "(1.24, -1.24)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q14",
+            type: "numerical",
+            marks: 1,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q14-passage-1.webp#575x771)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "Find s1.",
+            answer: 0.25,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q15",
+            type: "numerical",
+            marks: 2,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q14-passage-1.webp#575x771)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "Find s2.",
+            answer: 0.5,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q16",
+            type: "numerical",
+            marks: 1,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q14-passage-1.webp#575x771)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q16-1.webp#65x33)",
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q17",
+            type: "numerical",
+            marks: 3,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q14-passage-1.webp#575x771)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q17-1.webp#348x127)",
+            answer: 0.125,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q18",
+            type: "numerical",
+            marks: 2,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q18-passage-1.webp#575x230)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q18-1.webp#276x32)",
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "deep-learning-end-term-aug-2025-fn-q19",
+            type: "numerical",
+            marks: 2,
+            passage: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q18-passage-1.webp#575x230)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "![Figure](/pyq/deep-learning-end-term-aug-2025-fn/q19-1.webp#420x47)",
+            answer: 1,
+            explanation: ""
+          }
+        ]
+      }
+    ]
+  },
   {
     slug: "deep-learning-end-term-aug-2025-an",
     title: "Deep Learning End Term · 31 Aug 2025 (AN)",

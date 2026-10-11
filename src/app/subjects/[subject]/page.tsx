@@ -45,8 +45,10 @@ import { param } from "@/lib/filters";
 import { PYQ_EXAMS, getPyqIndex } from "@/lib/pyq-index";
 import type { Subject } from "@/lib/types";
 import { formatDate, SITE_URL } from "@/lib/utils";
+import { loadContent } from "@/lib/cms";
 
 export async function generateMetadata({ params }: PageProps<"/subjects/[subject]">): Promise<Metadata> {
+  await loadContent();
   const s = getSubject((await params).subject);
   if (!s) notFound();
   const { program, level } = subjectPlacement(s);
@@ -59,6 +61,7 @@ export async function generateMetadata({ params }: PageProps<"/subjects/[subject
 }
 
 export default async function SubjectPage({ params, searchParams }: PageProps<"/subjects/[subject]">) {
+  await loadContent();
   const subject = getSubject((await params).subject);
   if (!subject) notFound();
   const sp = await searchParams;

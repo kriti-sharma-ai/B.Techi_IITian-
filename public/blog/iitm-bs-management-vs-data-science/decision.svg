@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="400" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">A quick way to decide</text>
+  <g font-size="14">
+    <rect class="bg2" x="250" y="62" width="300" height="56" rx="14" fill="#eef1f4"/>
+    <text class="t" x="400" y="86" font-weight="700" fill="#171717" text-anchor="middle">What do you want to spend</text>
+    <text class="t" x="400" y="105" font-weight="700" fill="#171717" text-anchor="middle">most of your work day doing?</text>
+    <path class="lf" d="M330 118 L190 168 M470 118 L610 168" stroke="#171717" stroke-width="2" fill="none"/>
+    <rect class="brand" x="40" y="168" width="300" height="76" rx="14" fill="#ffd21c"/>
+    <text class="ink" x="190" y="196" font-weight="700" fill="#0b0b0b" text-anchor="middle">Using data to make business decisions</text>
+    <text class="ink" x="190" y="216" font-size="12" fill="#0b0b0b" text-anchor="middle">pricing, budgets, campaigns, operations,</text>
+    <text class="ink" x="190" y="232" font-size="12" fill="#0b0b0b" text-anchor="middle">people, strategy</text>
+    <rect class="blue" x="460" y="168" width="300" height="76" rx="14" fill="#2563eb"/>
+    <text x="610" y="196" font-weight="700" fill="#fff" text-anchor="middle">Building the systems that use data</text>
+    <text x="610" y="216" font-size="12" fill="#fff" text-anchor="middle">code, models, pipelines, apps,</text>
+    <text x="610" y="232" font-size="12" fill="#fff" text-anchor="middle">machine learning</text>
+    <path class="lf" d="M190 244 v40 M610 244 v40" stroke="#171717" stroke-width="2"/>
+    <rect class="bg2" x="40" y="284" width="300" height="70" rx="14" fill="#eef1f4"/>
+    <text class="t" x="190" y="312" font-weight="800" fill="#171717" text-anchor="middle">BS in Management and</text>
+    <text class="t" x="190" y="332" font-weight="800" fill="#171717" text-anchor="middle">Data Science</text>
+    <rect class="bg2" x="460" y="284" width="300" height="70" rx="14" fill="#eef1f4"/>
+    <text class="t" x="610" y="312" font-weight="800" fill="#171717" text-anchor="middle">BS in Data Science</text>
+    <text class="t" x="610" y="332" font-weight="800" fill="#171717" text-anchor="middle">and Applications</text>
+  </g>
+  <text class="tm" x="40" y="388" font-size="11" fill="#667085">Not sure? Both share the same qualifier courses, so your preparation is identical either way.</text>
+</svg>

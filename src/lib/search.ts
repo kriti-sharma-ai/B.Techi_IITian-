@@ -1,5 +1,6 @@
 import {
   books,
+  contentVersion,
   getSubject,
   notes,
   pyqs,
@@ -10,6 +11,7 @@ import {
   subjects,
   videos,
 } from "./content";
+import { blockText, cheatSheetHref, cheatSheets } from "./data/cheat-notes";
 
 export type SearchCategory = "subjects" | "topics" | "notes" | "videos" | "books" | "questions" | "pyqs";
 
@@ -90,6 +92,16 @@ function buildIndex(): SearchDoc[] {
       href: `/practice/session?subject=${q.subjectSlug}&topic=${q.topicSlug}`,
       text: `${q.prompt} ${q.context ?? ""} ${subjectName(q.subjectSlug)} ${q.topicSlug.replace(/-/g, " ")} question`,
     });
+  for (const sheet of cheatSheets)
+    for (const sec of sheet.sections)
+      docs.push({
+        id: `cheat/${sheet.slug}/${sec.id}`,
+        category: "notes",
+        title: `${sec.title} · ${sheet.short} cheat notes`,
+        subtitle: `${subjectName(sheet.subjectSlug)} · Week ${sec.week} · Qualifier`,
+        href: `${cheatSheetHref(sheet)}#${sec.id}`,
+        text: `${sec.title} ${sheet.short} cheat sheet formula sheet notes qualifier quiz 1 week ${sec.week} ${sec.blocks.flatMap(blockText).join(" ")}`,
+      });
   for (const p of pyqs)
     docs.push({
       id: p.id,
@@ -102,7 +114,7 @@ function buildIndex(): SearchDoc[] {
   return docs;
 }
 
-let index: SearchDoc[] | null = null;
+let index: { version: string; docs: SearchDoc[] } | null = null;
 
 const normalize = (s: string) =>
   s
@@ -117,11 +129,12 @@ const normalize = (s: string) =>
  * full-text search (see supabase/schema.sql) when the library grows.
  */
 export function search(query: string): SearchDoc[] {
-  index ??= buildIndex();
+  // Rebuilt whenever different CMS content has been applied.
+  if (index?.version !== contentVersion) index = { version: contentVersion, docs: buildIndex() };
   const terms = normalize(query).split(/\s+/).filter(Boolean);
   if (terms.length === 0) return [];
   const scored: { doc: SearchDoc; score: number }[] = [];
-  for (const doc of index) {
+  for (const doc of index.docs) {
     const title = normalize(doc.title);
     const body = normalize(doc.text);
     let score = 0;

@@ -1,12 +1,521 @@
 import type { QualifierMock } from "../../types";
 
-// Modern Application Development II: IIT Madras BS End Term papers (3 papers, 96 questions).
+// Modern Application Development II: IIT Madras BS End Term papers (4 papers, 128 questions).
 // Questions, options and answer keys are reproduced from the official question papers.
 // Figures, code and maths typeset as images are in public/pyq/<slug>/, embedded inline as
 // ![Figure](src#WxH). Range answers are stored as midpoint ± tolerance.
 // Generated from the paper PDFs; edit with care.
 
 export const mad2EndTermPapers: QualifierMock[] = [
+  {
+    slug: "mad-2-end-term-aug-2025-fn",
+    title: "MAD II End Term · 31 Aug 2025 (FN)",
+    description: "End Term paper from the May 2025 term, forenoon session on 31 Aug 2025, with the official answer key.",
+    difficulty: "Standard",
+    durationMin: 90,
+    endTerm: {
+      date: "2025-08-31",
+      session: "FN",
+      term: "May 2025"
+    },
+    sections: [
+      {
+        subjectSlug: "modern-application-development-2",
+        title: "Modern Application Development II",
+        short: "MAD II",
+        questions: [
+          {
+            id: "mad-2-end-term-aug-2025-fn-q1",
+            type: "mcq",
+            marks: 2,
+            prompt: "In a message queue system, if the consumer is slower than the producer, what is likely to occur first?",
+            options: [
+              "Messages will be dropped",
+              "The producer will block until the consumer is ready",
+              "Messages will accumulate in the queue",
+              "The consumer will speed up automatically"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q2",
+            type: "mcq",
+            marks: 2,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q2-1.webp#575x26)",
+            options: [
+              "The component will reload when data changes",
+              "The DOM updates automatically when the underlying reactive data changes",
+              "All function calls become asynchronous",
+              "It disables direct access to state"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q3",
+            type: "mcq",
+            marks: 2,
+            prompt: "In Flask, what is the main benefit of using the @cache.cached() decorator?",
+            options: [
+              "It stores output in session storage",
+              "It skips route execution for repeated inputs",
+              "It enables token authentication",
+              "It sends compressed response headers"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q4",
+            type: "mcq",
+            marks: 2,
+            prompt: "What is the primary purpose of CORS (Cross-Origin Resource Sharing)?",
+            options: [
+              "To encrypt data between client and server",
+              "To control which domains can access resources",
+              "To compress HTTP responses",
+              "To authenticate users across applications"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q5",
+            type: "multi",
+            marks: 2,
+            prompt: "Which of the following practices help protect against supply chain attacks?",
+            options: [
+              "Version pinning",
+              "Storing keys only in environment variables",
+              "Reduce Dependencies",
+              "Using only packages with over 1000 stars on GitHub"
+            ],
+            answer: [
+              0,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q6",
+            type: "multi",
+            marks: 2,
+            prompt: "Which of the following factors directly affect the speed and performance of a web page load?",
+            options: [
+              "The number of CSS selectors in the stylesheet",
+              "Number of HTTP requests made",
+              "File size of resources (like images, JS)",
+              "Use of semantic HTML tags"
+            ],
+            answer: [
+              1,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q7",
+            type: "multi",
+            marks: 2,
+            prompt: "Which of the following is/are the potential benefits of using a message broker?",
+            options: [
+              "A message broker allows two servers in a network to directly communicate with each other, without an intermediary.",
+              "A message broker makes the network scalable for adding more servers to the network.",
+              "A message broker can be used for batch processing of messages.",
+              "A message broker is not suited in case of traffic spikes, as messages are retained in the queue until processed."
+            ],
+            answer: [
+              1,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q8",
+            type: "multi",
+            marks: 2,
+            prompt: "Which statements about webhooks are correct?",
+            options: [
+              "They enable real-time data delivery",
+              "They require polling from the client",
+              "They use HTTP POST requests typically",
+              "They're designed for server-to-server communication"
+            ],
+            answer: [
+              0,
+              2,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q9",
+            type: "mcq",
+            marks: 3,
+            prompt: "A popular e-commerce platform needs to notify multiple third-party services (inventory management, email marketing, analytics) whenever a customer places an order. The development team is considering different approaches to handle these notifications.\nScenario: When an order is placed, the system needs to:\n● Update inventory levels in an external warehouse system\n● Send a welcome email through a third-party email service\n● Log analytics data to an external tracking service\n● Update customer loyalty points in a CRM system\nWhich of the following statements about using webhooks for this scenario is MOST accurate?",
+            options: [
+              "Webhooks are not suitable for this use case because they require the e- commerce platform to continuously poll each third-party service to check if they're ready to receive data, which would create unnecessary network overhead.",
+              "Webhooks provide an ideal solution as they allow the e-commerce platform to push real-time notifications to all subscribed third-party services immediately when an order is placed, eliminating the need for these services to repeatedly poll for updates.",
+              "Webhooks should be avoided in this scenario because they operate synchronously, meaning the customer's order placement would be delayed until all third-party services have successfully processed their notifications.",
+              "Webhooks are primarily designed for read-only operations and cannot handle complex data payloads like order information, making them unsuitable for e-commerce transaction notifications."
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q10",
+            type: "mcq",
+            marks: 3,
+            prompt: "What is the main advantage of using caching in a Flask-based web application?",
+            options: [
+              "It eliminates the need for client-side rendering",
+              "It encrypts data transmission between server and client",
+              "It avoids the need for database interactions completely",
+              "It reduces server load by reusing responses for repeated requests"
+            ],
+            answer: 3,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q11",
+            type: "mcq",
+            marks: 3,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q11-1.webp#575x269)",
+            options: [
+              "R P Q S",
+              "P R S Q",
+              "R P S Q",
+              "R S P Q"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q12",
+            type: "mcq",
+            marks: 3,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q12-1.webp#575x842)",
+            options: [
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q12-opt1-1.webp#252x59)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q12-opt2-1.webp#505x59)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q12-opt3-1.webp#438x75)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q12-opt4-1.webp#420x59)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q13",
+            type: "mcq",
+            marks: 3,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q13-1.webp#575x244)",
+            options: [
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q13-opt1-1.webp#324x150)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q13-opt2-1.webp#324x154)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q13-opt3-1.webp#329x151)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q13-opt4-1.webp#326x156)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q14",
+            type: "mcq",
+            marks: 3,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q14-1.webp#466x147)",
+            options: [
+              "object, undefined, true, false",
+              "null, undefined, false, false",
+              "object, undefined, false, false",
+              "null, undefined, true, true"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q15",
+            type: "mcq",
+            marks: 3,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q15-1.webp#512x590)",
+            options: [
+              "Admin component",
+              "Unauthorized component",
+              "Blank screen",
+              "Vue throws a routing error"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q16",
+            type: "mcq",
+            marks: 3,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q16-1.webp#575x732)",
+            options: [
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q16-opt1-1.webp#257x119)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q16-opt2-1.webp#283x117)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q16-opt3-1.webp#285x121)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q16-opt4-1.webp#257x116)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q17",
+            type: "mcq",
+            marks: 3,
+            passage: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q17-passage-1.webp#575x842)\n\n![Figure](/pyq/mad-2-end-term-aug-2025-fn/q17-passage-2.webp#575x628)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "After step 2 (selecting two tasks), what is the value of selectedTasks.length?",
+            options: [
+              "0",
+              "1",
+              "2",
+              "3"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q18",
+            type: "mcq",
+            marks: 3,
+            passage: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q17-passage-1.webp#575x842)\n\n![Figure](/pyq/mad-2-end-term-aug-2025-fn/q17-passage-2.webp#575x628)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "What happens when the user clicks \"Select\" on Design UI again (step 3)?",
+            options: [
+              "It is added again, making the total 3",
+              "It replaces the previous task",
+              "Nothing changes, no duplicate is added",
+              "Vue throws a warning about duplicate keys"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q19",
+            type: "multi",
+            marks: 3,
+            passage: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q17-passage-1.webp#575x842)\n\n![Figure](/pyq/mad-2-end-term-aug-2025-fn/q17-passage-2.webp#575x628)\n\nBased on the above data, answer the given subquestions.",
+            prompt: "Which of the following statements about this component setup are true?",
+            options: [
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q19-opt1-1.webp#514x26)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q19-opt2-1.webp#508x23)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q19-opt3-1.webp#461x25)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q19-opt4-1.webp#425x21)"
+            ],
+            answer: [
+              0,
+              1,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q20",
+            type: "multi",
+            marks: 3,
+            prompt: "Which factors directly impact the Lighthouse \"Performance\" score?",
+            options: [
+              "First Contentful Paint (FCP)",
+              "HTTPS usage",
+              "Time to Interactive (TTI)",
+              "Layout Shift"
+            ],
+            answer: [
+              0,
+              2,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q21",
+            type: "multi",
+            marks: 3,
+            prompt: "Which statements are true about handling background tasks in Flask with Celery?",
+            options: [
+              "Celery allows long-running tasks to be executed asynchronously",
+              "Polling is a strategy to check task status periodically",
+              "Using time.sleep() blocks the event loop and is recommended for async tasks",
+              "Flask + Celery + Redis is a common stack for async task management"
+            ],
+            answer: [
+              0,
+              1,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q22",
+            type: "multi",
+            marks: 3,
+            prompt: "Which of the following are true about mutations and actions in Vuex?",
+            options: [
+              "Mutations can be asynchronous",
+              "Actions can be asynchronous",
+              "Only actions can call APIs through fetch call",
+              "Mutations should modify state directly"
+            ],
+            answer: [
+              1,
+              2,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q23",
+            type: "multi",
+            marks: 3,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q23-1.webp#575x113)",
+            options: [
+              "The class \"active\" will only be applied to the div element if the variable \"isActive\" evaluates to true.",
+              "The class \"text-bold\" will always be applied to the div element regardless of the \"hasBoldText\" variable value.",
+              "The class \"disabled\" will be applied to the div element when the variable \"isEnabled\" evaluates to false.",
+              "All three classes (\"active\", \"text-bold\", \"disabled\") will always be applied to the div element.",
+              "The class \"text-bold\" will only be applied if the variable \"hasBoldText\" exists and evaluates to a truthy value.",
+              "If \"isEnabled\" is undefined, the \"disabled\" class will not be applied to the div element."
+            ],
+            answer: [
+              0,
+              2,
+              4
+            ],
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q24",
+            type: "mcq",
+            marks: 4.5,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q24-1.webp#525x400)",
+            options: [
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q24-opt1-1.webp#575x90)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q24-opt2-1.webp#575x109)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q24-opt3-1.webp#575x116)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q24-opt4-1.webp#575x89)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q25",
+            type: "mcq",
+            marks: 4.5,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q25-1.webp#474x391)",
+            options: [
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q25-opt1-1.webp#360x31)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q25-opt2-1.webp#359x31)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q25-opt3-1.webp#360x31)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q25-opt4-1.webp#359x30)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q26",
+            type: "mcq",
+            marks: 4.5,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q26-1.webp#392x426)",
+            options: [
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q26-opt1-1.webp#463x20)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q26-opt2-1.webp#523x21)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q26-opt3-1.webp#465x19)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q26-opt4-1.webp#216x20)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q27",
+            type: "mcq",
+            marks: 4.5,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q27-1.webp#471x490)\n\nIf requests for user IDs 1, 2, 1 are made within 5 minutes, what's the total response time?",
+            options: [
+              "15 seconds",
+              "10 seconds",
+              "5 seconds",
+              "0 seconds"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q28",
+            type: "mcq",
+            marks: 4.5,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q28-1.webp#575x381)",
+            options: [
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q28-opt1-1.webp#414x190)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q28-opt2-1.webp#448x148)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q28-opt3-1.webp#218x55)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q28-opt4-1.webp#417x196)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q29",
+            type: "mcq",
+            marks: 4.5,
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q29-1.webp#575x443)",
+            options: [
+              "Result: null",
+              "Error: HTTP 404, Result: null",
+              "Error: HTTP 404",
+              "Unhandled promise rejection"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q30",
+            type: "mcq",
+            marks: 4.5,
+            prompt: "Consider the following JavaScript program that demonstrates web storage operations:\n\n![Figure](/pyq/mad-2-end-term-aug-2025-fn/q30-1.webp#575x585)",
+            options: [
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q30-opt1-1.webp#287x206)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q30-opt2-1.webp#152x214)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q30-opt3-1.webp#300x218)",
+              "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q30-opt4-1.webp#294x217)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q31",
+            type: "mcq",
+            marks: 3,
+            passage: "Answer the given subquestions.",
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q31-1.webp#575x338)",
+            options: [
+              "The password will be stored as plain text \"mypassword123\" in the database because WTF_CSRF_ENABLED = False",
+              "The password will be hashed using bcrypt with the salt \"this-is-a-salt-key\" before being stored in the database",
+              "The password will be hashed using SHA-256 algorithm since no specific hashing method is configured",
+              "The password will be encrypted using the SECRET_KEY and stored in the session only"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "mad-2-end-term-aug-2025-fn-q32",
+            type: "mcq",
+            marks: 4.5,
+            passage: "Answer the given subquestions.",
+            prompt: "![Figure](/pyq/mad-2-end-term-aug-2025-fn/q32-1.webp#575x574)",
+            options: [
+              "200, 200, 200",
+              "200, 401, 403",
+              "200, 401, 401",
+              "401, 401, 403"
+            ],
+            answer: 1,
+            explanation: ""
+          }
+        ]
+      }
+    ]
+  },
   {
     slug: "mad-2-end-term-aug-2025-an",
     title: "MAD II End Term · 31 Aug 2025 (AN)",

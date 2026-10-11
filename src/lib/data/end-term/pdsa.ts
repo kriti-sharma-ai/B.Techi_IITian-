@@ -1,12 +1,366 @@
 import type { QualifierMock } from "../../types";
 
-// Programming, Data Structures and Algorithms using Python: IIT Madras BS End Term papers (4 papers, 100 questions).
+// Programming, Data Structures and Algorithms using Python: IIT Madras BS End Term papers (5 papers, 125 questions).
 // Questions, options and answer keys are reproduced from the official question papers.
 // Figures, code and maths typeset as images are in public/pyq/<slug>/, embedded inline as
 // ![Figure](src#WxH). Range answers are stored as midpoint ± tolerance.
 // Generated from the paper PDFs; edit with care.
 
 export const pdsaEndTermPapers: QualifierMock[] = [
+  {
+    slug: "pdsa-end-term-aug-2025-fn",
+    title: "PDSA End Term · 31 Aug 2025 (FN)",
+    description: "End Term paper from the May 2025 term, forenoon session on 31 Aug 2025, with the official answer key.",
+    difficulty: "Standard",
+    durationMin: 90,
+    endTerm: {
+      date: "2025-08-31",
+      session: "FN",
+      term: "May 2025"
+    },
+    sections: [
+      {
+        subjectSlug: "programming-data-structures-and-algorithms",
+        title: "Programming, Data Structures and Algorithms using Python",
+        short: "PDSA",
+        questions: [
+          {
+            id: "pdsa-end-term-aug-2025-fn-q1",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q1-1.webp#525x282)",
+            options: [
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q1-opt1-1.webp#43x32)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q1-opt2-1.webp#55x31)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q1-opt3-1.webp#87x30)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q1-opt4-1.webp#73x28)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q2",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q2-1.webp#575x416)",
+            options: [
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q2-opt1-1.webp#323x100)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q2-opt2-1.webp#327x94)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q2-opt3-1.webp#344x144)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q2-opt4-1.webp#285x77)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q3",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q3-1.webp#575x122)",
+            options: [
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            answer: 3,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q4",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q4-1.webp#575x74)",
+            options: [
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q4-opt1-1.webp#139x35)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q4-opt2-1.webp#148x31)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q4-opt3-1.webp#142x34)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q4-opt4-1.webp#138x32)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q5",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q5-1.webp#575x162)",
+            options: [
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q5-opt1-1.webp#193x29)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q5-opt2-1.webp#195x32)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q5-opt3-1.webp#193x32)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q6",
+            type: "mcq",
+            marks: 4,
+            prompt: "Given a weighted graph where weights of all edges are unique, there is always a unique shortest path from a source to destination in such a graph.",
+            options: [
+              "True",
+              "False"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q7",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q7-1.webp#575x130)",
+            options: [
+              "[65, 50, 55, 30, 40, 35, 45, 10, 20]",
+              "[65, 50, 55, 40, 30, 35, 45, 10, 20]",
+              "[65, 55, 50, 40, 30, 35, 45, 10, 20]",
+              "[65, 50, 55, 40, 30, 35, 45, 20, 10]"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q8",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q8-1.webp#575x58)",
+            options: [
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q8-opt1-1.webp#96x31)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q8-opt2-1.webp#93x26)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q8-opt3-1.webp#134x28)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q8-opt4-1.webp#85x27)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q9",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q9-1.webp#575x222)",
+            options: [
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q9-opt1-1.webp#420x101)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q9-opt2-1.webp#421x100)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q9-opt3-1.webp#426x95)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q9-opt4-1.webp#408x95)"
+            ],
+            answer: 1,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q10",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q10-1.webp#575x357)",
+            options: [
+              "4",
+              "5",
+              "6",
+              "7"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q11",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q11-1.webp#575x58)",
+            options: [
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q11-opt1-1.webp#141x29)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q11-opt2-1.webp#134x30)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q11-opt3-1.webp#134x35)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q11-opt4-1.webp#135x32)"
+            ],
+            answer: 3,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q12",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q12-1.webp#575x216)",
+            options: [
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q12-opt1-1.webp#183x27)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q12-opt2-1.webp#276x34)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q12-opt3-1.webp#284x32)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q12-opt4-1.webp#147x42)"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q13",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q13-1.webp#575x309)",
+            options: [
+              "14",
+              "15",
+              "13",
+              "16"
+            ],
+            answer: 0,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q14",
+            type: "mcq",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q14-1.webp#575x86)",
+            options: [
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q14-opt1-1.webp#193x32)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q14-opt2-1.webp#233x31)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q14-opt3-1.webp#208x30)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q14-opt4-1.webp#225x30)"
+            ],
+            answer: 2,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q15",
+            type: "multi",
+            marks: 4,
+            prompt: "Which of the following sorting algorithms will have the same time complexity irrespective of the sequence of elements in the input?",
+            options: [
+              "Selection Sort",
+              "Merge Sort",
+              "Quick Sort",
+              "Insertion Sort"
+            ],
+            answer: [
+              0,
+              1
+            ],
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q16",
+            type: "multi",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q16-1.webp#268x168)",
+            options: [
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q16-opt1-1.webp#122x38)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q16-opt2-1.webp#128x25)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q16-opt3-1.webp#127x29)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q16-opt4-1.webp#131x32)"
+            ],
+            answer: [
+              1,
+              3
+            ],
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q17",
+            type: "multi",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q17-1.webp#575x148)",
+            options: [
+              "13",
+              "8",
+              "9",
+              "10",
+              "11"
+            ],
+            answer: [
+              1,
+              2
+            ],
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q18",
+            type: "multi",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q18-1.webp#466x101)",
+            options: [
+              "10",
+              "20",
+              "22",
+              "25",
+              "40"
+            ],
+            answer: [
+              0,
+              2,
+              4
+            ],
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q19",
+            type: "multi",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q19-1.webp#575x224)",
+            options: [
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q19-opt1-1.webp#104x30)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q19-opt2-1.webp#109x28)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q19-opt3-1.webp#59x28)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q19-opt4-1.webp#96x26)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q19-opt5-1.webp#59x32)",
+              "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q19-opt6-1.webp#93x28)"
+            ],
+            answer: [
+              0,
+              1,
+              3,
+              4
+            ],
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q20",
+            type: "numerical",
+            marks: 4,
+            prompt: "An undirected graph has 300 edges. What is the minimum number of vertices it must have?",
+            answer: 25,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q21",
+            type: "numerical",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q21-1.webp#575x371)",
+            answer: 8,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q22",
+            type: "numerical",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q22-1.webp#575x321)",
+            answer: 14,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q23",
+            type: "numerical",
+            marks: 4,
+            prompt: "A binary tree has 7 nodes. What is the minimum possible height of this tree (assuming the empty tree height is 0)?",
+            answer: 3,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q24",
+            type: "numerical",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q24-1.webp#575x261)",
+            answer: 6,
+            explanation: ""
+          },
+          {
+            id: "pdsa-end-term-aug-2025-fn-q25",
+            type: "numerical",
+            marks: 4,
+            prompt: "![Figure](/pyq/pdsa-end-term-aug-2025-fn/q25-1.webp#575x420)",
+            answer: 76,
+            explanation: ""
+          }
+        ]
+      }
+    ]
+  },
   {
     slug: "pdsa-end-term-aug-2025-an",
     title: "PDSA End Term · 31 Aug 2025 (AN)",

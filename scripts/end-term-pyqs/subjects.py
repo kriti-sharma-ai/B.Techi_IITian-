@@ -25,11 +25,40 @@ SUBJECTS = {
     "DLP": ("dlp", "deep-learning-practice", "Deep Learning Practice", "DLP", "degree"),
     "i-NLP": ("inlp", "introduction-to-natural-language-processing", "Introduction to Natural Language Processing", "i-NLP", "degree"),
     "SPG": ("spg", "strategies-for-professional-growth", "Strategies for Professional Growth", "SPG", "degree"),
+    # Degree courses from the Aug 2025 Degree and Improvement papers. Prefixes and course slugs match
+    # scripts/quiz-pyqs/subjects.py; Managerial Economics uses BTechi's own course slug (curriculum.ts).
+    "Sw Engg": ("software-engineering", "software-engineering", "Software Engineering", "Software Engineering", "degree"),
+    "AI": ("ai-search", "ai-search-methods-for-problem-solving", "AI: Search Methods for Problem Solving", "AI Search", "degree"),
+    "Programming in C": ("c-programming", "programming-in-c", "Programming in C", "C Programming", "degree"),
+    "Computer System Design": ("csd", "computer-system-design", "Computer System Design", "CSD", "degree"),
+    "LLM": ("llm", "large-language-models", "Large Language Models", "LLM", "degree"),
+    "DL(CV)": ("dl-cv", "deep-learning-for-computer-vision", "Deep Learning for Computer Vision", "DL for CV", "degree"),
+    "Mathematical Foundations of Generative AI": ("mfgai", "mathematical-foundations-of-generative-ai", "Mathematical Foundations of Generative AI", "Maths for GenAI", "degree"),
+    "ADS": ("ads", "algorithms-for-data-science", "Algorithms for Data Science", "ADS", "degree"),
+    "Advanced Algorithms": ("advanced-algorithms", "advanced-algorithms", "Advanced Algorithms", "Advanced Algorithms", "degree"),
+    "Algorithmic Thinking in Bio": ("atb", "algorithmic-thinking-in-bioinformatics", "Algorithmic Thinking in Bioinformatics", "ATB", "degree"),
+    "Game Theory and Strategy": ("game-theory", "game-theory-and-strategy", "Game Theory and Strategy", "Game Theory", "degree"),
+    "Managerial Economics": ("managerial-economics", "managerial-economics", "Managerial Economics", "Managerial Economics", "degree"),
+    "Market Research": ("market-research", "market-research", "Market Research", "Market Research", "degree"),
+    "Design Thinking": ("design-thinking", "design-thinking-for-data-driven-app-development", "Design Thinking for Data-Driven App Development", "Design Thinking", "degree"),
 }
+
+# Improvement papers drop the "SemN" from Foundation section names; the questions are the same.
+ALIASES = {
+    "Maths1": "Sem1 Maths1", "Statistics1": "Sem1 Statistics1", "CT": "Sem1 CT", "English1": "Sem1 English1",
+    "Maths2": "Sem2 Maths2", "Statistics2": "Sem2 Statistics2", "Intro to Python": "Sem2 Intro to Python", "English2": "Sem2 English2",
+}
+
+# Pen-and-paper exams (Statistical Computing, Speech Technology): the questions are scanned images
+# answered on paper, with no key, so they can't be sat in the exam portal and are left out.
+
+
+def canonical(section):
+    return ALIASES.get(section, section)
 
 
 def slug_for(section, sitting):
-    s = SUBJECTS.get(section)
+    s = SUBJECTS.get(canonical(section))
     if not s:
         return None
     return f"{s[0]}-end-term-{sitting}"

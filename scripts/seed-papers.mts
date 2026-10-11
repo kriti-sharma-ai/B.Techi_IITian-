@@ -10,6 +10,7 @@ import { statsPyqPapers } from "../src/lib/data/stats-pyqs";
 import { ctPyqPapers } from "../src/lib/data/ct-pyqs";
 import { englishPyqPapers } from "../src/lib/data/english-pyqs";
 import { endTermPapers } from "../src/lib/data/end-term";
+import { quizPapers } from "../src/lib/data/quiz";
 import type { QualifierMock } from "../src/lib/types";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -22,11 +23,12 @@ if (!url || !serviceKey) {
 // The service role bypasses RLS, so this key must never reach the browser.
 const db = createClient(url, serviceKey, { auth: { persistSession: false } });
 
-type Kind = "mock" | "qualifier_pyq" | "end_term";
+type Kind = "mock" | "qualifier_pyq" | "end_term" | "quiz";
 const groups: [Kind, QualifierMock[]][] = [
   ["mock", qualifierMocks],
   ["qualifier_pyq", [...mathsPyqPapers, ...statsPyqPapers, ...ctPyqPapers, ...englishPyqPapers]],
   ["end_term", endTermPapers],
+  ["quiz", quizPapers],
 ];
 
 const rows = groups.flatMap(([kind, papers]) =>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="380" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">How an AI agent works: the loop</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">A model that can act, observe the result, and decide what to do next, until the goal is met.</text>
+  <rect class="brand" x="300" y="100" width="200" height="70" rx="16" fill="#ffd21c"/>
+  <text class="ink" x="400" y="131" font-size="16" font-weight="800" fill="#0b0b0b" text-anchor="middle">Language model</text>
+  <text class="ink" x="400" y="151" font-size="12" fill="#0b0b0b" text-anchor="middle">reasons and picks the next step</text>
+  <rect class="bg2" x="560" y="210" width="190" height="70" rx="16" fill="#eef1f4"/>
+  <text class="t" x="655" y="240" font-size="15" font-weight="700" fill="#171717" text-anchor="middle">Tools</text>
+  <text class="tm" x="655" y="260" font-size="12" fill="#667085" text-anchor="middle">search · code · files · APIs</text>
+  <rect class="bg2" x="50" y="210" width="190" height="70" rx="16" fill="#eef1f4"/>
+  <text class="t" x="145" y="240" font-size="15" font-weight="700" fill="#171717" text-anchor="middle">Context &amp; memory</text>
+  <text class="tm" x="145" y="260" font-size="12" fill="#667085" text-anchor="middle">goal · history · results so far</text>
+  <rect class="blue" x="305" y="300" width="190" height="56" rx="16" fill="#2563eb"/>
+  <text x="400" y="325" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">Observation</text>
+  <text x="400" y="343" font-size="12" fill="#fff" text-anchor="middle">what the tool returned</text>
+  <g class="lf" stroke="#171717" stroke-width="2" fill="none">
+    <path d="M500 150 C 600 160, 640 180, 650 206"/><path d="M644 198 l6 8 4 -9"/>
+    <path d="M620 280 C 580 320, 540 328, 498 328"/><path d="M506 322 l-8 6 8 5"/>
+    <path d="M305 328 C 250 328, 190 310, 160 284"/><path d="M168 290 l-8 -6 2 9"/>
+    <path d="M150 210 C 170 160, 230 140, 298 136"/><path d="M290 131 l8 5 -8 5"/>
+  </g>
+  <text class="tm" x="610" y="168" font-size="12" fill="#667085">1. act</text>
+  <text class="tm" x="560" y="345" font-size="12" fill="#667085">2. observe</text>
+  <text class="tm" x="160" y="330" font-size="12" fill="#667085">3. remember</text>
+  <text class="tm" x="150" y="160" font-size="12" fill="#667085">4. decide next step</text>
+</svg>

@@ -1,13 +1,14 @@
-// Practice sets built from real previous-year questions: the End Term or
+// Practice sets built from real previous-year questions: the End Term, quiz or
 // qualifier papers of one course, with the official answer keys. Past papers
 // carry no topic or week tags, so a set is drawn from one course and one exam.
 // Server-side only: it reads every paper (lib/papers.ts, via `await
 // getPyqPractice()`), and the session page sends the client just the questions it picked.
 
+import type { ExamTone } from "../components/exam-tag";
 import { formatSittingDate } from "./end-term";
 import { getPapers, type Papers } from "./papers";
 import { PYQ_EXAMS, PYQ_LEVELS, getPyqIndex, type CoursePyqs, type PaperSummary, type PyqExam, type PyqIndex } from "./pyq-index";
-import { paperHref } from "./pyq-urls";
+import { paperExam, paperHref, sittingOf } from "./pyq-urls";
 import type { QualifierMock, QualifierQuestion } from "./types";
 
 /** A past question plus what the practice view shows around it. */
@@ -15,7 +16,7 @@ export type PyqItem = QualifierQuestion & {
   subjectSlug: string;
   /** The section's "Useful data", when the paper has it. */
   reference?: string;
-  /** Sitting it was asked in, e.g. "End Term · 31 Aug 2025 FN" or "Qualifier · May 2024". */
+  /** Sitting it was asked in, e.g. "End Term · 31 Aug 2025 FN", "Quiz 1 · 26 Oct 2025 AN" or "Qualifier · May 2024". */
   source: string;
   /** The full paper in the exam portal. */
   paperHref: string;
@@ -44,8 +45,9 @@ type Block = PyqItem[];
 type Paper = { mock: QualifierMock; exam: PyqExam; blocks: Block[] };
 
 function blocksOf(p: QualifierMock): Block[] {
-  const source = p.endTerm
-    ? `End Term · ${formatSittingDate(p.endTerm.date)} ${p.endTerm.session}`
+  const sitting = sittingOf(p);
+  const source = sitting
+    ? `${sitting.label} · ${formatSittingDate(sitting.date)} ${sitting.session}`
     : `Qualifier · ${p.title.split(" · ").at(-1)}`;
   const href = paperHref(p);
   const blocks: Block[] = [];
@@ -137,18 +139,34 @@ const median = (values: number[]) => {
 };
 
 /**
- * How each exam's papers are offered for practice. The Qualifier covers weeks
- * 1–4, the same syllabus as Quiz 1, so its papers are offered as "Qualifier / Quiz 1".
- * `param` is the exam's value in practice URLs; `source` names the papers.
+ * How each exam's papers are offered for practice. `param` is the exam's value in
+ * practice URLs; `source` names the papers. The Qualifier covers weeks 1–4, the same
+ * syllabus as Quiz 1, so `about` says so where both are offered.
  */
-export const PRACTICE_EXAMS: Record<PyqExam, { param: string; label: string; scope: string; source: string; about: string; tone: "blue" | "purple" }> = {
+export const PRACTICE_EXAMS: Record<PyqExam, { param: string; label: string; scope: string; source: string; about: string; tone: ExamTone }> = {
   qualifier: {
-    param: "quiz-1",
-    label: "Qualifier / Quiz 1",
+    param: "qualifier",
+    label: "Qualifier",
     scope: "Weeks 1–4",
     source: "Qualifier",
     about: "The Qualifier covers weeks 1–4, the same syllabus as Quiz 1.",
     tone: "blue",
+  },
+  "quiz-1": {
+    param: "quiz-1",
+    label: "Quiz 1",
+    scope: "Weeks 1–4",
+    source: "Quiz 1",
+    about: "Papers from each term's first in-person quiz.",
+    tone: "teal",
+  },
+  "quiz-2": {
+    param: "quiz-2",
+    label: "Quiz 2",
+    scope: "Weeks 5–8",
+    source: "Quiz 2",
+    about: "Papers from each term's second in-person quiz.",
+    tone: "green",
   },
   "end-term": {
     param: "end-term",
@@ -160,11 +178,19 @@ export const PRACTICE_EXAMS: Record<PyqExam, { param: string; label: string; sco
   },
 };
 
-/** Reads ?exam=: the URL value ("quiz-1"), the internal name ("qualifier") or a label ("Quiz 1", "End Term"). */
+/** Reads ?exam=: the URL value or internal name ("quiz-1", "qualifier") or a label ("Quiz 1", "End Term"). */
 export const examFromParam = (s: string | undefined) => {
   const v = s?.trim().toLowerCase().replace(/\s+/g, "-");
   return (Object.keys(PRACTICE_EXAMS) as PyqExam[]).find((e) => e === v || PRACTICE_EXAMS[e].param === v);
 };
+
+/**
+ * The exam to open when Quiz 1 is asked for: Quiz 1 papers, or the qualifier's
+ * (same weeks 1–4) for a course that has no Quiz 1 papers yet. Links made before
+ * Quiz 1 papers existed used ?exam=quiz-1 for the qualifier papers.
+ */
+export const quiz1Fallback = (exams: PyqExam[]): PyqExam | undefined =>
+  exams.includes("quiz-1") ? "quiz-1" : exams.includes("qualifier") ? "qualifier" : undefined;
 
 /** The practice page opened on a course and exam. End Term is the default exam, so it stays out of the URL. */
 export const practiceHref = (courseSlug: string, exam: PyqExam = "end-term") =>
@@ -202,17 +228,18 @@ export type PyqSet = {
   blueprint?: string;
 };
 
-function buildPractice({ pyqGroups, endTermPapersFor }: Papers, { getPyqCourse }: PyqIndex) {
+function buildPractice({ pyqGroups, endTermPapersFor, quizPapersFor }: Papers, { getPyqCourse }: PyqIndex) {
   const papersCache = new Map<string, Paper[]>();
 
   function papersOf(courseSlug: string): Paper[] {
     let papers = papersCache.get(courseSlug);
     if (!papers) {
       const qualifier = pyqGroups.find((g) => g.subjectSlug === courseSlug)?.papers ?? [];
-      papers = [
-        ...endTermPapersFor(courseSlug).map((mock) => ({ mock, exam: "end-term" as const, blocks: blocksOf(mock) })),
-        ...qualifier.map((mock) => ({ mock, exam: "qualifier" as const, blocks: blocksOf(mock) })),
-      ];
+      papers = [...endTermPapersFor(courseSlug), ...quizPapersFor(courseSlug), ...qualifier].map((mock) => ({
+        mock,
+        exam: paperExam(mock),
+        blocks: blocksOf(mock),
+      }));
       papersCache.set(courseSlug, papers);
     }
     return papers;
@@ -270,4 +297,36 @@ export async function getPyqPractice(): Promise<PyqPractice> {
   let practice = built.get(papers);
   if (!practice) built.set(papers, (practice = buildPractice(papers, index)));
   return practice;
+}
+
+/** A course's papers in brief, for the dashboard's "Your exams". */
+export type CourseExamLinks = {
+  slug: string;
+  name: string;
+  code?: string;
+  /** Exam labels, e.g. ["End Term", "Quiz 1", "Qualifier"]. */
+  exams: string[];
+  papers: number;
+  /** The course's PYQ page. */
+  href: string;
+  practiceHref: string;
+};
+
+/** Every course with papers to sit or practise. */
+export async function getCourseExamLinks(): Promise<CourseExamLinks[]> {
+  const { pyqCourses } = await getPyqIndex();
+  return pyqCourses
+    .filter((c) => c.papers.length > 0)
+    .map((c) => {
+      const exams = courseExams(c);
+      return {
+        slug: c.slug,
+        name: c.name,
+        code: c.code,
+        exams: exams.map((e) => PRACTICE_EXAMS[e].label),
+        papers: c.papers.length,
+        href: c.href,
+        practiceHref: practiceHref(c.slug, exams[0]),
+      };
+    });
 }

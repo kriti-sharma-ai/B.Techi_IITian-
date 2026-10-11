@@ -89,7 +89,7 @@ export default async function PyqCoursePage({ params }: PageProps<"/pyqs/[level]
         {!c.inCurriculum && (
           <p className="max-w-3xl text-sm text-muted">
             <Badge className="mr-2">BS in Data Science</Badge>
-            This course belongs to the IIT Madras BS in Data Science, which sits the same End Term exam as the BS in Management and Data Science.
+            This course belongs to the IIT Madras BS in Data Science, which sits the same quizzes and End Term exams as the BS in Management and Data Science.
           </p>
         )}
 

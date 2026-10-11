@@ -2,22 +2,31 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { PyqHistory } from "@/components/qualifier-attempts";
+import { ScopeSwitch } from "@/components/study-scope";
 import { PageHeader } from "@/components/ui";
 import { PYQ_LEVELS, getPyqIndex, groupCourses } from "@/lib/pyq-index";
 import { pyqLevelHref } from "@/lib/pyq-urls";
+import { getStudyCourse } from "@/lib/study-courses";
+import { getStudyScope, keepScope, narrow, scopeLinks } from "@/lib/study-scope";
 
 export const metadata: Metadata = {
   title: "IIT Madras BS PYQs: Previous Year Papers for Every Course",
   description:
-    "Previous year question papers for every IIT Madras BS course, Foundation to Degree: Qualifier and End Term papers with the official answer key. Sit each paper in a timed exam portal.",
+    "Previous year question papers for every IIT Madras BS course, Foundation to Degree: Qualifier, Quiz and End Term papers with the official answer key. Sit each paper in a timed exam portal.",
   alternates: { canonical: "/pyqs" },
 };
 
 // Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
 export const revalidate = 300;
 
-export default async function PyqsPage() {
-  const { pyqCoursesForLevel, pyqTotals } = await getPyqIndex();
+export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
+  const sp = await searchParams;
+  const [{ pyqCourses, pyqTotals }, scope] = await Promise.all([getPyqIndex(), getStudyScope(sp)]);
+  const scoped = narrow(scope, pyqCourses, (c) => c.slug);
+  // Profile courses without papers, named so the student knows they weren't missed.
+  const noPapers = scoped.narrowed
+    ? scope.courses.filter((slug) => !pyqCourses.some((c) => c.slug === slug)).map((slug) => getStudyCourse(slug)!.name)
+    : [];
   return (
     <>
       <PageHeader
@@ -42,8 +51,16 @@ export default async function PyqsPage() {
       </PageHeader>
 
       <div className="container-page space-y-14 py-10 md:py-14">
+        {scoped.mine > 0 && (
+          <div className="-mb-6 space-y-3 md:-mb-8">
+            <ScopeSwitch list={scoped} links={scopeLinks("/pyqs", sp)} />
+            {noPapers.length > 0 && (
+              <p className="text-sm text-muted">No past papers yet for {new Intl.ListFormat("en").format(noPapers)}.</p>
+            )}
+          </div>
+        )}
         {PYQ_LEVELS.map((level) => {
-          const courses = pyqCoursesForLevel(level.slug);
+          const courses = scoped.items.filter((c) => c.level === level.slug);
           if (!courses.length) return null;
           const papers = courses.reduce((n, c) => n + c.papers.length, 0);
           return (
@@ -51,7 +68,7 @@ export default async function PyqsPage() {
               <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
                 <div>
                   <h2 id={`level-${level.slug}`} className="text-2xl font-bold tracking-tight">
-                    <Link href={pyqLevelHref(level.slug)} className="hover:underline">
+                    <Link href={keepScope(pyqLevelHref(level.slug), scope)} className="hover:underline">
                       {level.name} PYQs
                     </Link>
                   </h2>
@@ -59,8 +76,8 @@ export default async function PyqsPage() {
                     {level.description} {courses.length} courses, {papers} papers.
                   </p>
                 </div>
-                <Link href={pyqLevelHref(level.slug)} className="inline-flex items-center gap-1 text-sm font-semibold hover:underline">
-                  All {level.short} papers <ArrowRight className="size-4" aria-hidden />
+                <Link href={keepScope(pyqLevelHref(level.slug), scope)} className="inline-flex items-center gap-1 text-sm font-semibold hover:underline">
+                  {scoped.narrowed ? "Your" : "All"} {level.short} papers <ArrowRight className="size-4" aria-hidden />
                 </Link>
               </div>
               <div className="space-y-6">

@@ -4,17 +4,20 @@ import { useEffect } from "react";
 import type { User as AuthUser } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase/client";
 import { syncProgress } from "@/lib/supabase/sync";
-import { actions, update, type Role, type User } from "@/lib/store";
+import { actions, readState, update, type Role, type User } from "@/lib/store";
 
 function fromAuth(u: AuthUser): User {
   const meta = u.user_metadata ?? {};
+  const email = u.email ?? "";
+  const known = readState().user;
   return {
     name: meta.name ?? meta.full_name ?? u.email?.split("@")[0] ?? "Student",
-    email: u.email ?? "",
+    email,
     university: meta.university,
     program: meta.program,
     level: meta.level,
-    role: "student",
+    // The role comes from profiles (below); until it loads, keep the one already known for this account.
+    role: known?.email === email ? known.role : "student",
   };
 }
 
@@ -26,9 +29,7 @@ export function AuthSync() {
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
-        // Drop stale browser-only accounts from demo mode; the demo admin stays
-        // so the CMS can still be previewed without a real admin account.
-        update((s) => (s.user && s.user.role !== "admin" ? { ...s, user: null } : s));
+        update((s) => (s.user ? { ...s, user: null } : s));
         void syncProgress(null);
         return;
       }

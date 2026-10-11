@@ -11,10 +11,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, Calculator as CalcIcon, Check, Clock, Delete, Info, LayoutGrid, Maximize, User, X } from "lucide-react";
 import { actions, useHydrated, useStore } from "@/lib/store";
 import { formatClock, hasResponse, mockMarks, mockQuestions, paperHref, scoreMock, type QualifierResponse } from "@/lib/qualifier";
-import { pyqCourseHref } from "@/lib/pyq-urls";
+import { pyqCourseHref, sittingOf } from "@/lib/pyq-urls";
 import type { QualifierMock, QualifierQuestion } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
+import { ScientificCalculator } from "./scientific-calculator";
 
 /** nv: not visited · na: not answered · a: answered · m: marked · am: answered & marked */
 type Status = "nv" | "na" | "a" | "m" | "am";
@@ -86,8 +87,9 @@ export function QualifierExam({ mock }: { mock: QualifierMock }) {
       document.body.style.overflow = prev;
     };
   }, []);
+  // `light`: the portal always renders in the light theme, like the real exam software.
   return (
-    <div className="fixed inset-0 z-[70] flex flex-col bg-bg text-fg">
+    <div className="light fixed inset-0 z-[70] flex flex-col bg-bg text-fg">
       {hydrated ? <ExamFlow mock={mock} /> : <div className="m-auto size-8 animate-spin rounded-full border-2 border-border border-t-fg" />}
     </div>
   );
@@ -203,9 +205,10 @@ function Instructions({ mock, name, onBegin }: { mock: QualifierMock; name: stri
                   To qualify you need <b>at least 40% in each course</b> and <b>at least 50% on average</b> across the four (general category; relaxed
                   for reserved categories).
                 </li>
-              ) : mock.endTerm ? (
+              ) : sittingOf(mock) ? (
                 <li>
-                  This is a previous-year End Term paper with the official answer key. Figures, code and formulas appear exactly as in the paper.
+                  This is a previous-year {sittingOf(mock)!.label} paper with the official answer key. Figures, code and formulas appear exactly as in the
+                  paper.
                 </li>
               ) : (
                 <li>
@@ -262,7 +265,7 @@ function PortalHeader({ mock, children }: { mock: QualifierMock; children?: Reac
       <span className="grid size-8 place-items-center rounded-lg bg-brand text-sm font-black text-brand-ink">B</span>
       <div className="min-w-0 flex-1 leading-tight">
         <p className="truncate text-sm font-bold">{mock.title}</p>
-        <p className="truncate text-[11px] opacity-70">BTechi Exam Portal · IITM BS {mock.endTerm ? "End Term" : "Qualifier"} format</p>
+        <p className="truncate text-[11px] opacity-70">BTechi Exam Portal · IITM BS {sittingOf(mock)?.label ?? "Qualifier"} format</p>
       </div>
       {children}
     </header>
@@ -277,7 +280,9 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
   const [live, setLive] = useState<Live>(initial);
   const [draft, setDraft] = useState<QualifierResponse | undefined>(initial.responses[flat[initial.current].q.id]);
   const [now, setNow] = useState(() => Date.now());
-  const [panel, setPanel] = useState<"none" | "palette" | "calc" | "info" | "submit">("none");
+  const [panel, setPanel] = useState<"none" | "palette" | "info" | "submit">("none");
+  // The calculator floats over everything else, so it stays open while the palette or a dialog is used.
+  const [calcOpen, setCalcOpen] = useState(false);
   const [tabWarning, setTabWarning] = useState(false);
   const submitted = useRef(false);
 
@@ -379,8 +384,14 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
   return (
     <>
       <PortalHeader mock={mock}>
-        <button type="button" onClick={() => setPanel(panel === "calc" ? "none" : "calc")} className="hidden h-9 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium hover:bg-bg/10 sm:inline-flex">
-          <CalcIcon className="size-4" aria-hidden /> Calculator
+        <button
+          type="button"
+          onClick={() => setCalcOpen((o) => !o)}
+          aria-pressed={calcOpen}
+          aria-label="Calculator"
+          className={cn("inline-flex h-9 items-center gap-1.5 rounded-lg px-2 text-sm font-medium hover:bg-bg/10 sm:px-2.5", calcOpen && "bg-bg/15")}
+        >
+          <CalcIcon className="size-4" aria-hidden /> <span className="hidden sm:inline">Calculator</span>
         </button>
         <button type="button" onClick={() => setPanel("info")} className="hidden h-9 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium hover:bg-bg/10 sm:inline-flex">
           <Info className="size-4" aria-hidden /> Instructions
@@ -541,19 +552,23 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
           <div className="min-h-0 flex-1 overflow-y-auto p-4">
             <p className="mb-3 rounded-lg bg-surface-2 px-3 py-2 text-sm font-semibold">{section.title}</p>
             <p className="mb-3 text-xs text-muted">Choose a question</p>
-            <div className="grid grid-cols-5 gap-2.5">
+            {/* Columns are exactly chip-sized and spread edge to edge, so the first and last columns line up with
+                the section title above, and the current-question ring hugs the chip instead of the wider cell. */}
+            <div className="grid grid-cols-[repeat(5,2.25rem)] justify-between gap-y-3">
               {section.questions.map((x, i) => {
                 const index = sectionStart(si) + i;
+                const status = live.status[x.id] ?? "nv";
                 return (
                   <button
                     key={x.id}
                     type="button"
                     onClick={() => go(index)}
-                    aria-label={`Question ${i + 1}, ${STATUS_META[live.status[x.id] ?? "nv"].label}`}
+                    aria-label={`Question ${i + 1}, ${STATUS_META[status].label}`}
                     aria-current={index === live.current ? "true" : undefined}
-                    className={cn("rounded-xl", index === live.current && "ring-2 ring-fg ring-offset-2 ring-offset-surface")}
                   >
-                    <StatusChip status={live.status[x.id] ?? "nv"}>{i + 1}</StatusChip>
+                    <StatusChip status={status} className={cn(index === live.current && "ring-2 ring-fg ring-offset-2 ring-offset-surface")}>
+                      {i + 1}
+                    </StatusChip>
                   </button>
                 );
               })}
@@ -567,7 +582,7 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
         </aside>
       </div>
 
-      {panel === "calc" && <Calculator onClose={() => setPanel("none")} />}
+      {calcOpen && <ScientificCalculator onClose={() => setCalcOpen(false)} />}
       {panel === "info" && (
         <Modal title="Instructions" onClose={() => setPanel("none")}>
           <div className="space-y-4 text-sm leading-relaxed">
@@ -729,7 +744,7 @@ function Answer({ q, value, onChange }: { q: QualifierQuestion; value: Qualifier
   );
 }
 
-/* ───────────── Modal + calculator ───────────── */
+/* ───────────── Modal ───────────── */
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
   return (
@@ -742,98 +757,6 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
           </button>
         </div>
         {children}
-      </div>
-    </div>
-  );
-}
-
-type Op = "+" | "−" | "×" | "÷";
-const apply = (a: number, b: number, op: Op) => (op === "+" ? a + b : op === "−" ? a - b : op === "×" ? a * b : a / b);
-const show = (n: number) => (Number.isFinite(n) ? String(Number(n.toPrecision(12))) : "Error");
-
-function Calculator({ onClose }: { onClose: () => void }) {
-  const [display, setDisplay] = useState("0");
-  const [acc, setAcc] = useState<number | null>(null);
-  const [op, setOp] = useState<Op | null>(null);
-  const [fresh, setFresh] = useState(true);
-
-  const digit = (d: string) => {
-    if (display === "Error" || fresh) setDisplay(d === "." ? "0." : d);
-    else if (d === "." && display.includes(".")) return;
-    else setDisplay(display === "0" && d !== "." ? d : display + d);
-    setFresh(false);
-  };
-  const operator = (o: Op) => {
-    const cur = Number(display);
-    if (acc !== null && op && !fresh) {
-      const r = apply(acc, cur, op);
-      setAcc(r);
-      setDisplay(show(r));
-    } else setAcc(cur);
-    setOp(o);
-    setFresh(true);
-  };
-  const equals = () => {
-    if (acc === null || !op) return;
-    setDisplay(show(apply(acc, Number(display), op)));
-    setAcc(null);
-    setOp(null);
-    setFresh(true);
-  };
-  const unary = (f: (n: number) => number) => {
-    setDisplay(show(f(Number(display))));
-    setFresh(true);
-  };
-  const reset = () => {
-    setDisplay("0");
-    setAcc(null);
-    setOp(null);
-    setFresh(true);
-  };
-
-  const keys: [string, () => void, string?][] = [
-    ["C", reset, "text-red"],
-    ["±", () => unary((n) => -n)],
-    ["√", () => unary(Math.sqrt)],
-    ["÷", () => operator("÷"), "bg-surface-2"],
-    ["7", () => digit("7")],
-    ["8", () => digit("8")],
-    ["9", () => digit("9")],
-    ["×", () => operator("×"), "bg-surface-2"],
-    ["4", () => digit("4")],
-    ["5", () => digit("5")],
-    ["6", () => digit("6")],
-    ["−", () => operator("−"), "bg-surface-2"],
-    ["1", () => digit("1")],
-    ["2", () => digit("2")],
-    ["3", () => digit("3")],
-    ["+", () => operator("+"), "bg-surface-2"],
-    ["x²", () => unary((n) => n * n)],
-    ["0", () => digit("0")],
-    [".", () => digit(".")],
-    ["=", equals, "bg-ink text-bg"],
-  ];
-
-  return (
-    <div role="dialog" aria-label="Calculator" className="animate-fade-up fixed right-3 top-16 z-30 w-64 rounded-2xl border border-border bg-surface p-3 shadow-2xl md:right-[21rem]">
-      <div className="mb-2 flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted">Calculator</p>
-        <button type="button" onClick={onClose} aria-label="Close calculator" className="rounded-md p-1 hover:bg-surface-2">
-          <X className="size-4" />
-        </button>
-      </div>
-      <div className="mb-2 rounded-lg bg-surface-2 px-3 py-2 text-right">
-        <p className="h-4 font-mono text-[11px] text-muted">{acc !== null && op ? `${show(acc)} ${op}` : ""}</p>
-        <p className="truncate font-mono text-2xl font-semibold tabular-nums" aria-live="polite">
-          {display}
-        </p>
-      </div>
-      <div className="grid grid-cols-4 gap-1.5">
-        {keys.map(([label, fn, cls]) => (
-          <button key={label} type="button" onClick={fn} className={cn("h-10 rounded-lg border border-border font-mono text-sm font-semibold hover:brightness-95", cls ?? "bg-surface")}>
-            {label}
-          </button>
-        ))}
       </div>
     </div>
   );

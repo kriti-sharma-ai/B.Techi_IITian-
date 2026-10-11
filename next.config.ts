@@ -1,4 +1,6 @@
 import type { NextConfig } from "next";
+// Relative import: curriculum.ts has no "@/" aliases, so the config loader can resolve it.
+import { programs } from "./src/lib/data/curriculum";
 
 // Earlier paper URLs → /pyqs/<level>/<course>/<paper> (see src/lib/pyq-urls.ts).
 // next.config can't import app modules, so the course paths are listed here:
@@ -55,7 +57,14 @@ const nextConfig: NextConfig = {
   async redirects() {
     // Exam prep merged into /practice as a tab; query (subject, level, exam) is carried over.
     // Previous-year papers moved to readable /pyqs/<level>/<course>/<paper> paths; see lib/pyq-urls.ts.
-    return [{ source: "/exam-prep", destination: "/practice?tab=exam", permanent: true }, ...legacyPyqRedirects()];
+    // With a single program, /programs goes straight to it. Done here rather than with redirect() in the
+    // page, which renders an empty <main> (footer jumps up) until the client router follows it.
+    // Mirrors the check in app/programs/page.tsx.
+    return [
+      { source: "/exam-prep", destination: "/practice?tab=exam", permanent: true },
+      ...(programs.length === 1 ? [{ source: "/programs", destination: `/programs/${programs[0].slug}`, permanent: false }] : []),
+      ...legacyPyqRedirects(),
+    ];
   },
   async headers() {
     return [

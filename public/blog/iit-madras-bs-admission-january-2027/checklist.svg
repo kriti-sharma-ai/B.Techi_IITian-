@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="320" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">Application documents: get these ready first</text>
+  <g font-size="14">
+    <g transform="translate(40 70)">
+      <rect class="brand" width="26" height="26" rx="7" fill="#ffd21c"/><path class="lf" d="M7 13 l5 5 l8 -10" stroke="#171717" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <text class="t" x="40" y="18" font-weight="700" fill="#171717">Passport-size photo</text>
+      <text class="tm" x="40" y="38" font-size="12" fill="#667085">JPEG/JPG · 50–150 KB</text>
+    </g>
+    <g transform="translate(420 70)">
+      <rect class="brand" width="26" height="26" rx="7" fill="#ffd21c"/><path class="lf" d="M7 13 l5 5 l8 -10" stroke="#171717" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <text class="t" x="40" y="18" font-weight="700" fill="#171717">Signature</text>
+      <text class="tm" x="40" y="38" font-size="12" fill="#667085">JPEG · 4–150 KB</text>
+    </g>
+    <g transform="translate(40 140)">
+      <rect class="brand" width="26" height="26" rx="7" fill="#ffd21c"/><path class="lf" d="M7 13 l5 5 l8 -10" stroke="#171717" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <text class="t" x="40" y="18" font-weight="700" fill="#171717">Photo ID</text>
+      <text class="tm" x="40" y="38" font-size="12" fill="#667085">Aadhaar, PAN, passport, voter ID or licence · 50 KB–2 MB</text>
+    </g>
+    <g transform="translate(420 140)">
+      <rect class="bg2" width="26" height="26" rx="7" fill="#eef1f4"/>
+      <text class="t" x="40" y="18" font-weight="700" fill="#171717">Category certificate</text>
+      <text class="tm" x="40" y="38" font-size="12" fill="#667085">SC/ST/OBC-NCL/EWS only · 50 KB–2 MB</text>
+    </g>
+    <g transform="translate(40 210)">
+      <rect class="bg2" width="26" height="26" rx="7" fill="#eef1f4"/>
+      <text class="t" x="40" y="18" font-weight="700" fill="#171717">PwD certificate</text>
+      <text class="tm" x="40" y="38" font-size="12" fill="#667085">If disability is 40% or more · 50 KB–2 MB</text>
+    </g>
+    <g transform="translate(420 210)">
+      <rect class="bg2" width="26" height="26" rx="7" fill="#eef1f4"/>
+      <text class="t" x="40" y="18" font-weight="700" fill="#171717">JEE Advanced proof</text>
+      <text class="tm" x="40" y="38" font-size="12" fill="#667085">Direct entry only · scoresheet, admit card or receipt (PDF)</text>
+    </g>
+  </g>
+  <text class="tm" x="40" y="296" font-size="11" fill="#667085">Yellow = everyone. Grey = only if it applies to you. Requirements from the official admissions page, October 2026.</text>
+</svg>

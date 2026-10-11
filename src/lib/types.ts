@@ -94,6 +94,12 @@ export type Note = {
   sizeKB: number;
   /** Object-storage URL. Missing means the file is not uploaded yet. */
   fileUrl?: string;
+  /** MIME type of the file, when known (CMS uploads: PDF, Word or an image). */
+  fileType?: string;
+  /** Link to the resource elsewhere, for notes that are not uploaded files. */
+  externalUrl?: string;
+  /** The file opens for signed-in students only. */
+  signInRequired?: boolean;
   quality: Quality;
   author: string;
   downloads: number;
@@ -251,6 +257,20 @@ export type SkillPath = {
   courses: string[];
 };
 
+/** A text lesson teaching the curriculum lecture titled `lecture`. Blocks use the cheat-notes markup. */
+export type SkillLesson = { lecture: string; blocks: CheatBlock[] };
+
+/** Text notes for a skill course: one lesson per lecture, in curriculum order. */
+export type SkillNotes = {
+  /** SkillCourse slug. */
+  skill: string;
+  /** Name of the condensed view: "Code", "Formulas", "Shortcuts"… */
+  quickLabel: string;
+  lessons: SkillLesson[];
+  /** Key takeaways shown after the last lesson. */
+  recap: string[];
+};
+
 /* ───────────── Qualifier pack (Math 1 · Stats 1 · CT · English 1) ───────────── */
 
 /** IITM exam formats: single choice, multiple select, numerical answer, short text answer. */
@@ -298,5 +318,47 @@ export type QualifierMock = {
   durationMin: number;
   /** Set on End Term previous-year papers, which are listed in the PYQ hub (/pyqs) instead of the qualifier pack. */
   endTerm?: { date: string; session: "FN" | "AN"; term: string };
+  /** Set on Quiz 1 / Quiz 2 previous-year papers, also listed in the PYQ hub. */
+  quiz?: { number: 1 | 2; date: string; session: "FN" | "AN"; term: string };
   sections: QualifierSection[];
+};
+
+/* ───────────── Cheat notes (qualifier formula sheets) ───────────── */
+
+/**
+ * Text in cheat notes uses a small inline markup, rendered by components/cheat-sheet.tsx:
+ * **bold**, ==highlight==, `code`, ^{sup}, _{sub}, √{radicand}, ‾{overline} and [[numerator // denominator]].
+ */
+export type CheatFormula = { label: string; f: string; note?: string };
+
+export type CheatBlock =
+  | { kind: "formulas"; title?: string; items: CheatFormula[] }
+  | { kind: "table"; title?: string; head: string[]; rows: string[][] }
+  | { kind: "points"; title?: string; items: string[] }
+  | { kind: "code"; title?: string; code: string; note?: string }
+  | { kind: "example"; title?: string; q: string; steps: string[]; answer: string }
+  | { kind: "traps"; items: string[] }
+  | { kind: "tip"; text: string };
+
+export type CheatSection = {
+  /** Anchor id, unique within the sheet. */
+  id: string;
+  week: number;
+  title: string;
+  /** How often the qualifier papers on BTechi test this topic. */
+  hits: "every" | "often" | "sometimes";
+  blocks: CheatBlock[];
+};
+
+export type CheatSheet = {
+  /** URL segment under /qualifier/notes. */
+  slug: string;
+  subjectSlug: string;
+  short: string;
+  description: string;
+  /** Name of the condensed view: "Formulas" for Maths and Stats, "Rules" for CT and English. */
+  quickLabel: string;
+  sections: CheatSection[];
+  /** Checklist shown at the end of the sheet. */
+  lastMinute: string[];
 };

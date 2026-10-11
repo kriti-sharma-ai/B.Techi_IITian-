@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="380" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">The 9-month data analyst roadmap</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">About 10 hours a week. AI fluency and communication run through every phase.</text>
+  <g font-size="13">
+    <rect class="green" x="40" y="90" width="110" height="200" rx="14" fill="#15803d" opacity="0.9"/>
+    <text x="95" y="116" font-weight="800" fill="#fff" text-anchor="middle">Month 1</text>
+    <text x="95" y="146" fill="#fff" text-anchor="middle">Excel</text>
+    <text x="95" y="166" fill="#fff" text-anchor="middle">+ statistics</text>
+    <text x="95" y="186" fill="#fff" text-anchor="middle">basics</text>
+    <rect class="blue" x="160" y="90" width="150" height="200" rx="14" fill="#2563eb"/>
+    <text x="235" y="116" font-weight="800" fill="#fff" text-anchor="middle">Months 2–3</text>
+    <text x="235" y="146" fill="#fff" text-anchor="middle">SQL, properly:</text>
+    <text x="235" y="166" fill="#fff" text-anchor="middle">joins, CTEs,</text>
+    <text x="235" y="186" fill="#fff" text-anchor="middle">window functions</text>
+    <rect class="purple" x="320" y="90" width="110" height="200" rx="14" fill="#7c3aed"/>
+    <text x="375" y="116" font-weight="800" fill="#fff" text-anchor="middle">Month 4</text>
+    <text x="375" y="146" fill="#fff" text-anchor="middle">Power BI</text>
+    <text x="375" y="166" fill="#fff" text-anchor="middle">or Tableau</text>
+    <rect class="teal" x="440" y="90" width="150" height="200" rx="14" fill="#0f766e"/>
+    <text x="515" y="116" font-weight="800" fill="#fff" text-anchor="middle">Months 5–6</text>
+    <text x="515" y="146" fill="#fff" text-anchor="middle">Python + pandas</text>
+    <text x="515" y="166" fill="#fff" text-anchor="middle">+ 3 portfolio</text>
+    <text x="515" y="186" fill="#fff" text-anchor="middle">projects</text>
+    <rect class="brand" x="600" y="90" width="160" height="200" rx="14" fill="#ffd21c"/>
+    <text class="ink" x="680" y="116" font-weight="800" fill="#0b0b0b" text-anchor="middle">Months 7–9</text>
+    <text class="ink" x="680" y="146" fill="#0b0b0b" text-anchor="middle">Resume, LinkedIn,</text>
+    <text class="ink" x="680" y="166" fill="#0b0b0b" text-anchor="middle">mock interviews,</text>
+    <text class="ink" x="680" y="186" fill="#0b0b0b" text-anchor="middle">applications</text>
+  </g>
+  <rect class="bg2" x="40" y="306" width="720" height="30" rx="10" fill="#eef1f4"/>
+  <text class="t" x="400" y="326" font-size="13" font-weight="700" fill="#171717" text-anchor="middle">Throughout: AI-assisted work + verification · business domain · writing and presenting</text>
+  <text class="tm" x="40" y="366" font-size="11" fill="#667085">Timings assume no prior experience. With a quantitative degree, you can often compress months 1–4.</text>
+</svg>

@@ -14,8 +14,8 @@ import type { QualifierMock } from "./types";
 /** How long a server process reuses the papers. Pages that list papers revalidate on the same schedule (keep their `revalidate` in step). */
 export const REFRESH_SECONDS = 300;
 
-// Rows per request: keeps each response well under Next's 2 MB fetch-cache limit (the largest paper is ~120 KB).
-const PAGE_SIZE = 10;
+// Rows per request: the largest paper is ~120 KB, so pages stay a few MB at most.
+const PAGE_SIZE = 25;
 
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
@@ -23,19 +23,24 @@ const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 
 type Row = { kind: "mock" | "qualifier_pyq" | "end_term" | "quiz"; data: QualifierMock };
 
+/** Every paper row, with the pages requested in parallel rather than one after another. */
 async function fetchRows() {
-  const rows: Row[] = [];
-  for (let from = 0; ; from += PAGE_SIZE) {
-    const { data, error } = await db
-      .from("papers")
-      .select("kind, data")
-      .order("kind")
-      .order("position")
-      .range(from, from + PAGE_SIZE - 1);
-    if (error) throw new Error(`Loading papers from Supabase failed: ${error.message}`);
-    rows.push(...(data as Row[]));
-    if (data.length < PAGE_SIZE) return rows;
-  }
+  const { count, error } = await db.from("papers").select("kind", { count: "exact", head: true });
+  if (error) throw new Error(`Loading papers from Supabase failed: ${error.message}`);
+  const pages = await Promise.all(
+    Array.from({ length: Math.ceil((count ?? 0) / PAGE_SIZE) }, async (_, i) => {
+      const from = i * PAGE_SIZE;
+      const { data, error } = await db
+        .from("papers")
+        .select("kind, data")
+        .order("kind")
+        .order("position")
+        .range(from, from + PAGE_SIZE - 1);
+      if (error) throw new Error(`Loading papers from Supabase failed: ${error.message}`);
+      return data as Row[];
+    }),
+  );
+  return pages.flat();
 }
 
 function catalog(rows: Row[]) {
@@ -103,14 +108,27 @@ export function invalidatePapers() {
 
 /** All papers, loaded once per server process and refreshed every REFRESH_SECONDS. */
 export function getPapers(): Promise<Papers> {
-  if (!cached || Date.now() - cached.at > REFRESH_SECONDS * 1000) {
-    const papers = fetchRows().then(catalog);
-    const entry = { at: Date.now(), papers };
-    cached = entry;
-    // Don't keep a failed load: the next request tries again.
-    papers.catch(() => {
-      if (cached === entry) cached = undefined;
-    });
+  if (!cached) {
+    cached = load();
+  } else if (!refreshing && Date.now() - cached.at > REFRESH_SECONDS * 1000) {
+    // Keep serving the current papers while fresh ones load, so no request waits on Supabase.
+    refreshing = true;
+    const next = load();
+    next.papers
+      .then(() => { cached = next; })
+      .catch(() => {})
+      .finally(() => { refreshing = false; });
   }
   return cached.papers;
+}
+
+let refreshing = false;
+
+function load() {
+  const entry = { at: Date.now(), papers: fetchRows().then(catalog) };
+  // Don't keep a failed first load: the next request tries again.
+  entry.papers.catch(() => {
+    if (cached === entry) cached = undefined;
+  });
+  return entry;
 }

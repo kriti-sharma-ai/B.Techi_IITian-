@@ -121,9 +121,10 @@ export default async function SkillNotesPage({ params }: PageProps<"/skills/[slu
 
       <ReaderToolbar quickLabel={notes.quickLabel} items={toc} />
 
-      <div className="container-page grid gap-8 py-5 md:py-8 lg:grid-cols-[250px_minmax(0,1fr)] print:block">
-        <ReaderToc items={toc} />
-        <div id="cheat-content" className="cheat-content mx-auto w-full min-w-0 max-w-3xl space-y-8 lg:mx-0">
+      <div className="mx-auto w-full max-w-[1380px] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+        <div className="grid gap-8 lg:grid-cols-[260px_minmax(0,1fr)] items-start print:block">
+          <ReaderToc items={toc} />
+          <div id="cheat-content" className="cheat-content w-full min-w-0 max-w-[860px] mx-auto space-y-8">
           {modules.map((m) => {
             const lessons = m.lessons.filter((l) => l.blocks.length);
             if (!lessons.length) return null;
@@ -201,6 +202,7 @@ export default async function SkillNotesPage({ params }: PageProps<"/skills/[slu
             with IIT Madras.
           </p>
         </div>
+      </div>
       </div>
     </CheatReader>
   );

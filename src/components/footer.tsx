@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { hrefEnabled } from "@/lib/site";
-import { isAuthPage } from "@/lib/utils";
 import { Logo } from "./logo";
 import { FooterWordmark } from "./footer-wordmark";
 
@@ -18,7 +17,6 @@ const columns = [
       ["Videos", "/videos"],
       ["Books", "/books"],
       ["Practice", "/practice"],
-      ["PYQs", "/pyqs"],
     ],
   },
   {
@@ -49,8 +47,8 @@ const legal = [
 
 export function Footer() {
   const pathname = usePathname();
-  // Course player pages (/subjects/<slug>/...) and the full-screen auth pages stay distraction-free.
-  if (pathname.startsWith("/admin") || isAuthPage(pathname) || /^\/subjects\/[^/]+/.test(pathname)) return null;
+  // Only rendered on the landing page.
+  if (pathname !== "/") return null;
   return (
     <footer className="relative mt-20 overflow-hidden border-t border-border bg-surface pb-24 text-fg md:pb-0">
       <div aria-hidden className="footer-glow pointer-events-none absolute inset-x-0 bottom-0 h-[70%]" />

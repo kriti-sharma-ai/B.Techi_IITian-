@@ -9,6 +9,7 @@ import type { QualifierMock } from "@/lib/types";
 import type { QualifierAttempt } from "@/lib/store";
 import { readLive } from "./qualifier-exam";
 import { Badge, buttonClass } from "./ui";
+import { cn } from "@/lib/utils";
 
 /** Score of an attempt: saved at submission, or worked out from the answer key for older attempts. */
 const attemptPercent = (a: QualifierAttempt, key?: QualifierMock) => {
@@ -18,9 +19,22 @@ const attemptPercent = (a: QualifierAttempt, key?: QualifierMock) => {
 
 /**
  * Start / Resume / Retake button for a paper, with the best score so far.
- * Papers aren't in the client bundle: pass the paper's answer key (lib/qualifier.ts answerKey), or `single` for papers without one.
  */
-export function MockAction({ slug, href, single, answerKey }: { slug: string; href?: string; single?: boolean; answerKey?: QualifierMock }) {
+export function MockAction({
+  slug,
+  href,
+  single,
+  answerKey,
+  compact,
+  buttonVariant = "primary",
+}: {
+  slug: string;
+  href?: string;
+  single?: boolean;
+  answerKey?: QualifierMock;
+  compact?: boolean;
+  buttonVariant?: "primary" | "secondary" | "dark";
+}) {
   const hydrated = useHydrated();
   const attempts = useStore((s) => s.qualifierAttempts.filter((a) => a.mockSlug === slug));
   const [inProgress, setInProgress] = useState(false);
@@ -30,17 +44,20 @@ export function MockAction({ slug, href, single, answerKey }: { slug: string; hr
   const scores = attempts.map((a) => attemptPercent(a, mock)).filter((p): p is number => p !== null);
   const best = hydrated && scores.length ? Math.max(...scores) : null;
   const singleSubject = single ?? (mock ? isSingleSubject(mock) : true);
-  const label = inProgress ? "Resume exam" : attempts.length ? "Retake" : "Start exam";
+  const label = inProgress ? "Resume" : attempts.length ? "Retake" : "Start exam";
   const Icon = inProgress ? Play : attempts.length ? RotateCcw : Play;
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <Link href={href ?? `/qualifier/${slug}`} className={buttonClass(inProgress ? "dark" : "primary")}>
-        <Icon className="size-4" aria-hidden /> {label}
+    <div className={cn("flex flex-wrap items-center", compact ? "gap-2" : "gap-3")}>
+      <Link
+        href={href ?? `/qualifier/${slug}`}
+        className={buttonClass(inProgress ? "dark" : buttonVariant, compact ? "sm" : "md", compact ? "h-8 px-3 text-xs font-semibold" : "")}
+      >
+        <Icon className={compact ? "size-3.5" : "size-4"} aria-hidden /> {label}
       </Link>
       {best !== null && (
-        <span className="text-sm text-muted">
-          Best {singleSubject ? "score" : "average"} <b className="text-fg tabular-nums">{best}%</b> · {attempts.length} {attempts.length === 1 ? "attempt" : "attempts"}
+        <span className={cn("text-muted tabular-nums", compact ? "text-[11px]" : "text-sm")}>
+          Best <b className="text-fg">{best}%</b>
         </span>
       )}
     </div>
@@ -48,30 +65,30 @@ export function MockAction({ slug, href, single, answerKey }: { slug: string; hr
 }
 
 /** Attempts at qualifier papers. `answerKeys` are the qualifier papers stripped by answerKey(), enough to score each attempt. */
-export function QualifierHistory({ answerKeys }: { answerKeys: QualifierMock[] }) {
+export function QualifierHistory({ answerKeys, className }: { answerKeys: QualifierMock[]; className?: string }) {
   const hydrated = useHydrated();
   const attempts = useStore((s) => s.qualifierAttempts);
   if (!hydrated || attempts.length === 0) return null;
   const getQualifierMock = (slug: string) => answerKeys.find((m) => m.slug === slug);
   return (
-    <section className="container-page pb-14 md:pb-20">
-      <h2 className="mb-4 flex items-center gap-2 text-xl font-bold tracking-tight md:text-2xl">
-        <History className="size-5 text-muted" aria-hidden /> Your attempts
+    <section className={cn("pt-4 border-t border-border", className)}>
+      <h2 className="mb-2.5 flex items-center gap-2 text-xs sm:text-sm font-bold tracking-tight text-fg">
+        <History className="size-3.5 text-muted" aria-hidden /> Your Qualifier Attempts ({attempts.length})
       </h2>
-      <ul className="card divide-y divide-border">
+      <ul className="rounded-xl border border-border bg-surface divide-y divide-border overflow-hidden shadow-2xs">
         {attempts.map((a) => {
           const mock = getQualifierMock(a.mockSlug);
           if (!mock) return null;
           const r = scoreMock(mock, a.responses);
           return (
             <li key={a.id}>
-              <Link href={`/qualifier/${mock.slug}?attempt=${a.id}`} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3.5 transition-colors hover:bg-surface-2">
-                <span className="font-semibold">{mock.title}</span>
-                <span className="text-sm text-muted">
+              <Link href={`/qualifier/${mock.slug}?attempt=${a.id}`} className="flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 transition-colors hover:bg-surface-2/40 text-xs">
+                <span className="font-semibold text-fg">{mock.title}</span>
+                <span className="text-[11px] text-muted">
                   {new Date(a.at).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })}
                 </span>
-                <span className="ml-auto flex items-center gap-3">
-                  <span className="hidden gap-1.5 text-xs text-muted tabular-nums sm:flex">
+                <span className="flex items-center gap-2">
+                  <span className="hidden gap-1.5 text-[11px] text-muted tabular-nums sm:flex">
                     {r.sections.map((s) => (
                       <span key={s.subjectSlug} className={s.passed ? "" : "text-red"}>
                         {s.short} {s.percent}%
@@ -79,7 +96,7 @@ export function QualifierHistory({ answerKeys }: { answerKeys: QualifierMock[] }
                     ))}
                   </span>
                   <Badge tone={r.qualified ? "green" : "amber"}>{r.qualified ? (isSingleSubject(mock) ? "Cleared" : "Qualified") : "Not yet"} · {r.average}%</Badge>
-                  <ArrowRight className="size-4 text-muted" aria-hidden />
+                  <ArrowRight className="size-3 text-muted" aria-hidden />
                 </span>
               </Link>
             </li>

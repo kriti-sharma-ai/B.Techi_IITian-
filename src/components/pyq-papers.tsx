@@ -1,19 +1,19 @@
 import Link from "next/link";
-import { ArrowRight, BookOpenCheck, Clock, ListChecks } from "lucide-react";
+import { ArrowRight, BookOpenCheck, Clock, FileText, ListChecks } from "lucide-react";
 import { MockAction } from "@/components/qualifier-attempts";
-import { Badge } from "@/components/ui";
+import { Badge, buttonClass } from "@/components/ui";
 import type { CoursePyqs, PaperSummary, PyqExam } from "@/lib/pyq-index";
 import { cn } from "@/lib/utils";
 
 // Same colours as ExamTag (components/exam-tag.tsx).
-const EXAM_BADGE: Record<PyqExam, { label: string; tone: "purple" | "green" | "teal" | "blue" }> = {
+export const EXAM_BADGE: Record<PyqExam, { label: string; tone: "purple" | "green" | "teal" | "blue" }> = {
   "end-term": { label: "End Term", tone: "purple" },
   "quiz-2": { label: "Quiz 2", tone: "green" },
   "quiz-1": { label: "Quiz 1", tone: "teal" },
   qualifier: { label: "Qualifier", tone: "blue" },
 };
 
-/** One row per paper: date, exam, size, and a Start / Resume / Retake button. */
+/** One row per paper: date, exam, size, a link to the paper as a question sheet, and a Start / Resume / Retake button. */
 export function PaperRows({ papers, className }: { papers: PaperSummary[]; className?: string }) {
   return (
     <ul className={cn("divide-y divide-border", className)}>
@@ -41,7 +41,14 @@ export function PaperRows({ papers, className }: { papers: PaperSummary[]; class
               {p.exam !== "qualifier" && p.term && <span>{p.term} term</span>}
             </p>
           </div>
-          <div className="shrink-0">
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <Link
+              href={p.sheetHref}
+              className={buttonClass("secondary")}
+              title="Open clean question paper to solve on paper with pen & notebook; includes answer key"
+            >
+              <FileText className="size-4" aria-hidden /> Solve on paper (PDF)
+            </Link>
             <MockAction slug={p.slug} href={p.href} single />
           </div>
         </li>

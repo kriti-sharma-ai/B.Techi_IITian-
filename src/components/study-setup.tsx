@@ -15,7 +15,7 @@ const SKIPPED_KEY = "btechi:study-setup-skipped";
 export const openStudySetup = () => window.dispatchEvent(new Event(OPEN_EVENT));
 
 // Never interrupt signing in, the CMS, the profile page itself or an exam sitting.
-const QUIET = /^\/(login|signup|profile|admin|practice\/session)(\/|$)|^\/qualifier\/[^/]+|^\/pyqs\/[^/]+\/[^/]+\/[^/]+/;
+const QUIET = /^\/(login|signup|profile|admin|practice\/(session|exam))(\/|$)|^\/qualifier\/[^/]+|^\/pyqs\/[^/]+\/[^/]+\/[^/]+/;
 
 function skippedBy(accountId: string) {
   try {

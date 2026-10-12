@@ -10,7 +10,7 @@ import { DS_GROUP, formatSittingDate } from "./end-term";
 import { getPapers, type Papers } from "./papers";
 import { sectionEnabled } from "./site";
 import { mockMarks, mockQuestions } from "./qualifier";
-import { paperExam, paperHref, paperSegment, pyqCourseHref, qualifierTerm, sittingOf, type PyqExam, type PyqLevel } from "./pyq-urls";
+import { paperExam, paperHref, paperSegment, pyqCourseHref, pyqSheetsHref, qualifierTerm, sittingOf, type PyqExam, type PyqLevel } from "./pyq-urls";
 import type { Pyq, QualifierMock } from "./types";
 
 export type { PyqExam, PyqLevel };
@@ -34,6 +34,8 @@ export type PaperSummary = {
   /** Last URL segment, e.g. end-term-aug-2025-forenoon. */
   segment: string;
   href: string;
+  /** The paper as a question sheet, to solve on paper. */
+  sheetHref: string;
   exam: PyqExam;
   /** "31 Aug 2025" or "May 2024". */
   label: string;
@@ -69,7 +71,17 @@ const MONTHS: Record<string, string> = { january: "01", may: "05", september: "0
 const SESSION_NAME = { FN: "Forenoon", AN: "Afternoon" } as const;
 
 function summarise(p: QualifierMock): PaperSummary {
-  const base = { slug: p.slug, segment: paperSegment(p), href: paperHref(p), exam: paperExam(p), questions: mockQuestions(p).length, marks: mockMarks(p), durationMin: p.durationMin };
+  const segment = paperSegment(p);
+  const base = {
+    slug: p.slug,
+    segment,
+    href: paperHref(p),
+    sheetHref: pyqSheetsHref(p.sections[0].subjectSlug, segment),
+    exam: paperExam(p),
+    questions: mockQuestions(p).length,
+    marks: mockMarks(p),
+    durationMin: p.durationMin,
+  };
   const sitting = sittingOf(p);
   if (sitting) {
     return {
@@ -164,7 +176,7 @@ function buildIndex({ pyqGroups, endTermPapersFor, quizPapersFor }: Papers) {
     return portalPapers(courseSlug).find((p) => paperSegment(p) === segment);
   }
 
-  return { pyqCourses, getPyqCourse, pyqCoursesForLevel, pyqPapersFor, allPyqPapers, pyqTotals, findPaper };
+  return { pyqCourses, getPyqCourse, pyqCoursesForLevel, pyqPapersFor, allPyqPapers, pyqTotals, findPaper, coursePapers: portalPapers };
 }
 
 export type PyqIndex = ReturnType<typeof buildIndex>;

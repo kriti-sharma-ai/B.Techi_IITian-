@@ -8,8 +8,8 @@ import type { ExamTone } from "../components/exam-tag";
 import { formatSittingDate } from "./end-term";
 import { getPapers, type Papers } from "./papers";
 import { PYQ_EXAMS, PYQ_LEVELS, getPyqIndex, type CoursePyqs, type PaperSummary, type PyqExam, type PyqIndex } from "./pyq-index";
-import { paperExam, paperHref, sittingOf } from "./pyq-urls";
-import type { QualifierMock, QualifierQuestion } from "./types";
+import { MAX_EXAM_COURSES, examHref, paperExam, paperHref, qualifierTerm, sittingOf } from "./pyq-urls";
+import type { QualifierMock, QualifierQuestion, QualifierSection } from "./types";
 
 /** A past question plus what the practice view shows around it. */
 export type PyqItem = QualifierQuestion & {
@@ -284,7 +284,62 @@ function buildPractice({ pyqGroups, endTermPapersFor, quizPapersFor }: Papers, {
     }
   }
 
-  return { practicePlan, buildPyqSet };
+  /**
+   * A timed exam over up to four courses: each course's section is a mock exam
+   * built as above, and the time is the sum of the papers it follows. Courses
+   * without papers for the exam are left out.
+   */
+  function buildExamMock(courseSlugs: string[], exam: PyqExam, seed: number, year?: string): QualifierMock | undefined {
+    const rand = random(seed);
+    const sections: { section: QualifierSection; durationMin: number }[] = [];
+    for (const slug of [...new Set(courseSlugs)].slice(0, MAX_EXAM_COURSES)) {
+      const course = getPyqCourse(slug);
+      let papers = papersOf(slug).filter((p) => p.exam === exam);
+      if (!course || papers.length === 0) continue;
+
+      if (year && year !== "all" && year !== "random") {
+        const yearPapers = papers.filter((p) => {
+          const sitting = sittingOf(p.mock);
+          if (sitting?.date?.startsWith(year)) return true;
+          const term = qualifierTerm(p.mock.slug);
+          if (term?.year === year) return true;
+          return p.mock.slug.includes(year);
+        });
+        if (yearPapers.length > 0) {
+          papers = yearPapers;
+        }
+      }
+
+      const { items, blueprint } = mockExam(papers, rand);
+      // Questions drawn from different sittings can carry different "Useful data"; the section shows each once.
+      const reference = [...new Set(items.map((q) => q.reference).filter(Boolean))].join("\n");
+      sections.push({
+        section: {
+          subjectSlug: slug,
+          title: course.name,
+          short: course.short,
+          ...(reference && { reference }),
+          questions: items.map(({ subjectSlug: _s, reference: _r, source: _src, paperHref: _h, ...q }) => q),
+        },
+        durationMin: blueprint.durationMin,
+      });
+    }
+    if (sections.length === 0) return undefined;
+    const slugs = sections.map((s) => s.section.subjectSlug);
+    const { label } = PRACTICE_EXAMS[exam];
+    const yearPrefix = year && year !== "all" && year !== "random" ? `${year} ` : "";
+    return {
+      slug: `practice-${PRACTICE_EXAMS[exam].param}-${slugs.join(".")}-${seed}${year ? `-${year}` : ""}`,
+      title: `${yearPrefix}${label} mock · ${sections.map((s) => s.section.short).join(" · ")}`,
+      description: `A timed ${yearPrefix}${label} mock built from official IIT Madras BS past papers.`,
+      difficulty: "Standard",
+      durationMin: sections.reduce((n, s) => n + s.durationMin, 0),
+      practice: { exam, label, href: examHref(slugs, exam, seed, year) },
+      sections: sections.map((s) => s.section),
+    };
+  }
+
+  return { practicePlan, buildPyqSet, buildExamMock };
 }
 
 export type PyqPractice = ReturnType<typeof buildPractice>;

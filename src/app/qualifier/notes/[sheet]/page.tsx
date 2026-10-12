@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Clock, ListChecks, MonitorCheck, Repeat, ScrollText, Sigma, Target } from "lucide-react";
-import { CheatReader, PrintButton, ReaderToc, ReaderToolbar, type TocItem } from "@/components/cheat-reader";
+import { CheatReader, PrintButton, ReaderToc, ReaderToolbar, StudyCompanion, type TocItem } from "@/components/cheat-reader";
 import { CheatSectionCard, Rich, sectionViews } from "@/components/cheat-sheet";
 import { BookmarkButton, ShareButton } from "@/components/resource-actions";
 import { Badge, Breadcrumbs } from "@/components/ui";
@@ -46,7 +46,7 @@ export default async function CheatSheetPage({ params }: PageProps<"/qualifier/n
   return (
     <CheatReader sheet={sheet.slug}>
       <div className="border-b border-border bg-surface">
-        <div className="container-page py-7 md:py-10">
+        <div className="mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-8 py-7 md:py-9">
           <Breadcrumbs
             items={[
               { label: "Qualifier Pack", href: "/qualifier" },
@@ -58,14 +58,14 @@ export default async function CheatSheetPage({ params }: PageProps<"/qualifier/n
             <Badge tone="brand">Qualifier · Weeks 1–4</Badge>
             <span className="font-mono text-xs text-muted">{subject.code}</span>
           </div>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+          <h1 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl text-fg">
             {sheet.short} cheat notes <span className="text-muted">& {sheetKind(sheet)}</span>
           </h1>
-          <p className="mt-2 max-w-2xl text-muted">{sheet.description}</p>
+          <p className="mt-2 max-w-2xl text-muted text-sm sm:text-base">{sheet.description}</p>
           <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-3 sm:flex sm:flex-wrap sm:gap-x-8">
             {facts.map((f) => (
               <li key={f.label} className="flex items-center gap-2.5">
-                <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-surface-2">
+                <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-surface-2 border border-border">
                   <f.icon className="size-4" aria-hidden />
                 </span>
                 <span className="leading-tight">
@@ -75,7 +75,7 @@ export default async function CheatSheetPage({ params }: PageProps<"/qualifier/n
               </li>
             ))}
           </ul>
-          <div className="mt-6 flex flex-wrap gap-2 print:hidden">
+          <div className="mt-6 flex flex-wrap gap-2.5 print:hidden">
             <BookmarkButton
               withLabel
               item={{ kind: "note", id: `cheat-${sheet.slug}`, title: `${sheet.short} cheat notes`, href, subtitle: "Qualifier cheat notes" }}
@@ -88,19 +88,22 @@ export default async function CheatSheetPage({ params }: PageProps<"/qualifier/n
 
       <ReaderToolbar quickLabel={sheet.quickLabel} items={toc} />
 
-      <div className="container-page grid gap-8 py-5 md:py-8 lg:grid-cols-[250px_minmax(0,1fr)] print:block">
-        <ReaderToc items={toc} />
-        <div id="cheat-content" className="cheat-content mx-auto w-full min-w-0 max-w-3xl space-y-4 sm:space-y-5 lg:mx-0">
-          {sheet.sections.map((s) => (
-            <CheatSectionCard key={s.id} section={s} />
-          ))}
-          <LastMinute sheet={sheet} />
-          <TestYourself subjectSlug={subject.slug} />
-          <SheetNav sheet={sheet} />
-          <p className="text-[0.8em] text-muted">
-            Formulas and conventions follow the IIT Madras BS course material for weeks 1–4. &ldquo;Every paper&rdquo; and &ldquo;Most papers&rdquo;
-            count how often a topic appears in the qualifier papers on BTechi (January 2023 to May 2024). BTechi is not affiliated with IIT Madras.
-          </p>
+      <div className="mx-auto w-full max-w-[1380px] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+        <div className="grid gap-8 lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[260px_minmax(0,1fr)_270px] items-start print:block">
+          <ReaderToc items={toc} />
+          <div id="cheat-content" className="cheat-content w-full min-w-0 max-w-[860px] mx-auto space-y-6">
+            {sheet.sections.map((s) => (
+              <CheatSectionCard key={s.id} section={s} />
+            ))}
+            <LastMinute sheet={sheet} />
+            <TestYourself subjectSlug={subject.slug} />
+            <SheetNav sheet={sheet} />
+            <p className="text-[0.8em] text-muted text-center pt-2">
+              Formulas and conventions follow the IIT Madras BS course material for weeks 1–4. &ldquo;Every paper&rdquo; and &ldquo;Most papers&rdquo;
+              count how often a topic appears in the qualifier papers on BTechi (January 2023 to May 2024). BTechi is not affiliated with IIT Madras.
+            </p>
+          </div>
+          <StudyCompanion quickLabel={sheet.quickLabel} items={toc} />
         </div>
       </div>
     </CheatReader>
@@ -138,7 +141,7 @@ function TestYourself({ subjectSlug }: { subjectSlug: string }) {
     { href: "/qualifier", icon: MonitorCheck, title: "Full mock", text: "All four courses, timed" },
   ];
   return (
-    <div className="card p-4 sm:p-6 print:hidden">
+    <div id="test-yourself" className="card p-4 sm:p-6 print:hidden scroll-mt-28">
       <p className="eyebrow">Now test yourself</p>
       <h2 className="mt-1 text-[1.15em] font-bold tracking-tight">Turn these notes into marks</h2>
       <p className="mt-1 text-[0.9em] text-muted">Sit a real paper in the exam portal, then come back to the Traps view for whatever you got wrong.</p>

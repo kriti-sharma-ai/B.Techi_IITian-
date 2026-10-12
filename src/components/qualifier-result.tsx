@@ -5,7 +5,7 @@ import { useState } from "react";
 import { AlertTriangle, ArrowRight, CheckCircle2, Clock, MinusCircle, RotateCcw, Trophy, XCircle } from "lucide-react";
 import { useHydrated, useStore } from "@/lib/store";
 import { QUALIFIER_CUTOFF, correctAnswerLabel, formatClock, hasResponse, isCorrect, isSingleSubject, paperHref, responseLabel, scoreMock } from "@/lib/qualifier";
-import { pyqCourseHref } from "@/lib/pyq-urls";
+import { examHref, pyqCourseHref } from "@/lib/pyq-urls";
 import { sectionEnabled } from "@/lib/site";
 import type { QualifierMock, QualifierQuestion } from "@/lib/types";
 import { Badge, Breadcrumbs, EmptyState, buttonClass } from "./ui";
@@ -22,10 +22,12 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
   const hydrated = useHydrated();
   const attempt = useStore((s) => s.qualifierAttempts.find((a) => a.id === attemptId && a.mockSlug === mock.slug));
   const [tab, setTab] = useState(0);
-  // Single-course papers are PYQs, filed under their course; full mocks belong to the qualifier pack.
-  const home = isSingleSubject(mock)
-    ? { label: `${mock.sections[0].short} PYQs`, href: pyqCourseHref(mock.sections[0].subjectSlug) }
-    : { label: "Qualifier Pack", href: "/qualifier" };
+  // Practice mocks come from the practice page; single-course papers are PYQs, filed under their course; full mocks belong to the qualifier pack.
+  const home = mock.practice
+    ? { label: "Practice", href: "/practice" }
+    : isSingleSubject(mock)
+      ? { label: `${mock.sections[0].short} PYQs`, href: pyqCourseHref(mock.sections[0].subjectSlug) }
+      : { label: "Qualifier Pack", href: "/qualifier" };
 
   if (!hydrated) return <div className="container-page py-10"><div className="skeleton h-96" /></div>;
   if (!attempt)
@@ -39,14 +41,20 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
       </div>
     );
 
-  const result = scoreMock(mock, attempt.responses);
+  const scored = scoreMock(mock, attempt.responses);
+  // Practice mocks have no average rule: like a single paper, each course just needs its cutoff.
+  const result = mock.practice ? { ...scored, qualified: scored.sections.every((s) => s.passed) } : scored;
   const weakest = [...result.sections].sort((a, b) => a.percent - b.percent)[0];
   // End Term and quiz papers cover courses without a BTechi course page, so the server says whether one exists.
-  const pastPaper = Boolean(mock.endTerm || mock.quiz);
+  const pastPaper = Boolean(mock.endTerm || mock.quiz || mock.practice);
   // Without course pages, the qualifier cheat sheets are the place to revise.
   const reviseLink = pastPaper ? revise : sectionEnabled("subjects") ? `/subjects/${weakest.subjectSlug}` : "/qualifier/notes";
   const single = isSingleSubject(mock);
+  // Judged course by course, without the qualifier's average rule.
+  const perCourse = single || Boolean(mock.practice);
   const section = mock.sections[tab];
+  // A practice mock's link without its seed draws a fresh paper.
+  const retakeHref = mock.practice ? examHref(mock.sections.map((s) => s.subjectSlug), mock.practice.exam) : paperHref(mock);
 
   return (
     <>
@@ -61,7 +69,7 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
                   {result.qualified ? <Trophy className="size-6" aria-hidden /> : <AlertTriangle className="size-6" aria-hidden />}
                 </span>
                 <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-                  {single ? (result.qualified ? "Cleared" : "Below cutoff") : result.qualified ? "Qualified" : "Not qualified yet"}
+                  {perCourse ? (result.qualified ? "Cleared" : "Below cutoff") : result.qualified ? "Qualified" : "Not qualified yet"}
                 </h1>
               </div>
               <p className="mt-2 max-w-xl text-muted">
@@ -74,7 +82,9 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
                       ? `You scored ${result.average}%, below ${QUALIFIER_CUTOFF.perSubject}%. Review the answers below, then retake.`
                       : `You scored ${result.average}%. The course cutoff is ${QUALIFIER_CUTOFF.perSubject}%. Review the answers below, then retake.`
                   : result.qualified
-                  ? "You cleared the cutoff in every course and on average. Keep this up on exam day."
+                  ? mock.practice
+                    ? `You scored at least ${QUALIFIER_CUTOFF.perSubject}% in every course. Retake for a fresh paper.`
+                    : "You cleared the cutoff in every course and on average. Keep this up on exam day."
                   : `Weakest: ${weakest.title} at ${weakest.percent}%. Fix that first, then retake.`}
               </p>
             </div>
@@ -133,7 +143,7 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
             {[
               { ok: result.sections.every((s) => s.passed), label: `At least ${QUALIFIER_CUTOFF.perSubject}% in every course` },
               { ok: result.average >= QUALIFIER_CUTOFF.average, label: `At least ${QUALIFIER_CUTOFF.average}% average across the four (you: ${result.average}%)` },
-            ].slice(0, single ? 1 : 2).map((r) => (
+            ].slice(0, perCourse ? 1 : 2).map((r) => (
               <li key={r.label} className="flex items-center gap-3 px-5 py-3.5 text-sm">
                 {r.ok ? <CheckCircle2 className="size-5 shrink-0 text-green" aria-hidden /> : <XCircle className="size-5 shrink-0 text-red" aria-hidden />}
                 <span className="font-medium">{r.label}</span>
@@ -142,7 +152,7 @@ export function QualifierResult({ mock, attemptId, next, revise }: { mock: Quali
           </ul>
 
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link href={paperHref(mock)} className={buttonClass("primary")}>
+            <Link href={retakeHref} className={buttonClass("primary")}>
               <RotateCcw className="size-4" aria-hidden /> Retake {mock.title}
             </Link>
             {next && (

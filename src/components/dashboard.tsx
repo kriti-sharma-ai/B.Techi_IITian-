@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Award, CalendarClock, Download, Flame, LogOut, Settings2, Sparkles } from "lucide-react";
+import { ArrowRight, Award, CalendarClock, Download, Flame, LogOut, Settings2, Sparkles, StickyNote } from "lucide-react";
 import { actions, studyStreak, useHydrated, useStore, weeklyActivity } from "@/lib/store";
 import { PROGRAM_SLUG, allTopics, assignments, getProgram, getSubject, pyqs, subjects, topicKey } from "@/lib/content";
 import type { CourseExamLinks } from "@/lib/pyq-practice";
 import { getStudyCourse } from "@/lib/study-courses";
+import { cheatSheets, cheatSheetForSubject, cheatSheetHref, cheatSheetStats } from "@/lib/data/cheat-notes";
 import { ContinueLearning, SubjectProgressBar } from "./progress";
 import { openStudySetup } from "./study-setup";
 import { Button, MaybeLink, ProgressBar, Stat, buttonClass } from "./ui";
@@ -75,6 +76,10 @@ export function Dashboard({ exams }: { exams: CourseExamLinks[] }) {
   const myExams = plan ? exams.filter((e) => plan.subjects.includes(e.slug)) : [];
   const noPapers = plan ? plan.subjects.filter((s) => !exams.some((e) => e.slug === s)).map((s) => getStudyCourse(s)?.name ?? s) : [];
 
+  // Cheat sheets: when user has chosen courses, ONLY show cheat sheets for those chosen courses!
+  const enrolledCheatSheets = cheatSheets.filter((s) => courseSlugs.has(s.subjectSlug));
+  const displayCheatSheets = plan ? enrolledCheatSheets : cheatSheets;
+
   return (
     <div className="space-y-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -86,11 +91,16 @@ export function Dashboard({ exams }: { exams: CourseExamLinks[] }) {
             {user && program ? [program.name, levelName].filter(Boolean).join(" · ") : "Your progress is saved in this browser."}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1.5">
           {plan && (
-            <Link href="/profile" className={buttonClass("ghost", "sm")}>
-              <Settings2 className="size-4" aria-hidden /> Study profile
-            </Link>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={openStudySetup}
+              className="gap-1.5 text-xs font-semibold"
+            >
+              <Settings2 className="size-3.5" aria-hidden /> Edit term courses
+            </Button>
           )}
           {user ? (
             <Button
@@ -150,35 +160,60 @@ export function Dashboard({ exams }: { exams: CourseExamLinks[] }) {
       {plan && (
         <section aria-labelledby="exams-h">
           <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
-            <h2 id="exams-h" className="text-lg font-bold">
-              Your exams
-            </h2>
-            {myExams.length > 0 && (
-              <Link href="/pyqs" className="inline-flex items-center gap-1 text-sm font-semibold hover:underline">
-                All your papers <ArrowRight className="size-4" aria-hidden />
-              </Link>
-            )}
+            <div>
+              <h2 id="exams-h" className="text-lg font-bold">
+                My Term Courses & Exams
+              </h2>
+              <p className="text-xs text-muted">Direct access to your enrolled courses, practice drills, and past papers</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={openStudySetup}
+                className="gap-1 text-xs"
+              >
+                <Settings2 className="size-3.5" aria-hidden /> Change courses
+              </Button>
+              {myExams.length > 0 && (
+                <Link href="/pyqs" className="inline-flex items-center gap-1 text-xs font-semibold hover:underline">
+                  All your papers <ArrowRight className="size-3" aria-hidden />
+                </Link>
+              )}
+            </div>
           </div>
           {myExams.length > 0 ? (
             <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {myExams.map((e) => (
-                <li key={e.slug} className="card flex flex-col p-4">
-                  <p className="text-xs font-semibold text-muted">
-                    {e.code && <span className="font-mono">{e.code} · </span>}
-                    {e.exams.join(" · ")}
-                  </p>
-                  <p className="mt-1 leading-snug font-semibold">{e.name}</p>
-                  <p className="mt-1 text-xs text-muted tabular-nums">{plural(e.papers, "past paper")}</p>
-                  <div className="mt-auto flex gap-2 pt-4">
-                    <Link href={e.practiceHref} className={buttonClass("dark", "sm")}>
-                      Practise
-                    </Link>
-                    <Link href={e.href} className={buttonClass("secondary", "sm")}>
-                      Past papers
-                    </Link>
-                  </div>
-                </li>
-              ))}
+              {myExams.map((e) => {
+                const sheet = cheatSheetForSubject(e.slug);
+                return (
+                  <li key={e.slug} className="card flex flex-col p-4">
+                    <p className="text-xs font-semibold text-muted">
+                      {e.code && <span className="font-mono">{e.code} · </span>}
+                      {e.exams.join(" · ")}
+                    </p>
+                    <p className="mt-1 leading-snug font-semibold">{e.name}</p>
+                    <p className="mt-1 text-xs text-muted tabular-nums">{plural(e.papers, "past paper")}</p>
+                    <div className="mt-auto flex flex-wrap gap-2 pt-4">
+                      <Link href={e.practiceHref} className={buttonClass("dark", "sm")}>
+                        Practise
+                      </Link>
+                      <Link href={e.href} className={buttonClass("secondary", "sm")}>
+                        Past papers
+                      </Link>
+                      {sheet && (
+                        <Link
+                          href={cheatSheetHref(sheet)}
+                          className={cn(buttonClass("secondary", "sm"), "gap-1.5 border-border bg-surface-2 hover:border-brand/60")}
+                          title={`${sheet.short} cheat sheet & formulas`}
+                        >
+                          <StickyNote className="size-3.5 text-teal" aria-hidden /> Cheat sheet
+                        </Link>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           ) : (
             <div className="card p-5 text-sm text-muted">
@@ -188,6 +223,72 @@ export function Dashboard({ exams }: { exams: CourseExamLinks[] }) {
           {myExams.length > 0 && noPapers.length > 0 && (
             <p className="mt-3 text-xs text-muted">No past papers yet for {new Intl.ListFormat("en").format(noPapers)}.</p>
           )}
+        </section>
+      )}
+
+      {displayCheatSheets.length > 0 && (
+        <section aria-labelledby="cheats-h">
+          <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
+            <div>
+              <h2 id="cheats-h" className="text-lg font-bold">
+                {plan ? "My Cheat Sheets & Formulas" : "Cheat Sheets & Formula Sheets"}
+              </h2>
+              <p className="text-xs text-muted">
+                Every formula, pattern, and exam trap on one page. Made to revise on your phone or desktop.
+              </p>
+            </div>
+            <Link href="/qualifier/notes" className="inline-flex items-center gap-1 text-xs font-semibold hover:underline">
+              All qualifier notes <ArrowRight className="size-3" aria-hidden />
+            </Link>
+          </div>
+          <div
+            className={cn(
+              "grid gap-3 sm:grid-cols-2",
+              displayCheatSheets.length >= 4
+                ? "lg:grid-cols-4"
+                : displayCheatSheets.length === 3
+                  ? "lg:grid-cols-3"
+                  : "lg:grid-cols-2",
+            )}
+          >
+            {displayCheatSheets.map((sheet) => {
+              const stats = cheatSheetStats(sheet);
+              const subject = getSubject(sheet.subjectSlug);
+              return (
+                <div key={sheet.slug} className="card flex flex-col p-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-xs text-muted">{subject?.code ?? sheet.slug.toUpperCase()}</span>
+                    <span className="text-[11px] text-muted">{stats.minutes} min read</span>
+                  </div>
+                  <p className="mt-1 font-semibold leading-snug">{subject?.name ?? sheet.short}</p>
+                  <p className="mt-1 line-clamp-2 text-xs text-muted">{sheet.description}</p>
+                  <div className="mt-3 flex items-center gap-2 border-t border-border pt-2.5 text-[11px] text-muted">
+                    <span>
+                      <strong className="text-fg">{stats.quick}</strong> formulas
+                    </span>
+                    <span>·</span>
+                    <span>
+                      <strong className="text-fg">{stats.traps}</strong> traps
+                    </span>
+                  </div>
+                  <div className="mt-auto grid grid-cols-2 gap-2 pt-3">
+                    <Link
+                      href={cheatSheetHref(sheet, "quick")}
+                      className={cn(buttonClass("secondary", "sm"), "justify-center text-xs")}
+                    >
+                      Formulas
+                    </Link>
+                    <Link
+                      href={cheatSheetHref(sheet)}
+                      className={cn(buttonClass("dark", "sm"), "justify-center text-xs")}
+                    >
+                      Full notes
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </section>
       )}
 
@@ -201,17 +302,31 @@ export function Dashboard({ exams }: { exams: CourseExamLinks[] }) {
           <h2 className="mb-4 text-lg font-bold">Your courses</h2>
           {courses.length ? (
             <ul className="card divide-y divide-border">
-              {courses.map((s) => (
-                <li key={s.slug}>
-                  <MaybeLink href={`/subjects/${s.slug}`} className="block px-5 py-4 hover:bg-surface-2/50">
-                    <div className="flex items-baseline justify-between gap-4">
-                      <p className="font-semibold">{s.name}</p>
-                      <p className="font-mono text-xs text-muted">{s.code}</p>
-                    </div>
-                    <SubjectProgressBar subject={s} className="mt-2" />
-                  </MaybeLink>
-                </li>
-              ))}
+              {courses.map((s) => {
+                const sheet = cheatSheetForSubject(s.slug);
+                return (
+                  <li key={s.slug}>
+                    <MaybeLink href={`/subjects/${s.slug}`} className="block px-5 py-4 hover:bg-surface-2/50">
+                      <div className="flex items-baseline justify-between gap-4">
+                        <p className="font-semibold">{s.name}</p>
+                        <div className="flex items-center gap-2">
+                          {sheet && (
+                            <Link
+                              href={cheatSheetHref(sheet)}
+                              className="rounded border border-border bg-surface-2 px-1.5 py-0.5 text-[10px] font-medium text-fg hover:border-brand/60"
+                              title="Open Cheat Sheet"
+                            >
+                              Cheat sheet
+                            </Link>
+                          )}
+                          <p className="font-mono text-xs text-muted">{s.code}</p>
+                        </div>
+                      </div>
+                      <SubjectProgressBar subject={s} className="mt-2" />
+                    </MaybeLink>
+                  </li>
+                );
+              })}
             </ul>
           ) : (
             <div className="card p-5 text-sm text-muted">

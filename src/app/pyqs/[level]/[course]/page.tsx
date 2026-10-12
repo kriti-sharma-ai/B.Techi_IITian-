@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, BarChart3, BookOpen, Target } from "lucide-react";
+import { ArrowRight, BarChart3, BookOpen, FileText, Repeat, Target } from "lucide-react";
 import { PyqCard } from "@/components/cards";
 import { PyqAnalysis } from "@/components/pyq-analysis";
 import { PaperRows } from "@/components/pyq-papers";
@@ -9,6 +9,7 @@ import { Badge, PageHeader, buttonClass } from "@/components/ui";
 import { forSubject, pyqs } from "@/lib/content";
 import { PYQ_EXAMS, PYQ_LEVELS, getPyqIndex } from "@/lib/pyq-index";
 import { practiceHref } from "@/lib/pyq-practice";
+import { getQuestionSheets } from "@/lib/pyq-sheets";
 import { pyqLevelHref } from "@/lib/pyq-urls";
 
 export const dynamicParams = false;
@@ -45,6 +46,7 @@ export default async function PyqCoursePage({ params }: PageProps<"/pyqs/[level]
   const uploaded = forSubject(pyqs, c.slug).sort((a, b) => b.year - a.year);
   const questions = c.papers.reduce((n, p) => n + p.questions, 0);
   const related = (await getPyqIndex()).pyqCoursesForLevel(c.level).filter((x) => x.slug !== c.slug && x.group === c.group);
+  const sheets = (await getQuestionSheets()).courseSheets(c.slug);
 
   return (
     <>
@@ -73,6 +75,11 @@ export default async function PyqCoursePage({ params }: PageProps<"/pyqs/[level]
             ))}
           </dl>
           <div className="flex flex-wrap gap-2">
+            {sheets && (
+              <Link href={sheets.href} className={buttonClass("secondary")}>
+                <FileText className="size-4" aria-hidden /> Question sheets
+              </Link>
+            )}
             <Link href={practiceHref(c.slug)} className={buttonClass("secondary")}>
               <Target className="size-4" aria-hidden /> Practise questions
             </Link>
@@ -91,6 +98,34 @@ export default async function PyqCoursePage({ params }: PageProps<"/pyqs/[level]
             <Badge className="mr-2">BS in Data Science</Badge>
             This course belongs to the IIT Madras BS in Data Science, which sits the same quizzes and End Term exams as the BS in Management and Data Science.
           </p>
+        )}
+
+        {sheets && (sheets.repeated || sheets.topics.length > 0) && (
+          <section aria-labelledby="sheets" className="card flex flex-wrap items-center gap-x-6 gap-y-4 p-5">
+            <div className="min-w-0 flex-1 basis-72">
+              <h2 id="sheets" className="font-bold">
+                Solve on paper
+              </h2>
+              <p className="mt-0.5 text-sm text-muted">
+                {c.short} past questions laid out like a paper, with the answer key at the end
+                {sheets.topics.length > 0 && <>: {sheets.topics.length} topic-wise sets</>}
+                {sheets.repeated && <>, and {sheets.repeated.types} question types that keep coming back</>}.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {sheets.repeated && (
+                <Link href={sheets.repeated.href} className={buttonClass("primary")}>
+                  <Repeat className="size-4" aria-hidden /> Most repeated
+                </Link>
+              )}
+              <Link href={`${sheets.href}#by-topic`} className={buttonClass("secondary")}>
+                Topic wise
+              </Link>
+              <Link href={`${sheets.href}#by-year`} className={buttonClass("secondary")}>
+                Year wise
+              </Link>
+            </div>
+          </section>
         )}
 
         {sections.map((e) => (

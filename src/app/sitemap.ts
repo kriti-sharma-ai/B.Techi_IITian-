@@ -5,7 +5,8 @@ import { skillNotes, skillNotesHref } from "@/lib/data/skill-notes";
 import { blogPostHref, getAllPosts } from "@/lib/blog";
 import { blogCategories, blogCategoryHref } from "@/lib/blog/categories";
 import { PYQ_LEVELS, getPyqIndex, uploadedPyqHref } from "@/lib/pyq-index";
-import { pyqLevelHref } from "@/lib/pyq-urls";
+import { getQuestionSheets } from "@/lib/pyq-sheets";
+import { PYQ_SHEETS_HREF, pyqLevelHref } from "@/lib/pyq-urls";
 import { hrefEnabled } from "@/lib/site";
 import { SITE_URL } from "@/lib/utils";
 import { loadContent } from "@/lib/cms";
@@ -16,6 +17,7 @@ export const revalidate = 300;
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   await loadContent();
   const { pyqCourses, pyqCoursesForLevel } = await getPyqIndex();
+  const { sheetCourses, sheetLinks } = await getQuestionSheets();
   const url = (path: string, priority = 0.6): MetadataRoute.Sitemap[number] => ({ url: `${SITE_URL}${path}`, priority });
   const entries = [
     url("/", 1),
@@ -32,6 +34,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...PYQ_LEVELS.filter((l) => pyqCoursesForLevel(l.slug).length > 0).map((l) => url(pyqLevelHref(l.slug), 0.8)),
     ...pyqCourses.map((c) => url(c.href, 0.8)),
     ...pyqs.map((p) => url(uploadedPyqHref(p), 0.7)),
+    // Question sheets are server-rendered, so each sheet is a page to index.
+    url(PYQ_SHEETS_HREF, 0.8),
+    ...sheetCourses().flatMap((s) => [url(s.href, 0.8), ...sheetLinks(s.course.slug).map((l) => url(l.href, l.kind === "paper" ? 0.6 : 0.7))]),
     ...skillCourses.map((c) => url(`/skills/${c.slug}`, 0.8)),
     ...skillNotes.map((n) => url(skillNotesHref(n.skill), 0.8)),
     url("/blog", 0.8),

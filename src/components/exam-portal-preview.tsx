@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils";
 /** Decorative still of the exam portal: section tabs, a question and the colour-coded palette. */
 export function ExamPortalPreview({ className }: { className?: string }) {
   return (
-    <div aria-hidden className={cn("overflow-hidden rounded-2xl border border-border bg-bg shadow-xl", className)}>
-      <div className="flex items-center gap-2 bg-ink px-4 py-2.5 text-bg">
+    <div aria-hidden className={cn("light overflow-hidden rounded-2xl border border-border bg-bg shadow-xl", className)}>
+      <div className="flex items-center gap-2 bg-[#334155] px-4 py-2.5 text-white">
         <span className="grid size-6 place-items-center rounded-md bg-brand text-xs font-black text-brand-ink">B</span>
         <span className="flex-1 text-xs font-bold">Qualifier Mock 1</span>
-        <span className="flex items-center gap-1.5 rounded-md bg-bg/10 px-2 py-1 font-mono text-xs font-bold">
+        <span className="flex items-center gap-1.5 rounded-md bg-white/10 px-2 py-1 font-mono text-xs font-bold">
           <Clock className="size-3" /> 01:42:17
         </span>
       </div>
@@ -22,7 +22,7 @@ export function ExamPortalPreview({ className }: { className?: string }) {
       <div className="grid grid-cols-[1fr_130px]">
         <div className="space-y-2 p-4">
           <p className="text-xs font-bold">Question 8</p>
-          <div className="rounded-lg bg-ink p-2.5 font-mono text-[10px] leading-relaxed text-bg">
+          <div className="rounded-lg bg-surface-2 p-2.5 font-mono text-[10px] leading-relaxed text-fg">
             while (b != 0) {"{"}
             <br />
             &nbsp;&nbsp;t = b; b = a mod b; a = t
@@ -30,7 +30,7 @@ export function ExamPortalPreview({ className }: { className?: string }) {
             {"}"}
           </div>
           {["6", "12", "36", "252"].map((o, i) => (
-            <div key={o} className={`rounded-lg border-2 px-2.5 py-1.5 text-[11px] ${i === 1 ? "border-fg" : "border-border"}`}>
+            <div key={o} className={`rounded-lg border-2 px-2.5 py-1.5 text-[11px] ${i === 1 ? "border-brand" : "border-border"}`}>
               {String.fromCharCode(65 + i)}. {o}
             </div>
           ))}
@@ -48,7 +48,7 @@ export function ExamPortalPreview({ className }: { className?: string }) {
                       : s === "m" || s === "am"
                         ? "rounded-full bg-purple text-bg"
                         : s === "c"
-                          ? "rounded bg-surface-2 ring-2 ring-fg"
+                          ? "rounded bg-surface-2 ring-2 ring-brand"
                           : "rounded border border-border bg-surface-2"
                 }`}
               >
@@ -56,7 +56,7 @@ export function ExamPortalPreview({ className }: { className?: string }) {
               </span>
             ))}
           </div>
-          <div className="mt-3 h-7 rounded-lg bg-ink" />
+          <div className="mt-3 h-7 rounded-lg bg-brand" />
         </div>
       </div>
     </div>

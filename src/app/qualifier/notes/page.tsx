@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, ChartColumn, Flame, Languages, Sigma, Sunrise, Workflow, type LucideIcon } from "lucide-react";
 import { Badge, Breadcrumbs, SectionHeader, buttonClass } from "@/components/ui";
+import { ScopeSwitch } from "@/components/study-scope";
 import { getSubject } from "@/lib/content";
 import { cheatSheetHref, cheatSheetStats, cheatSheets, sheetKind } from "@/lib/data/cheat-notes";
 import { QUALIFIER_CUTOFF } from "@/lib/data/qualifier-meta";
+import { getStudyScope, narrow, scopeLinks } from "@/lib/study-scope";
 
 export const metadata: Metadata = {
   title: "Qualifier Cheat Notes & Formula Sheets: Maths I, Stats I, CT, English I",
@@ -27,8 +29,13 @@ const PLAN: { day: string; sheet?: string; href?: string; title: string; text: s
   { day: "Exam day", title: "Checklists only", text: "Read the four last-minute checklists. No new topics." },
 ];
 
-export default function CheatNotesPage() {
-  const all = cheatSheets.map((sheet) => ({ sheet, subject: getSubject(sheet.subjectSlug)!, stats: cheatSheetStats(sheet) }));
+export default async function CheatNotesPage({ searchParams }: PageProps<"/qualifier/notes">) {
+  const sp = await searchParams;
+  const scope = await getStudyScope(sp);
+  const scoped = narrow(scope, cheatSheets, (s) => s.subjectSlug);
+  const displayedSheets = scoped.items;
+
+  const all = displayedSheets.map((sheet) => ({ sheet, subject: getSubject(sheet.subjectSlug)!, stats: cheatSheetStats(sheet) }));
   const totals = all.reduce(
     (t, { stats }) => ({ quick: t.quick + stats.quick, examples: t.examples + stats.examples, traps: t.traps + stats.traps }),
     { quick: 0, examples: 0, traps: 0 },
@@ -72,10 +79,11 @@ export default function CheatNotesPage() {
 
       <section className="container-page py-12 md:py-16">
         <SectionHeader
-          eyebrow="Pick a course"
-          title="Four sheets, one qualifier"
+          eyebrow={scoped.narrowed ? `Your enrolled courses (${scoped.mine})` : "Pick a course"}
+          title={scoped.narrowed ? "My Cheat Sheets & Formulas" : "Four sheets, one qualifier"}
           description="Every sheet has three views: the full notes, a formulas-only sheet, and traps & shortcuts."
         />
+        <ScopeSwitch list={scoped} links={scopeLinks("/qualifier/notes", sp)} className="mb-6" />
         <div className="grid gap-4 md:grid-cols-2">
           {all.map(({ sheet, subject, stats }) => {
             const Icon = ICONS[sheet.slug] ?? Sigma;
@@ -174,7 +182,7 @@ export default function CheatNotesPage() {
       <section className="container-page pb-12 md:pb-16">
         <SectionHeader eyebrow="Revision plan" title="The last 7 days before the qualifier" />
         <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {PLAN.map((p) => {
+          {PLAN.filter((p) => !scoped.narrowed || !p.sheet || displayedSheets.some((s) => s.slug === p.sheet)).map((p) => {
             const sheet = cheatSheets.find((s) => s.slug === p.sheet);
             const href = sheet ? cheatSheetHref(sheet) : p.href;
             const body = (

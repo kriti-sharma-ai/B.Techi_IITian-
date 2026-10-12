@@ -125,6 +125,39 @@ export function CheatReader({ sheet, children }: { sheet: string; children: Reac
     return () => window.removeEventListener("beforeprint", openAll);
   }, []);
 
+  // Keyboard power-user shortcuts: J/K navigate topics, S toggles solutions, P prints
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
+        return;
+      }
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      if (e.key === "s" || e.key === "S") {
+        e.preventDefault();
+        setSolutions(!solutions);
+      } else if (e.key === "p" || e.key === "P") {
+        e.preventDefault();
+        window.print();
+      } else if (e.key === "j" || e.key === "J") {
+        e.preventDefault();
+        const targets = Array.from(document.querySelectorAll<HTMLElement>("#cheat-content section, #cheat-content [id]"));
+        const currentY = window.scrollY + 140;
+        const next = targets.find((t) => t.offsetTop > currentY);
+        if (next) next.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (e.key === "k" || e.key === "K") {
+        e.preventDefault();
+        const targets = Array.from(document.querySelectorAll<HTMLElement>("#cheat-content section, #cheat-content [id]"));
+        const currentY = window.scrollY + 60;
+        const prev = [...targets].reverse().find((t) => t.offsetTop < currentY);
+        if (prev) prev.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [solutions, setSolutions]);
+
   return (
     <ReaderContext value={{ view, setView, revised, toggleRevised, font, setFont, solutions, setSolutions }}>
       <div className="cheat-reader" data-view={view} style={{ "--cheat-fs": FONT_SIZES[font] } as CSSProperties}>
@@ -200,8 +233,8 @@ export function ReaderToolbar({ quickLabel, items }: { quickLabel: string; items
   return (
     <>
       <div className="sticky top-16 z-30 border-b border-border bg-surface/95 backdrop-blur-md print:hidden">
-        <div className="container-page flex h-14 items-center gap-2">
-          <div role="group" aria-label="What to show" className="flex min-w-0 flex-1 gap-0.5 rounded-xl bg-surface-2 p-1 sm:flex-none">
+        <div className="mx-auto flex h-14 max-w-[1380px] items-center gap-3 px-4 sm:px-6 lg:px-8">
+          <div role="group" aria-label="What to show" className="flex min-w-0 flex-1 gap-1 rounded-xl bg-surface-2 p-1 sm:flex-none">
             {views.map((v) => (
               <button
                 key={v.id}
@@ -209,8 +242,8 @@ export function ReaderToolbar({ quickLabel, items }: { quickLabel: string; items
                 aria-pressed={view === v.id}
                 onClick={() => setView(v.id)}
                 className={cn(
-                  "h-9 min-w-0 flex-1 truncate rounded-lg px-2.5 text-sm font-semibold transition-colors sm:flex-none sm:px-4",
-                  view === v.id ? "bg-surface text-fg shadow-sm" : "text-muted hover:text-fg",
+                  "h-9 min-w-0 flex-1 truncate rounded-lg px-2.5 text-sm font-semibold transition-colors sm:flex-none sm:px-4 cursor-pointer",
+                  view === v.id ? "bg-surface text-fg shadow-xs" : "text-muted hover:text-fg",
                 )}
               >
                 {v.label}
@@ -218,14 +251,16 @@ export function ReaderToolbar({ quickLabel, items }: { quickLabel: string; items
             ))}
           </div>
           <span className="hidden flex-1 sm:block" />
-          <span className="hidden text-sm text-muted tabular-nums md:inline">
-            {revised.length}/{sections.length} revised
-          </span>
+          <div className="hidden items-center gap-2 rounded-lg border border-border bg-surface px-3 py-1 text-xs text-muted tabular-nums md:flex">
+            <span className="font-semibold text-fg">{revised.length}</span>
+            <span>/</span>
+            <span>{sections.length} revised</span>
+          </div>
           <button
             type="button"
             onClick={() => setTocOpen(true)}
             aria-label="Contents"
-            className="grid size-10 shrink-0 place-items-center rounded-xl border border-border bg-surface transition-colors hover:border-fg/30 lg:hidden"
+            className="grid size-10 shrink-0 place-items-center rounded-xl border border-border bg-surface transition-colors hover:border-fg/30 lg:hidden cursor-pointer"
           >
             <ListTree className="size-[18px]" aria-hidden />
           </button>
@@ -385,10 +420,153 @@ function RevisedMeter({ total }: { total: number }) {
 export function ReaderToc({ items }: { items: TocItem[] }) {
   return (
     <nav aria-label="Contents" className="sticky top-36 hidden max-h-[calc(100dvh-10rem)] overflow-y-auto pb-6 [scrollbar-width:thin] lg:block print:hidden">
-      <p className="eyebrow mb-3">Contents</p>
-      <RevisedMeter total={tracked(items).length} />
-      <ContentsList items={items} />
+      <div className="rounded-2xl border border-border bg-surface p-4 shadow-xs">
+        <p className="eyebrow mb-3">Contents</p>
+        <RevisedMeter total={tracked(items).length} />
+        <ContentsList items={items} />
+      </div>
     </nav>
+  );
+}
+
+/** Right study companion rail for widescreen reading. */
+export function StudyCompanion({
+  quickLabel,
+  items,
+}: {
+  quickLabel: string;
+  items: TocItem[];
+}) {
+  const { view, setView, revised, font, setFont, solutions, setSolutions } = useReader();
+  const sections = tracked(items);
+  const pct = sections.length ? Math.round((revised.length / sections.length) * 100) : 0;
+
+  return (
+    <aside aria-label="Study Companion" className="sticky top-36 hidden xl:block space-y-4 print:hidden">
+      {/* Revision Tracker Card */}
+      <div className="rounded-2xl border border-border bg-surface p-4 shadow-xs">
+        <div className="flex items-center justify-between mb-2">
+          <p className="eyebrow">Revision Tracker</p>
+          <span className="font-mono text-xs font-bold text-fg tabular-nums">{pct}%</span>
+        </div>
+        <div className="h-2 w-full overflow-hidden rounded-full bg-surface-2 mb-2.5">
+          <div className="h-full rounded-full bg-green transition-all duration-300" style={{ width: `${pct}%` }} />
+        </div>
+        <p className="text-xs text-muted">
+          <strong className="text-fg">{revised.length}</strong> of {sections.length} topics checked off.
+        </p>
+      </div>
+
+      {/* Quick View Switcher */}
+      <div className="rounded-2xl border border-border bg-surface p-4 shadow-xs">
+        <p className="eyebrow mb-2.5">Reading View</p>
+        <div className="flex flex-col gap-1 text-xs">
+          <button
+            type="button"
+            onClick={() => setView("notes")}
+            className={cn(
+              "flex items-center justify-between rounded-xl px-3 py-2 font-medium transition-colors cursor-pointer text-left",
+              view === "notes" ? "bg-surface-2 font-bold text-fg border border-border" : "text-muted hover:bg-surface-2/60 hover:text-fg",
+            )}
+          >
+            <span>📝 Complete Notes</span>
+            {view === "notes" && <span className="size-1.5 rounded-full bg-brand" />}
+          </button>
+          <button
+            type="button"
+            onClick={() => setView("quick")}
+            className={cn(
+              "flex items-center justify-between rounded-xl px-3 py-2 font-medium transition-colors cursor-pointer text-left",
+              view === "quick" ? "bg-surface-2 font-bold text-fg border border-border" : "text-muted hover:bg-surface-2/60 hover:text-fg",
+            )}
+          >
+            <span>⚡ {quickLabel}</span>
+            {view === "quick" && <span className="size-1.5 rounded-full bg-brand" />}
+          </button>
+          <button
+            type="button"
+            onClick={() => setView("traps")}
+            className={cn(
+              "flex items-center justify-between rounded-xl px-3 py-2 font-medium transition-colors cursor-pointer text-left",
+              view === "traps" ? "bg-surface-2 font-bold text-fg border border-border" : "text-muted hover:bg-surface-2/60 hover:text-fg",
+            )}
+          >
+            <span>⚠️ Traps & Common Errors</span>
+            {view === "traps" && <span className="size-1.5 rounded-full bg-brand" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Text Size & Print Options */}
+      <div className="rounded-2xl border border-border bg-surface p-4 shadow-xs">
+        <p className="eyebrow mb-2">Reading Options</p>
+        <div className="flex gap-1 rounded-xl bg-surface-2 p-1 mb-3">
+          {FONT_SIZES.map((size, i) => (
+            <button
+              key={size}
+              type="button"
+              aria-pressed={font === i}
+              aria-label={["Small", "Medium", "Large"][i] + " text"}
+              onClick={() => setFont(i)}
+              className={cn(
+                "h-7 flex-1 rounded-lg text-xs font-bold transition-colors cursor-pointer",
+                font === i ? "bg-surface text-fg shadow-2xs" : "text-muted hover:text-fg",
+              )}
+            >
+              {["14", "16", "18"][i]}px
+            </button>
+          ))}
+        </div>
+        <label className="flex cursor-pointer items-center justify-between gap-2 text-xs">
+          <span className="font-medium text-fg">Reveal all solutions</span>
+          <input
+            type="checkbox"
+            checked={solutions}
+            onChange={(e) => setSolutions(e.target.checked)}
+            className="size-4 rounded accent-fg cursor-pointer"
+          />
+        </label>
+        <button
+          type="button"
+          onClick={() => window.print()}
+          className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-border bg-surface-2 py-2 text-xs font-semibold text-fg hover:bg-surface-3 transition-colors cursor-pointer"
+        >
+          <Printer className="size-3.5" aria-hidden /> Print / Save PDF
+        </button>
+      </div>
+
+      {/* Quick Jump Shortcuts */}
+      <div className="rounded-2xl border border-border bg-surface p-4 shadow-xs text-xs space-y-2">
+        <p className="eyebrow mb-1">Quick Shortcuts</p>
+        <a href="#last-minute" className="flex items-center justify-between rounded-lg px-2.5 py-1.5 text-muted hover:bg-surface-2 hover:text-fg transition-colors">
+          <span>🎯 Last-minute checklist</span>
+          <span>↓</span>
+        </a>
+        <a href="#test-yourself" className="flex items-center justify-between rounded-lg px-2.5 py-1.5 text-muted hover:bg-surface-2 hover:text-fg transition-colors">
+          <span>🚀 Practice & Mocks</span>
+          <span>↓</span>
+        </a>
+      </div>
+
+      {/* Power-User Keyboard Shortcuts Pill */}
+      <div className="rounded-2xl border border-border/80 bg-surface-2/40 p-3.5 shadow-2xs text-[11px] text-muted space-y-2">
+        <div className="flex items-center gap-1.5 font-semibold text-fg">
+          <span>⌨️</span> <span>Keyboard Shortcuts</span>
+        </div>
+        <div className="flex items-center justify-between text-[11px]">
+          <span>Next / Prev topic</span>
+          <span className="font-mono bg-surface border border-border px-1.5 py-0.5 rounded text-fg font-semibold">J / K</span>
+        </div>
+        <div className="flex items-center justify-between text-[11px]">
+          <span>Toggle solutions</span>
+          <span className="font-mono bg-surface border border-border px-1.5 py-0.5 rounded text-fg font-semibold">S</span>
+        </div>
+        <div className="flex items-center justify-between text-[11px]">
+          <span>Print / Save PDF</span>
+          <span className="font-mono bg-surface border border-border px-1.5 py-0.5 rounded text-fg font-semibold">P</span>
+        </div>
+      </div>
+    </aside>
   );
 }
 

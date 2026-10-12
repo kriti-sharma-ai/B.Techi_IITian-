@@ -320,7 +320,22 @@ export type QualifierMock = {
   endTerm?: { date: string; session: "FN" | "AN"; term: string };
   /** Set on Quiz 1 / Quiz 2 previous-year papers, also listed in the PYQ hub. */
   quiz?: { number: 1 | 2; date: string; session: "FN" | "AN"; term: string };
+  /** Set on mocks built on the practice page from one to four courses' past papers (lib/pyq-practice.ts). `href` is where it's sat. */
+  practice?: { exam: "qualifier" | "quiz-1" | "quiz-2" | "end-term"; label: string; href: string };
   sections: QualifierSection[];
+};
+
+/* ───────────── PYQ topics (question sheets) ───────────── */
+
+/**
+ * One course's past-paper questions sorted into syllabus topics, plus the question
+ * types that come back across sittings. Questions are referenced by id.
+ */
+export type PyqTopicTags = {
+  /** In syllabus order. Every tagged question is in exactly one topic. */
+  topics: { slug: string; title: string; summary: string; ids: string[] }[];
+  /** Questions from different papers that are solved with the same steps, oldest first. */
+  repeats: { title: string; ids: string[] }[];
 };
 
 /* ───────────── Cheat notes (qualifier formula sheets) ───────────── */

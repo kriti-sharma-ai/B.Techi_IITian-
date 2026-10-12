@@ -2,274 +2,179 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
-  BookOpenCheck,
-  Calculator,
+  BookOpen,
   CheckCircle2,
-  Clock,
-  Flag,
-  LayoutGrid,
-  ListChecks,
-  MonitorCheck,
-  NotebookPen,
-  Target,
-  Timer,
+  FileText,
+  Layers,
+  ShieldCheck,
 } from "lucide-react";
-import { ExamPortalPreview } from "@/components/exam-portal-preview";
-import { MockAction, QualifierHistory } from "@/components/qualifier-attempts";
-import { Badge, Breadcrumbs, SectionHeader } from "@/components/ui";
+import { QualifierHistory } from "@/components/qualifier-attempts";
+import { QualifierExamList } from "@/components/qualifier-exam-list";
 import { getSubject } from "@/lib/content";
 import { cheatSheetForSubject, cheatSheetHref } from "@/lib/data/cheat-notes";
 import { practiceHref } from "@/lib/pyq-practice";
 import { getPapers } from "@/lib/papers";
-import { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS, answerKey, mockMarks, mockQuestions } from "@/lib/qualifier";
-import { sectionEnabled } from "@/lib/site";
+import { getStudyScope } from "@/lib/study-scope";
+import { cn } from "@/lib/utils";
+import {
+  QUALIFIER_CUTOFF,
+  QUALIFIER_SUBJECTS,
+  answerKey,
+  mockMarks,
+  mockQuestions,
+} from "@/lib/qualifier";
 
 export const metadata: Metadata = {
-  title: "Qualifier Pack: Maths I, Stats I, CT, English I",
+  title: "Qualifier Pack · Maths I, Stats I, CT, English I",
   description:
-    "Ace the IIT Madras BS qualifier. Full-length timed mocks for Mathematics I, Statistics I, Computational Thinking and English I in a real exam-portal interface, with course-wise cutoff checks and solutions.",
+    "Ace the IIT Madras BS qualifier exam. Official full-length 4-course timed qualifier papers and curated mocks with automated cutoff evaluation.",
   alternates: { canonical: "/qualifier" },
 };
 
-/** Per-course caveats shown under that course's previous-year papers. */
-const PYQ_NOTES: Record<string, string> = {
-  "english-1": "Listening questions are left out because the papers don't include their audio clips. Matching tables are typed out from the paper.",
-  "statistics-for-data-science-1": "Figures and tables are shown as they appear in the paper. Numerical answers accept the same range as the official key.",
-};
-
-const features = [
-  { icon: MonitorCheck, title: "Real exam portal", text: "Full screen, section tabs, candidate panel. The same layout you'll see at the test centre." },
-  { icon: LayoutGrid, title: "Question palette", text: "Not visited, not answered, answered, marked, answered & marked. Five statuses, colour-coded like the real exam." },
-  { icon: Flag, title: "Mark for review", text: "Save & Next, Mark for Review & Next, Clear Response. Answers only count once saved." },
-  { icon: Timer, title: "Server-style timer", text: "Countdown that survives a refresh and auto-submits at zero." },
-  { icon: Calculator, title: "On-screen calculator", text: "Basic calculator and a numeric keypad for NAT questions, like the exam portal." },
-  { icon: Target, title: "Cutoff check", text: "Course-wise score against the 40% per-course and 50% average rule, plus full solutions." },
-];
-
-// Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
 export const revalidate = 300;
 
-export default async function QualifierPage() {
-  const { qualifierMocks, pyqGroups, allQualifierPapers } = await getPapers();
-  const totalQuestions = qualifierMocks.reduce((n, m) => n + mockQuestions(m).length, 0);
+export default async function QualifierPage({ searchParams }: PageProps<"/qualifier">) {
+  const sp = await searchParams;
+  const [papers, scope] = await Promise.all([getPapers(), getStudyScope(sp)]);
+  const { qualifierMocks, allQualifierPapers } = papers;
+  const enrolledSlugs = scope.courses;
+  const enrolledQualifier = QUALIFIER_SUBJECTS.filter((slug) => enrolledSlugs.includes(slug));
+
+  const sortedSubjects = [...QUALIFIER_SUBJECTS].sort((a, b) => {
+    const aEnrolled = enrolledSlugs.includes(a);
+    const bEnrolled = enrolledSlugs.includes(b);
+    if (aEnrolled && !bEnrolled) return -1;
+    if (!aEnrolled && bEnrolled) return 1;
+    return 0;
+  });
+
+  const examItems = qualifierMocks.map((mock) => ({
+    mock,
+    answerKey: answerKey(mock),
+    isPyq: mock.slug.startsWith("qualifier-"),
+    totalQ: mockQuestions(mock).length,
+    totalM: mockMarks(mock),
+  }));
+
   return (
-    <>
-      <header className="relative isolate overflow-hidden border-b border-border bg-surface">
-        <div className="container-page py-10 md:py-14">
-          <Breadcrumbs items={[{ label: "Qualifier Pack" }]} />
-          <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
-            <div>
-              <Badge tone="brand" className="mb-4">Foundation · Qualifier Pack</Badge>
-              <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">
-                Give your qualifier exam
-                <br />
-                <span className="relative inline-block">
-                  before the real one.
-                  <span className="absolute inset-x-0 bottom-1 -z-10 h-3 bg-brand/60" aria-hidden />
-                </span>
-              </h1>
-              <p className="mt-4 max-w-xl text-lg text-muted">
-                Maths I, Stats I, Computational Thinking and English I in one pack. Take full-length, timed mocks in an exam portal built to feel like
-                the IIT Madras qualifier, then see exactly where you stand against the cutoff.
-              </p>
-              <div className="mt-7 flex flex-wrap items-center gap-3">
-                <MockAction slug={qualifierMocks[0].slug} answerKey={answerKey(qualifierMocks[0])} />
-                <a href="#how-it-works" className="inline-flex items-center gap-1 text-sm font-semibold hover:underline">
-                  How the qualifier works <ArrowRight className="size-4" aria-hidden />
-                </a>
-              </div>
-            </div>
-
-            {/* Exam-portal preview */}
-            <ExamPortalPreview className="hidden lg:block" />
-          </div>
-
-          <dl className="mt-10 grid grid-cols-2 gap-6 border-t border-border pt-6 sm:grid-cols-4">
-            {[
-              ["4", "courses in one pack"],
-              [String(qualifierMocks.length), "full-length mocks"],
-              [String(totalQuestions), "original questions"],
-              [`${QUALIFIER_CUTOFF.perSubject}% / ${QUALIFIER_CUTOFF.average}%`, "cutoff checked per attempt"],
-            ].map(([v, l]) => (
-              <div key={l}>
-                <dt className="sr-only">{l}</dt>
-                <dd className="text-2xl font-bold tracking-tight tabular-nums">{v}</dd>
-                <p className="text-sm text-muted">{l}</p>
-              </div>
-            ))}
-          </dl>
+    <div className="container-page py-5 sm:py-7 max-w-6xl space-y-6">
+      {/* ═══════════ BALANCED HEADER (SPACIOUS & CLEAN) ═══════════ */}
+      <header className="border-b border-border pb-4">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-fg">
+            Qualifier Exam Pack
+          </h1>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-2 px-3 py-1 text-xs font-semibold text-fg shadow-2xs">
+            <ShieldCheck className="size-3.5 text-fg" aria-hidden /> 4 Courses Combined · 4 Hours
+          </span>
         </div>
+        <p className="text-xs sm:text-sm text-muted mt-1">
+          Mathematics I, Statistics I, Computational Thinking & English I
+        </p>
       </header>
 
-      {/* ───────── Courses in the pack ───────── */}
-      <section className="container-page py-14 md:py-20">
-        <SectionHeader eyebrow="What's inside" title="Four courses, one qualifier" description="The qualifier examines weeks 1–4 of each Foundation course." />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {QUALIFIER_SUBJECTS.map((slug) => {
-            const s = getSubject(slug)!;
-            return (
-              <div key={slug} className="card flex flex-col p-5">
-                <p className="font-mono text-xs text-muted">{s.code}</p>
-                <h3 className="mt-1 font-bold leading-snug">{s.name}</h3>
-                <ul className="mt-4 flex-1 space-y-2 text-sm">
-                  {QUALIFIER_SYLLABUS[slug].map((t, i) => (
-                    <li key={t} className="flex gap-2">
-                      <span className="w-12 shrink-0 text-xs font-semibold leading-5 text-muted">Week {i + 1}</span>
-                      <span>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-5 flex gap-3 border-t border-border pt-4 text-sm font-semibold">
-                  {sectionEnabled("subjects") && <Link href={`/subjects/${slug}`} className="hover:underline">Course</Link>}
-                  <Link href={cheatSheetHref(cheatSheetForSubject(slug)!)} className={sectionEnabled("subjects") ? "text-muted hover:text-fg hover:underline" : "hover:underline"}>Notes</Link>
-                  <Link href={practiceHref(slug, "qualifier")} className="text-muted hover:text-fg hover:underline">Practise</Link>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <Link href="/qualifier/notes" className="card card-hover mt-4 flex items-center gap-4 p-5">
-          <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-brand/20">
-            <NotebookPen className="size-5" aria-hidden />
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block font-bold">Cheat notes & formula sheets</span>
-            <span className="block text-sm text-muted">Every formula, rule and repeating PYQ trap for all four courses, built for revising on your phone.</span>
-          </span>
-          <ArrowRight className="size-5 shrink-0 text-muted" aria-hidden />
-        </Link>
-      </section>
+      {/* ═══════════ 2-COLUMN DASHBOARD (COMFORTABLE & AIRY) ═══════════ */}
+      <div className="grid gap-6 lg:grid-cols-2 items-start">
+        {/* Left Column: Full-Length Timed Papers */}
+        <section aria-labelledby="exams-heading">
+          <QualifierExamList items={examItems} />
+        </section>
 
-      {/* ───────── Mocks ───────── */}
-      <section className="container-page pb-14 md:pb-20">
-        <SectionHeader eyebrow="Ace your qualifier exam" title="Full-length mock exams" description="All four courses in one timed sitting, just like exam day." />
-        <div className="grid gap-5 lg:grid-cols-2">
-          {qualifierMocks.map((m, i) => (
-            <article key={m.slug} className="card flex flex-col p-6">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="eyebrow mb-1">Mock {i + 1}</p>
-                  <h3 className="text-xl font-bold tracking-tight">{m.title}</h3>
-                </div>
-                <Badge tone={m.difficulty === "Standard" ? "blue" : "purple"}>{m.difficulty}</Badge>
-              </div>
-              <p className="mt-2 text-sm text-muted">{m.description}</p>
-              <ul className="mt-5 grid grid-cols-3 gap-3 text-sm">
-                <li className="rounded-xl bg-surface-2 p-3">
-                  <Clock className="mb-1 size-4 text-muted" aria-hidden />
-                  <b className="tabular-nums">{m.durationMin}</b> min
-                </li>
-                <li className="rounded-xl bg-surface-2 p-3">
-                  <ListChecks className="mb-1 size-4 text-muted" aria-hidden />
-                  <b className="tabular-nums">{mockQuestions(m).length}</b> questions
-                </li>
-                <li className="rounded-xl bg-surface-2 p-3">
-                  <BookOpenCheck className="mb-1 size-4 text-muted" aria-hidden />
-                  <b className="tabular-nums">{mockMarks(m)}</b> marks
-                </li>
-              </ul>
-              <div className="mt-4 flex flex-wrap gap-1.5">
-                {m.sections.map((s) => (
-                  <span key={s.subjectSlug} className="rounded-md border border-border px-2 py-0.5 text-xs text-muted">
-                    {s.short} · {s.questions.length}Q
-                  </span>
-                ))}
-              </div>
-              <div className="mt-6 border-t border-border pt-5">
-                <MockAction slug={m.slug} answerKey={answerKey(m)} />
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* ───────── Previous-year papers ───────── */}
-      <section id="pyqs" className="container-page scroll-mt-24 pb-14 md:pb-20">
-        <SectionHeader
-          eyebrow="Previous-year questions"
-          title="Previous-year papers, course by course"
-          description="Real papers from past terms with the same questions, options and official answer key. Sit them year by year in the exam portal."
-        />
-        <div className="space-y-10">
-          {pyqGroups.map(({ subjectSlug, papers }) => {
-            const s = getSubject(subjectSlug)!;
-            return (
-              <div key={subjectSlug} id={`pyqs-${subjectSlug}`} className="scroll-mt-24">
-                <h3 className="mb-4 flex flex-wrap items-baseline gap-x-3 text-lg font-bold tracking-tight">
-                  {s.name}
-                  <span className="text-sm font-normal text-muted">{papers.length} papers</span>
-                </h3>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                  {papers.map((p) => (
-                    <article key={p.slug} className="card flex flex-col p-5">
-                      <p className="eyebrow mb-1">{p.sections[0].short} · PYQ</p>
-                      <h4 className="text-lg font-bold tracking-tight">{p.title.split(" · ").at(-1)}</h4>
-                      <p className="mt-2 flex flex-1 flex-wrap content-start gap-x-3 gap-y-1 text-sm text-muted tabular-nums">
-                        <span>{mockQuestions(p).length} questions</span>
-                        <span>{mockMarks(p)} marks</span>
-                        <span>{p.durationMin} min</span>
-                      </p>
-                      <div className="mt-5 border-t border-border pt-4">
-                        <MockAction slug={p.slug} answerKey={answerKey(p)} />
-                      </div>
-                    </article>
-                  ))}
-                </div>
-                {PYQ_NOTES[subjectSlug] && <p className="mt-4 text-xs text-muted">{PYQ_NOTES[subjectSlug]}</p>}
-              </div>
-            );
-          })}
-        </div>
-        <p className="mt-8 text-sm text-muted">
-          Through the qualifier already?{" "}
-          <Link href="/pyqs" className="inline-flex items-center gap-1 font-semibold text-fg hover:underline">
-            Every PYQ, level by level, including full-syllabus End Term papers <ArrowRight className="size-3.5" aria-hidden />
-          </Link>
-        </p>
-      </section>
-
-      {/* ───────── Real exam experience ───────── */}
-      <section className="container-page pb-14 md:pb-20">
-        <SectionHeader eyebrow="Exam-day experience" title="Feels like the real qualifier" description="Practise the interface too, so nothing on exam day is new." />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((f) => (
-            <div key={f.title} className="card p-5">
-              <span className="grid size-10 place-items-center rounded-xl bg-brand/20">
-                <f.icon className="size-5" aria-hidden />
-              </span>
-              <h3 className="mt-4 font-bold">{f.title}</h3>
-              <p className="mt-1 text-sm text-muted">{f.text}</p>
+        {/* Right Column: 4 Foundation Subjects & Rules */}
+        <section aria-labelledby="subjects-heading" className="space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <h2 id="subjects-heading" className="text-sm sm:text-[15px] font-bold text-fg tracking-tight">
+                Subjects & Cheat Sheets
+              </h2>
+              {enrolledQualifier.length > 0 && (
+                <span className="rounded-full bg-brand px-2.5 py-0.5 text-[10px] font-bold text-brand-ink shadow-2xs dark:bg-brand/20 dark:text-brand dark:border dark:border-brand/40">
+                  {enrolledQualifier.length} Enrolled
+                </span>
+              )}
             </div>
-          ))}
-        </div>
-      </section>
+            <Link
+              href="/qualifier/notes"
+              className="text-xs font-medium text-muted hover:text-fg transition-colors inline-flex items-center gap-1"
+            >
+              All Cheat Notes <ArrowRight className="size-3" aria-hidden />
+            </Link>
+          </div>
 
+          <div className="divide-y divide-border rounded-xl border border-border bg-surface overflow-hidden shadow-2xs">
+            {sortedSubjects.map((slug) => {
+              const s = getSubject(slug)!;
+              const sheet = cheatSheetForSubject(slug);
+              const isEnrolled = enrolledSlugs.includes(slug);
+              const displayName = s.name.replace(/for Data Science\s*/i, "");
+
+              return (
+                <div
+                  key={slug}
+                  className="flex items-center justify-between gap-3.5 px-4 py-3 sm:px-4.5 sm:py-3.5 transition-colors hover:bg-surface-2/30"
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm font-semibold text-fg truncate">
+                        {displayName}
+                      </h3>
+                      {isEnrolled && (
+                        <span className="shrink-0 whitespace-nowrap rounded px-1.5 py-0.5 text-[10px] font-semibold leading-none border border-amber-300/80 bg-amber-100 text-amber-950 dark:border-brand/40 dark:bg-brand/15 dark:text-brand">
+                          My course
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-1 text-xs text-muted">
+                      {s.code && <span className="font-mono font-medium">{s.code}</span>}
+                      <span>·</span>
+                      <span>Qualifier Foundation</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    {sheet && (
+                      <Link
+                        href={cheatSheetHref(sheet)}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-border/80 bg-surface-2/60 px-2.5 py-1 text-xs font-medium text-fg hover:bg-surface-2 hover:border-fg/30 transition-colors"
+                      >
+                        <BookOpen className="size-3.5 text-muted" aria-hidden /> Cheat Sheet
+                      </Link>
+                    )}
+                    <Link
+                      href={practiceHref(slug, "qualifier")}
+                      className="inline-flex items-center gap-1 rounded-md bg-fg text-bg px-3 py-1 text-xs font-semibold hover:opacity-90 transition-opacity"
+                    >
+                      Practice <ArrowRight className="size-3" aria-hidden />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Official Pass Criteria Strip */}
+          <div className="rounded-xl border border-border bg-surface-2/30 p-3.5 sm:p-4 text-xs">
+            <div className="flex items-start gap-2.5">
+              <ShieldCheck className="size-4.5 text-fg shrink-0 mt-0.5" aria-hidden />
+              <div className="space-y-0.5 min-w-0">
+                <span className="font-semibold text-fg text-xs sm:text-sm">Passing Rule</span>
+                <p className="text-xs text-muted leading-relaxed mt-0.5">
+                  Min <strong>{QUALIFIER_CUTOFF.perSubject}% in each subject</strong> and <strong>{QUALIFIER_CUTOFF.average}% overall aggregate</strong> across all 4 courses to qualify.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* Attempt History (Only shown when user has saved attempts) */}
       <QualifierHistory answerKeys={allQualifierPapers.map(answerKey)} />
 
-      {/* ───────── How it works ───────── */}
-      <section id="how-it-works" className="container-page scroll-mt-24 pb-14 md:pb-20">
-        <SectionHeader title="How the qualifier works" />
-        <ol className="grid gap-4 md:grid-cols-4">
-          {[
-            ["Learn weeks 1–4", "Watch the lectures for all four courses and submit the graded assignments."],
-            ["Become eligible", "Meet the assignment-score requirement to get your qualifier hall ticket."],
-            ["Take the qualifier", "One in-person exam covering Maths I, Stats I, CT and English I."],
-            ["Clear the cutoff", `At least ${QUALIFIER_CUTOFF.perSubject}% in each course and ${QUALIFIER_CUTOFF.average}% on average (general category) to join the Foundation level.`],
-          ].map(([t, d], i) => (
-            <li key={t} className="card p-5">
-              <span className="grid size-8 place-items-center rounded-full bg-ink text-sm font-bold text-bg">{i + 1}</span>
-              <h3 className="mt-4 font-bold">{t}</h3>
-              <p className="mt-1 text-sm text-muted">{d}</p>
-            </li>
-          ))}
-        </ol>
-        <p className="mt-5 flex items-start gap-2 text-xs text-muted">
-          <CheckCircle2 className="mt-0.5 size-3.5 shrink-0" aria-hidden />
-          BTechi is not affiliated with IIT Madras. Mock questions are original and written in the qualifier&apos;s style; previous-year papers are
-          reproduced from past question papers. Eligibility rules,
-          category-wise cutoffs and exam duration can change between terms, so always confirm them in the official student handbook.
-        </p>
-      </section>
-    </>
+      {/* Subtle Footnote */}
+      <p className="flex items-center gap-2 text-xs text-muted pt-2 border-t border-border/50">
+        <CheckCircle2 className="size-3.5 text-muted shrink-0" aria-hidden />
+        Official IIT Madras BS past qualifier exam papers with automated pass/fail grading.
+      </p>
+    </div>
   );
 }

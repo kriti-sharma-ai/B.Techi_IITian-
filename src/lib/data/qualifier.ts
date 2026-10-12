@@ -1,8 +1,11 @@
 import type { QualifierMock, QualifierQuestion } from "../types";
+import { mathsPyqPapers } from "./maths-pyqs";
+import { statsPyqPapers } from "./stats-pyqs";
+import { ctPyqPapers } from "./ct-pyqs";
+import { englishPyqPapers } from "./english-pyqs";
 
 // Qualifier pack: full-length mocks covering the four Foundation courses
-// examined in the IITM BS qualifier (weeks 1–4 of each). Every question is
-// original, written in the qualifier's style; none are copied from IITM papers.
+// examined in the IITM BS qualifier (weeks 1–4 of each).
 
 export { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS } from "./qualifier-meta";
 
@@ -292,4 +295,57 @@ export const qualifierMocks: QualifierMock[] = [
       },
     ],
   },
+  {
+    slug: "qualifier-may-2024",
+    title: "Qualifier · May 2024",
+    description: "Official 4-course qualifier exam sat in May 2024 (Maths I, Stats I, CT, English I).",
+    difficulty: "Standard",
+    durationMin: 240,
+    sections: [
+      mathsPyqPapers.find((p) => p.slug === "maths-1-may-2024")!.sections[0],
+      statsPyqPapers.find((p) => p.slug === "stats-1-may-2024")!.sections[0],
+      ctPyqPapers.find((p) => p.slug === "ct-may-2024")!.sections[0],
+      englishPyqPapers.find((p) => p.slug === "english-1-may-2024")!.sections[0],
+    ],
+  },
+  {
+    slug: "qualifier-january-2024",
+    title: "Qualifier · January 2024",
+    description: "Official 4-course qualifier exam sat in January 2024 (Maths I, Stats I, CT, English I).",
+    difficulty: "Standard",
+    durationMin: 240,
+    sections: [
+      mathsPyqPapers.find((p) => p.slug === "maths-1-january-2024")!.sections[0],
+      statsPyqPapers.find((p) => p.slug === "stats-1-january-2024")!.sections[0],
+      ctPyqPapers.find((p) => p.slug === "ct-january-2024")!.sections[0],
+      englishPyqPapers.find((p) => p.slug === "english-1-jan-2024")!.sections[0],
+    ],
+  },
+  {
+    slug: "qualifier-september-2023",
+    title: "Qualifier · September 2023",
+    description: "Official 4-course qualifier exam sat in September 2023 (Maths I, Stats I, CT, English I).",
+    difficulty: "Standard",
+    durationMin: 240,
+    sections: [
+      mathsPyqPapers.find((p) => p.slug === "maths-1-september-2023")!.sections[0],
+      statsPyqPapers.find((p) => p.slug === "stats-1-september-2023")!.sections[0],
+      ctPyqPapers.find((p) => p.slug === "ct-september-2023")!.sections[0],
+      englishPyqPapers.find((p) => p.slug === "english-1-sep-2023")!.sections[0],
+    ],
+  },
+  {
+    slug: "qualifier-may-2023",
+    title: "Qualifier · May 2023",
+    description: "Official 4-course qualifier exam sat in May 2023 (Maths I, Stats I, CT, English I).",
+    difficulty: "Standard",
+    durationMin: 240,
+    sections: [
+      mathsPyqPapers.find((p) => p.slug === "maths-1-may-2023")!.sections[0],
+      statsPyqPapers.find((p) => p.slug === "stats-1-may-2023")!.sections[0],
+      ctPyqPapers.find((p) => p.slug === "ct-may-2023")!.sections[0],
+      englishPyqPapers.find((p) => p.slug === "english-1-may-2023")!.sections[0],
+    ],
+  },
 ];
+

@@ -11,7 +11,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, Calculator as CalcIcon, Check, Clock, Delete, Info, LayoutGrid, Maximize, User, X } from "lucide-react";
 import { actions, useHydrated, useStore } from "@/lib/store";
 import { formatClock, hasResponse, mockMarks, mockQuestions, paperHref, scoreMock, type QualifierResponse } from "@/lib/qualifier";
-import { pyqCourseHref, sittingOf } from "@/lib/pyq-urls";
+import { attemptHref, pyqCourseHref, sittingOf } from "@/lib/pyq-urls";
 import type { QualifierMock, QualifierQuestion } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
@@ -118,6 +118,14 @@ function ExamFlow({ mock }: { mock: QualifierMock }) {
 
 /* ───────────── Instructions ───────────── */
 
+/** Where "Not now" leads: practice mocks back to Practice, single-course papers to their course, full mocks to the qualifier pack. */
+const portalHome = (mock: QualifierMock) =>
+  mock.practice
+    ? { label: "Practice", href: "/practice" }
+    : mock.sections.length === 1
+      ? { label: `${mock.sections[0].short} PYQs`, href: pyqCourseHref(mock.sections[0].subjectSlug) }
+      : { label: "Qualifier Pack", href: "/qualifier" };
+
 function Legend({ counts }: { counts?: Record<Status, number> }) {
   return (
     <ul className="grid grid-cols-2 gap-x-3 gap-y-2.5 text-xs">
@@ -187,7 +195,10 @@ function Instructions({ mock, name, onBegin }: { mock: QualifierMock; name: stri
               </li>
               <li>Questions you have answered and marked for review will be evaluated. Questions marked for review with no answer will not.</li>
               {mock.sections.length > 1 && (
-                <li>Use the section tabs at the top to move between Maths I, Stats I, CT and English I. You can switch sections at any time.</li>
+                <li>
+                  Use the section tabs at the top to move between {new Intl.ListFormat("en").format(mock.sections.map((s) => s.short))}. You can switch
+                  sections at any time.
+                </li>
               )}
               <li>
                 Question types: <b>MCQ</b> (one correct option), <b>MSQ</b> (one or more correct options, all must be selected) and{" "}
@@ -200,7 +211,12 @@ function Instructions({ mock, name, onBegin }: { mock: QualifierMock; name: stri
                 .
               </li>
               <li>There is <b>no negative marking</b>. Use the on-screen calculator from the top bar for working.</li>
-              {mock.sections.length > 1 ? (
+              {mock.practice ? (
+                <li>
+                  Each section follows a real {mock.practice.label} paper, filled with questions of the same format from other sittings, with the
+                  official answer key. Aim for <b>at least 40% in each course</b>.
+                </li>
+              ) : mock.sections.length > 1 ? (
                 <li>
                   To qualify you need <b>at least 40% in each course</b> and <b>at least 50% on average</b> across the four (general category; relaxed
                   for reserved categories).
@@ -245,11 +261,8 @@ function Instructions({ mock, name, onBegin }: { mock: QualifierMock; name: stri
               >
                 I am ready to begin
               </button>
-              <Link
-                href={mock.sections.length === 1 ? pyqCourseHref(mock.sections[0].subjectSlug) : "/qualifier"}
-                className="text-sm font-medium text-muted hover:text-fg"
-              >
-                Not now, back to {mock.sections.length === 1 ? `${mock.sections[0].short} PYQs` : "Qualifier Pack"}
+              <Link href={portalHome(mock).href} className="text-sm font-medium text-muted hover:text-fg">
+                Not now, back to {portalHome(mock).label}
               </Link>
             </div>
           </div>
@@ -261,11 +274,11 @@ function Instructions({ mock, name, onBegin }: { mock: QualifierMock; name: stri
 
 function PortalHeader({ mock, children }: { mock: QualifierMock; children?: React.ReactNode }) {
   return (
-    <header className="flex h-14 shrink-0 items-center gap-3 bg-ink px-3 text-bg md:px-5">
+    <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border bg-surface px-3 text-fg md:px-5">
       <span className="grid size-8 place-items-center rounded-lg bg-brand text-sm font-black text-brand-ink">B</span>
       <div className="min-w-0 flex-1 leading-tight">
         <p className="truncate text-sm font-bold">{mock.title}</p>
-        <p className="truncate text-[11px] opacity-70">BTechi Exam Portal · IITM BS {sittingOf(mock)?.label ?? "Qualifier"} format</p>
+        <p className="truncate text-[11px] opacity-70">BTechi Exam Portal · IITM BS {mock.practice?.label ?? sittingOf(mock)?.label ?? "Qualifier"} format</p>
       </div>
       {children}
     </header>
@@ -334,7 +347,7 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
       });
       writeLive(mock.slug, null);
       if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
-      router.replace(`${paperHref(mock)}?attempt=${id}`);
+      router.replace(attemptHref(mock, id));
     },
     [live, mock, router],
   );
@@ -389,17 +402,17 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
           onClick={() => setCalcOpen((o) => !o)}
           aria-pressed={calcOpen}
           aria-label="Calculator"
-          className={cn("inline-flex h-9 items-center gap-1.5 rounded-lg px-2 text-sm font-medium hover:bg-bg/10 sm:px-2.5", calcOpen && "bg-bg/15")}
+          className={cn("inline-flex h-9 items-center gap-1.5 rounded-lg px-2 text-sm font-medium hover:bg-surface-2 sm:px-2.5", calcOpen && "bg-surface-2")}
         >
           <CalcIcon className="size-4" aria-hidden /> <span className="hidden sm:inline">Calculator</span>
         </button>
-        <button type="button" onClick={() => setPanel("info")} className="hidden h-9 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium hover:bg-bg/10 sm:inline-flex">
+        <button type="button" onClick={() => setPanel("info")} className="hidden h-9 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium hover:bg-surface-2 sm:inline-flex">
           <Info className="size-4" aria-hidden /> Instructions
         </button>
         <button
           type="button"
           onClick={() => document.documentElement.requestFullscreen?.().catch(() => {})}
-          className="hidden size-9 place-items-center rounded-lg hover:bg-bg/10 md:grid"
+          className="hidden size-9 place-items-center rounded-lg hover:bg-surface-2 md:grid"
           aria-label="Enter full screen"
         >
           <Maximize className="size-4" aria-hidden />
@@ -407,7 +420,7 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
         <div
           role="timer"
           aria-label="Time left"
-          className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-sm font-bold tabular-nums", low ? "animate-pulse bg-red text-bg" : "bg-bg/10")}
+          className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-sm font-bold tabular-nums", low ? "animate-pulse bg-red text-bg" : "bg-surface-2")}
         >
           <Clock className="size-4" aria-hidden />
           <span className="hidden text-[11px] font-sans font-medium opacity-80 sm:inline">Time Left</span>
@@ -429,7 +442,7 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
               className={cn("relative flex shrink-0 items-center gap-2 px-3 py-3 text-sm font-medium", on ? "text-fg" : "text-muted hover:text-fg")}
             >
               {s.short}
-              <span className={cn("rounded-md px-1.5 py-0.5 text-[11px] tabular-nums", on ? "bg-ink text-bg" : "bg-surface-2")}>
+              <span className={cn("rounded-md px-1.5 py-0.5 text-[11px] tabular-nums", on ? "bg-brand text-brand-ink" : "bg-surface-2")}>
                 {c.a + c.am}/{s.questions.length}
               </span>
               {on && <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-brand" />}
@@ -490,7 +503,7 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
                   </div>
                 ))}
               {q.code && (
-                <pre className="mb-4 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-[13px] leading-relaxed text-bg">{q.code}</pre>
+                <pre className="mb-4 overflow-x-auto rounded-xl border border-border bg-surface-2 p-4 font-mono text-[13px] leading-relaxed">{q.code}</pre>
               )}
               <QuestionPrompt q={q} className="text-[15px] font-medium leading-relaxed md:text-base" />
               <Answer q={q} value={draft} onChange={setDraft} />
@@ -501,23 +514,41 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
           </div>
 
           {/* Action bar */}
-          <div className="flex shrink-0 flex-wrap items-center gap-2 border-t border-border bg-surface px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:px-6">
-            <button type="button" onClick={() => save(true)} className="h-10 rounded-xl border border-purple/40 bg-purple/10 px-3 text-sm font-semibold text-purple hover:bg-purple/15">
-              Mark for Review &amp; Next
-            </button>
-            <button type="button" onClick={clear} className="h-10 rounded-xl border border-border px-3 text-sm font-medium hover:border-fg/30">
-              Clear Response
-            </button>
-            <div className="ml-auto flex gap-2">
+          <div className="flex shrink-0 items-center justify-between gap-1.5 sm:gap-2 border-t border-border bg-surface px-2.5 sm:px-4 py-2.5 sm:py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:px-6">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <button
+                type="button"
+                onClick={() => save(true)}
+                className="h-10 rounded-xl border border-purple/40 bg-purple/10 px-2.5 sm:px-3 text-xs sm:text-sm font-semibold text-purple hover:bg-purple/15 transition-colors"
+                title="Mark question for review and continue"
+              >
+                <span className="sm:hidden">Mark &amp; Next</span>
+                <span className="hidden sm:inline">Mark for Review &amp; Next</span>
+              </button>
+              <button
+                type="button"
+                onClick={clear}
+                className="h-10 rounded-xl border border-border px-2.5 sm:px-3 text-xs sm:text-sm font-medium hover:border-fg/30 transition-colors"
+              >
+                <span className="sm:hidden">Clear</span>
+                <span className="hidden sm:inline">Clear Response</span>
+              </button>
+            </div>
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <button
                 type="button"
                 disabled={live.current === 0}
                 onClick={() => go(live.current - 1)}
-                className="hidden h-10 rounded-xl border border-border px-3 text-sm font-medium hover:border-fg/30 disabled:opacity-40 sm:block"
+                className="h-10 rounded-xl border border-border px-2.5 sm:px-3 text-xs sm:text-sm font-medium hover:border-fg/30 disabled:opacity-40 transition-colors"
               >
-                Previous
+                <span className="sm:hidden">Prev</span>
+                <span className="hidden sm:inline">Previous</span>
               </button>
-              <button type="button" onClick={() => save(false)} className="h-10 rounded-xl bg-green px-4 text-sm font-semibold text-bg hover:brightness-110">
+              <button
+                type="button"
+                onClick={() => save(false)}
+                className="h-10 rounded-xl bg-green px-3.5 sm:px-4 text-xs sm:text-sm font-semibold text-bg hover:brightness-110 shadow-xs transition-all"
+              >
                 Save &amp; Next
               </button>
             </div>
@@ -566,7 +597,7 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
                     aria-label={`Question ${i + 1}, ${STATUS_META[status].label}`}
                     aria-current={index === live.current ? "true" : undefined}
                   >
-                    <StatusChip status={status} className={cn(index === live.current && "ring-2 ring-fg ring-offset-2 ring-offset-surface")}>
+                    <StatusChip status={status} className={cn(index === live.current && "ring-2 ring-brand ring-offset-2 ring-offset-surface")}>
                       {i + 1}
                     </StatusChip>
                   </button>
@@ -575,7 +606,7 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
             </div>
           </div>
           <div className="border-t border-border p-4">
-            <button type="button" onClick={() => setPanel("submit")} className="h-11 w-full rounded-xl bg-ink text-sm font-semibold text-bg hover:opacity-90">
+            <button type="button" onClick={() => setPanel("submit")} className="h-11 w-full rounded-xl bg-brand text-sm font-semibold text-brand-ink hover:brightness-95">
               Submit exam
             </button>
           </div>
@@ -630,7 +661,7 @@ function ExamRoom({ mock, name, initial }: { mock: QualifierMock; name: string; 
             <button type="button" onClick={() => setPanel("none")} className="h-10 rounded-xl border border-border px-4 text-sm font-medium">
               Back to exam
             </button>
-            <button type="button" onClick={() => submit(false)} className="h-10 rounded-xl bg-ink px-4 text-sm font-semibold text-bg hover:opacity-90">
+            <button type="button" onClick={() => submit(false)} className="h-10 rounded-xl bg-brand px-4 text-sm font-semibold text-brand-ink hover:brightness-95">
               Yes, submit
             </button>
           </div>

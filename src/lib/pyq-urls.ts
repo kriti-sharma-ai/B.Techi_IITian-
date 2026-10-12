@@ -47,6 +47,12 @@ export const pyqLevelHref = (level: PyqLevel) => `/pyqs/${level}`;
 
 export const pyqCourseHref = (subjectSlug: string, level: PyqLevel = pyqLevelOf(subjectSlug)) => `/pyqs/${level}/${subjectSlug}`;
 
+/** Question sheets: past questions laid out as a paper to solve on paper (lib/pyq-sheets.ts). */
+export const PYQ_SHEETS_HREF = "/pyqs/sheets";
+
+/** A course's question sheets, /pyqs/<level>/<course>/sheets, or one sheet under it. */
+export const pyqSheetsHref = (subjectSlug: string, sheet?: string) => `${pyqCourseHref(subjectSlug)}/sheets${sheet ? `/${sheet}` : ""}`;
+
 /** The sitting an End Term or quiz paper was set in. Qualifier papers have none. */
 export function sittingOf(mock: Pick<QualifierMock, "endTerm" | "quiz">) {
   if (mock.endTerm) return { exam: "end-term" as const, label: "End Term", ...mock.endTerm };
@@ -79,8 +85,22 @@ export function qualifierTerm(slug: string) {
   return m ? { month: QUALIFIER_MONTHS[m[1]], year: m[2] } : undefined;
 }
 
-/** Where a paper is sat: single-course papers under their course, full qualifier mocks in the qualifier pack. */
-export function paperHref(mock: Pick<QualifierMock, "slug" | "endTerm" | "quiz" | "sections">) {
+/** Where a paper is sat: practice mocks on the practice page, single-course papers under their course, full qualifier mocks in the qualifier pack. */
+export function paperHref(mock: Pick<QualifierMock, "slug" | "endTerm" | "quiz" | "practice" | "sections">) {
+  if (mock.practice) return mock.practice.href;
   if (mock.sections.length > 1) return `/qualifier/${mock.slug}`;
   return `${pyqCourseHref(mock.sections[0].subjectSlug)}/${paperSegment(mock)}`;
+}
+
+/** Most courses a student can sit together in one exam from the practice page. */
+export const MAX_EXAM_COURSES = 4;
+
+/** One timed exam over several courses, a section each. Without a seed the page draws a fresh paper and pins its seed in the URL. */
+export const examHref = (courseSlugs: string[], exam: PyqExam, seed?: number, year?: string) =>
+  `/practice/exam?exam=${exam}&courses=${courseSlugs.join(".")}${seed === undefined ? "" : `&seed=${seed}`}${year && year !== "all" && year !== "random" ? `&year=${year}` : ""}`;
+
+/** A paper's result page for one attempt. */
+export function attemptHref(mock: Parameters<typeof paperHref>[0], attemptId: string) {
+  const href = paperHref(mock);
+  return `${href}${href.includes("?") ? "&" : "?"}attempt=${attemptId}`;
 }

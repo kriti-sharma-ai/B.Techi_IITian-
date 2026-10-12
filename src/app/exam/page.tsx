@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { ExamPortalStudio, type PortalCourse } from "@/components/exam-portal-studio";
 import { END_TERM_SUBJECTS } from "@/lib/data/end-term/subjects";
 import { getPyqIndex } from "@/lib/pyq-index";
@@ -11,11 +10,12 @@ import { loadContent } from "@/lib/cms";
 export const metadata: Metadata = {
   title: "Exam Portal · Real IIT Madras BS PYQs",
   description:
-    "Sit official IIT Madras BS previous year papers. Choose year or random mock, and combine 1 to 4 subjects with live timer and scientific calculator.",
+    "Sit official IIT Madras BS End Term and Quiz papers on a timed exam screen with a calculator. Take 1 to 4 subjects together.",
   alternates: { canonical: "/exam" },
 };
 
-const EXAM_KEYS: PyqExam[] = ["end-term", "quiz-1", "quiz-2", "qualifier"];
+// The Qualifier has its own page with full 4-hour papers and the cutoff check.
+const EXAM_KEYS: PyqExam[] = ["end-term", "quiz-1", "quiz-2"];
 
 export default async function ExamPortalPage({
   searchParams,
@@ -30,15 +30,6 @@ export default async function ExamPortalPage({
   ]);
 
   const endTermLevelMap = new Map(END_TERM_SUBJECTS.map((s) => [s.slug, s.level]));
-
-  const allYears = Array.from(
-    new Set(
-      index.pyqCourses
-        .flatMap((c) => c.papers)
-        .map((p) => p.sortKey.slice(0, 4))
-        .filter((y) => y.startsWith("20"))
-    )
-  ).sort((a, b) => b.localeCompare(a));
 
   const portalCourses: PortalCourse[] = index.pyqCourses
     .filter((c) => c.papers.length > 0)
@@ -97,23 +88,15 @@ export default async function ExamPortalPage({
             </span>
           </div>
           <p className="mt-0.5 text-xs text-muted">
-            Combine 1 to 4 subjects into a timed mock exam with official questions & calculator.
+            Sit a timed End Term or Quiz paper. Pick 1 to 4 subjects to take them together.
           </p>
         </div>
-
-        <Link
-          href="/practice"
-          className="inline-flex items-center gap-1 text-xs font-medium text-muted hover:text-fg transition-colors"
-        >
-          <ArrowLeft className="size-3" aria-hidden /> Single Subject Practice
-        </Link>
       </div>
 
       {/* Streamlined Studio */}
       <ExamPortalStudio
         courses={portalCourses}
         initialPlanned={scope.courses}
-        availableYears={allYears}
       />
     </div>
   );

@@ -8,24 +8,21 @@ import { FooterWordmark } from "./footer-wordmark";
 
 const columns = [
   {
-    title: "Explore",
+    title: "Prepare",
     links: [
       ["Programs", "/programs"],
-      ["Qualifier Pack", "/qualifier"],
-      ["Courses", "/subjects"],
-      ["Notes", "/notes"],
-      ["Videos", "/videos"],
-      ["Books", "/books"],
       ["Practice", "/practice"],
+      ["Exam Portal", "/exam"],
+      ["Qualifier Pack", "/qualifier"],
     ],
   },
   {
     title: "Resources",
     links: [
+      ["Notes", "/notes"],
+      ["Videos", "/videos"],
+      ["Books", "/books"],
       ["Blog", "/blog"],
-      ["Cheat sheets", "/qualifier/notes"],
-      ["Study Guides", "/study-guides"],
-      ["Search", "/search"],
     ],
   },
   {

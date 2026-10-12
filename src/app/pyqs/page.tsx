@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, FileText } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { PyqHistory } from "@/components/qualifier-attempts";
 import { ScopeSwitch } from "@/components/study-scope";
 import { PageHeader } from "@/components/ui";
 import { PYQ_LEVELS, getPyqIndex, groupCourses } from "@/lib/pyq-index";
-import { PYQ_SHEETS_HREF, pyqLevelHref } from "@/lib/pyq-urls";
+import { pyqLevelHref } from "@/lib/pyq-urls";
 import { getStudyCourse } from "@/lib/study-courses";
 import { getStudyScope, keepScope, narrow, scopeLinks } from "@/lib/study-scope";
 
@@ -51,21 +51,6 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
       </PageHeader>
 
       <div className="container-page space-y-14 py-10 md:py-14">
-        <div className="card flex flex-wrap items-center justify-between gap-4 border-border bg-surface-2/50 px-5 py-3.5 text-xs text-muted">
-          <span className="flex items-center gap-2 text-fg font-medium">
-            <FileText className="size-4 text-amber dark:text-brand" aria-hidden />
-            Prefer to solve papers offline with pen &amp; paper? Use &ldquo;Solve on Paper&rdquo; on the Practice page.
-          </span>
-          <div className="flex items-center gap-3">
-            <Link href="/practice?format=paper" className="font-semibold text-amber hover:underline dark:text-brand">
-              Practice on paper <ArrowRight className="inline size-3.5" aria-hidden />
-            </Link>
-            <span className="text-border">·</span>
-            <Link href={keepScope(PYQ_SHEETS_HREF, scope)} className="font-semibold text-muted hover:text-fg hover:underline">
-              All question sheets <ArrowRight className="inline size-3.5" aria-hidden />
-            </Link>
-          </div>
-        </div>
         {scoped.mine > 0 && (
           <div className="-mb-6 space-y-3 md:-mb-8">
             <ScopeSwitch list={scoped} links={scopeLinks("/pyqs", sp)} />

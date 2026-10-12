@@ -8,7 +8,6 @@ import {
   Clock,
   Layers,
   Plus,
-  RotateCcw,
   Search,
   Shuffle,
   X,
@@ -35,7 +34,6 @@ const EXAMS: { exam: PyqExam; label: string; scope: string }[] = [
   { exam: "end-term", label: "End Term", scope: "Weeks 1–12" },
   { exam: "quiz-1", label: "Quiz 1", scope: "Weeks 1–4" },
   { exam: "quiz-2", label: "Quiz 2", scope: "Weeks 5–8" },
-  { exam: "qualifier", label: "Qualifier", scope: "Entry" },
 ];
 
 const LEVEL_FILTERS = [
@@ -58,11 +56,9 @@ function formatMinutes(min: number): string {
 export function ExamPortalStudio({
   courses,
   initialPlanned = [],
-  availableYears = [],
 }: {
   courses: PortalCourse[];
   initialPlanned?: string[];
-  availableYears?: string[];
 }) {
   const hydrated = useHydrated();
   const plannedFromStore = useStore((s) => s.plan?.subjects);
@@ -94,6 +90,12 @@ export function ExamPortalStudio({
   const coursesForExam = useMemo(() => {
     return courses.filter((c) => (c.minutes[activeExam] ?? 0) > 0);
   }, [courses, activeExam]);
+
+  // Only the years this exam has papers for.
+  const availableYears = useMemo(
+    () => [...new Set(coursesForExam.flatMap((c) => c.yearsPerExam?.[activeExam] ?? []))].sort((a, b) => b.localeCompare(a)),
+    [coursesForExam, activeExam],
+  );
 
   // Keep selected slugs valid
   const validSelectedSlugs = useMemo(() => {
@@ -162,7 +164,10 @@ export function ExamPortalStudio({
               <button
                 key={item.exam}
                 type="button"
-                onClick={() => setActiveExam(item.exam)}
+                onClick={() => {
+                  setActiveExam(item.exam);
+                  setSelectedYear("random");
+                }}
                 className={cn(
                   "rounded-lg px-3 py-1.5 text-xs font-medium transition-colors shrink-0",
                   isSelected
@@ -174,6 +179,12 @@ export function ExamPortalStudio({
               </button>
             );
           })}
+          <Link
+            href="/qualifier"
+            className="inline-flex shrink-0 items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:bg-surface-2/60 hover:text-fg"
+          >
+            Qualifier <ArrowRight className="size-3" aria-hidden />
+          </Link>
         </div>
 
         {/* Paper / Year Pills */}
@@ -211,65 +222,6 @@ export function ExamPortalStudio({
               </button>
             );
           })}
-        </div>
-      </div>
-
-      {/* ──────────────── COMPACT SELECTION STRIP (REPLACES 4 GIANT DASHED BOXES) ──────────────── */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-xl bg-surface-2/30 px-3.5 py-2.5 text-xs border border-border/60">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="font-semibold text-fg">
-            Selected ({validSelectedSlugs.length}/{MAX_EXAM_COURSES}):
-          </span>
-
-          {selectedCoursesData.map((c) => (
-            <span
-              key={c.slug}
-              className="inline-flex items-center gap-1.5 rounded-md bg-surface px-2.5 py-1 text-xs font-medium text-fg border border-border shadow-2xs"
-            >
-              <span>{c.short}</span>
-              <span className="text-[10px] text-muted tabular-nums">
-                ({formatMinutes(c.minutes[activeExam] ?? 60)})
-              </span>
-              <button
-                type="button"
-                onClick={() => toggleCourse(c.slug)}
-                className="text-muted hover:text-fg ml-0.5"
-                title={`Remove ${c.short}`}
-              >
-                <X className="size-3" aria-hidden />
-              </button>
-            </span>
-          ))}
-
-          {validSelectedSlugs.length < MAX_EXAM_COURSES && (
-            <span className="text-muted text-[11px] italic pl-1">
-              Select up to {MAX_EXAM_COURSES - validSelectedSlugs.length} more subject{MAX_EXAM_COURSES - validSelectedSlugs.length > 1 ? "s" : ""} below
-            </span>
-          )}
-        </div>
-
-        <div className="flex items-center gap-3">
-          {userPlanned.length > 0 && (
-            <button
-              type="button"
-              onClick={() => {
-                const matching = userPlanned.filter((slug) => coursesForExam.some((c) => c.slug === slug));
-                setSelectedSlugs(matching.slice(0, MAX_EXAM_COURSES));
-              }}
-              className="text-[11px] font-semibold text-amber hover:text-amber/80 dark:text-brand dark:hover:underline cursor-pointer"
-            >
-              Select My Courses ({userPlanned.length})
-            </button>
-          )}
-          {validSelectedSlugs.length > 0 && (
-            <button
-              type="button"
-              onClick={clearSelection}
-              className="text-[11px] font-medium text-muted hover:text-fg cursor-pointer"
-            >
-              Clear all
-            </button>
-          )}
         </div>
       </div>
 
@@ -399,11 +351,19 @@ export function ExamPortalStudio({
             <div>
               <p className="text-xs font-semibold text-fg">
                 {validSelectedSlugs.length === 0
-                  ? "Select 1 to 4 subjects"
-                  : `${validSelectedSlugs.length} ${validSelectedSlugs.length === 1 ? "subject" : "subjects"} · ${formatMinutes(totalMinutes)}`}
+                  ? `Pick 1 to ${MAX_EXAM_COURSES} subjects`
+                  : `${selectedCoursesData.map((c) => c.short).join(" + ")} · ${formatMinutes(totalMinutes)}`}
               </p>
               <p className="text-[11px] text-muted">
-                {selectedYear === "random" ? "Random blueprint mock" : `${selectedYear} official papers`} · Live timer & calculator
+                {selectedYear === "random" ? "Random paper" : `${selectedYear} papers`} · Timer and calculator
+                {validSelectedSlugs.length > 0 && (
+                  <>
+                    {" · "}
+                    <button type="button" onClick={clearSelection} className="font-medium text-muted underline-offset-2 hover:text-fg hover:underline cursor-pointer">
+                      Clear
+                    </button>
+                  </>
+                )}
               </p>
             </div>
           </div>
@@ -417,10 +377,7 @@ export function ExamPortalStudio({
                   "w-full justify-center gap-1.5 font-semibold sm:w-auto text-xs px-4 py-2"
                 )}
               >
-                <span>Start Mock Test</span>
-                <span className="rounded bg-brand-ink/15 px-1.5 py-0.2 text-[10px] font-mono">
-                  {formatMinutes(totalMinutes)}
-                </span>
+                <span>Start exam</span>
                 <ArrowRight className="size-3.5" aria-hidden />
               </Link>
             ) : (
@@ -432,7 +389,7 @@ export function ExamPortalStudio({
                   "w-full cursor-not-allowed justify-center opacity-50 sm:w-auto text-xs px-4 py-2"
                 )}
               >
-                Select at least 1 subject
+                Start exam
               </button>
             )}
           </div>

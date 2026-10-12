@@ -7,22 +7,18 @@ import { PracticeUnifiedSidebar } from "@/components/practice-unified-sidebar";
 import { PracticeFormatStudio } from "@/components/practice-format-studio";
 import { PracticeStats } from "@/components/practice-stats";
 import { param } from "@/lib/filters";
-import { getSubject, questions } from "@/lib/content";
+import { getSubject } from "@/lib/content";
 import { PYQ_LEVELS, getPyqIndex, type CoursePyqs, type PyqExam, type PyqIndex } from "@/lib/pyq-index";
 import { getQuestionSheets, type QuestionSheets } from "@/lib/pyq-sheets";
 import {
-  DRILL_COUNT,
   PRACTICE_EXAMS,
-  QUICK_COUNT,
   courseExams,
   examFromParam,
   practiceHref,
   getPyqPractice,
   quiz1Fallback,
-  sessionHref,
   type PracticePlan,
   type PyqPractice,
-  type PyqPracticeMode,
 } from "@/lib/pyq-practice";
 import { isPyqLevel, type PyqLevel } from "@/lib/pyq-urls";
 import { getStudyScope, type StudyScope } from "@/lib/study-scope";
@@ -105,10 +101,6 @@ const EXAM_CHOICES: { label: string; exam: PyqExam; onlyWithPapers?: boolean }[]
   { label: "End Term", exam: "end-term" },
 ];
 
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
-
-type Mode = { mode: PyqPracticeMode; title: string; description: string; meta: string };
-
 /**
  * The chooser on the left (pinned on desktop); on the right, everything for the
  * chosen course and exam: what it covers, ways to practise, tests, and the real papers.
@@ -130,48 +122,11 @@ function PracticeModes({
   format?: string;
   tab?: string;
 }) {
-  const live = questions.length > 0;
   // The student's courses that have papers to practise.
   const mine = scope.courses.map((slug) => index.getPyqCourse(slug)).filter((c): c is CoursePyqs => !!c && c.papers.length > 0);
   const { course, exam } = resolveSelection(index, props.level, props.course, props.exam, { courses: mine, level: scope.level });
   const plan = practice.practicePlan(course.slug, exam)!;
   const courseSheets = sheets.courseSheets(course.slug);
-  const { source } = plan.exam;
-
-  const practise: Mode[] = [
-    {
-      mode: "quick",
-      title: "Quick Practice",
-      description: `Random questions from past ${source} papers with instant explanations.`,
-      meta: plural(Math.min(QUICK_COUNT, plan.questions), "question"),
-    },
-    {
-      mode: "drill",
-      title: "Adaptive Drill",
-      description: "Miss a question and it comes back in your loop until you get it right.",
-      meta: plural(Math.min(DRILL_COUNT, plan.questions), "question"),
-    },
-    {
-      mode: "all",
-      title: "Every Question",
-      description: `All past ${source} questions of ${course.short}, one at a time.`,
-      meta: plural(plan.questions, "question"),
-    },
-  ];
-  const tests: Mode[] = [
-    {
-      mode: "full",
-      title: "Full Test",
-      description: "A full-length paper drawn from every past sitting. Untimed.",
-      meta: plural(plan.paperLength, "question"),
-    },
-    {
-      mode: "mock",
-      title: "Mock Exam",
-      description: `Timed, and laid out like a real ${source} paper.`,
-      meta: `${plan.durationMin} min`,
-    },
-  ];
 
   const levelsWithCourses = PYQ_LEVELS.map((lvl) => ({
     levelSlug: lvl.slug,

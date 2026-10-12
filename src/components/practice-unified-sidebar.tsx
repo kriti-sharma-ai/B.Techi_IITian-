@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronDown, Layers } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { openStudySetup } from "./study-setup";
 import { useHydrated, useStore } from "@/lib/store";
 import type { PyqExam } from "@/lib/pyq-index";
@@ -165,16 +165,6 @@ export function PracticeUnifiedSidebar({
         </div>
       </div>
 
-      {/* Subtle Combined Mock link */}
-      <div className="border-t border-border/80 pt-3 text-xs text-muted">
-        <Link
-          href={`/qualifier?subject=${currentCourse.slug}`}
-          className="flex items-center gap-1.5 hover:text-fg transition-colors"
-        >
-          <Layers className="size-3.5" aria-hidden />
-          <span>Combined 4-hour mock test</span>
-        </Link>
-      </div>
     </div>
   );
 }

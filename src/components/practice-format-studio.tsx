@@ -6,6 +6,7 @@ import { buttonClass } from "@/components/ui";
 import { cheatSheetForSubject, cheatSheetHref } from "@/lib/data/cheat-notes";
 import type { CourseSheets } from "@/lib/pyq-sheets";
 import { practiceHref, sessionHref, type PracticePlan } from "@/lib/pyq-practice";
+import { examHref } from "@/lib/pyq-urls";
 import { cn } from "@/lib/utils";
 
 type StudioTab = "practice" | "papers" | "repeated" | "topics";
@@ -111,8 +112,8 @@ export function PracticeFormatStudio({
               },
               {
                 mode: "mock",
-                title: "Timed mock exam",
-                detail: "Full paper with a timer, like the real exam. Score at the end.",
+                title: "Timed exam",
+                detail: "A full paper on the real exam screen, with timer and calculator.",
                 cta: "Start",
               },
             ] as const).map((item) => (
@@ -125,7 +126,8 @@ export function PracticeFormatStudio({
                   <p className="mt-0.5 text-xs text-muted">{item.detail}</p>
                 </div>
                 <Link
-                  href={sessionHref(course.slug, exam.slug, item.mode)}
+                  // The timed exam runs in the Exam Portal, so there is one exam screen across the site.
+                  href={item.mode === "mock" ? examHref([course.slug], exam.slug) : sessionHref(course.slug, exam.slug, item.mode)}
                   className={cn(
                     buttonClass(item.mode === "quick" ? "primary" : "secondary", "sm"),
                     "text-xs font-semibold shrink-0"

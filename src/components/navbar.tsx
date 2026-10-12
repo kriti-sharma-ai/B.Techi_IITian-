@@ -20,7 +20,6 @@ import {
   ScrollText,
   Search,
   Shield,
-  StickyNote,
   User,
   GraduationCap,
   type LucideIcon,
@@ -50,7 +49,6 @@ const primaryLinks: NavLink[] = [
 ].filter((l) => hrefEnabled(l.href));
 
 const resources: NavItem[] = ([
-  { href: "/qualifier/notes", label: "Cheat sheets", description: "Formulas, rules and traps for the qualifier", icon: StickyNote },
   { href: "/notes", label: "Notes", description: "Lecture notes and revision sheets", icon: FileText },
   { href: "/videos", label: "Videos", description: "Topic-mapped video lessons", icon: PlayCircle },
   { href: "/books", label: "Books", description: "Recommended texts", icon: BookOpen },
@@ -66,8 +64,6 @@ const accountLinks: NavLink[] = [
 const isActive = (pathname: string, href: string) => {
   const path = href.split("#")[0];
   if (path === "/") return pathname === "/";
-  // Cheat sheets live under /qualifier but belong to Resources.
-  if (path === "/qualifier" && pathname.startsWith("/qualifier/notes")) return false;
   // Past papers have no menu link of their own; they belong to Practice.
   if (path === "/practice" && (pathname === "/pyqs" || pathname.startsWith("/pyqs/"))) return true;
   if (path === "/practice" && pathname.startsWith("/practice/exam")) return false;
@@ -534,14 +530,7 @@ function MyCoursesNavButton({ mobile, onAction }: { mobile?: boolean; onAction?:
                         onClick={() => setDropdownOpen(false)}
                         className="rounded px-1.5 py-0.5 text-[10px] font-semibold text-muted hover:bg-surface-2 hover:text-fg transition-colors"
                       >
-                        PYQs
-                      </Link>
-                      <Link
-                        href={`/qualifier/notes`}
-                        onClick={() => setDropdownOpen(false)}
-                        className="rounded px-1.5 py-0.5 text-[10px] font-semibold text-muted hover:bg-surface-2 hover:text-fg transition-colors"
-                      >
-                        Notes
+                        Practice
                       </Link>
                     </div>
                   </div>
@@ -559,7 +548,7 @@ function MyCoursesNavButton({ mobile, onAction }: { mobile?: boolean; onAction?:
                 <ArrowRight className="size-3.5" aria-hidden />
               </button>
               <p className="mt-2 text-center text-[10px] text-muted">
-                Filters Practice Hub, Notes, and Exam Portal to your syllabus.
+                Filters Practice, Exam Portal and Notes to your courses.
               </p>
             </div>
           </div>

@@ -81,11 +81,6 @@ export default async function QualifierPage({ searchParams }: PageProps<"/qualif
           id="subjects-heading"
           step={1}
           title="Prepare each subject"
-          action={
-            <Link href="/qualifier/notes" className="inline-flex items-center gap-1 text-xs font-semibold text-muted transition-colors hover:text-fg">
-              All cheat notes <ArrowRight className="size-3.5" aria-hidden />
-            </Link>
-          }
         />
         <div className="grid gap-3 sm:grid-cols-2">
           {sortedSubjects.map((slug) => {

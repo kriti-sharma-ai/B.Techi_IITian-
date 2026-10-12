@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { SquarePlay } from "lucide-react";
 import { hrefEnabled } from "@/lib/site";
 import { YOUTUBE_URL } from "@/lib/utils";
-import { Logo } from "./logo";
 import { FooterWordmark } from "./footer-wordmark";
 
 const columns = [
@@ -48,59 +47,91 @@ export function Footer() {
   const pathname = usePathname();
   // Only rendered on the landing page.
   if (pathname !== "/") return null;
+
   return (
-    <footer className="relative mt-20 overflow-hidden border-t border-border bg-surface pb-24 text-fg md:pb-0">
+    <footer className="relative mt-20 flex min-h-dvh flex-col justify-between overflow-hidden border-t border-border bg-surface pb-24 text-fg md:pb-0">
+      {/* Background radial glow */}
       <div aria-hidden className="footer-glow pointer-events-none absolute inset-x-0 bottom-0 h-[70%]" />
-      <div className="container-page relative grid grid-cols-3 gap-x-6 gap-y-10 pt-14 md:grid-cols-[2fr_repeat(3,1fr)]">
-        <div className="col-span-3 md:col-span-1">
-          <p className="text-3xl font-medium tracking-tight md:text-4xl">Learn. Practise. Prepare.</p>
-          <p className="mt-4 max-w-sm text-base leading-relaxed text-muted">
+
+      {/* Main footer content */}
+      <div className="relative mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-12 px-6 pt-14 pb-8 sm:px-10 md:pt-16 lg:grid-cols-12 lg:gap-16 lg:px-14">
+        {/* Brand identity column */}
+        <div className="flex flex-col gap-4 lg:col-span-5">
+          <h2 className="text-2xl font-bold tracking-tight text-fg md:text-3xl">
+            Learn. Practise. Prepare.
+          </h2>
+          <p className="max-w-md text-sm leading-relaxed text-muted">
             A structured academic platform where students learn, practise and prepare.
           </p>
-          <p className="mt-5 inline-block rounded-full bg-brand px-3 py-1 text-xs font-semibold tracking-wide text-brand-ink dark:border dark:border-brand/40 dark:bg-brand/10 dark:text-brand">AI • Automation • Tech • Education</p>
+
+          <div className="mt-1 flex flex-wrap items-center gap-3">
+            <span className="inline-block rounded-full bg-brand px-3 py-1 text-xs font-semibold tracking-wide text-brand-ink dark:border dark:border-brand/40 dark:bg-brand/10 dark:text-brand">
+              AI • Automation • Tech • Education
+            </span>
+          </div>
+
           <a
             href={YOUTUBE_URL}
             target="_blank"
             rel="noopener me"
-            className="mt-4 flex w-fit items-center gap-2 text-[15px] text-fg/80 transition-colors hover:text-fg dark:hover:text-brand"
+            className="mt-2 inline-flex w-fit items-center gap-2 rounded-lg border border-border bg-surface-muted/40 px-3 py-1.5 text-sm font-medium text-fg/90 transition-all hover:border-brand/50 hover:bg-surface-muted hover:text-fg dark:hover:text-brand"
           >
-            <SquarePlay className="size-4" aria-hidden />
-            BTechi IITian on YouTube
+            <SquarePlay className="size-4 text-brand dark:text-brand" aria-hidden />
+            <span>BTechi IITian on YouTube</span>
           </a>
         </div>
-        {columns.map((col) => (
-          <div key={col.title}>
-            <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted dark:text-brand">{col.title}</h2>
-            <ul className="space-y-2.5">
-              {col.links.filter(([, href]) => hrefEnabled(href)).map(([label, href]) => (
-                <li key={href}>
-                  <Link href={href} className="text-[15px] text-fg/80 transition-colors hover:text-fg dark:hover:text-brand">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+
+        {/* Navigation links grid */}
+        <nav
+          aria-label="Footer navigation"
+          className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-7 lg:gap-10"
+        >
+          {columns.map((col) => (
+            <div key={col.title} className="flex flex-col gap-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted dark:text-brand">
+                {col.title}
+              </h3>
+              <ul className="space-y-3 text-sm">
+                {col.links
+                  .filter(([, href]) => hrefEnabled(href))
+                  .map(([label, href]) => (
+                    <li key={href}>
+                      <Link
+                        href={href}
+                        className="inline-block text-fg/80 transition-all duration-150 hover:translate-x-0.5 hover:text-fg dark:hover:text-brand"
+                      >
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
       </div>
-      <div className="container-page relative pt-12 pb-10 md:pt-16 md:pb-14">
-        <FooterWordmark />
+
+      {/* Signature Brand Wordmark Banner */}
+      <div className="relative my-auto w-full border-t border-border/40 px-6 pt-8 pb-6 sm:px-10 md:pt-12 md:pb-10 lg:px-14">
+        <div className="mx-auto w-full max-w-[1440px]">
+          <FooterWordmark />
+        </div>
       </div>
-      <div className="relative border-t border-border">
-        <div className="container-page flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <Logo />
-            <p className="text-sm text-muted">© {new Date().getFullYear()} BTechi IITian. Built for students, by students.</p>
-          </div>
-          <ul className="flex flex-wrap gap-x-5 gap-y-2">
+
+      {/* Sub-footer bottom bar */}
+      <div className="relative mt-auto border-t border-border bg-surface/40">
+        <div className="mx-auto flex w-full max-w-[1440px] flex-col items-center justify-between gap-4 px-6 py-6 text-xs text-muted sm:flex-row sm:px-10 lg:px-14">
+          <p>© {new Date().getFullYear()} BTechi IITian. Built for students, by students.</p>
+          <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-5 gap-y-2">
             {legal.map(([label, href]) => (
-              <li key={href}>
-                <Link href={href} className="text-sm text-muted transition-colors hover:text-fg dark:hover:text-brand">
-                  {label}
-                </Link>
-              </li>
+              <Link
+                key={href}
+                href={href}
+                className="transition-colors hover:text-fg dark:hover:text-brand"
+              >
+                {label}
+              </Link>
             ))}
-          </ul>
+          </nav>
         </div>
       </div>
     </footer>

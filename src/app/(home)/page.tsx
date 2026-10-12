@@ -90,23 +90,26 @@ export default async function HomePage() {
               </li>
             ))}
           </ul>
-          <div className="mt-[clamp(2rem,6svh,3rem)] flex flex-wrap items-center justify-center gap-3">
-            <ButtonLink href="/exam" size="lg">
+          {/* Phones: two equal full-width buttons, stacked. Wider: side by side. */}
+          <div className="mt-[clamp(2rem,6svh,3rem)] flex w-full max-w-xs flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:justify-center">
+            <ButtonLink href="/exam" size="lg" className="w-full sm:w-auto">
               Start a mock exam <ArrowRight className="size-4" aria-hidden />
             </ButtonLink>
-            <ButtonLink href="/practice" size="lg" variant="secondary">
+            <ButtonLink href="/practice" size="lg" variant="secondary" className="w-full sm:w-auto">
               Practise PYQs
             </ButtonLink>
           </div>
-          <p className="mt-[clamp(1.5rem,4svh,2.25rem)] text-sm text-muted/80">
-            {pyqTotals.papers.toLocaleString("en-IN")} papers · {pyqTotals.questions.toLocaleString("en-IN")} questions
+          <p className="mt-[clamp(1.5rem,4svh,2.25rem)] text-sm text-muted md:text-base">
+            <span className="font-bold text-fg tabular-nums">{pyqTotals.papers.toLocaleString("en-IN")}</span> papers
+            <span className="mx-2 text-muted/50">·</span>
+            <span className="font-bold text-fg tabular-nums">{pyqTotals.questions.toLocaleString("en-IN")}</span> questions
           </p>
         </div>
       </section>
 
       {/* ───────── The exam screen: pops up on scroll, and works ───────── */}
       {demo.length > 0 && (
-        <section className="px-4 pb-16 md:px-6 md:pb-24">
+        <section className="px-4 pb-20 md:px-6 md:pb-28">
           <ScrollPop className="mx-auto max-w-[1200px]">
             {/* Clean card: thin border, soft shadow, nothing else. The screen scales itself to fit. */}
             <ExamShowcase
@@ -128,61 +131,39 @@ export default async function HomePage() {
         <section className="container-page pb-20 md:pb-28">
           <SectionHead title="Growing every term." />
           <TermChart bars={terms} />
-          <p className="mt-6 text-sm text-muted">Total past papers after each IITM term</p>
+          <p className="mt-6 text-sm text-muted">Total past papers after each IITM term. Tap a bar to open that term’s papers.</p>
         </section>
       )}
 
       {/* ───────── Reviews ───────── */}
-      <section className="container-page">
+      <section className="container-page pb-20 md:pb-28">
         <SectionHead title="From the students." />
         <ReviewsSection />
       </section>
 
-      {/* ───────── Closing CTA ───────── */}
-      <section className="container-page pt-20 md:pt-28">
-        <div className="grid items-center gap-10 border-t border-border pt-12 md:grid-cols-2 md:pt-16">
-          <Venn className="mx-auto w-full max-w-xs md:max-w-sm" />
-          <div className="text-center md:text-left">
-            <h2 className="text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.05] font-extrabold tracking-tight">
-              All three.
-              <br />
-              One place.
-            </h2>
-            <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
-              <ButtonLink href="/exam" size="lg">
-                Start a mock exam <ArrowRight className="size-4" aria-hidden />
-              </ButtonLink>
-              <ButtonLink href="/practice" size="lg" variant="secondary">
-                Practise PYQs
-              </ButtonLink>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ───────── Courses covered: both programmes, linked to each course's PYQs ───────── */}
-      <section className="container-page border-t border-border/50 py-16 md:py-24">
-        <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">PYQs and mock tests for every IIT Madras BS level</h2>
-        <p className="mt-2 max-w-3xl text-muted">
+      <section className="container-page pb-20 md:pb-28">
+        <h2 className="border-t border-border pt-5 text-xl font-extrabold tracking-tight md:text-2xl">PYQs and mock tests for every IIT Madras BS level</h2>
+        <p className="mt-2 max-w-3xl text-sm text-muted">
           For the IIT Madras BS in Data Science and Applications and the BS in Management and Data Science: Qualifier, Quiz 1, Quiz 2 and End Term papers,
           from Foundation to Degree level.
         </p>
-        <div className="mt-8 grid gap-8 md:grid-cols-3">
+        <div className="mt-6 grid gap-6 sm:grid-cols-3">
           {PYQ_LEVELS.map((level) => {
             const courses = pyqCourses.filter((c) => c.level === level.slug && c.papers.length > 0);
             if (!courses.length) return null;
             return (
               <div key={level.slug}>
-                <h3 className="font-bold">
+                <h3 className="text-sm font-bold">
                   <Link href={pyqLevelHref(level.slug)} className="hover:underline">
                     {level.name} PYQs
                   </Link>
                 </h3>
-                <ul className="mt-3 space-y-1.5 text-sm">
+                <ul className="mt-2 space-y-1 text-sm leading-snug">
                   {courses.map((c) => (
                     <li key={c.slug}>
                       <Link href={c.href} className="text-muted hover:text-fg hover:underline">
-                        {c.name} previous year papers
+                        {c.name}
                       </Link>
                     </li>
                   ))}
@@ -194,8 +175,8 @@ export default async function HomePage() {
       </section>
 
       {/* ───────── FAQ: answers for search and AI assistants, mirrored in FAQPage JSON-LD ───────── */}
-      <section className="container-page pb-16 md:pb-24">
-        <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">IIT Madras BS prep: frequently asked questions</h2>
+      <section className="container-page pb-20 md:pb-28">
+        <h2 className="border-t border-border pt-5 text-xl font-extrabold tracking-tight md:text-2xl">IIT Madras BS prep: frequently asked questions</h2>
         <div className="mt-6 divide-y divide-border rounded-2xl border border-border/80 bg-surface/60">
           {HOME_FAQ.map(({ q, a }) => (
             <details key={q} className="group px-5 py-4">
@@ -203,12 +184,35 @@ export default async function HomePage() {
                 <h3>{q}</h3>
                 <ChevronDown className="size-4 shrink-0 text-muted transition-transform group-open:rotate-180" aria-hidden />
               </summary>
-              <p className="mt-2 text-muted">{a}</p>
+              <p className="mt-2 text-[15px] leading-relaxed text-muted">{a}</p>
             </details>
           ))}
         </div>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd).replace(/</g, "\\u003c") }} />
       </section>
+      {/* ───────── Closing CTA ───────── */}
+      <section className="container-page pb-20 md:pb-28">
+        <div className="grid items-center gap-8 border-t border-border pt-10 md:pt-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-12">
+          {/* Fills its column, capped by width and by screen height so it fits short laptop screens too. */}
+          <Venn className="mx-auto h-auto w-[min(100%,22rem)] sm:w-[min(100%,26rem,50svh)] lg:w-[min(100%,30rem,60svh)]" />
+          <div className="text-center lg:text-left">
+            <h2 className="text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.05] font-extrabold tracking-tight">
+              All three.
+              <br />
+              One place.
+            </h2>
+            <div className="mx-auto mt-8 flex w-full max-w-xs flex-col gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start">
+              <ButtonLink href="/exam" size="lg" className="w-full sm:w-auto">
+                Start a mock exam <ArrowRight className="size-4" aria-hidden />
+              </ButtonLink>
+              <ButtonLink href="/practice" size="lg" variant="secondary" className="w-full sm:w-auto">
+                Practise PYQs
+              </ButtonLink>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </>
   );
 }

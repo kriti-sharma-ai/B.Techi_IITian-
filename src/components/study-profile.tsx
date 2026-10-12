@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useRef, useMemo, useState, type FormEvent, type ReactNode } from "react";
 import { Check, X } from "lucide-react";
+import { PROGRAM_SLUG, programs } from "@/lib/data/curriculum";
 import { QUALIFIER_SUBJECTS } from "@/lib/data/qualifier-meta";
 import { isPyqLevel, type PyqLevel } from "@/lib/pyq-urls";
 import { actions, useHydrated, useStore } from "@/lib/store";
 import { getStudyCourse, sortCourses, studyCourses, type StudyCourse } from "@/lib/study-courses";
+import { supabase } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { Button, buttonClass } from "./ui";
 import { useToast } from "./toast";
@@ -14,6 +16,17 @@ import { useToast } from "./toast";
 type TabId = "qualifier" | "foundation" | "diploma" | "degree";
 
 type Draft = { level: PyqLevel; subjects: string[] };
+
+/**
+ * Copies the level onto the account's profile row, which Admin → People reads. Email sign-ups
+ * set it on the sign-up form; Google, GitHub and LinkedIn sign-ups only ever set it here.
+ */
+async function saveProfileLevel(level: PyqLevel) {
+  const { data } = await supabase.auth.getSession();
+  if (!data.session) return; // Guests keep their plan in this browser only.
+  const university = programs.find((p) => p.slug === PROGRAM_SLUG)?.university;
+  await supabase.from("profiles").update({ level, university }).eq("id", data.session.user.id);
+}
 
 const TABS: { id: TabId; label: string; sub: string }[] = [
   { id: "qualifier", label: "Qualifier", sub: "Term 1" },
@@ -118,6 +131,7 @@ function StudyProfileForm({
     else if (activeTab === "degree") level = "degree";
 
     actions.setPlan({ level, subjects });
+    void saveProfileLevel(level);
     setDraft(null);
     onSaved?.(subjects.length);
   };

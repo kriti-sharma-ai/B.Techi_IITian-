@@ -23,7 +23,7 @@ function fromAuth(u: AuthUser): User {
 
 /**
  * Mirrors the Supabase session into the local store, which the rest of the UI
- * reads. Covers email login, sign-up, Google redirects and sign-out in other tabs.
+ * reads. Covers email login, sign-up, OAuth redirects (Google, GitHub, LinkedIn) and sign-out in other tabs.
  */
 export function AuthSync() {
   useEffect(() => {

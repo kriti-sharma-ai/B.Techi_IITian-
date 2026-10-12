@@ -6,7 +6,7 @@ import { CONTACT_EMAIL, SITE_URL } from "@/lib/utils";
 // does (lib/store.ts, lib/supabase/sync.ts, supabase/schema.sql); update them,
 // and LEGAL_UPDATED, whenever that changes.
 
-export const LEGAL_UPDATED = "11 October 2026";
+export const LEGAL_UPDATED = "12 October 2026";
 
 export type InfoPage = {
   title: string;
@@ -191,8 +191,9 @@ export const PAGES: Record<string, InfoPage> = {
           <li>your university, program and level, if you choose them at sign-up.</li>
         </ul>
         <p>
-          If you sign in with Google, Google shares your name, email address and profile picture URL with us. We don't
-          get access to your Google password, contacts or any other Google data.
+          If you sign in with Google, GitHub or LinkedIn, that provider shares your name, email address and profile
+          picture URL with us (GitHub also shares your username). We don't get access to your password, contacts,
+          connections, repositories or any other data in those accounts.
         </p>
         <h3>Learning progress</h3>
         <p>To power your dashboard, bookmarks and practice history, we store:</p>
@@ -270,6 +271,12 @@ export const PAGES: Record<string, InfoPage> = {
           </li>
           <li>
             <strong>Google</strong>: only if you choose "Continue with Google".
+          </li>
+          <li>
+            <strong>GitHub</strong>: only if you choose "Continue with GitHub".
+          </li>
+          <li>
+            <strong>LinkedIn</strong>: only if you choose "Continue with LinkedIn".
           </li>
           <li>
             <strong>YouTube</strong>: videos are embedded from youtube-nocookie.com and only load when you press play. Once

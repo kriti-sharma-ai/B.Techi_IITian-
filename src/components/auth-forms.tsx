@@ -141,46 +141,74 @@ function PasswordInput({
   );
 }
 
-function GoogleButton({ onClick, busy }: { onClick: () => void; busy: boolean }) {
+type Provider = "google" | "github" | "linkedin_oidc";
+
+function ProviderIcon({ provider }: { provider: Provider }) {
+  if (provider === "linkedin_oidc")
+    return (
+      <svg viewBox="0 0 24 24" className="size-5" aria-hidden>
+        <path fill="#0A66C2" d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2ZM5.3 7.4a2.1 2.1 0 1 1 0-4.1 2.1 2.1 0 0 1 0 4.1ZM7.1 20.5H3.6V9h3.5v11.5ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0Z" />
+      </svg>
+    );
+  if (provider === "github")
+    return (
+      <svg viewBox="0 0 24 24" className="size-5" fill="currentColor" aria-hidden>
+        <path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3" />
+      </svg>
+    );
   return (
-    <Button variant="secondary" size="lg" className="w-full short:h-11 tiny:h-10" onClick={onClick} disabled={busy}>
-      {busy ? (
-        <LoaderCircle className="size-5 animate-spin" aria-hidden />
-      ) : (
-        <svg viewBox="0 0 24 24" className="size-5" aria-hidden>
-          <path fill="#4285F4" d="M22.6 12.2c0-.8-.1-1.5-.2-2.2H12v4.3h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2.1-1.9 3.3-4.8 3.3-8.1Z" />
-          <path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.6-2.7c-1 .7-2.2 1-3.7 1-2.9 0-5.3-1.9-6.2-4.5H2.1v2.8A11 11 0 0 0 12 23Z" />
-          <path fill="#FBBC05" d="M5.8 14.1a6.6 6.6 0 0 1 0-4.2V7.1H2.1a11 11 0 0 0 0 9.8l3.7-2.8Z" />
-          <path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.2-3.2A11 11 0 0 0 2.1 7.1l3.7 2.8C6.7 7.3 9.1 5.4 12 5.4Z" />
-        </svg>
-      )}
-      Continue with Google
-    </Button>
+    <svg viewBox="0 0 24 24" className="size-5" aria-hidden>
+      <path fill="#4285F4" d="M22.6 12.2c0-.8-.1-1.5-.2-2.2H12v4.3h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2.1-1.9 3.3-4.8 3.3-8.1Z" />
+      <path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.6-2.7c-1 .7-2.2 1-3.7 1-2.9 0-5.3-1.9-6.2-4.5H2.1v2.8A11 11 0 0 0 12 23Z" />
+      <path fill="#FBBC05" d="M5.8 14.1a6.6 6.6 0 0 1 0-4.2V7.1H2.1a11 11 0 0 0 0 9.8l3.7-2.8Z" />
+      <path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.2-3.2A11 11 0 0 0 2.1 7.1l3.7 2.8C6.7 7.3 9.1 5.4 12 5.4Z" />
+    </svg>
   );
 }
 
-/** Google sign-in, plus whether the browser is on its way to Google (for the button's spinner). */
-function useGoogle() {
+const PROVIDER_LABEL: Record<Provider, string> = { google: "Google", github: "GitHub", linkedin_oidc: "LinkedIn" };
+
+/** Google, GitHub and LinkedIn sign-in buttons. `redirectPath` is where the provider sends the user back to. */
+function OAuthButtons({ redirectPath }: { redirectPath: () => string }) {
   const toast = useToast();
-  const [redirecting, setRedirecting] = useState(false);
+  // The provider the browser is on its way to, for that button's spinner.
+  const [redirecting, setRedirecting] = useState<Provider | null>(null);
   // Coming back with the Back button can restore this page from the bfcache, still "redirecting".
   useEffect(() => {
-    const reset = (e: PageTransitionEvent) => e.persisted && setRedirecting(false);
+    const reset = (e: PageTransitionEvent) => e.persisted && setRedirecting(null);
     window.addEventListener("pageshow", reset);
     return () => window.removeEventListener("pageshow", reset);
   }, []);
-  const start = async (redirectPath: string) => {
-    setRedirecting(true);
+  const start = async (provider: Provider) => {
+    setRedirecting(provider);
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.origin + redirectPath },
+      provider,
+      options: { redirectTo: window.location.origin + redirectPath() },
     });
     if (error) {
-      setRedirecting(false);
+      setRedirecting(null);
       toast(authMessage(error));
     }
   };
-  return { start, redirecting };
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {(["google", "github", "linkedin_oidc"] as const).map((provider) => (
+        <Button
+          key={provider}
+          variant="secondary"
+          size="lg"
+          className="w-full px-3 short:h-11 tiny:h-10"
+          onClick={() => start(provider)}
+          disabled={redirecting !== null}
+          aria-label={`Continue with ${PROVIDER_LABEL[provider]}`}
+        >
+          {redirecting === provider ? <LoaderCircle className="size-5 animate-spin" aria-hidden /> : <ProviderIcon provider={provider} />}
+          {/* Narrow phones show just the logos; the aria-label still names the provider. */}
+          <span className="max-[400px]:hidden">{PROVIDER_LABEL[provider]}</span>
+        </Button>
+      ))}
+    </div>
+  );
 }
 
 function Divider({ label = "or", className = "my-6" }: { label?: string; className?: string }) {
@@ -349,7 +377,6 @@ const confirmationLink = (email: string) =>
 export function LoginForm() {
   const router = useRouter();
   const toast = useToast();
-  const google = useGoogle();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -441,7 +468,7 @@ export function LoginForm() {
         </Link>
       </AuthHeader>
 
-      <GoogleButton onClick={() => google.start(nextPath())} busy={google.redirecting} />
+      <OAuthButtons redirectPath={nextPath} />
       <Divider label="or log in with email" className="my-5 short:my-4 tiny:my-3" />
       <form onSubmit={submit} noValidate className="space-y-4 short:space-y-3 tiny:space-y-2.5">
         <Field id="email" label="Email" error={errors.email}>
@@ -509,7 +536,6 @@ const errorField = (code?: string): keyof SignupErrors =>
 export function SignupForm() {
   const router = useRouter();
   const toast = useToast();
-  const google = useGoogle();
   const [form, setForm] = useState({ name: "", email: "", password: "", program: PROGRAM_SLUG, level: "foundation" });
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState<SignupErrors>({});
@@ -581,7 +607,7 @@ export function SignupForm() {
         </Link>
       </AuthHeader>
 
-      <GoogleButton onClick={() => google.start("/dashboard")} busy={google.redirecting} />
+      <OAuthButtons redirectPath={() => "/dashboard"} />
       <Divider label="or sign up with email" className="my-5 short:my-4 tiny:my-3" />
       <form onSubmit={submit} noValidate className="space-y-4 short:space-y-3 tiny:space-y-2.5">
         <Field id="name" label="Full name" error={errors.name}>

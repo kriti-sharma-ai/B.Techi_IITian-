@@ -9,8 +9,9 @@ import { getStudyScope } from "@/lib/study-scope";
 import { loadContent } from "@/lib/cms";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Exam Portal · Real IIT Madras BS PYQs",
-  description: "Sit official IIT Madras BS End Term and Quiz papers on a timed exam screen with a calculator. Take 1 to 4 subjects together.",
+  title: "IITM BS Mock Test: Exam Portal with Real Quiz & End Term Papers",
+  description:
+    "Free IIT Madras BS mock tests: sit real End Term, Quiz 1 and Quiz 2 papers for Data Science and Management courses on a timed exam screen with a calculator. Take 1 to 4 subjects together.",
   path: "/exam",
 });
 

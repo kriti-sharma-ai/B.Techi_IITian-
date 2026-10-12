@@ -1,32 +1,5 @@
 import { cn } from "@/lib/utils";
-
-interface ReviewItem {
-  name: string;
-  courseTag: string;
-  content: string;
-}
-
-// Real reviews from students preparing for the IIT Madras BS Qualifier. The first is the pull quote.
-const REVIEWS: ReviewItem[] = [
-  {
-    name: "Bonny Mondal",
-    courseTag: "Maths 1 & CT",
-    content:
-      "Preparing for qualifier, helping a lot! The TCS iON mock test replica, scientific calculator, and chapter-wise PYQs gave me so much clarity and confidence for the exam.",
-  },
-  {
-    name: "Satya Sharma",
-    courseTag: "Stats 1 & English 1",
-    content:
-      "As a student preparing for the Qualifier, finding accurate past papers with official keys was tough until I found BTechi. The chapter-wise practice and exam simulation are spot on.",
-  },
-  {
-    name: "Yeasmin Khatun",
-    courseTag: "4 Foundation Subjects",
-    content:
-      "Preparing for the Qualifier became so much easier with BTechi. The instant scoring, negative marking alerts, and question palette make revision seamless and effective.",
-  },
-];
+import { REVIEWS, type ReviewItem } from "@/lib/data/reviews";
 
 function Author({ review, featured }: { review: ReviewItem; featured?: boolean }) {
   const initials = review.name

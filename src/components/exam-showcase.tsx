@@ -116,7 +116,7 @@ export function ExamShowcase({ sections }: { sections: DemoSection[] }) {
     <div
       role="region"
       aria-label="Try the exam portal with real past qualifier questions"
-      className="light relative flex h-[620px] flex-col overflow-hidden rounded-2xl bg-bg text-fg sm:h-[680px] lg:h-[740px]"
+      className="light relative flex h-[clamp(480px,85svh,740px)] flex-col overflow-hidden rounded-2xl bg-bg text-fg"
     >
       {/* Portal header */}
       <div className="flex h-14 shrink-0 items-center gap-3 border-b border-border bg-surface px-3 md:px-5">

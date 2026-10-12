@@ -80,7 +80,7 @@ const CALLOUTS: Record<CalloutTone, { label: string; icon: LucideIcon; className
 function localSvg(src: string) {
   if (!src.startsWith("/") || !src.endsWith(".svg") || src.includes("..")) return null;
   try {
-    return readFileSync(join(process.cwd(), "public", src), "utf8").replace(/<\?xml[^>]*>\s*/, "");
+    return readFileSync(join(/* turbopackIgnore: true */ process.cwd(), "public", src), "utf8").replace(/<\?xml[^>]*>\s*/, "");
   } catch {
     throw new Error(`Blog image not found: public${src}`);
   }

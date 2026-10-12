@@ -60,6 +60,13 @@ The full official course list (50 courses: 8 Foundation, 10 Diploma in Data Anal
    `update profiles set role = 'super_admin' where id = (select id from auth.users where email = 'you@example.com');`
    After that, give other people roles in `/admin/users`.
 
+## Deploying to Vercel
+
+1. Import the GitHub repo in Vercel (framework preset: Next.js; the default build and output settings are right).
+2. Under Project → Settings → Environment Variables, add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` for Production and Preview. The build reads papers and CMS content from Supabase, so it fails without them. `.env.example` lists the optional variables. Don't add `SUPABASE_SERVICE_ROLE_KEY`.
+3. Redeploy after changing a variable: `NEXT_PUBLIC_` values are baked in at build time.
+4. In Supabase → Authentication → URL Configuration, set the Site URL to the production domain and add it to the redirect URLs.
+
 ## Admin CMS (`/admin`)
 
 | Role | Can |

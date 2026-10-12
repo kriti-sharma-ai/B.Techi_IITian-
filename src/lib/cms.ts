@@ -6,6 +6,7 @@
 
 import { cache } from "react";
 import { createClient } from "@supabase/supabase-js";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./supabase/env";
 import { applyContent, codeSubjects, programs, type CmsContent } from "./content";
 import type { Book, Difficulty, Note, NoteKind, Question, QuestionType, Subject, Unit, Video, VideoLevel } from "./types";
 import { slugify } from "./utils";
@@ -13,7 +14,7 @@ import { slugify } from "./utils";
 /** Cache tag on the published content. Admin server actions expire it after every change. */
 export const CMS_TAG = "cms";
 
-const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
   global: { fetch: (input, init) => fetch(input, { ...init, next: { revalidate: 300, tags: [CMS_TAG] } }) },
 });

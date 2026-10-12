@@ -5,6 +5,7 @@
 // show up on the site within REFRESH_SECONDS.
 
 import { createClient } from "@supabase/supabase-js";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./supabase/env";
 import { QUALIFIER_SUBJECTS } from "./data/qualifier-meta";
 import { paperExam, paperHref } from "./pyq-urls";
 import { isSingleSubject } from "./qualifier";
@@ -16,7 +17,7 @@ export const REFRESH_SECONDS = 300;
 // Rows per request: keeps each response well under Next's 2 MB fetch-cache limit (the largest paper is ~120 KB).
 const PAGE_SIZE = 10;
 
-const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
 

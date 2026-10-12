@@ -42,17 +42,17 @@ export default async function HomePage() {
     <>
       {/* ───────── Hero: text only ───────── */}
       {/* Pulled up under the sticky navbar, which is see-through at the top. */}
-      <section className="relative isolate -mt-16 overflow-hidden pt-16">
+      <section className="relative isolate -mt-16 flex min-h-[min(100svh,56rem)] items-center overflow-hidden pt-16">
         <MathBackground variant="hero" />
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_50%_60%_at_50%_50%,var(--bg)_40%,transparent_80%)]"
         />
-        <div className="container-page flex flex-col items-center pt-20 pb-16 text-center md:pt-28 md:pb-20 animate-fade-up">
+        <div className="container-page flex w-full flex-col items-center py-[clamp(2.5rem,8svh,6rem)] text-center animate-fade-up">
           {/* Flagship Qualifier Pack Pill Banner */}
           <Link
             href="/qualifier"
-            className="group mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/80 px-3.5 py-1.5 text-xs sm:text-sm font-medium text-fg shadow-xs backdrop-blur-sm transition-all hover:border-brand/60 hover:bg-surface hover:shadow-sm"
+            className="group mb-[clamp(1rem,3svh,1.5rem)] inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/80 px-3.5 py-1.5 text-xs sm:text-sm font-medium text-fg shadow-xs backdrop-blur-sm transition-all hover:border-brand/60 hover:bg-surface hover:shadow-sm"
           >
             <span className="flex size-2 shrink-0 rounded-full bg-brand animate-pulse" />
             <span className="font-semibold text-fg">Qualifier Exam Pack</span>
@@ -61,7 +61,7 @@ export default async function HomePage() {
             <ArrowRight className="size-3.5 shrink-0 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-fg" aria-hidden />
           </Link>
 
-          <h1 className="text-[2.6rem] leading-[1.05] font-extrabold tracking-tight md:text-7xl">
+          <h1 className="text-[clamp(2.4rem,min(6.5vw,9svh),4.5rem)] leading-[1.05] font-extrabold tracking-tight">
             Sit the real exam
             <br />
             <span className="relative whitespace-nowrap">
@@ -69,8 +69,8 @@ export default async function HomePage() {
               before exam day.
             </span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted md:text-xl">Real IITM BS previous-year papers, in an exam portal that works like the real one.</p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <p className="mt-[clamp(1rem,3svh,1.5rem)] max-w-2xl text-balance text-[clamp(1rem,min(1.6vw,2.4svh),1.25rem)] text-muted">Real IITM BS previous-year papers, in an exam portal that works like the real one.</p>
+          <div className="mt-[clamp(1.25rem,4svh,2rem)] flex flex-wrap items-center justify-center gap-3">
             <ButtonLink href="/exam" size="lg">
               Start a mock exam <ArrowRight className="size-4" aria-hidden />
             </ButtonLink>
@@ -78,7 +78,7 @@ export default async function HomePage() {
               Practise PYQs
             </ButtonLink>
           </div>
-          <p className="mt-6 text-sm text-muted">
+          <p className="mt-[clamp(1rem,3svh,1.5rem)] text-sm text-muted">
             {pyqTotals.papers.toLocaleString("en-IN")} papers · {pyqTotals.questions.toLocaleString("en-IN")} questions · official answer keys
           </p>
         </div>

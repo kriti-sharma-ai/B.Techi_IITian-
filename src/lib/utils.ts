@@ -22,7 +22,8 @@ export const formatSize = (kb: number) => (kb >= 1024 ? `${(kb / 1024).toFixed(1
 export const formatDate = (iso: string) =>
   new Date(iso + "T00:00:00").toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://btechi.in";
+// The live host: btechi.in redirects to www, so canonicals and the sitemap must name www.
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.btechi.in";
 
 /** Inbox for support, privacy, copyright and grievance requests (shown on the info pages). */
 export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "btechi.atechnerd@gmail.com";

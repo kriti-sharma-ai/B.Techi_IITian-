@@ -1,6 +1,6 @@
 import { LogoMark } from "./logo";
 
-const SITE = "https://btechi.in";
+import { SITE_URL as SITE } from "@/lib/utils";
 
 /**
  * Wraps the page so a printed / saved PDF carries BTechi branding on every page.

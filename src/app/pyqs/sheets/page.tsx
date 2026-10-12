@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { CheckCircle2, Repeat } from "lucide-react";
 import { ScopeSwitch } from "@/components/study-scope";
@@ -8,12 +9,11 @@ import { getQuestionSheets } from "@/lib/pyq-sheets";
 import { PYQ_SHEETS_HREF } from "@/lib/pyq-urls";
 import { getStudyScope, narrow, scopeLinks } from "@/lib/study-scope";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "IIT Madras BS PYQs Year Wise, Topic Wise & Most Repeated, with Answers",
-  description:
-    "Every IIT Madras BS previous year paper set out to solve on paper: level wise, course wise, year wise and topic wise, plus each course's most repeated questions. Official answer key at the end of every sheet.",
-  alternates: { canonical: PYQ_SHEETS_HREF },
-};
+  description: "Every IIT Madras BS previous year paper set out to solve on paper: level wise, course wise, year wise and topic wise, plus each course's most repeated questions. Official answer key at the end of every sheet.",
+  path: PYQ_SHEETS_HREF,
+});
 
 // Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
 export const revalidate = 300;

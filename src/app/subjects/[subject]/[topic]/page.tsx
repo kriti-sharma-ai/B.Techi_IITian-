@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, BookOpen, Clock, FileText, PenLine, PlayCircle, ScrollText } from "lucide-react";
@@ -43,11 +44,11 @@ async function load(params: PageProps<"/subjects/[subject]/[topic]">["params"]) 
 export async function generateMetadata({ params }: PageProps<"/subjects/[subject]/[topic]">): Promise<Metadata> {
   const r = await load(params);
   if (!r) return {};
-  return {
+  return pageMetadata({
     title: `${r.topic.title}: ${r.subject.name} Notes, Video & Practice`,
     description: `${r.topic.summary} Notes, video, book chapters, practice questions and PYQs for ${r.topic.title} (${r.subject.name}, Week ${r.unit.number}).`,
-    alternates: { canonical: `/subjects/${r.subject.slug}/${r.topic.slug}` },
-  };
+    path: `/subjects/${r.subject.slug}/${r.topic.slug}`,
+  });
 }
 
 export default async function TopicPage({ params }: PageProps<"/subjects/[subject]/[topic]">) {

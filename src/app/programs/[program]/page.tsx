@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { LevelExplorer } from "@/components/level-explorer";
 import { PageHeader } from "@/components/ui";
@@ -11,11 +12,11 @@ export const generateStaticParams = () => programs.map((p) => ({ program: p.slug
 export async function generateMetadata({ params }: PageProps<"/programs/[program]">): Promise<Metadata> {
   const p = getProgram((await params).program);
   if (!p) return {};
-  return {
+  return pageMetadata({
     title: `${p.university} ${p.degree}: All Courses by Level`,
     description: `${p.description} Course codes, credits and resources for every Foundation, Diploma and Degree course.`,
-    alternates: { canonical: `/programs/${p.slug}` },
-  };
+    path: `/programs/${p.slug}`,
+  });
 }
 
 export default async function ProgramPage({ params }: PageProps<"/programs/[program]">) {

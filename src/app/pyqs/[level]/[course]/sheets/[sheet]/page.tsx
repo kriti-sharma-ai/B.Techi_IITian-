@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, KeyRound, MonitorCheck } from "lucide-react";
@@ -32,11 +33,11 @@ const metaTitle = (s: QuestionSheet) =>
 export async function generateMetadata({ params }: PageProps<"/pyqs/[level]/[course]/sheets/[sheet]">): Promise<Metadata> {
   const s = await load(params);
   if (!s) return {};
-  return {
+  return pageMetadata({
     title: metaTitle(s),
     description: `${s.questions} ${s.course.name} past questions (${s.marks} marks) from ${s.papers} IIT Madras BS ${s.papers === 1 ? "paper" : "papers"}, set out to solve on paper. Official answer key at the end.`,
-    alternates: { canonical: s.href },
-  };
+    path: s.href,
+  });
 }
 
 export default async function SheetPage({ params }: PageProps<"/pyqs/[level]/[course]/sheets/[sheet]">) {

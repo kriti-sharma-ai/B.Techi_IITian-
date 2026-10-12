@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -32,7 +33,14 @@ export const generateStaticParams = () => skillCourses.map((c) => ({ slug: c.slu
 export async function generateMetadata({ params }: PageProps<"/skills/[slug]">): Promise<Metadata> {
   const course = getSkill((await params).slug);
   if (!course) return {};
-  return { title: course.title, description: course.subtitle, alternates: { canonical: `/skills/${course.slug}` } };
+  return pageMetadata({
+    title: course.title,
+    description: `${course.subtitle} A free ${course.level.toLowerCase()} course: ${course.outcomes
+      .slice(0, 2)
+      .map((o) => o.replace(/^./, (c) => c.toLowerCase()))
+      .join(", ")} and more.`,
+    path: `/skills/${course.slug}`,
+  });
 }
 
 const lectureIcon: Record<SkillLecture["kind"], LucideIcon> = {

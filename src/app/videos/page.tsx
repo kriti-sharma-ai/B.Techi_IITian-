@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Suspense } from "react";
 import { PlayCircle } from "lucide-react";
 import { FilterBar } from "@/components/filter-bar";
@@ -10,11 +11,11 @@ import { academicFilters, matchesAcademic, param } from "@/lib/filters";
 import { getStudyScope, narrow, scopeLinks } from "@/lib/study-scope";
 import { loadContent } from "@/lib/cms";
 
-export const metadata: Metadata = {
-  title: "Videos",
-  description: "Topic-mapped video lessons from the BTechi IITian YouTube channel and trusted educators.",
-  alternates: { canonical: "/videos" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "IIT Madras BS Video Lectures, Topic by Topic",
+  description: "Video lessons for every IIT Madras BS course, mapped to each week and topic, from the BTechi IITian YouTube channel and trusted educators.",
+  path: "/videos",
+});
 
 const LEVELS = ["Beginner", "Intermediate", "Advanced"];
 

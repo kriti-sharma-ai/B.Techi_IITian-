@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, BarChart3, BookOpen, FileText, Repeat, Target } from "lucide-react";
@@ -31,11 +32,11 @@ export async function generateMetadata({ params }: PageProps<"/pyqs/[level]/[cou
   const c = await load(params);
   if (!c) return {};
   const exams = PYQ_EXAMS.filter((e) => c.papers.some((p) => p.exam === e.slug)).map((e) => e.label);
-  return {
+  return pageMetadata({
     title: `${c.name}${c.code ? ` (${c.code})` : ""} PYQs: ${exams.join(" & ")} Papers`,
     description: `${c.papers.length} ${c.name} previous year question papers from the IIT Madras BS (${exams.join(" and ")}), with the official answer key. Sit each one in a timed exam portal and review every answer.`,
-    alternates: { canonical: c.href },
-  };
+    path: c.href,
+  });
 }
 
 export default async function PyqCoursePage({ params }: PageProps<"/pyqs/[level]/[course]">) {

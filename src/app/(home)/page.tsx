@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Award, Layers, PenLine, Sigma, type LucideIcon } from "lucide-react";
 import { ExamShowcase } from "@/components/exam-showcase";
@@ -7,9 +8,28 @@ import { ReviewsSection } from "@/components/reviews-section";
 import { ButtonLink } from "@/components/ui";
 import { getDemoExam } from "@/lib/demo-exam";
 import { getPyqIndex } from "@/lib/pyq-index";
+import { pageMetadata } from "@/lib/seo";
+import { SITE_URL } from "@/lib/utils";
 
 // Paper counts come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
 export const revalidate = 300;
+
+const TITLE = "BTechi: IIT Madras BS PYQs, Notes & Mock Exams";
+export const metadata: Metadata = {
+  ...pageMetadata({
+    title: TITLE,
+    description:
+      "Real IIT Madras BS previous year papers in a timed exam portal, plus week-wise notes, videos, cheat sheets and qualifier mocks for every Foundation, Diploma and Degree course.",
+    path: "/",
+  }),
+  title: { absolute: TITLE },
+};
+
+// Organization and WebSite tell Google the site's name and logo for the search result.
+const siteLd = [
+  { "@context": "https://schema.org", "@type": "Organization", name: "BTechi", url: SITE_URL, logo: `${SITE_URL}/logo-512.png` },
+  { "@context": "https://schema.org", "@type": "WebSite", name: "BTechi", url: SITE_URL },
+];
 
 const features: { icon: LucideIcon; title: string; text: string; href: string; cta: string }[] = [
   {
@@ -40,6 +60,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }} />
       {/* ───────── Hero: text only ───────── */}
       {/* Pulled up under the sticky navbar, which is see-through at the top. */}
       <section className="relative isolate -mt-16 flex min-h-[min(100svh,56rem)] items-center overflow-hidden pt-16">

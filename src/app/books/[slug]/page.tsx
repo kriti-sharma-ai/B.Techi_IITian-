@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalLink, Info } from "lucide-react";
@@ -18,11 +19,11 @@ export async function generateMetadata({ params }: PageProps<"/books/[slug]">): 
   await loadContent();
   const b = getBook((await params).slug);
   if (!b) return {};
-  return {
+  return pageMetadata({
     title: `${b.title} by ${b.authors.join(", ")}`,
     description: `${b.why} Recommended chapters and where to get it legally.`,
-    alternates: { canonical: `/books/${b.slug}` },
-  };
+    path: `/books/${b.slug}`,
+  });
 }
 
 export default async function BookPage({ params }: PageProps<"/books/[slug]">) {

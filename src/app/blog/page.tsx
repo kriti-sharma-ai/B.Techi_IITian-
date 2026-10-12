@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { BlogCategoryNav } from "@/components/blog/category-nav";
 import { PostListItem, toSummary } from "@/components/blog/post-card";
 import { EmptyState, PageHeader } from "@/components/ui";
@@ -6,9 +7,11 @@ import { getAllPosts } from "@/lib/blog";
 import { SITE_URL } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Blog: IITM BS Guides, Exam Strategy, Data Skills & Careers",
-  description:
-    "In-depth guides for IIT Madras BS learners and aspiring analysts: the qualifier, exam strategy, Python, SQL, Excel, Power BI, AI trends and data careers in India.",
+  ...pageMetadata({
+    title: "Blog: IITM BS Guides, Exam Strategy, Data Skills & Careers",
+    description: "In-depth guides for IIT Madras BS learners and aspiring analysts: the qualifier, exam strategy, Python, SQL, Excel, Power BI, AI trends and data careers in India.",
+    path: "/blog",
+  }),
   alternates: { canonical: "/blog", types: { "application/rss+xml": `${SITE_URL}/blog/rss.xml` } },
 };
 

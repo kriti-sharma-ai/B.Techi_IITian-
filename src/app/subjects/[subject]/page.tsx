@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
@@ -52,11 +53,11 @@ export async function generateMetadata({ params }: PageProps<"/subjects/[subject
   if (!s) notFound();
   const { program, level } = subjectPlacement(s);
   const code = s.code ? `${s.code} ` : "";
-  return {
+  return pageMetadata({
     title: `${code}${s.name}: Notes, PYQs & Practice (${program.university} BS ${level.short})`,
     description: `${s.name}${s.code ? ` (${s.code})` : ""}, a ${s.credits}-credit ${level.short} Level course of the ${program.university} ${program.degree}. Week-wise notes, videos, previous year questions and practice.`,
-    alternates: { canonical: `/subjects/${s.slug}` },
-  };
+    path: `/subjects/${s.slug}`,
+  });
 }
 
 export default async function SubjectPage({ params, searchParams }: PageProps<"/subjects/[subject]">) {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PenLine, Timer } from "lucide-react";
@@ -43,20 +44,20 @@ export async function generateMetadata({ params }: PageProps<"/pyqs/[level]/[cou
   if (r.portal) {
     const p = r.course.papers.find((x) => x.slug === r.portal.slug)!;
     const exam = PYQ_EXAMS.find((e) => e.slug === p.exam)!.label;
-    return {
+    return pageMetadata({
       title: `${r.course.name} ${exam} Paper, ${p.label}${p.session ? ` ${p.session}` : ""}`,
       description: `${r.portal.description} ${p.questions} questions, ${p.marks} marks; sit it in a timed exam portal.`,
-      alternates: { canonical: p.href },
+      path: p.href,
       // The exam portal renders in the browser, so the course page is the page to index.
-      robots: { index: false, follow: true },
-    };
+      noindex: true,
+    });
   }
   const title = pyqTitle(r.uploaded!);
-  return {
+  return pageMetadata({
     title: `${title} Question Paper`,
     description: `${title} previous year paper (${r.uploaded!.marks} marks). View, download, or practise with explanations.`,
-    alternates: { canonical: uploadedPyqHref(r.uploaded!) },
-  };
+    path: uploadedPyqHref(r.uploaded!),
+  });
 }
 
 export default async function PyqPaperPage({ params, searchParams }: PageProps<"/pyqs/[level]/[course]/[paper]">) {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BlogCategoryNav } from "@/components/blog/category-nav";
@@ -14,11 +15,11 @@ export const generateStaticParams = () => blogCategories.map((c) => ({ category:
 export async function generateMetadata({ params }: PageProps<"/blog/category/[category]">): Promise<Metadata> {
   const cat = getBlogCategory((await params).category);
   if (!cat) return {};
-  return {
+  return pageMetadata({
     title: `${cat.name} Articles & Guides`,
     description: `${cat.description} In-depth, regularly updated guides from BTechi.`,
-    alternates: { canonical: blogCategoryHref(cat.slug) },
-  };
+    path: blogCategoryHref(cat.slug),
+  });
 }
 
 export default async function BlogCategoryPage({ params }: PageProps<"/blog/category/[category]">) {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, ChartColumn, Languages, Sigma, Workflow, type LucideIcon } from "lucide-react";
 import { PageHeader, buttonClass } from "@/components/ui";
@@ -7,12 +8,11 @@ import { getSubject } from "@/lib/content";
 import { cheatSheetHref, cheatSheetStats, cheatSheets } from "@/lib/data/cheat-notes";
 import { getStudyScope, narrow, scopeLinks } from "@/lib/study-scope";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Qualifier Cheat Notes & Formula Sheets: Maths I, Stats I, CT, English I",
-  description:
-    "Free IIT Madras BS qualifier cheat notes: every formula, rule and repeating PYQ pattern for Mathematics I, Statistics I, Computational Thinking and English I (weeks 1–4). Made for revising on your phone.",
-  alternates: { canonical: "/qualifier/notes" },
-};
+  description: "Free IIT Madras BS qualifier cheat notes: every formula, rule and repeating PYQ pattern for Mathematics I, Statistics I, Computational Thinking and English I (weeks 1–4). Made for revising on your phone.",
+  path: "/qualifier/notes",
+});
 
 const ICONS: Record<string, LucideIcon> = { "maths-1": Sigma, "stats-1": ChartColumn, ct: Workflow, "english-1": Languages };
 

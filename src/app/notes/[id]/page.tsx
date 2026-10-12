@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CalendarDays, Lock, User } from "lucide-react";
@@ -20,11 +21,11 @@ export async function generateMetadata({ params }: PageProps<"/notes/[id]">): Pr
   const n = getNote((await params).id);
   if (!n) return {};
   const s = getSubject(n.subjectSlug);
-  return {
+  return pageMetadata({
     title: `${n.title}: ${s?.name} Notes (PDF)`,
     description: `${n.description} ${n.pages}-page PDF for ${s?.name}, ${unitLabel(n.subjectSlug, n.unitId)}. Read online or download.`,
-    alternates: { canonical: `/notes/${n.id}` },
-  };
+    path: `/notes/${n.id}`,
+  });
 }
 
 export default async function NotePage({ params }: PageProps<"/notes/[id]">) {

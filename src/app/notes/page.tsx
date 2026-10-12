@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowRight, FileText, NotebookPen } from "lucide-react";
@@ -13,11 +14,11 @@ import { getStudyScope, narrow, scopeLinks } from "@/lib/study-scope";
 import type { NoteKind } from "@/lib/types";
 import { loadContent } from "@/lib/cms";
 
-export const metadata: Metadata = {
-  title: "Notes",
-  description: "Lecture notes, cheat sheets, formula sheets and revision notes by program, semester, subject and unit. Preview free, download when you need.",
-  alternates: { canonical: "/notes" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "IIT Madras BS Notes: Lecture Notes, Cheat Sheets & Formula Sheets",
+  description: "Free IIT Madras BS lecture notes, cheat sheets, formula sheets and revision notes for every course, by level, subject and week. Read online or download the PDF.",
+  path: "/notes",
+});
 
 const KINDS: NoteKind[] = ["Lecture notes", "Cheat sheet", "Formula sheet", "Revision", "Lab manual"];
 const PAGE_SIZE = 8;

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { PyqHistory } from "@/components/qualifier-attempts";
@@ -9,12 +10,11 @@ import { pyqLevelHref } from "@/lib/pyq-urls";
 import { getStudyCourse } from "@/lib/study-courses";
 import { getStudyScope, keepScope, narrow, scopeLinks } from "@/lib/study-scope";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "IIT Madras BS PYQs: Previous Year Papers for Every Course",
-  description:
-    "Previous year question papers for every IIT Madras BS course, Foundation to Degree: Qualifier, Quiz and End Term papers with the official answer key. Sit each paper in a timed exam portal.",
-  alternates: { canonical: "/pyqs" },
-};
+  description: "Previous year question papers for every IIT Madras BS course, Foundation to Degree: Qualifier, Quiz and End Term papers with the official answer key. Sit each paper in a timed exam portal.",
+  path: "/pyqs",
+});
 
 // Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
 export const revalidate = 300;

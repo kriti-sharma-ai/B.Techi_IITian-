@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Suspense } from "react";
 import { BookDashed } from "lucide-react";
 import { SubjectCard } from "@/components/cards";
@@ -10,11 +11,11 @@ import { academicFilters, matchesAcademic } from "@/lib/filters";
 import { getStudyScope, narrow, scopeLinks } from "@/lib/study-scope";
 import { loadContent } from "@/lib/cms";
 
-export const metadata: Metadata = {
-  title: "All courses",
-  description: "Every IIT Madras BS Management and Data Science course, from Foundation to Degree, with course codes and credits.",
-  alternates: { canonical: "/subjects" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "All IIT Madras BS Courses: Codes, Credits & Study Material",
+  description: "Every IIT Madras BS Management and Data Science course, Foundation to Degree, with course codes, credits, week-wise notes, videos and previous year questions.",
+  path: "/subjects",
+});
 
 export default async function SubjectsPage({ searchParams }: PageProps<"/subjects">) {
   await loadContent();

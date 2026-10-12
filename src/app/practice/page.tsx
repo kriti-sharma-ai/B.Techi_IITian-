@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, ArrowUp } from "lucide-react";
@@ -25,12 +26,11 @@ import { isPyqLevel, type PyqLevel } from "@/lib/pyq-urls";
 import { getStudyScope, type StudyScope } from "@/lib/study-scope";
 import { loadContent } from "@/lib/cms";
 
-export const metadata: Metadata = {
-  title: "Practice",
-  description:
-    "Practise real IITM BS previous-year questions by level, course and exam, with the official answer keys: quick sets, drills, full tests and timed mock exams.",
-  alternates: { canonical: "/practice" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "IIT Madras BS PYQ Practice with Official Answer Keys",
+  description: "Practise real IITM BS previous-year questions by level, course and exam, with the official answer keys: quick sets, drills, full tests and timed mock exams.",
+  path: "/practice",
+});
 
 export default async function PracticePage({ searchParams }: PageProps<"/practice">) {
   await loadContent();

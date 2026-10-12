@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -20,12 +21,11 @@ import {
   mockQuestions,
 } from "@/lib/qualifier";
 
-export const metadata: Metadata = {
-  title: "Qualifier Pack · Maths I, Stats I, CT, English I",
-  description:
-    "Ace the IIT Madras BS qualifier exam. Official full-length 4-course timed qualifier papers and curated mocks with automated cutoff evaluation.",
-  alternates: { canonical: "/qualifier" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "IIT Madras BS Qualifier Mock Tests & Previous Papers",
+  description: "Prepare for the IIT Madras BS qualifier exam: official full-length qualifier papers for Maths I, Stats I, Computational Thinking and English I on a timed screen, with the cutoff check.",
+  path: "/qualifier",
+});
 
 export const revalidate = 300;
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { PageHeader, ButtonLink } from "@/components/ui";
 import { hrefEnabled } from "@/lib/site";
@@ -10,7 +11,7 @@ export const generateStaticParams = () => Object.keys(PAGES).map((page) => ({ pa
 export async function generateMetadata({ params }: PageProps<"/[page]">): Promise<Metadata> {
   const { page } = await params;
   const p = PAGES[page];
-  return p ? { title: p.title, description: p.description, alternates: { canonical: `/${page}` } } : {};
+  return p ? pageMetadata({ title: p.title, description: p.description, path: `/${page}` }) : {};
 }
 
 export default async function InfoPage({ params }: PageProps<"/[page]">) {

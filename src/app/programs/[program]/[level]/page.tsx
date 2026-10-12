@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, ScrollText } from "lucide-react";
@@ -26,11 +27,11 @@ export async function generateMetadata({ params }: PageProps<"/programs/[program
   const { program, level } = await params;
   const r = load(program, level);
   if (!r) return {};
-  return {
+  return pageMetadata({
     title: `${r.program.university} BS ${r.level.name}: Courses, Notes & PYQs`,
     description: `All ${r.level.name} courses of the ${r.program.university} ${r.program.degree} with course codes, credits, notes, PYQs and practice.`,
-    alternates: { canonical: `/programs/${r.program.slug}/${r.level.slug}` },
-  };
+    path: `/programs/${r.program.slug}/${r.level.slug}`,
+  });
 }
 
 export default async function LevelPage({ params }: PageProps<"/programs/[program]/[level]">) {

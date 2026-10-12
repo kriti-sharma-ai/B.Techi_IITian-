@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ScrollText } from "lucide-react";
@@ -26,15 +27,15 @@ export async function generateMetadata({ params }: PageProps<"/pyqs/[level]">): 
   if (!level) return {};
   const { pyqCoursesForLevel } = await getPyqIndex();
   const courses = pyqCoursesForLevel(level.slug);
-  return {
+  return pageMetadata({
     title: `IIT Madras BS ${level.name} PYQs: Previous Year Papers`,
     description: `${level.name} previous year question papers for ${courses.length} IIT Madras BS courses (${courses
       .slice(0, 4)
       .map((c) => c.short)
       .join(", ")} and more), with the official answer key. Sit each paper in a timed exam portal.`,
     // Exam filters (?exam=) are views of this page, not separate pages.
-    alternates: { canonical: pyqLevelHref(level.slug) },
-  };
+    path: pyqLevelHref(level.slug),
+  });
 }
 
 export default async function PyqLevelPage({ params, searchParams }: PageProps<"/pyqs/[level]">) {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowRight, Award, Infinity as InfinityIcon, Route, Search, Star, Users } from "lucide-react";
@@ -10,11 +11,11 @@ import { param } from "@/lib/filters";
 import type { SkillCourse } from "@/lib/types";
 import { accentStyles, cn, formatNumber } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "Skills",
+export const metadata: Metadata = pageMetadata({
+  title: "Free Data Skills Courses: Python, SQL, Excel, Power BI & ML",
   description: "Free, job-ready skill courses in Python, SQL, Excel, Power BI, statistics, machine learning and more, built around the IITM BS degree.",
-  alternates: { canonical: "/skills" },
-};
+  path: "/skills",
+});
 
 const LEVELS = ["Beginner", "Intermediate", "Advanced", "All levels"];
 const SORTS = [

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, MonitorCheck, ScrollText, Target } from "lucide-react";
@@ -19,11 +20,11 @@ export async function generateMetadata({ params }: PageProps<"/qualifier/notes/[
   const sheet = getCheatSheet((await params).sheet);
   if (!sheet) return {};
   const subject = getSubject(sheet.subjectSlug)!;
-  return {
+  return pageMetadata({
     title: `${sheet.short} Cheat Notes & ${sheetKind(sheet).replace(/^./, (c) => c.toUpperCase())} for the Qualifier`,
     description: `${sheet.description} Free revision notes for ${subject.name} (${subject.code}), IIT Madras BS qualifier, weeks 1–4.`,
-    alternates: { canonical: cheatSheetHref(sheet) },
-  };
+    path: cheatSheetHref(sheet),
+  });
 }
 
 export default async function CheatSheetPage({ params }: PageProps<"/qualifier/notes/[sheet]">) {

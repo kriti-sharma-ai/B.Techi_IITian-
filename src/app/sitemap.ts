@@ -21,7 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const url = (path: string, priority = 0.6): MetadataRoute.Sitemap[number] => ({ url: `${SITE_URL}${path}`, priority });
   const entries = [
     url("/", 1),
-    ...["/programs", "/subjects", "/notes", "/videos", "/books", "/practice", "/pyqs", "/skills", "/qualifier", "/qualifier/notes"].map((p) => url(p, 0.8)),
+    ...["/programs", "/subjects", "/notes", "/videos", "/books", "/practice", "/exam", "/pyqs", "/skills", "/qualifier", "/qualifier/notes"].map((p) => url(p, 0.8)),
     ...cheatSheets.map((s) => url(cheatSheetHref(s), 0.8)),
     ...programs.flatMap((p) => [
       url(`/programs/${p.slug}`, 0.8),

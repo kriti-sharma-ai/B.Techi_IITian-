@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { ExamPortalStudio, type PortalCourse } from "@/components/exam-portal-studio";
 import { PageHeader } from "@/components/ui";
 import { END_TERM_SUBJECTS } from "@/lib/data/end-term/subjects";
@@ -7,12 +8,11 @@ import type { PyqExam } from "@/lib/pyq-urls";
 import { getStudyScope } from "@/lib/study-scope";
 import { loadContent } from "@/lib/cms";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Exam Portal · Real IIT Madras BS PYQs",
-  description:
-    "Sit official IIT Madras BS End Term and Quiz papers on a timed exam screen with a calculator. Take 1 to 4 subjects together.",
-  alternates: { canonical: "/exam" },
-};
+  description: "Sit official IIT Madras BS End Term and Quiz papers on a timed exam screen with a calculator. Take 1 to 4 subjects together.",
+  path: "/exam",
+});
 
 // The Qualifier has its own page with full 4-hour papers and the cutoff check.
 const EXAM_KEYS: PyqExam[] = ["end-term", "quiz-1", "quiz-2"];

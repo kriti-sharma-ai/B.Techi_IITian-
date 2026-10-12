@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, BookOpen, Clock, Code, ListChecks, Repeat } from "lucide-react";
@@ -22,11 +23,11 @@ export async function generateMetadata({ params }: PageProps<"/skills/[slug]/not
   const course = getSkill(slug);
   if (!course || !getSkillNotes(slug)) return {};
   const name = course.title.split(":")[0];
-  return {
+  return pageMetadata({
     title: `${name} Notes: Free Text Lessons with Examples`,
     description: `Free ${name} notes from BTechi: ${course.subtitle} Every lesson as readable text, with worked examples, practice questions and a project.`,
-    alternates: { canonical: skillNotesHref(slug) },
-  };
+    path: skillNotesHref(slug),
+  });
 }
 
 export default async function SkillNotesPage({ params }: PageProps<"/skills/[slug]/notes">) {

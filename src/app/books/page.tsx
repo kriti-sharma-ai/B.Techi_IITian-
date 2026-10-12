@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Suspense } from "react";
 import { BookOpen } from "lucide-react";
 import { BookCard } from "@/components/cards";
@@ -10,11 +11,11 @@ import { academicFilters, matchesAcademic, param } from "@/lib/filters";
 import { getStudyScope, narrow, scopeLinks } from "@/lib/study-scope";
 import { loadContent } from "@/lib/cms";
 
-export const metadata: Metadata = {
-  title: "Recommended books",
-  description: "Curated textbooks for every subject with recommended chapters and free, legal editions where available.",
-  alternates: { canonical: "/books" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Recommended Books for Every IIT Madras BS Course",
+  description: "Textbooks for every IIT Madras BS course with the chapters to read for each week, plus free and legal editions where available.",
+  path: "/books",
+});
 
 export default async function BooksPage({ searchParams }: PageProps<"/books">) {
   await loadContent();

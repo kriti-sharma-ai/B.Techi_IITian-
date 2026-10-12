@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { redirect } from "next/navigation";
 import { GraduationCap } from "lucide-react";
 import { ProgramCard } from "@/components/cards";
 import { ButtonLink, EmptyState, PageHeader } from "@/components/ui";
 import { programs } from "@/lib/content";
 
-export const metadata: Metadata = {
-  title: "Programs",
-  description: "Explore the IIT Madras BS in Management and Data Science, level by level.",
-  alternates: { canonical: "/programs" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "IIT Madras BS Programs: Foundation, Diploma & Degree Levels",
+  description: "The IIT Madras BS in Management and Data Science, level by level: every Foundation, Diploma and Degree course with course codes, credits, notes and PYQs.",
+  path: "/programs",
+});
 
 export default function ProgramsPage() {
   // BTechi currently covers one program; send students straight to it.

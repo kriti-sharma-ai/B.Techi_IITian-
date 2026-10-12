@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ChevronDown, Star } from "lucide-react";
+import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import { ExamShowcase } from "@/components/exam-showcase";
 import { LandingFeatures } from "@/components/landing-features";
 import { MathBackground } from "@/components/math-background";
@@ -9,7 +9,6 @@ import { ReviewsSection } from "@/components/reviews-section";
 import { Venn } from "@/components/venn";
 import { TermChart, type TermBar } from "@/components/term-chart";
 import { ButtonLink } from "@/components/ui";
-import { REVIEW_SUMMARY } from "@/lib/data/reviews";
 import { getDemoExam } from "@/lib/demo-exam";
 import { PYQ_LEVELS, getPyqIndex } from "@/lib/pyq-index";
 import { pyqTermHref, pyqTerms } from "@/lib/pyq-terms";
@@ -63,31 +62,35 @@ export default async function HomePage() {
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_50%_60%_at_50%_50%,var(--bg)_40%,transparent_80%)]"
         />
-        <div className="container-page flex w-full flex-col items-center py-[clamp(2.5rem,8svh,6rem)] text-center animate-fade-up">
+        <div className="container-page flex w-full flex-col items-center py-[clamp(3.5rem,12svh,8rem)] text-center animate-fade-up">
           {/* Flagship Qualifier Pack Pill Banner */}
           <Link
             href="/qualifier"
-            className="group mb-[clamp(1rem,3svh,1.5rem)] inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/80 px-3.5 py-1.5 text-xs sm:text-sm font-medium text-fg shadow-xs backdrop-blur-sm transition-all hover:border-brand/60 hover:bg-surface hover:shadow-sm"
+            className="group mb-[clamp(1.75rem,5svh,2.75rem)] inline-flex items-center gap-2.5 rounded-full border border-border/80 bg-surface/80 px-5 py-2 text-xs sm:gap-3 sm:px-6 sm:py-2.5 sm:text-sm font-medium text-fg shadow-xs backdrop-blur-sm transition-all hover:border-brand/60 hover:bg-surface hover:shadow-sm"
           >
             <span className="flex size-2 shrink-0 rounded-full bg-brand animate-pulse" />
-            <span className="font-semibold text-fg">Qualifier Exam Pack</span>
-            <span className="hidden sm:inline text-muted/60">·</span>
-            <span className="hidden sm:inline text-muted">4-Course Mock & Cutoff Evaluator</span>
+            <span className="font-semibold text-fg">Qualifier pack</span>
+            <span className="text-muted">mock + cutoff check</span>
             <ArrowRight className="size-3.5 shrink-0 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-fg" aria-hidden />
           </Link>
 
-          <h1 className="text-[clamp(2.4rem,min(6.5vw,9svh),4.5rem)] leading-[1.05] font-extrabold tracking-tight">
-            Sit the real exam
+          <h1 className="text-[clamp(2.25rem,min(6vw,8svh),4rem)] leading-[1.15] font-extrabold tracking-[-0.02em]">
+            IITM BS past papers.
             <br />
             <span className="relative whitespace-nowrap">
-              <span className="absolute inset-x-[-0.15em] bottom-[-0.04em] -z-10 h-[0.24em] -rotate-1 rounded-sm bg-brand" />
-              before exam day.
+              <span className="absolute inset-x-[-0.05em] bottom-[-0.14em] -z-10 h-[0.12em] -rotate-1 rounded-sm bg-brand" />
+              Real exam portal.
             </span>
           </h1>
-          <p className="mt-[clamp(1rem,3svh,1.5rem)] max-w-2xl text-balance text-[clamp(1rem,min(1.6vw,2.4svh),1.25rem)] text-muted">
-            Real IIT Madras BS previous-year papers for Data Science and Applications and Management and Data Science, in an exam portal that works like the real one.
-          </p>
-          <div className="mt-[clamp(1.25rem,4svh,2rem)] flex flex-wrap items-center justify-center gap-3">
+          <ul className="mt-[clamp(2rem,6svh,3rem)] inline-flex flex-col items-start gap-1.5 text-sm text-muted sm:flex-row sm:items-center sm:gap-x-7 md:text-base">
+            {["Data Science & Management", "Qualifier to End Term", "Official answer keys"].map((point) => (
+              <li key={point} className="flex items-center gap-1.5 whitespace-nowrap">
+                <Check className="size-3.5 shrink-0 text-brand md:size-4" aria-hidden />
+                {point}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-[clamp(2rem,6svh,3rem)] flex flex-wrap items-center justify-center gap-3">
             <ButtonLink href="/exam" size="lg">
               Start a mock exam <ArrowRight className="size-4" aria-hidden />
             </ButtonLink>
@@ -95,13 +98,8 @@ export default async function HomePage() {
               Practise PYQs
             </ButtonLink>
           </div>
-          <p className="mt-[clamp(1rem,3svh,1.5rem)] flex flex-wrap items-center justify-center gap-x-1.5 text-sm text-muted">
-            <span className="inline-flex items-center gap-1 font-semibold text-fg">
-              <Star className="size-3.5 fill-amber-400 text-amber-400" aria-hidden />
-              Rated {REVIEW_SUMMARY.average.toFixed(1)}/5 by students
-            </span>
-            <span aria-hidden>·</span>
-            {pyqTotals.papers.toLocaleString("en-IN")} papers · {pyqTotals.questions.toLocaleString("en-IN")} questions · official answer keys
+          <p className="mt-[clamp(1.5rem,4svh,2.25rem)] text-sm text-muted/80">
+            {pyqTotals.papers.toLocaleString("en-IN")} papers · {pyqTotals.questions.toLocaleString("en-IN")} questions
           </p>
         </div>
       </section>

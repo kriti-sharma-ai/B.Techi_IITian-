@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, ArrowUp } from "lucide-react";
 import { ExamTag } from "@/components/exam-tag";
+import { PageHeader } from "@/components/ui";
 import { PracticeUnifiedSidebar } from "@/components/practice-unified-sidebar";
 import { PracticeFormatStudio } from "@/components/practice-format-studio";
 import { PracticeStats } from "@/components/practice-stats";
@@ -149,34 +150,39 @@ function PracticeModes({
   });
 
   return (
-    <div className="container-page pt-6 pb-8">
-      <div className="grid gap-8 lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start xl:grid-cols-[21rem_minmax(0,1fr)]">
-        {/* Scrolls on its own if it outgrows a short screen, so the unified sidebar stays reachable while pinned. */}
-        <aside className="space-y-4 lg:sticky lg:top-20 lg:-m-1 lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:p-1">
-          <PracticeUnifiedSidebar
-            currentCourse={{ slug: course.slug, name: course.name, code: course.code }}
-            currentExam={exam}
-            levels={levelsWithCourses}
-            exams={examOptions}
-          />
-          <PracticeStats />
-        </aside>
+    <>
+      <PageHeader
+        crumbs={[{ label: "Practice" }]}
+        title="Practice"
+        description="Previous-year questions with official answer keys."
+      />
+      <div className="container-page py-8">
+        <div className="grid gap-8 lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start xl:grid-cols-[21rem_minmax(0,1fr)]">
+          {/* Scrolls on its own if it outgrows a short screen, so the unified sidebar stays reachable while pinned. */}
+          <aside id="choose" className="scroll-mt-20 space-y-4 lg:sticky lg:top-20 lg:-m-1 lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:p-1">
+            <PracticeUnifiedSidebar
+              currentCourse={{ slug: course.slug, name: course.name, code: course.code }}
+              currentExam={exam}
+              levels={levelsWithCourses}
+              exams={examOptions}
+            />
+            <PracticeStats />
+          </aside>
 
-        <div className="min-w-0 space-y-6">
-          <PracticeFormatStudio
-            plan={plan}
-            courseSheets={courseSheets}
-            initialFormat={props.format === "paper" ? "paper" : undefined}
-            initialTab={props.tab}
-            header={<CourseHeader plan={plan} />}
-          />
+          <div className="min-w-0 space-y-6">
+            <PracticeFormatStudio
+              plan={plan}
+              courseSheets={courseSheets}
+              initialFormat={props.format === "paper" ? "paper" : undefined}
+              initialTab={props.tab}
+              header={<CourseHeader plan={plan} />}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
-
-
 
 /** Compact minimalist course & exam header */
 function CourseHeader({ plan }: { plan: PracticePlan }) {
@@ -188,7 +194,7 @@ function CourseHeader({ plan }: { plan: PracticePlan }) {
           <span>{level.name}</span>
           {course.code && <span className="font-mono">· {course.code}</span>}
         </p>
-        <h2 className="mt-0.5 text-xl font-bold tracking-tight text-fg md:text-2xl">{course.name}</h2>
+        <h2 className="mt-0.5 text-base font-bold tracking-tight text-fg">{course.name}</h2>
       </div>
       <div className="flex items-center gap-2">
         <ExamTag exam={exam} />

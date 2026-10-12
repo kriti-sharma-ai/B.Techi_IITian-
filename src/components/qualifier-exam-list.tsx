@@ -13,107 +13,62 @@ export type QualifierCardItem = {
   totalM: number;
 };
 
-export function QualifierExamList({ items }: { items: QualifierCardItem[] }) {
-  const [filter, setFilter] = useState<"all" | "pyq" | "mock">("all");
+type Filter = "all" | "pyq" | "mock";
 
-  const filtered = items.filter((item) => {
-    if (filter === "pyq") return item.isPyq;
-    if (filter === "mock") return !item.isPyq;
-    return true;
-  });
+/** The full papers, with an Official / Mocks filter in the section title. */
+export function QualifierExamList({ items, title }: { items: QualifierCardItem[]; title: string }) {
+  const [filter, setFilter] = useState<Filter>("all");
+  const filtered = items.filter((i) => filter === "all" || (filter === "pyq") === i.isPyq);
+  const options: { value: Filter; label: string; count: number }[] = [
+    { value: "all", label: "All", count: items.length },
+    { value: "pyq", label: "Official", count: items.filter((i) => i.isPyq).length },
+    { value: "mock", label: "Mocks", count: items.filter((i) => !i.isPyq).length },
+  ];
 
-  const pyqCount = items.filter((i) => i.isPyq).length;
-  const mockCount = items.filter((i) => !i.isPyq).length;
+  const tabs = (
+    <div className="flex items-center gap-1 text-xs font-medium">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          onClick={() => setFilter(o.value)}
+          aria-pressed={filter === o.value}
+          className={cn(
+            "inline-flex h-7 cursor-pointer items-center rounded-lg px-2.5 transition-colors",
+            filter === o.value ? "bg-fg font-semibold text-bg" : "text-muted hover:bg-surface-2 hover:text-fg",
+          )}
+        >
+          {o.label} <span className="ml-1 tabular-nums opacity-70">{o.count}</span>
+        </button>
+      ))}
+    </div>
+  );
 
   return (
-    <div className="space-y-3">
-      {/* Filter: official past papers or practice mocks */}
-      <div className="flex h-8 items-center">
-        <div className="flex items-center gap-1.5 text-xs font-medium">
-          <button
-            type="button"
-            onClick={() => setFilter("all")}
-            className={cn(
-              "inline-flex h-7 items-center rounded-lg px-2.5 transition-colors cursor-pointer",
-              filter === "all"
-                ? "bg-fg text-bg font-semibold shadow-2xs"
-                : "text-muted hover:text-fg hover:bg-surface-2"
-            )}
-          >
-            All ({items.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter("pyq")}
-            className={cn(
-              "inline-flex h-7 items-center rounded-lg px-2.5 transition-colors cursor-pointer",
-              filter === "pyq"
-                ? "bg-fg text-bg font-semibold shadow-2xs"
-                : "text-muted hover:text-fg hover:bg-surface-2"
-            )}
-          >
-            Official ({pyqCount})
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter("mock")}
-            className={cn(
-              "inline-flex h-7 items-center rounded-lg px-2.5 transition-colors cursor-pointer",
-              filter === "mock"
-                ? "bg-fg text-bg font-semibold shadow-2xs"
-                : "text-muted hover:text-fg hover:bg-surface-2"
-            )}
-          >
-            Mocks ({mockCount})
-          </button>
-        </div>
+    <section aria-labelledby="exams-heading" className="space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
+        <h2 id="exams-heading" className="text-base font-bold tracking-tight text-fg">
+          {title}
+        </h2>
+        {tabs}
       </div>
-
-      {/* Unified Compact Paper Rows with breathing room */}
-      <div className="divide-y divide-border rounded-xl border border-border bg-surface overflow-hidden shadow-2xs">
-        {filtered.map(({ mock, answerKey, isPyq, totalQ, totalM }) => {
-          const hours = Math.round(mock.durationMin / 60);
-          // Strip redundant "Qualifier · " or "Qualifier " prefix since we are inside Qualifier Exam Pack
-          const cleanTitle = mock.title.replace(/^Qualifier\s*·?\s*/i, "");
-
-          return (
-            <div
-              key={mock.slug}
-              className="flex min-h-16 items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-surface-2/30"
-            >
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold text-fg truncate">
-                    {cleanTitle}
-                  </h3>
-                  <span
-                    className={cn(
-                      "shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold leading-none border",
-                      isPyq
-                        ? "bg-surface-2 text-fg border-border"
-                        : "bg-surface-2/50 text-muted border-border/50"
-                    )}
-                  >
-                    {isPyq ? "Official" : "Mock"}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-1.5 mt-1 text-xs text-muted tabular-nums">
-                  <span>{hours}h</span>
-                  <span>·</span>
-                  <span>{totalQ} Qs</span>
-                  <span>·</span>
-                  <span>{totalM} Marks</span>
-                </div>
+      <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface">
+        {filtered.map(({ mock, answerKey, isPyq, totalQ, totalM }) => (
+          <div key={mock.slug} className="flex items-center justify-between gap-4 px-5 py-4">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                {/* Every paper here is a qualifier, so the prefix is noise. */}
+                <h3 className="truncate font-semibold text-fg">{mock.title.replace(/^Qualifier\s*·?\s*/i, "")}</h3>
+                {!isPyq && <span className="shrink-0 text-xs text-muted">Mock</span>}
               </div>
-
-              <div className="shrink-0">
-                <MockAction slug={mock.slug} answerKey={answerKey} compact buttonVariant="secondary" />
-              </div>
+              <p className="mt-1 text-xs text-muted tabular-nums">
+                {Math.round(mock.durationMin / 60)}h · {totalQ} Qs · {totalM} marks
+              </p>
             </div>
-          );
-        })}
+            <MockAction slug={mock.slug} answerKey={answerKey} compact buttonVariant="secondary" />
+          </div>
+        ))}
       </div>
-    </div>
+    </section>
   );
 }

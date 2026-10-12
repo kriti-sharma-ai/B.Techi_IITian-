@@ -3,7 +3,7 @@ import { Bone, HeaderBone, ScopeBone, SkeletonRoot } from "@/components/page-ske
 export default function Loading() {
   return (
     <SkeletonRoot>
-      <HeaderBone crumbs filters />
+      <HeaderBone filters />
       <div className="container-page py-8">
         <Bone className="mb-6 h-[78px] rounded-2xl" />
         <ScopeBone className="mb-6" />

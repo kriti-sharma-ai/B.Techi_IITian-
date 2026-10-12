@@ -147,7 +147,7 @@ function Frame({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="container-page grid gap-8 py-6 lg:grid-cols-[230px_1fr]">
-      <aside>
+      <aside className="min-w-0">
         <nav aria-label="Admin" className="flex gap-1 overflow-x-auto pb-2 lg:sticky lg:top-22 lg:flex-col lg:gap-5 lg:overflow-visible">
           {adminNav.map((g) => {
             const items = g.items.filter((i) => atLeast(staff.role, i.min));

@@ -71,18 +71,16 @@ export function QualifierHistory({ answerKeys, className }: { answerKeys: Qualif
   if (!hydrated || attempts.length === 0) return null;
   const getQualifierMock = (slug: string) => answerKeys.find((m) => m.slug === slug);
   return (
-    <section className={cn("pt-4 border-t border-border", className)}>
-      <h2 className="mb-2.5 flex items-center gap-2 text-xs sm:text-sm font-bold tracking-tight text-fg">
-        <History className="size-3.5 text-muted" aria-hidden /> Your Qualifier Attempts ({attempts.length})
-      </h2>
-      <ul className="rounded-xl border border-border bg-surface divide-y divide-border overflow-hidden shadow-2xs">
+    <section className={cn("space-y-5", className)}>
+      <h2 className="border-b border-border pb-3 text-base font-bold tracking-tight text-fg">Your attempts</h2>
+      <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface">
         {attempts.map((a) => {
           const mock = getQualifierMock(a.mockSlug);
           if (!mock) return null;
           const r = scoreMock(mock, a.responses);
           return (
             <li key={a.id}>
-              <Link href={`/qualifier/${mock.slug}?attempt=${a.id}`} className="flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 transition-colors hover:bg-surface-2/40 text-xs">
+              <Link href={`/qualifier/${mock.slug}?attempt=${a.id}`} className="flex flex-wrap items-center justify-between gap-2 px-5 py-4 text-sm transition-colors hover:bg-surface-2/40">
                 <span className="font-semibold text-fg">{mock.title}</span>
                 <span className="text-[11px] text-muted">
                   {new Date(a.at).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })}

@@ -40,14 +40,14 @@ export function FilterBar({ filters, className }: { filters: Filter[]; className
         const value = params.get(f.name) ?? "";
         const disabled = f.options.length === 0;
         return (
-          <label key={f.name} className="relative">
+          <label key={f.name} className="relative max-w-full min-w-0">
             <span className="sr-only">{f.label}</span>
             <select
               value={value}
               disabled={disabled}
               onChange={(e) => set(f, e.target.value)}
               className={cn(
-                "h-9 appearance-none rounded-lg border bg-surface pr-8 pl-3 text-sm outline-none transition-colors focus:border-fg/40 disabled:opacity-50",
+                "h-9 max-w-full appearance-none truncate rounded-lg border bg-surface pr-8 pl-3 text-sm outline-none transition-colors focus:border-fg/40 disabled:opacity-50",
                 value ? "border-fg font-medium" : "border-border text-muted",
               )}
             >

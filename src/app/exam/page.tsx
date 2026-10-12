@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { CheckCircle2 } from "lucide-react";
 import { ExamPortalStudio, type PortalCourse } from "@/components/exam-portal-studio";
+import { PageHeader } from "@/components/ui";
 import { END_TERM_SUBJECTS } from "@/lib/data/end-term/subjects";
 import { getPyqIndex } from "@/lib/pyq-index";
 import type { PyqExam } from "@/lib/pyq-urls";
@@ -75,29 +75,15 @@ export default async function ExamPortalPage({
     });
 
   return (
-    <div className="container-page py-6 lg:py-8 max-w-6xl">
-      {/* Compact Clean Header */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold tracking-tight text-fg sm:text-2xl">
-              Exam Portal
-            </h1>
-            <span className="inline-flex items-center gap-1 rounded-full bg-brand/20 px-2 py-0.5 text-[11px] font-semibold text-fg">
-              <CheckCircle2 className="size-3 text-brand" aria-hidden /> Real IITM BS PYQs
-            </span>
-          </div>
-          <p className="mt-0.5 text-xs text-muted">
-            Sit a timed End Term or Quiz paper. Pick 1 to 4 subjects to take them together.
-          </p>
-        </div>
-      </div>
-
-      {/* Streamlined Studio */}
-      <ExamPortalStudio
-        courses={portalCourses}
-        initialPlanned={scope.courses}
+    <>
+      <PageHeader
+        crumbs={[{ label: "Exam Portal" }]}
+        title="Exam Portal"
+        description="Timed End Term and Quiz papers. Take 1 to 4 subjects together."
       />
-    </div>
+      <div className="container-page py-8">
+        <ExamPortalStudio courses={portalCourses} initialPlanned={scope.courses} />
+      </div>
+    </>
   );
 }

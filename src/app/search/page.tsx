@@ -115,7 +115,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/search">)
                 }
               />
             ) : cat ? (
-              <ul className="grid gap-1 md:grid-cols-2">
+              <ul className="grid grid-cols-1 gap-1 md:grid-cols-2">
                 {shown.map((d) => (
                   <Result key={d.category + d.id} doc={d} />
                 ))}
@@ -134,7 +134,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/search">)
                         </Link>
                       )}
                     </div>
-                    <ul className="grid gap-1 md:grid-cols-2">
+                    <ul className="grid grid-cols-1 gap-1 md:grid-cols-2">
                       {results
                         .filter((r) => r.category === c)
                         .slice(0, 4)

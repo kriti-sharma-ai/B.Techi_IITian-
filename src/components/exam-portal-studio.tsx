@@ -343,7 +343,7 @@ export function ExamPortalStudio({
         aria-label="Start mock test"
         className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-bg/95 p-3 backdrop-blur shadow-md"
       >
-        <div className="container-page flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between max-w-6xl">
+        <div className="container-page flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2.5">
             <span className="flex size-6.5 items-center justify-center rounded-lg bg-surface-2 text-fg">
               <Layers className="size-3.5" aria-hidden />

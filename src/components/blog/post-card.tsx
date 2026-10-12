@@ -56,19 +56,20 @@ export function PostCard({ post, large = false, className }: { post: PostSummary
   );
 }
 
-/** Compact row for sidebars and "read next" lists. */
-export function PostRow({ post }: { post: PostSummary }) {
+/** Text-only row for the blog index and category lists. */
+export function PostListItem({ post }: { post: PostSummary }) {
+  const cat = getBlogCategory(post.category);
   return (
-    <article className="group relative flex items-center gap-3">
-      <BlogCover slug={post.slug} category={post.category} image={post.image} motif={post.motif} size="sm" className="w-28 shrink-0 rounded-xl sm:w-32" />
-      <div className="min-w-0">
-        <h3 className="line-clamp-2 text-sm font-semibold leading-snug group-hover:underline">
-          <Link href={`/blog/${post.slug}`} className="after:absolute after:inset-0">
-            {post.title}
-          </Link>
-        </h3>
-        <p className="mt-1 text-xs text-muted">{post.minutes} min read</p>
-      </div>
+    <article className="group relative py-5">
+      <p className="text-xs text-muted">
+        {cat?.name} · {formatDate(post.updated)} · {post.minutes} min read
+      </p>
+      <h2 className="mt-1 text-lg font-semibold leading-snug tracking-tight text-balance group-hover:underline">
+        <Link href={`/blog/${post.slug}`} className="after:absolute after:inset-0 focus-visible:outline-none">
+          {post.title}
+        </Link>
+      </h2>
+      <p className="mt-1 line-clamp-2 text-sm text-muted">{post.description}</p>
     </article>
   );
 }

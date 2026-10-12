@@ -175,14 +175,17 @@ export function PageHeader({
   children?: ReactNode;
   crumbs?: Crumb[];
 }) {
+  // Kept small so the page itself starts near the top. Crumbs only show below the top level.
   return (
-    <header className="border-b border-border bg-surface">
-      <div className="container-page py-8 md:py-10">
-        {crumbs && <Breadcrumbs items={crumbs} />}
-        {eyebrow && <div className="eyebrow mb-2">{eyebrow}</div>}
-        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{title}</h1>
-        {description && <p className="mt-2 max-w-2xl text-muted">{description}</p>}
-        {children && <div className="mt-5">{children}</div>}
+    <header className="border-b border-border">
+      <div className="container-page py-3">
+        {crumbs && crumbs.length > 1 && <Breadcrumbs items={crumbs} className="mb-1 [&_ol]:text-xs" />}
+        {eyebrow && <div className="eyebrow mb-0.5">{eyebrow}</div>}
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+          <h1 className="text-lg font-bold tracking-tight md:text-xl">{title}</h1>
+          {description && <p className="text-sm text-muted">{description}</p>}
+        </div>
+        {children && <div className="mt-3">{children}</div>}
       </div>
     </header>
   );

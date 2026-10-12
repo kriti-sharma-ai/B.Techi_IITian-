@@ -32,9 +32,9 @@ export function ScopeBone({ className }: { className?: string }) {
   return <Bone className={cn("h-5 w-64 max-w-full", className)} />;
 }
 
-/** Mirrors PageHeader in ui.tsx: the surface band with crumbs, title, description and an optional slot. */
+/** Mirrors PageHeader in ui.tsx: a compact title row (crumbs only below the top level) and an optional slot. */
 export function HeaderBone({
-  crumbs = true,
+  crumbs = false,
   eyebrow = false,
   description = true,
   filters = false,
@@ -49,21 +49,23 @@ export function HeaderBone({
   children?: ReactNode;
 }) {
   return (
-    <header className="border-b border-border bg-surface">
-      <div className="container-page py-8 md:py-10">
-        {crumbs && <CrumbsBone />}
-        {eyebrow && <Bone className="mb-2 h-3 w-40" />}
-        <Bone className="h-9 w-72 max-w-full md:h-10" />
-        {description && <Bone className="mt-3 h-5 w-[36rem] max-w-full" />}
+    <header className="border-b border-border">
+      <div className="container-page py-3">
+        {crumbs && <CrumbsBone className="mb-1 h-3" />}
+        {eyebrow && <Bone className="mb-0.5 h-3 w-40" />}
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <Bone className="h-6 w-36 md:h-7" />
+          {description && <Bone className="h-4 w-80 max-w-full" />}
+        </div>
         {filters && (
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-3 flex flex-wrap gap-2">
             {repeat(4).map((i) => (
               <Bone key={i} className="h-9 w-32 rounded-lg" />
             ))}
           </div>
         )}
         {stats > 0 && (
-          <div className="mt-5 grid grid-cols-3 gap-6 sm:max-w-xl">
+          <div className="mt-3 grid grid-cols-3 gap-6 sm:max-w-xl">
             {repeat(stats).map((i) => (
               <div key={i}>
                 <Bone className="h-8 w-16" />
@@ -72,7 +74,7 @@ export function HeaderBone({
             ))}
           </div>
         )}
-        {children && <div className="mt-5">{children}</div>}
+        {children && <div className="mt-3">{children}</div>}
       </div>
     </header>
   );

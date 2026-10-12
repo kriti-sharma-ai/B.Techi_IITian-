@@ -169,6 +169,8 @@ function ResourcesMenu({ pathname }: { pathname: string }) {
   const { open, setOpen, ref, enter, leave } = useMenu(pathname);
   const on = resources.some((r) => isActive(pathname, r.href));
   if (resources.length === 0) return null;
+  // A menu of one is just a link (the launch build ships Blog alone).
+  if (resources.length === 1) return <TopLink pathname={pathname} {...resources[0]} />;
 
   return (
     <div ref={ref} className="relative" onMouseEnter={enter} onMouseLeave={leave}>
@@ -289,8 +291,8 @@ function SearchButton() {
       className="hidden h-8 items-center gap-2 rounded-md border border-border bg-surface px-2.5 text-sm text-muted transition-colors hover:border-fg/20 hover:text-fg lg:flex"
     >
       <Search className="size-3.5" aria-hidden />
-      Search
-      <kbd className="ml-3 rounded border border-border bg-surface-2 px-1 font-sans text-[10px]">⌘K</kbd>
+      <span className="sr-only xl:not-sr-only">Search</span>
+      <kbd className="ml-3 hidden xl:inline rounded border border-border bg-surface-2 px-1 font-sans text-[10px]">⌘K</kbd>
     </Link>
   );
 }
@@ -383,7 +385,7 @@ function MobileMenu({
         <nav aria-label="Mobile">
           {primaryLinks.map((l) => row(l.href, l.label))}
           {sectionEnabled("skills") && row("/skills", "Skills")}
-          <p className="pt-6 pb-1 text-xs font-medium text-muted">Resources</p>
+          {resources.length > 1 && <p className="pt-6 pb-1 text-xs font-medium text-muted">Resources</p>}
           {resources.map((r) => row(r.href, r.label))}
           {signedIn && (
             <>
@@ -608,7 +610,7 @@ export function Navbar() {
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-4 focus:z-50 focus:rounded-md focus:bg-fg focus:px-3 focus:py-2 focus:text-bg">
         Skip to content
       </a>
-      <div className="container-page flex h-16 items-center gap-6">
+      <div className="container-page flex h-16 items-center gap-4 xl:gap-6">
         <Logo />
 
         <nav aria-label="Primary" className="hidden items-center gap-0.5 lg:flex">

@@ -395,7 +395,7 @@ function Practice({ subject }: { subject: Subject }) {
 function ComingSoon({ title, description }: { title: string; description: string }) {
   return (
     <div className="relative overflow-hidden rounded-2xl border border-brand/50 bg-brand/10 p-6 md:p-8">
-      <ListTree className="pointer-events-none absolute -right-4 -bottom-6 size-36 text-brand/15" aria-hidden />
+      <ListTree className="pointer-events-none absolute -right-4 -bottom-6 size-28 text-fg/10 sm:size-36" aria-hidden />
       <span className="inline-flex items-center gap-1.5 rounded-full bg-brand px-2.5 py-1 text-xs font-semibold text-brand-ink">
         <Timer className="size-3.5" aria-hidden /> Coming soon
       </span>

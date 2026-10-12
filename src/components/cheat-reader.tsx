@@ -242,7 +242,7 @@ export function ReaderToolbar({ quickLabel, items }: { quickLabel: string; items
                 aria-pressed={view === v.id}
                 onClick={() => setView(v.id)}
                 className={cn(
-                  "h-9 min-w-0 flex-1 truncate rounded-lg px-2.5 text-sm font-semibold transition-colors sm:flex-none sm:px-4 cursor-pointer",
+                  "h-9 min-w-0 flex-auto truncate rounded-lg px-2 text-sm font-semibold transition-colors sm:flex-none sm:px-4 cursor-pointer",
                   view === v.id ? "bg-surface text-fg shadow-xs" : "text-muted hover:text-fg",
                 )}
               >

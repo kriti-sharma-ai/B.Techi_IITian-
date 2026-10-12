@@ -87,11 +87,12 @@ export default async function HomePage() {
       {/* ───────── The exam screen: pops up on scroll, and works ───────── */}
       {demo.length > 0 && (
         <section className="px-4 pb-16 md:px-6 md:pb-24">
-          <ScrollPop className="mx-auto max-w-[min(1200px,136svh)]">
-            {/* Clean card: thin border, soft shadow, nothing else. */}
-            <div className="rounded-2xl shadow-[0_2px_6px_rgb(0_0_0/0.04),0_24px_60px_-24px_rgb(0_0_0/0.3)] ring-1 ring-black/10 dark:ring-white/15">
-              <ExamShowcase sections={demo} />
-            </div>
+          <ScrollPop className="mx-auto max-w-[1200px]">
+            {/* Clean card: thin border, soft shadow, nothing else. The screen scales itself to fit. */}
+            <ExamShowcase
+              sections={demo}
+              className="shadow-[0_2px_6px_rgb(0_0_0/0.04),0_24px_60px_-24px_rgb(0_0_0/0.3)] ring-1 ring-black/10 dark:ring-white/15"
+            />
           </ScrollPop>
         </section>
       )}

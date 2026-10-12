@@ -41,10 +41,11 @@ export function PaperRows({ papers, className }: { papers: PaperSummary[]; class
               {p.exam !== "qualifier" && p.term && <span>{p.term} term</span>}
             </p>
           </div>
-          <div className="flex shrink-0 flex-wrap items-center gap-2">
+          {/* Full row on phones so the two buttons can wrap inside a padded card. */}
+          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:shrink-0">
             <Link
               href={p.sheetHref}
-              className={buttonClass("secondary")}
+              className={cn(buttonClass("secondary"), "max-sm:flex-1")}
               title="Open clean question paper to solve on paper with pen & notebook; includes answer key"
             >
               <FileText className="size-4" aria-hidden /> Solve on paper (PDF)

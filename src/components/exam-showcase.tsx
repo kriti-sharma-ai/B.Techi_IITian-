@@ -6,7 +6,7 @@
 // shows the score. Keep the look (header, tabs, chips, action bar) in step with qualifier-exam.tsx.
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Calculator, Check, CheckCircle2, Clock, Info, LayoutGrid, Maximize, MousePointerClick, RotateCcw, Trophy, User, X } from "lucide-react";
 import type { DemoSection } from "@/lib/demo-exam";
 import { isCorrect } from "@/lib/grading";
@@ -49,7 +49,43 @@ function Chip({ status, children, className }: { status: Status; children?: Reac
   );
 }
 
-export function ExamShowcase({ sections }: { sections: DemoSection[] }) {
+/**
+ * From tablets up the portal is laid out once at a fixed desktop size and scaled down as a whole to fit
+ * the width and the viewport height, like a screenshot, so a smaller screen shows the same screen
+ * smaller instead of cropping it. Phones get the portal's own narrow layout at full size. Breakpoints
+ * inside are container queries, so they follow the portal's width, not the window's.
+ */
+const SCREEN = { w: 1200, h: 740 };
+const SCALE_FROM = 768;
+
+function useFit() {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [fit, setFit] = useState<{ w: number; h: number; scale: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const frame = frameRef.current?.parentElement;
+    if (!frame) return;
+    const measure = () => {
+      const width = frame.clientWidth;
+      const vh = window.innerHeight;
+      if (width < SCALE_FROM) setFit({ w: width, h: Math.min(Math.max(480, vh * 0.85), SCREEN.h), scale: 1 });
+      else setFit({ ...SCREEN, scale: Math.min(1, width / SCREEN.w, (vh * 0.88) / SCREEN.h) });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(frame);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
+  return { frameRef, fit };
+}
+
+export function ExamShowcase({ sections, className }: { sections: DemoSection[]; className?: string }) {
+  const { frameRef, fit } = useFit();
   const flat = useMemo(() => sections.flatMap((s, si) => s.questions.map((q, qi) => ({ q, si, qi }))), [sections]);
   const fresh = (): Live => ({ current: 0, status: { [flat[0].q.id]: "na" }, saved: {} });
   const [live, setLive] = useState<Live>(fresh);
@@ -114,30 +150,36 @@ export function ExamShowcase({ sections }: { sections: DemoSection[] }) {
 
   return (
     <div
+      ref={frameRef}
+      className={cn("relative mx-auto overflow-hidden rounded-2xl", !fit && "h-[clamp(480px,85svh,740px)] w-full", className)}
+      style={fit ? { width: fit.w * fit.scale, height: fit.h * fit.scale } : undefined}
+    >
+    <div
       role="region"
       aria-label="Try the exam portal with real past qualifier questions"
-      className="light relative flex h-[clamp(480px,85svh,740px)] flex-col overflow-hidden rounded-2xl bg-bg text-fg"
+      className={cn("light @container absolute top-0 left-0 flex origin-top-left flex-col overflow-hidden bg-bg text-fg", !fit && "invisible size-full")}
+      style={fit ? { width: fit.w, height: fit.h, transform: fit.scale < 1 ? `scale(${fit.scale})` : undefined } : undefined}
     >
       {/* Portal header */}
-      <div className="flex h-14 shrink-0 items-center gap-3 border-b border-border bg-surface px-3 md:px-5">
+      <div className="flex h-14 shrink-0 items-center gap-3 border-b border-border bg-surface px-3 @min-[768px]:px-5">
         <span className="grid size-8 place-items-center rounded-lg bg-brand text-sm font-black text-brand-ink">B</span>
         <div className="min-w-0 flex-1 leading-tight">
           <div className="flex items-center gap-2">
             <p className="truncate text-sm font-bold">Qualifier demo</p>
-            <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-brand/30 bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-fg">
+            <span className="hidden @min-[640px]:inline-flex items-center gap-1 rounded-full border border-brand/30 bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-fg">
               <MousePointerClick className="size-2.5 text-brand" /> Interactive Sandbox
             </span>
           </div>
           <p className="truncate text-[11px] opacity-70">BTechi Exam Portal · click an option below to test</p>
         </div>
         {/* Calculator, instructions and full screen work in the full mock; here they are only shown. */}
-        <span aria-hidden className="hidden h-9 items-center gap-1.5 px-2.5 text-sm font-medium text-muted sm:inline-flex">
+        <span aria-hidden className="hidden h-9 items-center gap-1.5 px-2.5 text-sm font-medium text-muted @min-[640px]:inline-flex">
           <Calculator className="size-4" /> Calculator
         </span>
-        <span aria-hidden className="hidden h-9 items-center gap-1.5 px-2.5 text-sm font-medium text-muted md:inline-flex">
+        <span aria-hidden className="hidden h-9 items-center gap-1.5 px-2.5 text-sm font-medium text-muted @min-[768px]:inline-flex">
           <Info className="size-4" /> Instructions
         </span>
-        <span aria-hidden className="hidden size-9 place-items-center text-muted lg:grid">
+        <span aria-hidden className="hidden size-9 place-items-center text-muted @min-[1024px]:grid">
           <Maximize className="size-4" />
         </span>
         <div
@@ -149,13 +191,13 @@ export function ExamShowcase({ sections }: { sections: DemoSection[] }) {
           )}
         >
           <Clock className="size-4" aria-hidden />
-          <span className="hidden font-sans text-[11px] font-medium opacity-80 sm:inline">Time Left</span>
+          <span className="hidden font-sans text-[11px] font-medium opacity-80 @min-[640px]:inline">Time Left</span>
           {clock(left)}
         </div>
       </div>
 
       {/* Section tabs */}
-      <nav aria-label="Sections" className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-border bg-surface px-2 [scrollbar-width:none] md:px-4">
+      <nav aria-label="Sections" className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-border bg-surface px-2 [scrollbar-width:none] @min-[768px]:px-4">
         {sections.map((s, i) => {
           const c = counts(i);
           const on = !over && i === si;
@@ -184,10 +226,10 @@ export function ExamShowcase({ sections }: { sections: DemoSection[] }) {
         <div className="flex min-h-0 flex-1">
           {/* Question pane */}
           <section aria-label={`Question ${qi + 1}`} className="flex min-w-0 flex-1 flex-col">
-            <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3 md:px-6">
+            <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3 @min-[768px]:px-6">
               <div className="flex min-w-0 items-center gap-3">
                 <h3 className="text-base font-bold">Question {qi + 1}</h3>
-                <span className="hidden truncate text-xs text-muted sm:inline">Multiple Choice (single correct)</span>
+                <span className="hidden truncate text-xs text-muted @min-[640px]:inline">Multiple Choice (single correct)</span>
               </div>
               <div className="flex items-center gap-2 text-xs">
                 <span className="rounded-md bg-green/10 px-1.5 py-0.5 font-semibold text-green">+{q.marks}</span>
@@ -195,14 +237,14 @@ export function ExamShowcase({ sections }: { sections: DemoSection[] }) {
                 <button
                   type="button"
                   onClick={() => setPalette(true)}
-                  className="ml-1 inline-flex h-8 items-center gap-1.5 rounded-lg border border-border px-2.5 font-medium lg:hidden"
+                  className="ml-1 inline-flex h-8 items-center gap-1.5 rounded-lg border border-border px-2.5 font-medium @min-[1024px]:hidden"
                 >
                   <LayoutGrid className="size-3.5" aria-hidden /> Palette
                 </button>
               </div>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 md:px-6">
+            <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 @min-[768px]:px-6">
               {saveToast && (
                 <div className="mb-4 flex items-center justify-between gap-2 rounded-xl border border-green/30 bg-green/10 px-4 py-2.5 text-xs font-semibold text-green animate-fade-in shadow-xs">
                   <span className="flex items-center gap-2">
@@ -231,7 +273,7 @@ export function ExamShowcase({ sections }: { sections: DemoSection[] }) {
                 {q.code && (
                   <pre className="mb-4 overflow-x-auto rounded-xl border border-border bg-surface-2 p-4 font-mono text-[13px] leading-relaxed">{q.code}</pre>
                 )}
-                <QuestionPrompt q={q} className="text-[15px] leading-relaxed font-medium md:text-base" />
+                <QuestionPrompt q={q} className="text-[15px] leading-relaxed font-medium @min-[768px]:text-base" />
                 <fieldset className="mt-6">
                   <legend className="sr-only">Select one option</legend>
                   <div className="grid gap-2.5">
@@ -269,25 +311,25 @@ export function ExamShowcase({ sections }: { sections: DemoSection[] }) {
             </div>
 
             {/* Action bar */}
-            <div className="flex shrink-0 items-center gap-2 border-t border-border bg-surface px-3 py-3 md:px-6">
+            <div className="flex shrink-0 items-center gap-2 border-t border-border bg-surface px-3 py-3 @min-[768px]:px-6">
               <button
                 type="button"
                 onClick={() => save(true)}
                 className="h-10 rounded-xl border border-purple/40 bg-purple/10 px-3 text-sm font-semibold text-purple hover:bg-purple/15"
               >
-                <span className="sm:hidden">Mark &amp; Next</span>
-                <span className="hidden sm:inline">Mark for Review &amp; Next</span>
+                <span className="@min-[640px]:hidden">Mark &amp; Next</span>
+                <span className="hidden @min-[640px]:inline">Mark for Review &amp; Next</span>
               </button>
               <button type="button" onClick={clear} className="h-10 rounded-xl border border-border px-3 text-sm font-medium hover:border-fg/30">
-                <span className="sm:hidden">Clear</span>
-                <span className="hidden sm:inline">Clear Response</span>
+                <span className="@min-[640px]:hidden">Clear</span>
+                <span className="hidden @min-[640px]:inline">Clear Response</span>
               </button>
               <div className="ml-auto flex gap-2">
                 <button
                   type="button"
                   disabled={live.current === 0}
                   onClick={() => go(live.current - 1)}
-                  className="hidden h-10 rounded-xl border border-border px-3 text-sm font-medium hover:border-fg/30 disabled:opacity-40 sm:block"
+                  className="hidden h-10 rounded-xl border border-border px-3 text-sm font-medium hover:border-fg/30 disabled:opacity-40 @min-[640px]:block"
                 >
                   Previous
                 </button>
@@ -299,12 +341,12 @@ export function ExamShowcase({ sections }: { sections: DemoSection[] }) {
           </section>
 
           {/* Palette: a side panel on desktop, a drawer inside the screen on smaller screens */}
-          {palette && <button type="button" aria-label="Close palette" onClick={() => setPalette(false)} className="absolute inset-0 z-10 bg-ink/30 lg:hidden" />}
+          {palette && <button type="button" aria-label="Close palette" onClick={() => setPalette(false)} className="absolute inset-0 z-10 bg-ink/30 @min-[1024px]:hidden" />}
           <aside
             aria-label="Question palette"
             className={cn(
-              "w-72 shrink-0 flex-col border-l border-border bg-surface lg:w-80",
-              palette ? "absolute inset-y-0 right-0 z-20 flex shadow-2xl" : "hidden lg:flex",
+              "w-72 shrink-0 flex-col border-l border-border bg-surface @min-[1024px]:w-80",
+              palette ? "absolute inset-y-0 right-0 z-20 flex shadow-2xl" : "hidden @min-[1024px]:flex",
             )}
           >
             <div className="flex items-center gap-3 border-b border-border p-4">
@@ -363,6 +405,7 @@ export function ExamShowcase({ sections }: { sections: DemoSection[] }) {
         </div>
       )}
     </div>
+    </div>
   );
 }
 
@@ -378,7 +421,7 @@ function Result({ sections, saved, timeUp, onRestart }: { sections: DemoSection[
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
-      <div className="animate-fade-up mx-auto flex max-w-lg flex-col items-center px-5 py-10 text-center md:py-14">
+      <div className="animate-fade-up mx-auto flex max-w-lg flex-col items-center px-5 py-10 text-center @min-[768px]:py-14">
         <span className="grid size-14 place-items-center rounded-2xl bg-brand text-brand-ink">
           <Trophy className="size-7" aria-hidden />
         </span>

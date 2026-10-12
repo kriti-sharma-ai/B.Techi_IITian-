@@ -1,1 +1,1 @@
-export { PageSkeleton as default } from "@/components/page-skeleton";
+export { ExamRoomSkeleton as default } from "@/components/page-skeleton";

@@ -33,11 +33,21 @@ export const stats1: CheatSheet = {
           ],
         },
         {
+          kind: "diagram",
+          diagram: "population-sample",
+          title: "Population, sample and inference",
+        },
+        {
           kind: "points",
           items: [
             "For inference to be valid, the sample must be **representative** of the population: randomly chosen and unbiased.",
             "A claim about every organisation in a city based on one organisation's data is an over-generalisation: the sample doesn't represent the population.",
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "cross-vs-time",
+          title: "Cross-sectional vs time series",
         },
         {
           kind: "traps",
@@ -80,6 +90,11 @@ export const stats1: CheatSheet = {
           text: "Ask in order: Is it just a label? → nominal. Can I put it in order? → ordinal. Does 0 mean 'none of it'? → ratio; if not → interval.",
         },
         {
+          kind: "diagram",
+          diagram: "scales-tree",
+          title: "Which scale? Ask in order",
+        },
+        {
           kind: "traps",
           items: [
             "Numbers used as labels (PIN code, roll number, phone number, jersey number) are **categorical, nominal**.",
@@ -117,6 +132,11 @@ export const stats1: CheatSheet = {
             ["Pareto chart", "Bars in **descending** order plus a cumulative-percentage line"],
             ["Stacked / side-by-side bars", "Two categorical variables together (week 4)"],
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "pie-pareto",
+          title: "Pie and Pareto charts of 500 fruits",
         },
         {
           kind: "example",
@@ -171,6 +191,12 @@ export const stats1: CheatSheet = {
           ],
         },
         {
+          kind: "diagram",
+          diagram: "skew-shapes",
+          title: "Shape tells you where the mean sits",
+          caption: "The mean is dragged towards the long tail; the median stays with the bulk of the data.",
+        },
+        {
           kind: "example",
           title: "PYQ pattern (May 2024)",
           q: "Ages in a stem-and-leaf plot: 1 | 8 9 · 2 | 0 2 3 5 7 · 3 | 1 4. How many are above 23? What is the median?",
@@ -197,6 +223,11 @@ export const stats1: CheatSheet = {
             { label: "Fix a wrong value", f: "new mean = ‾{x} + [[correct − wrong // n]]" },
             { label: "y = ax + b", f: "‾{y} = a‾{x} + b", note: "Median, mode, quartiles and percentiles transform the same way." },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "mean-outlier",
+          title: "One outlier moves the mean, not the median",
         },
         {
           kind: "example",
@@ -232,6 +263,12 @@ export const stats1: CheatSheet = {
             { label: "y = ax + b", f: "Var(y) = a² Var(x),  SD(y) = |a| SD(x)" },
             { label: "Recover Σx²", f: "sample: (n − 1)s² + n‾{x}² · population: n(σ² + μ²)" },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "shift-stretch",
+          title: "Adding vs multiplying",
+          caption: "Dashed: the original data.",
         },
         {
           kind: "table",
@@ -291,6 +328,11 @@ export const stats1: CheatSheet = {
             { label: "Five-number summary", f: "min, Q_{1}, median, Q_{3}, max", note: "This is what a box plot draws." },
             { label: "Outliers", f: "below Q_{1} − 1.5 × IQR  or  above Q_{3} + 1.5 × IQR" },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "box-plot",
+          title: "Box plot with the 1.5 × IQR fence",
         },
         {
           kind: "example",
@@ -364,6 +406,11 @@ export const stats1: CheatSheet = {
           steps: ["Females who own = 80 − 30 = 50.", "Males who own = 150 − 50 = 100 (so 20 males don't)."],
           answer: "100",
         },
+        {
+          kind: "diagram",
+          diagram: "contingency",
+          title: "The smartphone PYQ as a two-way table",
+        },
         { kind: "tip", text: "Draw the empty table with its totals row and column first, write in every number given, then fill the blanks so each row and column adds up." },
       ],
     },
@@ -381,6 +428,12 @@ export const stats1: CheatSheet = {
             { label: "Scaling", f: "cov(ax + b, cy + d) = ac · cov(x, y)" },
             { label: "With itself", f: "cov(x, x) = Var(x)" },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "covariance-quadrants",
+          title: "Why the sign of covariance works",
+          caption: "Each point adds (x − x̄)(y − ȳ). Points in the green quadrants push covariance up, points in the red ones pull it down.",
         },
         {
           kind: "points",
@@ -413,6 +466,12 @@ export const stats1: CheatSheet = {
             { label: "Range", f: "−1 ≤ r ≤ 1" },
             { label: "Change of origin and scale", f: "r(ax + b, cy + d) = r(x, y) if ac > 0,  −r(x, y) if ac < 0" },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "correlation-panels",
+          title: "What r looks like",
+          caption: "r measures how tightly points hug a straight line. The U-shape has r = 0 even though y depends on x.",
         },
         {
           kind: "table",
@@ -458,6 +517,12 @@ export const stats1: CheatSheet = {
             { label: "With population SD", f: "r_{pb} = [[‾{Y}_{1} − ‾{Y}_{0} // σ_{Y}]] × √{[[n_{1}n_{0} // n²]]}", note: "Same answer as the sample version." },
             { label: "Symbols", f: "‾{Y}_{1}, ‾{Y}_{0}: group means · n_{1}, n_{0}: group sizes · n = n_{1} + n_{0} · s_{Y}, σ_{Y}: SD of **all** Y values" },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "point-biserial",
+          title: "Hours studied, split by pass and fail",
+          caption: "The bigger the gap between the two group means (relative to the SD), the larger r_{pb}.",
         },
         {
           kind: "example",

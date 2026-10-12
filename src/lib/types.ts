@@ -353,7 +353,9 @@ export type CheatBlock =
   | { kind: "code"; title?: string; code: string; note?: string }
   | { kind: "example"; title?: string; q: string; steps: string[]; answer: string }
   | { kind: "traps"; items: string[] }
-  | { kind: "tip"; text: string };
+  | { kind: "tip"; text: string }
+  /** A colour diagram from components/cheat-diagrams.tsx, by id. */
+  | { kind: "diagram"; diagram: string; title?: string; caption?: string };
 
 export type CheatSection = {
   /** Anchor id, unique within the sheet. */

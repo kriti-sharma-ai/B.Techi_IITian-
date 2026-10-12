@@ -40,6 +40,12 @@ export const maths1: CheatSheet = {
           ],
         },
         {
+          kind: "diagram",
+          diagram: "number-systems",
+          title: "Number systems, nested",
+          caption: "Every natural number is an integer, every integer is rational, and the rationals plus the irrationals make up ℝ.",
+        },
+        {
           kind: "points",
           items: [
             "∅ is a subset of every set, and every set is a subset of itself.",
@@ -82,6 +88,12 @@ export const maths1: CheatSheet = {
         {
           kind: "tip",
           text: "Fill the diagram **from the centre outwards**: the triple overlap first, then the 'exactly two' regions, then the 'only' regions, then 'none' outside. Every sub-question is then just adding regions.",
+        },
+        {
+          kind: "diagram",
+          diagram: "venn-three",
+          title: "The Jan 2024 PYQ, filled in",
+          caption: "Start with the 5 in the centre. Take it off each pair (20 − 5, 15 − 5, 10 − 5), then fill the singles. The union is 80, so 20 bought none.",
         },
         {
           kind: "example",
@@ -134,6 +146,12 @@ export const maths1: CheatSheet = {
             { label: "Equivalence", f: "reflexive + symmetric + transitive" },
             { label: "Pairs not in R", f: "|(A × A) \\ R| = n² − |R|" },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "relation-properties",
+          title: "The four properties as arrow diagrams",
+          caption: "An arrow a → b means (a, b) ∈ R. A loop on a node is (a, a).",
         },
         {
           kind: "table",
@@ -199,6 +217,11 @@ export const maths1: CheatSheet = {
             { label: "Bijections (m = n)", f: "n!" },
             { label: "Composition", f: "(g ∘ f)(x) = g(f(x))", note: "Usually g ∘ f ≠ f ∘ g." },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "function-types",
+          title: "Mapping diagrams",
         },
         {
           kind: "table",
@@ -267,6 +290,11 @@ export const maths1: CheatSheet = {
           ],
         },
         {
+          kind: "diagram",
+          diagram: "quadrants",
+          title: "Quadrants and reflections of P(3, 1)",
+        },
+        {
           kind: "example",
           title: "PYQ pattern (Jan 2023)",
           q: "Starting at the origin, Ajay walks 3 units right, 4 units up, then 6 units left. Where is he, and how far is he from home?",
@@ -301,6 +329,11 @@ export const maths1: CheatSheet = {
             { label: "Between parallel lines", f: "d = [[|c_{1} − c_{2}| // √{a² + b²}]]" },
             { label: "Foot of perpendicular", f: "[[x − x_{1} // a]] = [[y − y_{1} // b]] = −[[ax_{1} + by_{1} + c // a² + b²]]" },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "slopes",
+          title: "Lines at a glance",
         },
         {
           kind: "example",
@@ -346,6 +379,12 @@ export const maths1: CheatSheet = {
           ],
         },
         {
+          kind: "diagram",
+          diagram: "residuals",
+          title: "Errors are vertical gaps",
+          caption: "SSE adds up the squared red gaps. The least-squares line makes that total as small as possible.",
+        },
+        {
           kind: "example",
           q: "Points (1, 2), (2, 3), (3, 5). Which fits better: y = x + 1 or y = 1.5x + 0.5?",
           steps: [
@@ -378,6 +417,11 @@ export const maths1: CheatSheet = {
             { label: "Slope of secant x₁ → x₂", f: "[[f(x_{2}) − f(x_{1}) // x_{2} − x_{1}]] = a(x_{1} + x_{2}) + b" },
             { label: "Increasing / decreasing", f: "a > 0: decreasing on (−∞, h), increasing on (h, ∞)", note: "Reversed when a < 0." },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "parabolas",
+          title: "Reading a parabola",
         },
         {
           kind: "example",
@@ -431,6 +475,11 @@ export const maths1: CheatSheet = {
             { label: "Signs of roots", f: "[[c // a]] < 0 ⇒ opposite signs · both positive ⇔ −[[b // a]] > 0 and [[c // a]] > 0", note: "For real roots (D ≥ 0)." },
             { label: "Completing the square", f: "ax² + bx + c = a(x + [[b // 2a]])² − [[D // 4a]]" },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "discriminant",
+          title: "The discriminant decides the picture",
         },
         {
           kind: "example",
@@ -489,6 +538,12 @@ export const maths1: CheatSheet = {
           ],
         },
         {
+          kind: "diagram",
+          diagram: "factor-theorem",
+          title: "Remainder and factor theorem",
+          caption: "x³ − 2x² + 4x − 5 divided by (x − 2): p(2) = 3, which isn't 0, so the remainder is 3.",
+        },
+        {
           kind: "example",
           q: "Find the remainder when p(x) = x³ − 2x² + 4x − 5 is divided by (x − 2).",
           steps: ["Remainder = p(2) = 8 − 8 + 8 − 5."],
@@ -518,6 +573,11 @@ export const maths1: CheatSheet = {
             { label: "Factor form", f: "p(x) = a(x − r_{1})^{k₁}(x − r_{2})^{k₂}⋯,  degree = k_{1} + k_{2} + ⋯" },
             { label: "y-intercept", f: "p(0)" },
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "end-behaviour",
+          title: "End behaviour",
         },
         {
           kind: "table",
@@ -557,6 +617,11 @@ export const maths1: CheatSheet = {
             "Sign: negative for x < −2, positive between −2 and 1, positive for x > 1.",
           ],
           answer: "Crosses at −2, bounces at 1, y-intercept 2",
+        },
+        {
+          kind: "diagram",
+          diagram: "polynomial-example",
+          title: "The worked example, drawn",
         },
         {
           kind: "example",

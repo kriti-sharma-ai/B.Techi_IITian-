@@ -7,6 +7,7 @@ import { blogCategories, blogCategoryHref } from "@/lib/blog/categories";
 import { PYQ_LEVELS, getPyqIndex, uploadedPyqHref } from "@/lib/pyq-index";
 import { getQuestionSheets } from "@/lib/pyq-sheets";
 import { PYQ_SHEETS_HREF, pyqLevelHref } from "@/lib/pyq-urls";
+import { pyqTermHref, pyqTerms } from "@/lib/pyq-terms";
 import { hrefEnabled } from "@/lib/site";
 import { SITE_URL } from "@/lib/utils";
 import { loadContent } from "@/lib/cms";
@@ -33,6 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Paper pages run the exam portal in the browser and are noindex; the level and course pages are the landing pages.
     ...PYQ_LEVELS.filter((l) => pyqCoursesForLevel(l.slug).length > 0).map((l) => url(pyqLevelHref(l.slug), 0.8)),
     ...pyqCourses.map((c) => url(c.href, 0.8)),
+    ...pyqTerms(pyqCourses).map((t) => url(pyqTermHref(t.slug), 0.7)),
     ...pyqs.map((p) => url(uploadedPyqHref(p), 0.7)),
     // Question sheets are server-rendered, so each sheet is a page to index.
     url(PYQ_SHEETS_HREF, 0.8),

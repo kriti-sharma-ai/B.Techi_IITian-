@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, BookOpenCheck, Clock, FileText, ListChecks } from "lucide-react";
+import { BookOpen, ChevronRight } from "lucide-react";
+import { buttonClass } from "@/components/ui";
 import { MockAction } from "@/components/qualifier-attempts";
-import { Badge, buttonClass } from "@/components/ui";
-import type { CoursePyqs, PaperSummary, PyqExam } from "@/lib/pyq-index";
+import { PYQ_EXAMS, type CoursePyqs, type PaperSummary, type PyqExam } from "@/lib/pyq-index";
 import { cn } from "@/lib/utils";
 
 // Same colours as ExamTag (components/exam-tag.tsx).
@@ -13,77 +13,69 @@ export const EXAM_BADGE: Record<PyqExam, { label: string; tone: "purple" | "gree
   qualifier: { label: "Qualifier", tone: "blue" },
 };
 
-/** One row per paper: date, exam, size, a link to the paper as a question sheet, and a Start / Resume / Retake button. */
-export function PaperRows({ papers, className }: { papers: PaperSummary[]; className?: string }) {
+/**
+ * One row per paper. The row opens Study (the paper as a question sheet with the official answers);
+ * the button on the right starts the timed exam (or Resume / Retake, with the best score).
+ * With `course` on each paper (the term page) the row is titled by course instead of by date.
+ */
+export function PaperRows({ papers, className }: { papers: (PaperSummary & { course?: CoursePyqs })[]; className?: string }) {
   return (
     <ul className={cn("divide-y divide-border", className)}>
-      {papers.map((p) => (
-        <li key={p.slug} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3 sm:flex-nowrap">
-          {/* At least 12rem for the details, so on phones the button drops below instead of squeezing them. */}
-          <div className="min-w-0 flex-1 basis-48">
-            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-semibold">
-              <span>
-                {p.label}
-                {p.session && <span className="font-normal text-muted"> · {p.session}</span>}
+      {papers.map((p) => {
+        const when = `${p.label}${p.session ? ` · ${p.session}` : ""}`;
+        return (
+          <li key={p.slug} className="flex items-center gap-4 py-3.5">
+            <Link href={p.sheetHref} title="Study: questions with the official answers" className="group flex min-w-0 flex-1 items-center gap-4">
+              {p.course && <span className="hidden w-20 shrink-0 font-mono text-xs text-muted sm:block">{p.course.code}</span>}
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-semibold group-hover:underline">{p.course ? p.course.name : when}</span>
+                <span className="mt-0.5 block truncate text-xs text-muted tabular-nums">
+                  {EXAM_BADGE[p.exam].label} · {p.course ? when : `${p.durationMin} min`} · {p.questions} Qs
+                </span>
               </span>
-              <Badge tone={EXAM_BADGE[p.exam].tone}>{EXAM_BADGE[p.exam].label}</Badge>
-            </p>
-            <p className="mt-0.5 flex flex-wrap gap-x-3 text-xs text-muted tabular-nums">
-              <span className="inline-flex items-center gap-1">
-                <ListChecks className="size-3.5" aria-hidden /> {p.questions} questions
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <BookOpenCheck className="size-3.5" aria-hidden /> {p.marks} marks
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <Clock className="size-3.5" aria-hidden /> {p.durationMin} min
-              </span>
-              {p.exam !== "qualifier" && p.term && <span>{p.term} term</span>}
-            </p>
-          </div>
-          {/* Full row on phones so the two buttons can wrap inside a padded card. */}
-          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:shrink-0">
-            <Link
-              href={p.sheetHref}
-              className={cn(buttonClass("secondary"), "max-sm:flex-1")}
-              title="Open clean question paper to solve on paper with pen & notebook; includes answer key"
-            >
-              <FileText className="size-4" aria-hidden /> Solve on paper (PDF)
             </Link>
-            <MockAction slug={p.slug} href={p.href} single />
-          </div>
-        </li>
-      ))}
+            <div className="flex shrink-0 items-center gap-1">
+              <Link href={p.sheetHref} className={buttonClass("ghost", "sm", "h-8 px-3 text-xs font-semibold max-sm:hidden")}>
+                <BookOpen className="size-3.5" aria-hidden /> Study
+              </Link>
+              <MockAction slug={p.slug} href={p.href} single compact buttonVariant="secondary" />
+            </div>
+          </li>
+        );
+      })}
     </ul>
   );
 }
 
-/** A course and its papers, as listed on the PYQ hub. */
-export function CoursePyqCard({ course, papers = course.papers }: { course: CoursePyqs; papers?: PaperSummary[] }) {
+/**
+ * Level page list: one quiet row per course (code, name, which exams, paper count).
+ * The papers themselves live on the course page, so the level page stays scannable.
+ */
+export function CourseList({ courses, exam }: { courses: CoursePyqs[]; exam?: PyqExam }) {
   return (
-    <article className="card p-5">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="eyebrow mb-1">
-            {course.code ? <span className="font-mono">{course.code} · </span> : null}
-            {course.short}
-          </p>
-          <h3 className="font-bold leading-snug">
-            <Link href={course.href} className="hover:underline">
-              {course.name}
+    <ul className="card divide-y divide-border overflow-hidden">
+      {courses.map((c) => {
+        const papers = c.papers.filter((p) => !exam || p.exam === exam);
+        const exams = PYQ_EXAMS.filter((e) => papers.some((p) => p.exam === e.slug));
+        return (
+          <li key={c.slug}>
+            <Link
+              href={exam ? `${c.href}#exam-${exam}` : c.href}
+              className="group flex items-center gap-4 px-5 py-4 transition-colors hover:bg-surface-2/60"
+            >
+              <span className="hidden w-20 shrink-0 font-mono text-xs text-muted sm:block">{c.code}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-semibold">{c.name}</span>
+                <span className="mt-0.5 block truncate text-xs text-muted">{exams.map((e) => e.label).join(" · ")}</span>
+              </span>
+              <span className="shrink-0 text-sm text-muted tabular-nums">
+                {papers.length} {papers.length === 1 ? "paper" : "papers"}
+              </span>
+              <ChevronRight className="size-4 shrink-0 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-fg" aria-hidden />
             </Link>
-          </h3>
-        </div>
-        <Badge className="shrink-0 whitespace-nowrap">
-          {papers.length} {papers.length === 1 ? "paper" : "papers"}
-        </Badge>
-      </div>
-      <PaperRows papers={papers} className="mt-4 border-t border-border" />
-      {course.courseHref && (
-        <Link href={course.courseHref} className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-muted hover:text-fg">
-          Go to course <ArrowRight className="size-3.5" aria-hidden />
-        </Link>
-      )}
-    </article>
+          </li>
+        );
+      })}
+    </ul>
   );
 }

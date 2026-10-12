@@ -6,6 +6,7 @@ import { AlertTriangle, ChevronDown, Flame, Lightbulb, Repeat } from "lucide-rea
 import { blockViews } from "@/lib/data/cheat-notes";
 import type { CheatBlock, CheatSection } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { CheatDiagram } from "./cheat-diagrams";
 import { RevisedToggle } from "./cheat-reader";
 import { Badge } from "./ui";
 
@@ -336,6 +337,22 @@ function Tip({ block }: { block: Extract<CheatBlock, { kind: "tip" }> }) {
   );
 }
 
+function Diagram({ block }: { block: Extract<CheatBlock, { kind: "diagram" }> }) {
+  return (
+    <figure className="cheat-block" data-views={views(block)}>
+      {block.title && <BlockTitle>{block.title}</BlockTitle>}
+      <div className="overflow-x-auto rounded-xl border border-border bg-surface px-3 py-4 [scrollbar-width:thin] sm:px-5">
+        <CheatDiagram id={block.diagram} label={block.title ?? block.caption ?? "Diagram"} />
+      </div>
+      {block.caption && (
+        <figcaption className="mt-2 text-[0.88em] text-muted">
+          <Rich text={block.caption} />
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
 function Block({ block }: { block: CheatBlock }) {
   switch (block.kind) {
     case "formulas":
@@ -357,6 +374,8 @@ function Block({ block }: { block: CheatBlock }) {
       return <Traps block={block} />;
     case "tip":
       return <Tip block={block} />;
+    case "diagram":
+      return <Diagram block={block} />;
   }
 }
 

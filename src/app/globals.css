@@ -388,6 +388,8 @@
     --green: #15803d;
     --red: #dc2626;
     --amber: #b45309;
+    --purple: #7c3aed;
+    --teal: #0f766e;
     color: var(--fg);
     background: var(--bg);
   }

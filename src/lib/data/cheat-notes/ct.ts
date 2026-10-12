@@ -28,6 +28,12 @@ export const ct: CheatSheet = {
           ],
         },
         {
+          kind: "diagram",
+          diagram: "scores-card",
+          title: "Anatomy of a Scores card",
+          caption: "Illustrative values. Total is always Mathematics + Physics + Chemistry.",
+        },
+        {
           kind: "points",
           items: [
             "Total = Mathematics + Physics + Chemistry · cost = quantity × price · bill total = sum of item costs · letter count = number of letters in the word.",
@@ -65,6 +71,12 @@ export const ct: CheatSheet = {
             ["Parallelogram", "Input or output"],
             ["Arrow", "Flow of control"],
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "iterator-flowchart",
+          title: "The iterator as a flowchart",
+          caption: "The same loop as the pseudocode below: the average Maths marks of female students.",
         },
         {
           kind: "points",
@@ -150,6 +162,12 @@ while(Table 1 has more rows){
           answer: "21 students",
         },
         {
+          kind: "diagram",
+          diagram: "and-or",
+          title: "and, or, exactly one",
+          caption: "14 female students, 12 from Chennai, 5 both.",
+        },
+        {
           kind: "points",
           items: [
             "Brackets change meaning: (A and B) or C ≠ A and (B or C).",
@@ -194,6 +212,11 @@ while(Table 1 has more rows){
 }`,
         },
         {
+          kind: "diagram",
+          diagram: "max-trace",
+          title: "Tracing max over five cards",
+        },
+        {
           kind: "table",
           title: "Ties: which card wins?",
           head: ["Comparison", "On a tie, keeps"],
@@ -236,6 +259,11 @@ while(Table 1 has more rows){
     }
     return(False)
 End isVowel`,
+        },
+        {
+          kind: "diagram",
+          diagram: "procedure-call",
+          title: "What happens on a call",
         },
         {
           kind: "points",
@@ -310,6 +338,12 @@ else{
           answer: "₹1700",
         },
         {
+          kind: "diagram",
+          diagram: "slab-bill",
+          title: "250 units through the slabs",
+          caption: "Each rate applies only to the units inside its own slab.",
+        },
+        {
           kind: "traps",
           items: [
             "Wrong-option pattern: `cost = unit * 10` for unit > 200, which charges every unit at the top rate.",
@@ -347,6 +381,11 @@ while(Table 1 has more rows){
 }`,
         },
         {
+          kind: "diagram",
+          diagram: "two-passes",
+          title: "Two passes, in order",
+        },
+        {
           kind: "points",
           items: [
             "You can't compare with the average until you know it, so it takes two passes.",
@@ -379,6 +418,12 @@ while(Table 1 has more rows){
     Move all rows from Table 3 to Table 1
 }`,
           note: "count = number of pairs of students from the same city.",
+        },
+        {
+          kind: "diagram",
+          diagram: "pairs-grid",
+          title: "Counting pairs on a grid",
+          caption: "Six cards A–F. The nested loop only visits the green cells.",
         },
         {
           kind: "formulas",
@@ -433,6 +478,11 @@ while(Table 1 has more rows){
           steps: ["Without: [[30 × 29 // 2]] = 435.", "With: 3 × [[10 × 9 // 2]] = 3 × 45."],
           answer: "435 without, 135 with",
         },
+        {
+          kind: "diagram",
+          diagram: "binning",
+          title: "Binning 30 cards into 3 bins",
+        },
       ],
     },
     {
@@ -451,6 +501,11 @@ while(Table 1 has more rows){
             "**Scope:** reset inside the outer loop? Then it's per-card, and the final value belongs to the last card.",
             "**Dry-run** 3–4 cards in a trace table (one column per variable) when unsure.",
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "trace-map",
+          title: "Spot the pattern",
         },
         {
           kind: "code",

@@ -21,7 +21,7 @@ export type CheatView = "notes" | "quick" | "traps";
 
 /** Views a block appears in. Every block shows in the full notes. */
 export function blockViews(block: CheatBlock): CheatView[] {
-  if (block.kind === "formulas" || block.kind === "table" || block.kind === "code") return ["notes", "quick"];
+  if (block.kind === "formulas" || block.kind === "table" || block.kind === "code" || block.kind === "diagram") return ["notes", "quick"];
   if (block.kind === "traps" || block.kind === "tip") return ["notes", "traps"];
   return ["notes"];
 }
@@ -42,6 +42,8 @@ export const blockText = (b: CheatBlock): string[] => {
       return [b.q, ...b.steps, b.answer];
     case "tip":
       return [b.text];
+    case "diagram":
+      return [b.title ?? "", b.caption ?? ""];
   }
 };
 

@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ScrollText } from "lucide-react";
-import { CoursePyqCard } from "@/components/pyq-papers";
+import { CourseList } from "@/components/pyq-papers";
 import { ScopeSwitch } from "@/components/study-scope";
 import { EmptyState, LinkTabs, PageHeader, buttonClass } from "@/components/ui";
 import { param } from "@/lib/filters";
@@ -70,9 +70,8 @@ export default async function PyqLevelPage({ params, searchParams }: PageProps<"
     <>
       <PageHeader
         crumbs={[{ label: "PYQs", href: "/pyqs" }, { label: level.name }]}
-        eyebrow="Previous-year questions"
         title={`${level.name} papers`}
-        description={`${level.description} Every paper has the official answer key and runs in the timed exam portal.`}
+        description="Pick a subject. Every paper has the official answer key."
       />
 
       <div className="sticky top-16 z-20 border-b border-border bg-bg/90 backdrop-blur">
@@ -100,8 +99,8 @@ export default async function PyqLevelPage({ params, searchParams }: PageProps<"
         </div>
       </div>
 
-      <div className="container-page space-y-12 py-10">
-        <ScopeSwitch list={scoped} links={scopeLinks(pyqLevelHref(level.slug), sp)} className="-mb-4" />
+      <div className="container-page space-y-10 py-10">
+        <ScopeSwitch list={scoped} links={scopeLinks(pyqLevelHref(level.slug), sp)} />
         {groups.length === 0 ? (
           <EmptyState
             icon={<ScrollText className="size-6" />}
@@ -116,21 +115,17 @@ export default async function PyqLevelPage({ params, searchParams }: PageProps<"
         ) : (
           groups.map((g) => (
             <section key={g.name} aria-labelledby={`g-${g.name}`}>
-              <div className="mb-4">
-                <h2 id={`g-${g.name}`} className="text-lg font-bold">
+              <div className="mb-3">
+                <h2 id={`g-${g.name}`} className="text-sm font-semibold text-muted">
                   {g.name}
                 </h2>
                 {!g.courses[0].inCurriculum && (
-                  <p className="mt-0.5 text-sm text-muted">
-                    Courses of the IIT Madras BS in Data Science, which sits the same quizzes and End Term exams. Listed here so every paper is in one place.
+                  <p className="mt-0.5 text-xs text-muted">
+                    Same quizzes and End Term exams as the BS in Data Science.
                   </p>
                 )}
               </div>
-              <div className="grid gap-5 lg:grid-cols-2">
-                {g.courses.map((c) => (
-                  <CoursePyqCard key={c.slug} course={c} papers={papersOf(c)} />
-                ))}
-              </div>
+              <CourseList courses={g.courses} exam={exam} />
             </section>
           ))
         )}

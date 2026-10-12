@@ -17,6 +17,11 @@ export const english1: CheatSheet = {
       hits: "every",
       blocks: [
         {
+          kind: "diagram",
+          diagram: "vowel-chart",
+          title: "Where each vowel sits",
+        },
+        {
           kind: "table",
           title: "Short vowels",
           head: ["Symbol", "IPA", "As in", "Words from past papers"],
@@ -77,6 +82,12 @@ export const english1: CheatSheet = {
           items: ["A **diphthong** glides from one vowel to another inside one syllable (b-oy, m-ou-th). A pure vowel holds still (sp-or-t, m-oo-t)."],
         },
         {
+          kind: "diagram",
+          diagram: "diphthong-glides",
+          title: "The 8 diphthongs as glides",
+          caption: "Each arrow is the tongue moving from the first vowel to the second, inside one syllable.",
+        },
+        {
           kind: "table",
           title: "The 8 diphthongs",
           head: ["Symbol", "IPA", "Examples"],
@@ -107,6 +118,11 @@ export const english1: CheatSheet = {
       title: "Consonants, clusters & glides",
       hits: "every",
       blocks: [
+        {
+          kind: "diagram",
+          diagram: "places-of-articulation",
+          title: "Places of articulation, lips to throat",
+        },
         {
           kind: "table",
           title: "Place of articulation (this decides 'odd one out by initial sound')",
@@ -147,6 +163,11 @@ export const english1: CheatSheet = {
           ],
         },
         {
+          kind: "diagram",
+          diagram: "linking-glides",
+          title: "Linking glides",
+        },
+        {
           kind: "formulas",
           title: "Linking glides between words",
           items: [
@@ -171,6 +192,11 @@ export const english1: CheatSheet = {
       title: "Nouns & pronouns",
       hits: "every",
       blocks: [
+        {
+          kind: "diagram",
+          diagram: "noun-map",
+          title: "Types of nouns",
+        },
         {
           kind: "table",
           title: "Types of nouns",
@@ -247,6 +273,11 @@ export const english1: CheatSheet = {
           ],
         },
         {
+          kind: "diagram",
+          diagram: "tense-timeline",
+          title: "Tense signals on a timeline",
+        },
+        {
           kind: "table",
           title: "Tense signals",
           head: ["Signal words", "Tense", "Example"],
@@ -299,6 +330,11 @@ export const english1: CheatSheet = {
             "'Joseph ran **faster** than everyone': faster is a comparative adverb, because it modifies ran (PYQ).",
             "'She **yelled** when she hit her toe': yelled is a verb (PYQ).",
           ],
+        },
+        {
+          kind: "diagram",
+          diagram: "modifies",
+          title: "What each one modifies",
         },
         {
           kind: "table",
@@ -355,6 +391,12 @@ export const english1: CheatSheet = {
           ],
         },
         {
+          kind: "diagram",
+          diagram: "article-picker",
+          title: "Picking the article",
+          caption: "a/an go by the first sound, not the first letter.",
+        },
+        {
           kind: "example",
           title: "PYQ answers",
           q: "There is __ emergency exit · This is __ best chocolate cake · __ Sun rises in the east · Tomorrow will be __ cold day · I want to buy __ laptop · They spend their holidays in __ mountains · He gave me __ book on my birthday",
@@ -369,6 +411,11 @@ export const english1: CheatSheet = {
       title: "Prepositions & conjunctions",
       hits: "every",
       blocks: [
+        {
+          kind: "diagram",
+          diagram: "at-on-in",
+          title: "at, on, in: from wide to exact",
+        },
         {
           kind: "table",
           title: "Prepositions of time and place",
@@ -419,6 +466,11 @@ export const english1: CheatSheet = {
       title: "Phrasal verbs, idioms & collocations",
       hits: "every",
       blocks: [
+        {
+          kind: "diagram",
+          diagram: "separable-test",
+          title: "The 'it' test",
+        },
         {
           kind: "formulas",
           title: "Separable vs inseparable",

@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Award, Layers, PenLine, Sigma, type LucideIcon } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ExamShowcase } from "@/components/exam-showcase";
+import { LandingFeatures } from "@/components/landing-features";
 import { MathBackground } from "@/components/math-background";
 import { ScrollPop } from "@/components/scroll-pop";
 import { ReviewsSection } from "@/components/reviews-section";
+import { Venn } from "@/components/venn";
+import { TermChart, type TermBar } from "@/components/term-chart";
 import { ButtonLink } from "@/components/ui";
 import { getDemoExam } from "@/lib/demo-exam";
 import { getPyqIndex } from "@/lib/pyq-index";
+import { pyqTermHref, pyqTerms } from "@/lib/pyq-terms";
 import { pageMetadata } from "@/lib/seo";
 import { SITE_URL } from "@/lib/utils";
 
@@ -31,32 +35,25 @@ const siteLd = [
   { "@context": "https://schema.org", "@type": "WebSite", name: "BTechi", url: SITE_URL },
 ];
 
-const features: { icon: LucideIcon; title: string; text: string; href: string; cta: string }[] = [
-  {
-    icon: Layers,
-    title: "Exam Portal",
-    text: "Sit timed End Term and Quiz papers, 1 to 4 subjects at once, with a calculator.",
-    href: "/exam",
-    cta: "Open Exam Portal",
-  },
-  {
-    icon: PenLine,
-    title: "Practice",
-    text: "One subject at a time: answer past questions and see the answer right away.",
-    href: "/practice",
-    cta: "Start practising",
-  },
-  {
-    icon: Award,
-    title: "Qualifier Pack",
-    text: "Cheat sheets and full 4-hour qualifier papers with the cutoff check.",
-    href: "/qualifier",
-    cta: "Open qualifier pack",
-  },
-];
+// Hairline header shared by the sections below the exam screen.
+function SectionHead({ title }: { title: string }) {
+  return (
+    <h2 className="mb-8 border-t border-border pt-5 text-[clamp(1.75rem,3.5vw,2.75rem)] leading-tight font-extrabold tracking-tight md:mb-12">
+      {title}
+    </h2>
+  );
+}
 
 export default async function HomePage() {
-  const [{ pyqTotals }, demo] = await Promise.all([getPyqIndex(), getDemoExam()]);
+  const [{ pyqTotals, pyqCourses }, demo] = await Promise.all([getPyqIndex(), getDemoExam()]);
+  // Archive size at the end of each IITM term, oldest first; each bar opens that term's papers.
+  let runningTotal = 0;
+  const terms: TermBar[] = pyqTerms(pyqCourses).map((t) => ({
+    year: t.year,
+    month: t.month,
+    papers: (runningTotal += t.papers.length),
+    href: pyqTermHref(t.slug),
+  }));
 
   return (
     <>
@@ -119,49 +116,47 @@ export default async function HomePage() {
       )}
 
       {/* ───────── Features ───────── */}
-      <section className="container-page pb-16 md:pb-24">
-        <div className="grid gap-4 md:grid-cols-3">
-          {features.map(({ icon: Icon, title, text, href, cta }) => (
-            <Link key={href} href={href} className="card card-hover group flex flex-col p-6">
-              <span className="grid size-10 place-items-center rounded-xl bg-brand text-brand-ink">
-                <Icon className="size-5" aria-hidden />
-              </span>
-              <h2 className="mt-5 text-lg font-bold">{title}</h2>
-              <p className="mt-1 flex-1 text-muted">{text}</p>
-              <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold">
-                {cta} <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
-              </span>
-            </Link>
-          ))}
-        </div>
+      <section className="container-page pb-20 md:pb-28">
+        <SectionHead title="Study what IITM actually asks." />
+        <LandingFeatures />
       </section>
 
-      {/* ───────── Trust & Metrics Proof Bar ───────── */}
-      <section className="container-page pb-12 sm:pb-16">
-        <div className="rounded-2xl border border-border/80 bg-surface/60 p-6 sm:p-8 backdrop-blur-sm">
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-8 text-center divide-y sm:divide-y-0 sm:divide-x divide-border">
-            <div className="pt-2 sm:pt-0">
-              <p className="text-2xl sm:text-3xl font-extrabold tracking-tight text-fg tabular-nums">{pyqTotals.papers}+</p>
-              <p className="mt-1 text-xs sm:text-sm text-muted font-medium">IITM Past Papers</p>
-            </div>
-            <div className="pt-4 sm:pt-0">
-              <p className="text-2xl sm:text-3xl font-extrabold tracking-tight text-fg tabular-nums">{pyqTotals.questions.toLocaleString("en-IN")}+</p>
-              <p className="mt-1 text-xs sm:text-sm text-muted font-medium">Verified Questions</p>
-            </div>
-            <div className="pt-4 sm:pt-0">
-              <p className="text-2xl sm:text-3xl font-extrabold tracking-tight text-fg tabular-nums">100% Free</p>
-              <p className="mt-1 text-xs sm:text-sm text-muted font-medium">Open Student Initiative</p>
-            </div>
-            <div className="pt-4 sm:pt-0">
-              <p className="text-2xl sm:text-3xl font-extrabold tracking-tight text-fg tabular-nums">TCS iON</p>
-              <p className="mt-1 text-xs sm:text-sm text-muted font-medium">Accurate Mock Simulation</p>
+      {/* ───────── Archive growth ───────── */}
+      {terms.length > 1 && (
+        <section className="container-page pb-20 md:pb-28">
+          <SectionHead title="Growing every term." />
+          <TermChart bars={terms} />
+          <p className="mt-6 text-sm text-muted">Total past papers after each IITM term</p>
+        </section>
+      )}
+
+      {/* ───────── Reviews ───────── */}
+      <section className="container-page">
+        <SectionHead title="From the students." />
+        <ReviewsSection />
+      </section>
+
+      {/* ───────── Closing CTA ───────── */}
+      <section className="container-page pt-20 md:pt-28">
+        <div className="grid items-center gap-10 border-t border-border pt-12 md:grid-cols-2 md:pt-16">
+          <Venn className="mx-auto w-full max-w-xs md:max-w-sm" />
+          <div className="text-center md:text-left">
+            <h2 className="text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.05] font-extrabold tracking-tight">
+              All three.
+              <br />
+              One place.
+            </h2>
+            <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
+              <ButtonLink href="/exam" size="lg">
+                Start a mock exam <ArrowRight className="size-4" aria-hidden />
+              </ButtonLink>
+              <ButtonLink href="/practice" size="lg" variant="secondary">
+                Practise PYQs
+              </ButtonLink>
             </div>
           </div>
         </div>
       </section>
-
-      {/* ───────── Rolling Unstructured Reviews ───────── */}
-      <ReviewsSection />
     </>
   );
 }

@@ -248,7 +248,7 @@ export const skillCourses: SkillCourse[] = [
     category: "machine-learning",
     level: "All levels",
     accent: "purple",
-    icon: "sparkles",
+    icon: "bot",
     snippet: "Summarise this report in 5 bullets",
     instructor: BTECHI,
     rating: 4.6,

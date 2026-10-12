@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Award, CalendarClock, Download, Flame, LogOut, Settings2, Sparkles, StickyNote } from "lucide-react";
+import { ArrowRight, Award, CalendarClock, Download, Flame, LogOut, Settings2, SlidersHorizontal, StickyNote } from "lucide-react";
 import { actions, studyStreak, useHydrated, useStore, weeklyActivity } from "@/lib/store";
 import { PROGRAM_SLUG, allTopics, assignments, getProgram, getSubject, pyqs, subjects, topicKey } from "@/lib/content";
 import type { CourseExamLinks } from "@/lib/pyq-practice";
@@ -125,7 +125,7 @@ export function Dashboard({ exams }: { exams: CourseExamLinks[] }) {
       {!plan && (
         <section aria-labelledby="setup-h" className="card flex flex-wrap items-center gap-4 border-brand/60 bg-brand/5 p-5">
           <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-brand text-brand-ink">
-            <Sparkles className="size-5" aria-hidden />
+            <SlidersHorizontal className="size-5" aria-hidden />
           </span>
           <div className="min-w-[14rem] flex-1">
             <h2 id="setup-h" className="font-semibold">

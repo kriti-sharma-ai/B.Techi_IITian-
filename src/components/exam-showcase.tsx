@@ -7,7 +7,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Calculator, Check, CheckCircle2, Clock, Info, LayoutGrid, Maximize, RotateCcw, Sparkles, Trophy, User, X } from "lucide-react";
+import { ArrowRight, Calculator, Check, CheckCircle2, Clock, Info, LayoutGrid, Maximize, MousePointerClick, RotateCcw, Trophy, User, X } from "lucide-react";
 import type { DemoSection } from "@/lib/demo-exam";
 import { isCorrect } from "@/lib/grading";
 import { cn } from "@/lib/utils";
@@ -125,7 +125,7 @@ export function ExamShowcase({ sections }: { sections: DemoSection[] }) {
           <div className="flex items-center gap-2">
             <p className="truncate text-sm font-bold">Qualifier demo</p>
             <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-brand/30 bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-fg">
-              <Sparkles className="size-2.5 text-brand" /> Interactive Sandbox
+              <MousePointerClick className="size-2.5 text-brand" /> Interactive Sandbox
             </span>
           </div>
           <p className="truncate text-[11px] opacity-70">BTechi Exam Portal · click an option below to test</p>

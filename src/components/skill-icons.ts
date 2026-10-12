@@ -1,4 +1,4 @@
-import { Brain, Briefcase, ChartColumn, Code, Database, Presentation, Sheet, Sigma, Sparkles, TrendingUp, type LucideIcon } from "lucide-react";
+import { Bot, Brain, Briefcase, ChartColumn, Code, Database, Presentation, Sheet, Sigma, TrendingUp, type LucideIcon } from "lucide-react";
 
 /** Icon per skill course (SkillCourse.icon). Kept separate so client menus can import it cheaply. */
 export const skillIcons: Record<string, LucideIcon> = {
@@ -8,7 +8,7 @@ export const skillIcons: Record<string, LucideIcon> = {
   chart: ChartColumn,
   sigma: Sigma,
   brain: Brain,
-  sparkles: Sparkles,
+  bot: Bot,
   presentation: Presentation,
   trending: TrendingUp,
   briefcase: Briefcase,

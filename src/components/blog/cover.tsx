@@ -1,7 +1,7 @@
 // Generated cover art for blog posts: category motif + accent glow + the post's cover label.
 // Deterministic per slug, so every post gets a distinct but on-brand image with no files to manage.
 
-import { BriefcaseBusiness, ChartColumn, GraduationCap, NotebookPen, Sparkles, type LucideIcon } from "lucide-react";
+import { Bot, BriefcaseBusiness, ChartColumn, GraduationCap, NotebookPen, type LucideIcon } from "lucide-react";
 import type { Accent } from "@/lib/types";
 import { getBlogCategory } from "@/lib/blog/categories";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,7 @@ export const blogCategoryIcons: Record<string, LucideIcon> = {
   "iitm-bs": GraduationCap,
   "exam-prep": NotebookPen,
   "data-skills": ChartColumn,
-  ai: Sparkles,
+  ai: Bot,
   careers: BriefcaseBusiness,
 };
 
@@ -267,7 +267,7 @@ export function BlogCover({
   const accent = cat?.accent ?? "yellow";
   const color = accentVar[accent];
   const seed = hash(slug);
-  const Icon = blogCategoryIcons[category] ?? Sparkles;
+  const Icon = blogCategoryIcons[category] ?? NotebookPen;
   const glowX = 55 + (seed % 30);
 
   if (image)

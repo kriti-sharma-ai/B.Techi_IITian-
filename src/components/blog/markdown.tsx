@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { AlertTriangle, Info, Lightbulb, OctagonAlert, Sparkles, type LucideIcon } from "lucide-react";
+import { AlertTriangle, BadgeAlert, Info, Lightbulb, OctagonAlert, type LucideIcon } from "lucide-react";
 import type { CalloutTone, MdBlock } from "@/lib/blog/markdown";
 import { hrefEnabled } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -71,7 +71,7 @@ export function Inline({ text }: { text: string }): ReactNode {
 const CALLOUTS: Record<CalloutTone, { label: string; icon: LucideIcon; className: string; tone: string }> = {
   note: { label: "Note", icon: Info, className: "border-blue/25 bg-blue/[0.05]", tone: "text-blue" },
   tip: { label: "Tip", icon: Lightbulb, className: "border-brand/60 bg-brand/15", tone: "text-fg" },
-  important: { label: "Important", icon: Sparkles, className: "border-purple/25 bg-purple/[0.05]", tone: "text-purple" },
+  important: { label: "Important", icon: BadgeAlert, className: "border-purple/25 bg-purple/[0.05]", tone: "text-purple" },
   warning: { label: "Watch out", icon: AlertTriangle, className: "border-amber/30 bg-amber/[0.06]", tone: "text-amber" },
   caution: { label: "Caution", icon: OctagonAlert, className: "border-red/25 bg-red/[0.05]", tone: "text-red" },
 };

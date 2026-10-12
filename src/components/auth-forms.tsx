@@ -360,7 +360,18 @@ export function LoginForm() {
 
   // Already signed in (a bookmark, or Back after logging in): skip the form.
   useEffect(() => {
-    void supabase.auth.getSession().then(({ data }) => data.session && router.replace(nextPath()));
+    void supabase.auth.getSession().then(async ({ data }) => {
+      if (data.session) {
+        const explicit = new URLSearchParams(window.location.search).get("next");
+        if (explicit) {
+          router.replace(safeNext(explicit));
+        } else {
+          const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.session.user.id).maybeSingle();
+          const isStaff = profile?.role && profile.role !== "student";
+          router.replace(isStaff ? "/admin" : "/dashboard");
+        }
+      }
+    });
   }, [router]);
 
   const submit = async (e: FormEvent) => {
@@ -385,7 +396,15 @@ export function LoginForm() {
     // Stays busy while the next page loads, so the form can't be sent twice.
     const name: string = data.user.user_metadata?.name ?? address.split("@")[0];
     toast(`Welcome back, ${name.split(" ")[0]}`);
-    router.push(nextPath());
+    
+    const explicit = new URLSearchParams(window.location.search).get("next");
+    if (explicit) {
+      router.push(safeNext(explicit));
+    } else {
+      const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.user.id).maybeSingle();
+      const isStaff = profile?.role && profile.role !== "student";
+      router.push(isStaff ? "/admin" : "/dashboard");
+    }
   };
 
   const resendConfirmation = async () => {

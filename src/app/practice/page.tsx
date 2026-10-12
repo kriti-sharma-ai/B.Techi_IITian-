@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, ArrowUp } from "lucide-react";
-import { EXAM_TONES, ExamTag } from "@/components/exam-tag";
+import { ExamTag } from "@/components/exam-tag";
 import { PracticeUnifiedSidebar } from "@/components/practice-unified-sidebar";
 import { PracticeFormatStudio } from "@/components/practice-format-studio";
 import { PracticeStats } from "@/components/practice-stats";
@@ -26,7 +26,6 @@ import {
 } from "@/lib/pyq-practice";
 import { isPyqLevel, type PyqLevel } from "@/lib/pyq-urls";
 import { getStudyScope, type StudyScope } from "@/lib/study-scope";
-import { cn } from "@/lib/utils";
 import { loadContent } from "@/lib/cms";
 
 export const metadata: Metadata = {
@@ -209,14 +208,12 @@ function PracticeModes({
         </aside>
 
         <div className="min-w-0 space-y-6">
-          <SelectionBar plan={plan} />
-          <CourseHeader plan={plan} />
-
           <PracticeFormatStudio
             plan={plan}
             courseSheets={courseSheets}
-            initialFormat={props.format === "paper" ? "paper" : "portal"}
+            initialFormat={props.format === "paper" ? "paper" : undefined}
             initialTab={props.tab}
+            header={<CourseHeader plan={plan} />}
           />
         </div>
       </div>
@@ -225,28 +222,6 @@ function PracticeModes({
 }
 
 
-
-/** Phones only: the chooser is above the content there, so this keeps the choice in view while scrolling. */
-function SelectionBar({ plan }: { plan: PracticePlan }) {
-  const { course, exam } = plan;
-  return (
-    <div
-      className={cn(
-        "sticky top-16 z-20 rounded-xl border bg-bg/90 px-4 py-2.5 shadow-sm backdrop-blur lg:hidden",
-        EXAM_TONES[exam.tone].border,
-      )}
-    >
-      <p className="flex items-center gap-2.5 text-sm">
-        <span className="hidden shrink-0 text-muted sm:inline">You&apos;re practising</span>
-        <ExamTag exam={exam} />
-        <span className="min-w-0 truncate font-semibold">{course.name}</span>
-        <a href="#choose" className="ml-auto inline-flex shrink-0 items-center gap-1 font-semibold text-muted hover:text-fg">
-          <ArrowUp className="size-3.5" aria-hidden /> Change
-        </a>
-      </p>
-    </div>
-  );
-}
 
 /** Compact minimalist course & exam header */
 function CourseHeader({ plan }: { plan: PracticePlan }) {
@@ -265,6 +240,10 @@ function CourseHeader({ plan }: { plan: PracticePlan }) {
         <span className="rounded-lg bg-surface-2 px-2.5 py-1 text-xs font-semibold text-muted tabular-nums">
           {papers.length} {papers.length === 1 ? "paper" : "papers"} · {plan.questions} Qs
         </span>
+        {/* Phones: the chooser sits above, so offer a jump back to it. */}
+        <a href="#choose" className="inline-flex items-center gap-1 text-xs font-semibold text-muted hover:text-fg lg:hidden">
+          <ArrowUp className="size-3.5" aria-hidden /> Change
+        </a>
       </div>
     </div>
   );

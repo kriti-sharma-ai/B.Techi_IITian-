@@ -395,6 +395,76 @@
   }
 }
 
+/* Print branding (components/print-frame.tsx): invisible on screen, repeated on every printed page. */
+.print-frame,
+.print-frame > tbody,
+.print-frame > tbody > tr,
+.print-frame > tbody > tr > td {
+  display: contents;
+}
+.print-frame > thead,
+.print-frame > tfoot {
+  display: none;
+}
+@media print {
+  .print-frame {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .print-frame > tbody {
+    display: table-row-group;
+  }
+  .print-frame > tbody > tr {
+    display: table-row;
+  }
+  .print-frame > tbody > tr > td {
+    display: table-cell;
+    padding: 0;
+  }
+  .print-frame > thead {
+    display: table-header-group;
+  }
+  .print-frame > tfoot {
+    display: table-footer-group;
+  }
+  .print-frame > thead td,
+  .print-frame > tfoot td {
+    padding: 0;
+  }
+  .print-brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #d1d5db;
+    color: #111827;
+    text-decoration: none;
+    font-size: 12px;
+  }
+  .print-brand-name {
+    font-weight: 800;
+  }
+  .print-brand-url {
+    margin-left: auto;
+    color: #4b5563;
+  }
+  .print-foot {
+    display: block;
+    margin-top: 10px;
+    padding-top: 6px;
+    border-top: 1px solid #d1d5db;
+    color: #4b5563;
+    text-align: center;
+    font-size: 11px;
+    text-decoration: none;
+  }
+  .print-foot b {
+    color: #111827;
+  }
+}
+
 /* ───────────── Blog articles (components/blog/markdown.tsx) ───────────── */
 /* In the components layer so Tailwind utilities on individual elements (my-8, not-prose…) win. */
 @layer components {
@@ -531,4 +601,15 @@
   .blog-figure svg .s-muted {
     stroke: var(--muted);
   }
+}
+
+/* Light mode: yellow text/icons vanish on white, so show them in plain black. */
+:root:not(.dark) :is(.text-brand, [class*="text-brand/"]) {
+  color: var(--ink);
+}
+:root:not(.dark) .fill-brand {
+  fill: var(--ink);
+}
+:root:not(.dark) .stroke-brand {
+  stroke: var(--ink);
 }

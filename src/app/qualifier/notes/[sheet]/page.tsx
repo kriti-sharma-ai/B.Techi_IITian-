@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Clock, ListChecks, MonitorCheck, Repeat, ScrollText, Sigma, Target } from "lucide-react";
+import { ArrowLeft, ArrowRight, MonitorCheck, ScrollText, Target } from "lucide-react";
 import { CheatReader, PrintButton, ReaderToc, ReaderToolbar, StudyCompanion, type TocItem } from "@/components/cheat-reader";
 import { CheatSectionCard, Rich, sectionViews } from "@/components/cheat-sheet";
 import { BookmarkButton, ShareButton } from "@/components/resource-actions";
-import { Badge, Breadcrumbs } from "@/components/ui";
+import { Breadcrumbs } from "@/components/ui";
 import { getSubject } from "@/lib/content";
 import { cheatSheetHref, cheatSheetStats, cheatSheets, getCheatSheet, sheetKind } from "@/lib/data/cheat-notes";
 import { practiceHref } from "@/lib/pyq-practice";
@@ -36,52 +36,35 @@ export default async function CheatSheetPage({ params }: PageProps<"/qualifier/n
     ...sheet.sections.map((s) => ({ id: s.id, title: s.title, week: s.week, hits: s.hits, views: sectionViews(s) })),
     { id: "last-minute", title: "Last-minute checklist" },
   ];
-  const facts = [
-    { icon: ListChecks, value: stats.sections, label: "topics" },
-    { icon: Sigma, value: stats.quick, label: `${sheetKind(sheet).replace(" ", "-")} lines` },
-    { icon: Repeat, value: stats.examples, label: "worked examples" },
-    { icon: Clock, value: stats.minutes, label: "min read" },
-  ];
 
   return (
     <CheatReader sheet={sheet.slug}>
       <div className="border-b border-border bg-surface">
-        <div className="mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-8 py-7 md:py-9">
+        <div className="mx-auto max-w-[1380px] px-4 py-4 sm:px-6 lg:px-8">
           <Breadcrumbs
+            className="mb-2"
             items={[
               { label: "Qualifier Pack", href: "/qualifier" },
-              { label: "Cheat notes", href: "/qualifier/notes" },
+              { label: "Cheat sheets", href: "/qualifier/notes" },
               { label: sheet.short },
             ]}
           />
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge tone="brand">Qualifier · Weeks 1–4</Badge>
-            <span className="font-mono text-xs text-muted">{subject.code}</span>
-          </div>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl text-fg">
-            {sheet.short} cheat notes <span className="text-muted">& {sheetKind(sheet)}</span>
-          </h1>
-          <p className="mt-2 max-w-2xl text-muted text-sm sm:text-base">{sheet.description}</p>
-          <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-3 sm:flex sm:flex-wrap sm:gap-x-8">
-            {facts.map((f) => (
-              <li key={f.label} className="flex items-center gap-2.5">
-                <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-surface-2 border border-border">
-                  <f.icon className="size-4" aria-hidden />
-                </span>
-                <span className="leading-tight">
-                  <span className="block font-bold tabular-nums">{f.value}</span>
-                  <span className="text-xs text-muted">{f.label}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-6 flex flex-wrap gap-2.5 print:hidden">
-            <BookmarkButton
-              withLabel
-              item={{ kind: "note", id: `cheat-${sheet.slug}`, title: `${sheet.short} cheat notes`, href, subtitle: "Qualifier cheat notes" }}
-            />
-            <ShareButton title={`${sheet.short} cheat notes`} path={href} />
-            <PrintButton />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="min-w-0">
+              <h1 className="text-xl font-bold tracking-tight text-fg sm:text-2xl">{subject.name.replace(/for Data Science\s*/i, "")}</h1>
+              <p className="mt-0.5 text-xs text-muted tabular-nums">
+                {subject.code && <span className="font-mono">{subject.code} · </span>}
+                {stats.sections} topics · {stats.minutes} min read
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 print:hidden">
+              <BookmarkButton
+                withLabel
+                item={{ kind: "note", id: `cheat-${sheet.slug}`, title: `${sheet.short} cheat notes`, href, subtitle: "Qualifier cheat notes" }}
+              />
+              <ShareButton title={`${sheet.short} cheat notes`} path={href} />
+              <PrintButton />
+            </div>
           </div>
         </div>
       </div>

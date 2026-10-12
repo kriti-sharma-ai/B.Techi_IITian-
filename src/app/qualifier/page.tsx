@@ -3,10 +3,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   BookOpen,
-  CheckCircle2,
-  FileText,
-  Layers,
-  ShieldCheck,
 } from "lucide-react";
 import { QualifierHistory } from "@/components/qualifier-attempts";
 import { QualifierExamList } from "@/components/qualifier-exam-list";
@@ -15,7 +11,7 @@ import { cheatSheetForSubject, cheatSheetHref } from "@/lib/data/cheat-notes";
 import { practiceHref } from "@/lib/pyq-practice";
 import { getPapers } from "@/lib/papers";
 import { getStudyScope } from "@/lib/study-scope";
-import { cn } from "@/lib/utils";
+import { buttonClass } from "@/components/ui";
 import {
   QUALIFIER_CUTOFF,
   QUALIFIER_SUBJECTS,
@@ -38,7 +34,6 @@ export default async function QualifierPage({ searchParams }: PageProps<"/qualif
   const [papers, scope] = await Promise.all([getPapers(), getStudyScope(sp)]);
   const { qualifierMocks, allQualifierPapers } = papers;
   const enrolledSlugs = scope.courses;
-  const enrolledQualifier = QUALIFIER_SUBJECTS.filter((slug) => enrolledSlugs.includes(slug));
 
   const sortedSubjects = [...QUALIFIER_SUBJECTS].sort((a, b) => {
     const aEnrolled = enrolledSlugs.includes(a);
@@ -56,125 +51,102 @@ export default async function QualifierPage({ searchParams }: PageProps<"/qualif
     totalM: mockMarks(mock),
   }));
 
+  const facts = [
+    { label: "Duration", value: "4 hours" },
+    { label: "Pass mark", value: `${QUALIFIER_CUTOFF.perSubject}% in each subject` },
+    { label: "Overall", value: `${QUALIFIER_CUTOFF.average}% average` },
+  ];
+
   return (
-    <div className="container-page py-5 sm:py-7 max-w-6xl space-y-6">
-      {/* ═══════════ BALANCED HEADER (SPACIOUS & CLEAN) ═══════════ */}
-      <header className="border-b border-border pb-4">
-        <div className="flex flex-wrap items-center gap-2.5">
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-fg">
-            Qualifier Exam Pack
-          </h1>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-2 px-3 py-1 text-xs font-semibold text-fg shadow-2xs">
-            <ShieldCheck className="size-3.5 text-fg" aria-hidden /> 4 Courses Combined · 4 Hours
-          </span>
+    <div className="container-page max-w-5xl space-y-10 py-6 sm:py-8">
+      {/* ═══════════ HEADER ═══════════ */}
+      <header className="space-y-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-fg sm:text-3xl">Qualifier Exam Pack</h1>
+          <p className="mt-1 text-sm text-muted">Maths I · Stats I · Computational Thinking · English I</p>
         </div>
-        <p className="text-xs sm:text-sm text-muted mt-1">
-          Mathematics I, Statistics I, Computational Thinking & English I
-        </p>
+        <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-border bg-border">
+          {facts.map((f) => (
+            <div key={f.label} className="bg-surface px-4 py-3">
+              <dt className="text-xs text-muted">{f.label}</dt>
+              <dd className="mt-0.5 text-sm font-semibold text-fg">{f.value}</dd>
+            </div>
+          ))}
+        </dl>
       </header>
 
-      {/* ═══════════ 2-COLUMN DASHBOARD (COMFORTABLE & AIRY) ═══════════ */}
-      <div className="grid gap-6 lg:grid-cols-2 items-start">
-        {/* Left Column: Full-Length Timed Papers */}
-        <section aria-labelledby="exams-heading">
-          <QualifierExamList items={examItems} />
-        </section>
-
-        {/* Right Column: 4 Foundation Subjects & Rules */}
-        <section aria-labelledby="subjects-heading" className="space-y-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <h2 id="subjects-heading" className="text-sm sm:text-[15px] font-bold text-fg tracking-tight">
-                Subjects & Cheat Sheets
-              </h2>
-              {enrolledQualifier.length > 0 && (
-                <span className="rounded-full bg-brand px-2.5 py-0.5 text-[10px] font-bold text-brand-ink shadow-2xs dark:bg-brand/20 dark:text-brand dark:border dark:border-brand/40">
-                  {enrolledQualifier.length} Enrolled
-                </span>
-              )}
-            </div>
-            <Link
-              href="/qualifier/notes"
-              className="text-xs font-medium text-muted hover:text-fg transition-colors inline-flex items-center gap-1"
-            >
-              All Cheat Notes <ArrowRight className="size-3" aria-hidden />
+      {/* ═══════════ STEP 1: SUBJECTS ═══════════ */}
+      <section aria-labelledby="subjects-heading" className="space-y-4">
+        <SectionTitle
+          id="subjects-heading"
+          step={1}
+          title="Prepare each subject"
+          action={
+            <Link href="/qualifier/notes" className="inline-flex items-center gap-1 text-xs font-semibold text-muted transition-colors hover:text-fg">
+              All cheat notes <ArrowRight className="size-3.5" aria-hidden />
             </Link>
-          </div>
+          }
+        />
+        <div className="grid gap-3 sm:grid-cols-2">
+          {sortedSubjects.map((slug) => {
+            const s = getSubject(slug)!;
+            const sheet = cheatSheetForSubject(slug);
+            const isEnrolled = enrolledSlugs.includes(slug);
+            const displayName = s.name.replace(/for Data Science\s*/i, "");
 
-          <div className="divide-y divide-border rounded-xl border border-border bg-surface overflow-hidden shadow-2xs">
-            {sortedSubjects.map((slug) => {
-              const s = getSubject(slug)!;
-              const sheet = cheatSheetForSubject(slug);
-              const isEnrolled = enrolledSlugs.includes(slug);
-              const displayName = s.name.replace(/for Data Science\s*/i, "");
-
-              return (
-                <div
-                  key={slug}
-                  className="flex items-center justify-between gap-3.5 px-4 py-3 sm:px-4.5 sm:py-3.5 transition-colors hover:bg-surface-2/30"
-                >
+            return (
+              <div key={slug} className="flex flex-col justify-between gap-4 rounded-xl border border-border bg-surface p-4 transition-colors hover:border-fg/25">
+                <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-semibold text-fg truncate">
-                        {displayName}
-                      </h3>
-                      {isEnrolled && (
-                        <span className="shrink-0 whitespace-nowrap rounded px-1.5 py-0.5 text-[10px] font-semibold leading-none border border-amber-300/80 bg-amber-100 text-amber-950 dark:border-brand/40 dark:bg-brand/15 dark:text-brand">
-                          My course
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-1.5 mt-1 text-xs text-muted">
-                      {s.code && <span className="font-mono font-medium">{s.code}</span>}
-                      <span>·</span>
-                      <span>Qualifier Foundation</span>
-                    </div>
+                    <h3 className="truncate text-sm font-semibold text-fg">{displayName}</h3>
+                    {s.code && <p className="mt-0.5 font-mono text-xs text-muted">{s.code}</p>}
                   </div>
-
-                  <div className="flex items-center gap-2 shrink-0">
-                    {sheet && (
-                      <Link
-                        href={cheatSheetHref(sheet)}
-                        className="inline-flex items-center gap-1.5 rounded-md border border-border/80 bg-surface-2/60 px-2.5 py-1 text-xs font-medium text-fg hover:bg-surface-2 hover:border-fg/30 transition-colors"
-                      >
-                        <BookOpen className="size-3.5 text-muted" aria-hidden /> Cheat Sheet
-                      </Link>
-                    )}
-                    <Link
-                      href={practiceHref(slug, "qualifier")}
-                      className="inline-flex items-center gap-1 rounded-md bg-fg text-bg px-3 py-1 text-xs font-semibold hover:opacity-90 transition-opacity"
-                    >
-                      Practice <ArrowRight className="size-3" aria-hidden />
-                    </Link>
-                  </div>
+                  {isEnrolled && (
+                    <span className="shrink-0 rounded-full border border-amber-300/80 bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-950 dark:border-brand/40 dark:bg-brand/15 dark:text-brand">
+                      My course
+                    </span>
+                  )}
                 </div>
-              );
-            })}
-          </div>
-
-          {/* Official Pass Criteria Strip */}
-          <div className="rounded-xl border border-border bg-surface-2/30 p-3.5 sm:p-4 text-xs">
-            <div className="flex items-start gap-2.5">
-              <ShieldCheck className="size-4.5 text-fg shrink-0 mt-0.5" aria-hidden />
-              <div className="space-y-0.5 min-w-0">
-                <span className="font-semibold text-fg text-xs sm:text-sm">Passing Rule</span>
-                <p className="text-xs text-muted leading-relaxed mt-0.5">
-                  Min <strong>{QUALIFIER_CUTOFF.perSubject}% in each subject</strong> and <strong>{QUALIFIER_CUTOFF.average}% overall aggregate</strong> across all 4 courses to qualify.
-                </p>
+                <div className="flex gap-2">
+                  {sheet && (
+                    <Link href={cheatSheetHref(sheet)} className={buttonClass("secondary", "sm", "h-8 flex-1 justify-center px-3 text-xs font-semibold")}>
+                      <BookOpen className="size-3.5" aria-hidden /> Cheat sheet
+                    </Link>
+                  )}
+                  <Link href={practiceHref(slug, "qualifier")} className={buttonClass("primary", "sm", "h-8 flex-1 justify-center px-3 text-xs font-semibold")}>
+                    Practice <ArrowRight className="size-3.5" aria-hidden />
+                  </Link>
+                </div>
               </div>
-            </div>
-          </div>
-        </section>
-      </div>
+            );
+          })}
+        </div>
+      </section>
 
-      {/* Attempt History (Only shown when user has saved attempts) */}
+      {/* ═══════════ STEP 2: FULL PAPERS ═══════════ */}
+      <section aria-labelledby="exams-heading" className="space-y-4">
+        <SectionTitle
+          id="exams-heading"
+          step={2}
+          title="Take a full timed paper"
+        />
+        <QualifierExamList items={examItems} />
+      </section>
       <QualifierHistory answerKeys={allQualifierPapers.map(answerKey)} />
+    </div>
+  );
+}
 
-      {/* Subtle Footnote */}
-      <p className="flex items-center gap-2 text-xs text-muted pt-2 border-t border-border/50">
-        <CheckCircle2 className="size-3.5 text-muted shrink-0" aria-hidden />
-        Official IIT Madras BS past qualifier exam papers with automated pass/fail grading.
-      </p>
+function SectionTitle({ id, step, title, action }: { id: string; step: number; title: string; action?: React.ReactNode }) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
+      <div className="flex items-center gap-3">
+        <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-fg text-xs font-bold text-bg">{step}</span>
+        <div>
+          <h2 id={id} className="text-base font-bold tracking-tight text-fg">{title}</h2>
+        </div>
+      </div>
+      {action}
     </div>
   );
 }

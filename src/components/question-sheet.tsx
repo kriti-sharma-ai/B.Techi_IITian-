@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { Repeat } from "lucide-react";
+import { Keyboard, Repeat } from "lucide-react";
 import { EXAM_BADGE } from "./pyq-papers";
 import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
 import { Badge } from "./ui";
@@ -373,7 +373,7 @@ export function QuestionPalette({ questions }: { questions: SheetQuestion[] }) {
       {/* Keyboard Shortcuts Helper */}
       <div className="mt-3 rounded-xl border border-border/70 bg-surface-2/40 p-2.5 text-[11px] text-muted space-y-1.5">
         <div className="flex items-center gap-1.5 font-semibold text-fg">
-          <span>⌨️</span> <span>Shortcuts</span>
+          <Keyboard className="size-3.5 shrink-0" aria-hidden /> <span>Shortcuts</span>
         </div>
         <div className="flex items-center justify-between text-[10px]">
           <span>Next / Prev Q</span>

@@ -1,3 +1,4 @@
+import { PrintFrame } from "@/components/print-frame";
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
@@ -50,7 +51,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <ContentSnapshot content={content}>
           <Providers>
             <Navbar />
-            <main id="main">{children}</main>
+            <main id="main">
+              <PrintFrame>{children}</PrintFrame>
+            </main>
             <Footer />
             <BottomNav />
             <ScrollTop />

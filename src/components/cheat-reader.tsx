@@ -6,7 +6,7 @@
 // (see `.cheat-reader` in globals.css), so switching never re-renders the notes.
 
 import { createContext, use, useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
-import { Check, Flame, ListTree, Printer, Type, X } from "lucide-react";
+import { Check, FileText, Flame, Keyboard, ListTree, Printer, Rocket, Target, TriangleAlert, Type, X, Zap } from "lucide-react";
 import type { CheatView } from "@/lib/data/cheat-notes";
 import type { CheatSection } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -469,7 +469,7 @@ export function StudyCompanion({
               view === "notes" ? "bg-surface-2 font-bold text-fg border border-border" : "text-muted hover:bg-surface-2/60 hover:text-fg",
             )}
           >
-            <span>📝 Complete Notes</span>
+            <span className="flex items-center gap-2"><FileText className="size-3.5 shrink-0" aria-hidden /> Complete Notes</span>
             {view === "notes" && <span className="size-1.5 rounded-full bg-brand" />}
           </button>
           <button
@@ -480,7 +480,7 @@ export function StudyCompanion({
               view === "quick" ? "bg-surface-2 font-bold text-fg border border-border" : "text-muted hover:bg-surface-2/60 hover:text-fg",
             )}
           >
-            <span>⚡ {quickLabel}</span>
+            <span className="flex items-center gap-2"><Zap className="size-3.5 shrink-0" aria-hidden /> {quickLabel}</span>
             {view === "quick" && <span className="size-1.5 rounded-full bg-brand" />}
           </button>
           <button
@@ -491,7 +491,7 @@ export function StudyCompanion({
               view === "traps" ? "bg-surface-2 font-bold text-fg border border-border" : "text-muted hover:bg-surface-2/60 hover:text-fg",
             )}
           >
-            <span>⚠️ Traps & Common Errors</span>
+            <span className="flex items-center gap-2"><TriangleAlert className="size-3.5 shrink-0" aria-hidden /> Traps & Common Errors</span>
             {view === "traps" && <span className="size-1.5 rounded-full bg-brand" />}
           </button>
         </div>
@@ -539,11 +539,11 @@ export function StudyCompanion({
       <div className="rounded-2xl border border-border bg-surface p-4 shadow-xs text-xs space-y-2">
         <p className="eyebrow mb-1">Quick Shortcuts</p>
         <a href="#last-minute" className="flex items-center justify-between rounded-lg px-2.5 py-1.5 text-muted hover:bg-surface-2 hover:text-fg transition-colors">
-          <span>🎯 Last-minute checklist</span>
+          <span className="flex items-center gap-2"><Target className="size-3.5 shrink-0" aria-hidden /> Last-minute checklist</span>
           <span>↓</span>
         </a>
         <a href="#test-yourself" className="flex items-center justify-between rounded-lg px-2.5 py-1.5 text-muted hover:bg-surface-2 hover:text-fg transition-colors">
-          <span>🚀 Practice & Mocks</span>
+          <span className="flex items-center gap-2"><Rocket className="size-3.5 shrink-0" aria-hidden /> Practice & Mocks</span>
           <span>↓</span>
         </a>
       </div>
@@ -551,7 +551,7 @@ export function StudyCompanion({
       {/* Power-User Keyboard Shortcuts Pill */}
       <div className="rounded-2xl border border-border/80 bg-surface-2/40 p-3.5 shadow-2xs text-[11px] text-muted space-y-2">
         <div className="flex items-center gap-1.5 font-semibold text-fg">
-          <span>⌨️</span> <span>Keyboard Shortcuts</span>
+          <Keyboard className="size-3.5 shrink-0" aria-hidden /> <span>Keyboard Shortcuts</span>
         </div>
         <div className="flex items-center justify-between text-[11px]">
           <span>Next / Prev topic</span>

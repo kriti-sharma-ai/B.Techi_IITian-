@@ -20,11 +20,11 @@ import {
   ScrollText,
   Search,
   Shield,
-  Sigma,
   StickyNote,
   User,
   GraduationCap,
   type LucideIcon,
+  Star,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { skillIcons } from "./skill-icons";
@@ -50,8 +50,7 @@ const primaryLinks: NavLink[] = [
 ].filter((l) => hrefEnabled(l.href));
 
 const resources: NavItem[] = ([
-  { href: "/qualifier/notes", label: "Cheat sheets", description: "Maths I, Stats I, CT and English I", icon: StickyNote },
-  { href: "/qualifier/notes#formula-sheets", label: "Formula sheets", description: "Every formula, on one page", icon: Sigma },
+  { href: "/qualifier/notes", label: "Cheat sheets", description: "Formulas, rules and traps for the qualifier", icon: StickyNote },
   { href: "/notes", label: "Notes", description: "Lecture notes and revision sheets", icon: FileText },
   { href: "/videos", label: "Videos", description: "Topic-mapped video lessons", icon: PlayCircle },
   { href: "/books", label: "Books", description: "Recommended texts", icon: BookOpen },
@@ -256,7 +255,7 @@ function SkillsMenu({ pathname }: { pathname: string }) {
                         <span className="min-w-0">
                           <span className="block truncate text-sm font-medium">{c.title.split(":")[0]}</span>
                           <span className="block text-xs text-muted">
-                            {c.rating.toFixed(1)} ★ · {c.level} · Free
+                            <span className="inline-flex items-center gap-0.5">{c.rating.toFixed(1)} <Star className="size-3 fill-current" aria-hidden /></span> · {c.level} · Free
                           </span>
                         </span>
                       </Link>

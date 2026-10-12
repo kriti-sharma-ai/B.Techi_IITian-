@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, ShieldCheck, Trophy, Sparkles } from "lucide-react";
 import { MockAction } from "./qualifier-attempts";
 import type { QualifierMock } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -28,17 +27,14 @@ export function QualifierExamList({ items }: { items: QualifierCardItem[] }) {
 
   return (
     <div className="space-y-3">
-      {/* Sleek inline header with tabs */}
-      <div className="flex items-center justify-between gap-2">
-        <h2 className="text-sm sm:text-[15px] font-bold text-fg tracking-tight">
-          Full-Length Timed Papers
-        </h2>
+      {/* Filter: official past papers or practice mocks */}
+      <div className="flex h-8 items-center">
         <div className="flex items-center gap-1.5 text-xs font-medium">
           <button
             type="button"
             onClick={() => setFilter("all")}
             className={cn(
-              "rounded-lg px-2.5 py-1 transition-colors cursor-pointer",
+              "inline-flex h-7 items-center rounded-lg px-2.5 transition-colors cursor-pointer",
               filter === "all"
                 ? "bg-fg text-bg font-semibold shadow-2xs"
                 : "text-muted hover:text-fg hover:bg-surface-2"
@@ -50,7 +46,7 @@ export function QualifierExamList({ items }: { items: QualifierCardItem[] }) {
             type="button"
             onClick={() => setFilter("pyq")}
             className={cn(
-              "rounded-lg px-2.5 py-1 transition-colors cursor-pointer",
+              "inline-flex h-7 items-center rounded-lg px-2.5 transition-colors cursor-pointer",
               filter === "pyq"
                 ? "bg-fg text-bg font-semibold shadow-2xs"
                 : "text-muted hover:text-fg hover:bg-surface-2"
@@ -62,7 +58,7 @@ export function QualifierExamList({ items }: { items: QualifierCardItem[] }) {
             type="button"
             onClick={() => setFilter("mock")}
             className={cn(
-              "rounded-lg px-2.5 py-1 transition-colors cursor-pointer",
+              "inline-flex h-7 items-center rounded-lg px-2.5 transition-colors cursor-pointer",
               filter === "mock"
                 ? "bg-fg text-bg font-semibold shadow-2xs"
                 : "text-muted hover:text-fg hover:bg-surface-2"
@@ -83,7 +79,7 @@ export function QualifierExamList({ items }: { items: QualifierCardItem[] }) {
           return (
             <div
               key={mock.slug}
-              className="flex items-center justify-between gap-3.5 px-4 py-3 sm:px-4.5 sm:py-3.5 transition-colors hover:bg-surface-2/30"
+              className="flex min-h-16 items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-surface-2/30"
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
@@ -102,7 +98,7 @@ export function QualifierExamList({ items }: { items: QualifierCardItem[] }) {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 mt-1 text-xs text-muted tabular-nums">
+                <div className="flex items-center gap-1.5 mt-1 text-xs text-muted tabular-nums">
                   <span>{hours}h</span>
                   <span>·</span>
                   <span>{totalQ} Qs</span>

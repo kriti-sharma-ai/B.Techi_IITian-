@@ -27,8 +27,9 @@ import { getStudyScope, type StudyScope } from "@/lib/study-scope";
 import { loadContent } from "@/lib/cms";
 
 export const metadata: Metadata = pageMetadata({
-  title: "IIT Madras BS PYQ Practice with Official Answer Keys",
-  description: "Practise real IITM BS previous-year questions by level, course and exam, with the official answer keys: quick sets, drills, full tests and timed mock exams.",
+  title: "IITM BS PYQ Practice: Quiz 1, Quiz 2 & End Term Questions",
+  description:
+    "Practise real IITM BS previous-year questions by level, course and exam, with the official answer keys: quick sets, drills, full tests and timed mock exams.",
   path: "/practice",
 });
 

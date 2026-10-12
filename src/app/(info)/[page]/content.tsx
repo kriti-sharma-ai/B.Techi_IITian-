@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { CONTACT_EMAIL, SITE_URL } from "@/lib/utils";
+import { CONTACT_EMAIL, SITE_URL, YOUTUBE_URL } from "@/lib/utils";
 
 // Copy for the footer pages. The legal pages describe what the code actually
 // does (lib/store.ts, lib/supabase/sync.ts, supabase/schema.sql); update them,
@@ -30,8 +30,9 @@ export const PAGES: Record<string, InfoPage> = {
     body: (
       <>
         <p>
-          BTechi started as the BTechi IITian YouTube channel: AI, automation, tech and education explained simply. This
-          platform is the next step, starting with the IIT Madras BS in Management and Data Science.
+          BTechi started as the <a href={YOUTUBE_URL} target="_blank" rel="noopener me">BTechi IITian YouTube channel</a>: AI,
+          automation, tech and education explained simply. This platform is the next step, starting with the IIT Madras BS
+          in Data Science and Applications and the BS in Management and Data Science.
         </p>
         <p>
           Instead of hunting through WhatsApp groups, Telegram channels and random Drive links, students get one
@@ -113,7 +114,10 @@ export const PAGES: Record<string, InfoPage> = {
           never ask for your password.
         </p>
         <h2>YouTube</h2>
-        <p>You can also reach us through comments and community posts on the BTechi IITian YouTube channel.</p>
+        <p>
+          You can also reach us through comments and community posts on the{" "}
+          <a href={YOUTUBE_URL} target="_blank" rel="noopener me">BTechi IITian YouTube channel</a>.
+        </p>
       </>
     ),
   },

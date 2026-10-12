@@ -22,8 +22,9 @@ import {
 } from "@/lib/qualifier";
 
 export const metadata: Metadata = pageMetadata({
-  title: "IIT Madras BS Qualifier Mock Tests & Previous Papers",
-  description: "Prepare for the IIT Madras BS qualifier exam: official full-length qualifier papers for Maths I, Stats I, Computational Thinking and English I on a timed screen, with the cutoff check.",
+  title: "IITM BS Qualifier Mock Test & PYQs: Maths 1, Stats 1, CT, English 1",
+  description:
+    "Free IIT Madras BS qualifier mock tests: real previous-year qualifier papers for Maths 1, Stats 1, Computational Thinking and English 1, timed like the real exam, with a cutoff check.",
   path: "/qualifier",
 });
 

@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SquarePlay } from "lucide-react";
 import { hrefEnabled } from "@/lib/site";
+import { YOUTUBE_URL } from "@/lib/utils";
 import { Logo } from "./logo";
 import { FooterWordmark } from "./footer-wordmark";
 
@@ -56,6 +58,15 @@ export function Footer() {
             A structured academic platform where students learn, practise and prepare.
           </p>
           <p className="mt-5 inline-block rounded-full bg-brand px-3 py-1 text-xs font-semibold tracking-wide text-brand-ink dark:border dark:border-brand/40 dark:bg-brand/10 dark:text-brand">AI • Automation • Tech • Education</p>
+          <a
+            href={YOUTUBE_URL}
+            target="_blank"
+            rel="noopener me"
+            className="mt-4 flex w-fit items-center gap-2 text-[15px] text-fg/80 transition-colors hover:text-fg dark:hover:text-brand"
+          >
+            <SquarePlay className="size-4" aria-hidden />
+            BTechi IITian on YouTube
+          </a>
         </div>
         {columns.map((col) => (
           <div key={col.title}>

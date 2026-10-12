@@ -28,6 +28,8 @@ export type BlogPost = {
   highlights: string[];
   featured: boolean;
   author: string;
+  /** The post body as written, for /llms-full.txt. */
+  markdown: string;
   blocks: MdBlock[];
   words: number;
   minutes: number;
@@ -85,6 +87,7 @@ function readPost(file: string): BlogPost {
     highlights: Array.isArray(data.highlights) ? data.highlights : [],
     featured: data.featured === true,
     author: str("author", "BTechi Team"),
+    markdown: body.trim(),
     blocks,
     words,
     minutes: Math.max(1, Math.round(words / 230)),

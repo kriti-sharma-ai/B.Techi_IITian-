@@ -1,35 +1,33 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Award, Layers, PenLine, Sigma, type LucideIcon } from "lucide-react";
+import { ArrowRight, Award, ChevronDown, Layers, PenLine, Star, type LucideIcon } from "lucide-react";
 import { ExamShowcase } from "@/components/exam-showcase";
 import { MathBackground } from "@/components/math-background";
 import { ScrollPop } from "@/components/scroll-pop";
 import { ReviewsSection } from "@/components/reviews-section";
 import { ButtonLink } from "@/components/ui";
+import { REVIEW_SUMMARY } from "@/lib/data/reviews";
 import { getDemoExam } from "@/lib/demo-exam";
-import { getPyqIndex } from "@/lib/pyq-index";
-import { pageMetadata } from "@/lib/seo";
-import { SITE_URL } from "@/lib/utils";
+import { PYQ_LEVELS, getPyqIndex } from "@/lib/pyq-index";
+import { pyqLevelHref } from "@/lib/pyq-urls";
+import { HOME_FAQ, SITE_DESCRIPTION, pageMetadata } from "@/lib/seo";
 
 // Paper counts come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
 export const revalidate = 300;
 
-const TITLE = "BTechi: IIT Madras BS PYQs, Notes & Mock Exams";
+// Matches the root layout's default title; Organization and WebSite JSON-LD come from the layout.
+const TITLE = "BTechi: IIT Madras BS PYQs, Qualifier Mock Tests & Exam Portal";
 export const metadata: Metadata = {
-  ...pageMetadata({
-    title: TITLE,
-    description:
-      "Real IIT Madras BS previous year papers in a timed exam portal, plus week-wise notes, videos, cheat sheets and qualifier mocks for every Foundation, Diploma and Degree course.",
-    path: "/",
-  }),
+  ...pageMetadata({ title: TITLE, description: SITE_DESCRIPTION, path: "/" }),
   title: { absolute: TITLE },
 };
 
-// Organization and WebSite tell Google the site's name and logo for the search result.
-const siteLd = [
-  { "@context": "https://schema.org", "@type": "Organization", name: "BTechi", url: SITE_URL, logo: `${SITE_URL}/logo-512.png` },
-  { "@context": "https://schema.org", "@type": "WebSite", name: "BTechi", url: SITE_URL },
-];
+// Same questions and answers as the FAQ rendered below, for Google and AI answer engines.
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: HOME_FAQ.map(({ q, a }) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+};
 
 const features: { icon: LucideIcon; title: string; text: string; href: string; cta: string }[] = [
   {
@@ -56,11 +54,10 @@ const features: { icon: LucideIcon; title: string; text: string; href: string; c
 ];
 
 export default async function HomePage() {
-  const [{ pyqTotals }, demo] = await Promise.all([getPyqIndex(), getDemoExam()]);
+  const [{ pyqCourses, pyqTotals }, demo] = await Promise.all([getPyqIndex(), getDemoExam()]);
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }} />
       {/* ───────── Hero: text only ───────── */}
       {/* Pulled up under the sticky navbar, which is see-through at the top. */}
       <section className="relative isolate -mt-16 flex min-h-[min(100svh,56rem)] items-center overflow-hidden pt-16">
@@ -90,7 +87,9 @@ export default async function HomePage() {
               before exam day.
             </span>
           </h1>
-          <p className="mt-[clamp(1rem,3svh,1.5rem)] max-w-2xl text-balance text-[clamp(1rem,min(1.6vw,2.4svh),1.25rem)] text-muted">Real IITM BS previous-year papers, in an exam portal that works like the real one.</p>
+          <p className="mt-[clamp(1rem,3svh,1.5rem)] max-w-2xl text-balance text-[clamp(1rem,min(1.6vw,2.4svh),1.25rem)] text-muted">
+            Real IIT Madras BS previous-year papers for Data Science and Applications and Management and Data Science, in an exam portal that works like the real one.
+          </p>
           <div className="mt-[clamp(1.25rem,4svh,2rem)] flex flex-wrap items-center justify-center gap-3">
             <ButtonLink href="/exam" size="lg">
               Start a mock exam <ArrowRight className="size-4" aria-hidden />
@@ -99,7 +98,12 @@ export default async function HomePage() {
               Practise PYQs
             </ButtonLink>
           </div>
-          <p className="mt-[clamp(1rem,3svh,1.5rem)] text-sm text-muted">
+          <p className="mt-[clamp(1rem,3svh,1.5rem)] flex flex-wrap items-center justify-center gap-x-1.5 text-sm text-muted">
+            <span className="inline-flex items-center gap-1 font-semibold text-fg">
+              <Star className="size-3.5 fill-amber-400 text-amber-400" aria-hidden />
+              Rated {REVIEW_SUMMARY.average.toFixed(1)}/5 by students
+            </span>
+            <span aria-hidden>·</span>
             {pyqTotals.papers.toLocaleString("en-IN")} papers · {pyqTotals.questions.toLocaleString("en-IN")} questions · official answer keys
           </p>
         </div>
@@ -162,6 +166,56 @@ export default async function HomePage() {
 
       {/* ───────── Rolling Unstructured Reviews ───────── */}
       <ReviewsSection />
+
+      {/* ───────── Courses covered: both programmes, linked to each course's PYQs ───────── */}
+      <section className="container-page border-t border-border/50 py-16 md:py-24">
+        <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">PYQs and mock tests for every IIT Madras BS level</h2>
+        <p className="mt-2 max-w-3xl text-muted">
+          For the IIT Madras BS in Data Science and Applications and the BS in Management and Data Science: Qualifier, Quiz 1, Quiz 2 and End Term papers,
+          from Foundation to Degree level.
+        </p>
+        <div className="mt-8 grid gap-8 md:grid-cols-3">
+          {PYQ_LEVELS.map((level) => {
+            const courses = pyqCourses.filter((c) => c.level === level.slug && c.papers.length > 0);
+            if (!courses.length) return null;
+            return (
+              <div key={level.slug}>
+                <h3 className="font-bold">
+                  <Link href={pyqLevelHref(level.slug)} className="hover:underline">
+                    {level.name} PYQs
+                  </Link>
+                </h3>
+                <ul className="mt-3 space-y-1.5 text-sm">
+                  {courses.map((c) => (
+                    <li key={c.slug}>
+                      <Link href={c.href} className="text-muted hover:text-fg hover:underline">
+                        {c.name} previous year papers
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ───────── FAQ: answers for search and AI assistants, mirrored in FAQPage JSON-LD ───────── */}
+      <section className="container-page pb-16 md:pb-24">
+        <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">IIT Madras BS prep: frequently asked questions</h2>
+        <div className="mt-6 divide-y divide-border rounded-2xl border border-border/80 bg-surface/60">
+          {HOME_FAQ.map(({ q, a }) => (
+            <details key={q} className="group px-5 py-4">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">
+                <h3>{q}</h3>
+                <ChevronDown className="size-4 shrink-0 text-muted transition-transform group-open:rotate-180" aria-hidden />
+              </summary>
+              <p className="mt-2 text-muted">{a}</p>
+            </details>
+          ))}
+        </div>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd).replace(/</g, "\\u003c") }} />
+      </section>
     </>
   );
 }

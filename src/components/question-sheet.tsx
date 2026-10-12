@@ -93,8 +93,8 @@ export function SheetPaper({ sheet }: { sheet: QuestionSheet }) {
           )}
         </div>
 
-        {/* Paper Metadata Bar */}
-        <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4 rounded-xl border border-border bg-surface-2/60 p-3 text-xs">
+        {/* Paper metadata: the page header shows this on screen, so only print it. */}
+        <div className="mt-5 hidden print:grid grid-cols-2 gap-2 sm:grid-cols-4 rounded-xl border border-border bg-surface-2/60 p-3 text-xs">
           <div>
             <span className="block text-muted">Total Questions</span>
             <span className="text-sm font-bold text-fg tabular-nums">{sheet.questions} Questions</span>
@@ -242,9 +242,9 @@ function SheetItem({ q, showSource, passageRange, showReference }: { q: SheetQue
               ))}
             </ol>
           ) : (
-            <div className="mt-5 flex items-center gap-3 rounded-xl border border-dashed border-border bg-surface-2/30 p-3 text-sm text-muted">
-              <span className="font-semibold text-fg">Candidate Answer:</span>
-              <span className="flex-1 font-mono text-xs text-muted/60">[ Enter solution on scratchpad ]</span>
+            <div className="mt-5 flex items-end gap-3 text-sm">
+              <span className="font-semibold text-fg">Your answer:</span>
+              <span className="h-5 w-40 border-b border-dashed border-muted/60" aria-hidden />
             </div>
           )}
         </div>

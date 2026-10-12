@@ -9,11 +9,11 @@ export function PrintSheetButton({ className }: { className?: string }) {
     <button
       type="button"
       onClick={() => window.print()}
-      className={cn(buttonClass("secondary"), className)}
+      className={cn(buttonClass("secondary", "sm"), className)}
       title="Print this question sheet or save as PDF (Ctrl+P / Cmd+P)"
     >
-      <Printer className="size-4" aria-hidden />
-      <span>Print / Save as PDF</span>
+      <Printer className="size-3.5" aria-hidden />
+      <span>Save PDF</span>
     </button>
   );
 }

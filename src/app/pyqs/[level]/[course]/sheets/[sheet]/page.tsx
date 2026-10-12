@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, BookOpenCheck, Clock, FileText, KeyRound, Layers, ListChecks, MonitorCheck, Repeat } from "lucide-react";
-import { EXAM_BADGE } from "@/components/pyq-papers";
+import { ArrowLeft, ArrowRight, KeyRound, MonitorCheck } from "lucide-react";
 import { PrintSheetButton } from "@/components/print-sheet-button";
 import { QuestionPalette, SheetPaper } from "@/components/question-sheet";
-import { Badge, Breadcrumbs, buttonClass } from "@/components/ui";
-import { PYQ_LEVELS } from "@/lib/pyq-index";
-import { getQuestionSheets, type QuestionSheet, type SheetKind } from "@/lib/pyq-sheets";
-import { PYQ_SHEETS_HREF, pyqSheetsHref } from "@/lib/pyq-urls";
+import { Breadcrumbs, buttonClass } from "@/components/ui";
+import { getQuestionSheets, type QuestionSheet } from "@/lib/pyq-sheets";
+import { pyqSheetsHref } from "@/lib/pyq-urls";
 
 // Sheets render on first visit, then are cached like the other PYQ pages.
 export const dynamicParams = true;
@@ -22,8 +20,6 @@ async function load(params: Promise<{ level: string; course: string; sheet: stri
   const s = (await getQuestionSheets()).getSheet(course, sheet);
   return s && s.course.level === level ? s : undefined;
 }
-
-const KIND_LABEL: Record<SheetKind, string> = { paper: "Past paper", year: "Year wise", topic: "Topic wise", repeated: "Most repeated" };
 
 const metaTitle = (s: QuestionSheet) =>
   ({
@@ -47,68 +43,41 @@ export default async function SheetPage({ params }: PageProps<"/pyqs/[level]/[co
   const s = await load(params);
   if (!s) notFound();
   const c = s.course;
-  const level = PYQ_LEVELS.find((l) => l.slug === c.level)!;
   const sheetsHref = pyqSheetsHref(c.slug);
-  const exam = s.kind === "paper" ? s.groups[0].exam : undefined;
   const allQuestions = s.groups.flatMap((g) => g.questions);
   const facts = [
-    { icon: ListChecks, value: s.questions, label: "questions" },
-    { icon: BookOpenCheck, value: s.marks, label: "marks" },
-    s.durationMin ? { icon: Clock, value: `${s.durationMin} min`, label: "time" } : { icon: FileText, value: s.papers, label: s.papers === 1 ? "paper" : "papers" },
-    ...(s.kind === "repeated" ? [{ icon: Repeat, value: s.groups.length, label: "question types" }] : []),
+    `${s.questions} questions`,
+    `${s.marks} marks`,
+    s.durationMin ? `${s.durationMin} min` : `${s.papers} ${s.papers === 1 ? "paper" : "papers"}`,
+    ...(s.kind === "repeated" ? [`${s.groups.length} question types`] : []),
   ];
 
   return (
     <>
       <div className="border-b border-border bg-surface">
-        <div className="mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-8 py-7 md:py-9">
-          <Breadcrumbs
-            items={[
-              { label: "PYQs", href: "/pyqs" },
-              { label: "Question sheets", href: PYQ_SHEETS_HREF },
-              { label: level.short, href: `${PYQ_SHEETS_HREF}#${level.slug}` },
-              { label: c.short, href: sheetsHref },
-              { label: s.title },
-            ]}
-          />
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge tone="brand">{KIND_LABEL[s.kind]}</Badge>
-            {exam && <Badge tone={EXAM_BADGE[exam].tone}>{EXAM_BADGE[exam].label}</Badge>}
-            <span className="text-xs text-muted">
-              {c.code && <span className="font-mono">{c.code} · </span>}
-              {c.name}
-            </span>
-          </div>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl text-fg">
-            {c.short} <span className="text-muted">·</span> {s.title}
-          </h1>
-          <p className="mt-2 max-w-2xl text-muted text-sm sm:text-base">{s.description}</p>
-          <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 sm:flex sm:flex-wrap sm:gap-x-8">
-            {facts.map((f) => (
-              <li key={f.label} className="flex items-center gap-2.5">
-                <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-surface-2 border border-border">
-                  <f.icon className="size-4" aria-hidden />
-                </span>
-                <span className="leading-tight">
-                  <span className="block font-bold tabular-nums">{f.value}</span>
-                  <span className="text-xs text-muted">{f.label}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-6 flex flex-wrap gap-2.5">
-            <a href="#answer-key" className={buttonClass("secondary")}>
-              <KeyRound className="size-4" aria-hidden /> Official Answer Key
-            </a>
-            <PrintSheetButton />
-            {s.portalHref && (
-              <Link href={s.portalHref} className={buttonClass("secondary")}>
-                <MonitorCheck className="size-4" aria-hidden /> Sit in Exam Portal
-              </Link>
-            )}
-            <Link href={sheetsHref} className={buttonClass("ghost")}>
-              <Layers className="size-4" aria-hidden /> All {c.short} Sheets
-            </Link>
+        <div className="mx-auto max-w-[1380px] px-4 py-4 sm:px-6 lg:px-8">
+          <Breadcrumbs className="mb-2" items={[{ label: "PYQs", href: "/pyqs" }, { label: c.short, href: sheetsHref }, { label: s.title }]} />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="min-w-0">
+              <h1 className="text-xl font-bold tracking-tight text-fg sm:text-2xl">
+                {c.short} <span className="text-muted">·</span> {s.title}
+              </h1>
+              <p className="mt-0.5 text-xs text-muted tabular-nums">
+                {c.code && <span className="font-mono">{c.code} · </span>}
+                {facts.join(" · ")}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 print:hidden">
+              <a href="#answer-key" className={buttonClass("secondary", "sm")}>
+                <KeyRound className="size-3.5" aria-hidden /> Answer key
+              </a>
+              <PrintSheetButton />
+              {s.portalHref && (
+                <Link href={s.portalHref} className={buttonClass("primary", "sm")}>
+                  <MonitorCheck className="size-3.5" aria-hidden /> Take as mock
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -117,9 +86,9 @@ export default async function SheetPage({ params }: PageProps<"/pyqs/[level]/[co
         <div className="grid gap-8 lg:grid-cols-[250px_minmax(0,1fr)] xl:grid-cols-[250px_minmax(0,1fr)_260px] items-start">
           {/* Left Column: Outline / Sections */}
           <aside aria-label="On this sheet" className="hidden lg:block sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1">
-            <div className="rounded-2xl border border-border bg-surface p-4 shadow-xs">
-              <p className="eyebrow mb-2">Paper Outline</p>
-              {s.groups.length > 1 ? (
+            {s.groups.length > 1 && (
+              <div className="rounded-2xl border border-border bg-surface p-4 shadow-xs">
+                <p className="eyebrow mb-2">Sections</p>
                 <ol className="space-y-1 text-sm">
                   {s.groups.map((g) => (
                     <li key={g.id}>
@@ -130,21 +99,17 @@ export default async function SheetPage({ params }: PageProps<"/pyqs/[level]/[co
                     </li>
                   ))}
                   <li className="pt-2 border-t border-border mt-1">
-                    <a href="#answer-key" className="flex items-center justify-between rounded-lg px-2.5 py-1.5 font-bold text-fg transition-colors hover:bg-surface-2">
+                    <a
+                      href="#answer-key"
+                      className="flex items-center justify-between rounded-lg px-2.5 py-1.5 font-bold text-fg transition-colors hover:bg-surface-2"
+                    >
                       <span>Answer Key</span>
                       <span className="text-xs text-muted">↓</span>
                     </a>
                   </li>
                 </ol>
-              ) : (
-                <div className="text-xs text-muted space-y-2.5">
-                  <p>Official paper questions arranged in standard order.</p>
-                  <a href="#answer-key" className="flex items-center gap-1.5 font-bold text-fg hover:underline">
-                    Jump to Answer Key ↓
-                  </a>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
           </aside>
 
           {/* Center Column: The Exam Paper (Centered) */}
@@ -186,20 +151,6 @@ export default async function SheetPage({ params }: PageProps<"/pyqs/[level]/[co
           {/* Right Column: Question Palette & Companion */}
           <aside className="hidden xl:block sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto space-y-4">
             <QuestionPalette questions={allQuestions} />
-            <div className="rounded-2xl border border-border bg-surface p-4 shadow-xs text-xs space-y-2.5">
-              <p className="eyebrow">Study Actions</p>
-              <div className="flex flex-col gap-2">
-                <PrintSheetButton />
-                {s.portalHref && (
-                  <Link href={s.portalHref} className="flex items-center justify-center gap-2 rounded-xl border border-border bg-surface-2 px-3 py-2 font-semibold text-fg hover:bg-surface-3 transition-colors">
-                    <MonitorCheck className="size-4" aria-hidden /> Sit in Exam Portal
-                  </Link>
-                )}
-                <Link href={sheetsHref} className="flex items-center justify-center gap-2 rounded-xl border border-border px-3 py-2 font-medium text-muted hover:text-fg transition-colors">
-                  <Layers className="size-4" aria-hidden /> All {c.short} Sheets
-                </Link>
-              </div>
-            </div>
           </aside>
         </div>
       </div>

@@ -33,10 +33,10 @@ const faqLd = {
 };
 
 // Hairline header shared by the sections below the exam screen.
-function SectionHead({ title }: { title: string }) {
+function SectionHead({ title, children }: { title?: string; children?: React.ReactNode }) {
   return (
     <h2 className="mb-8 border-t border-border pt-5 text-[clamp(1.75rem,3.5vw,2.75rem)] leading-tight font-extrabold tracking-tight md:mb-12">
-      {title}
+      {children ?? title}
     </h2>
   );
 }
@@ -131,7 +131,7 @@ export default async function HomePage() {
         <section className="container-page pb-20 md:pb-28">
           <SectionHead title="Growing every term." />
           <TermChart bars={terms} />
-          <p className="mt-6 text-sm text-muted">Total past papers after each IITM term. Tap a bar to open that term’s papers.</p>
+          <p className="mt-6 text-sm text-muted">Total past papers after each IITM term</p>
         </section>
       )}
 
@@ -142,28 +142,105 @@ export default async function HomePage() {
       </section>
 
       {/* ───────── Courses covered: both programmes, linked to each course's PYQs ───────── */}
-      <section className="container-page pb-20 md:pb-28">
-        <h2 className="border-t border-border pt-5 text-xl font-extrabold tracking-tight md:text-2xl">PYQs and mock tests for every IIT Madras BS level</h2>
-        <p className="mt-2 max-w-3xl text-sm text-muted">
-          For the IIT Madras BS in Data Science and Applications and the BS in Management and Data Science: Qualifier, Quiz 1, Quiz 2 and End Term papers,
-          from Foundation to Degree level.
-        </p>
-        <div className="mt-6 grid gap-6 sm:grid-cols-3">
+      <section className="container-page pb-16 md:pb-24">
+        <div className="border-t border-border pt-4">
+          <div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between">
+            <div>
+              <h2 className="text-base font-bold tracking-tight md:text-lg">
+                PYQs and mock tests for every IIT Madras BS level
+              </h2>
+              <p className="mt-0.5 text-xs text-muted">
+                Qualifier, Quiz 1, Quiz 2 and End Term papers across Data Science & Electronic Systems, Foundation to Degree.
+              </p>
+            </div>
+            {/* Quick aggregate summary stat ribbon */}
+            <div className="flex shrink-0 items-center gap-2.5 text-[11px] text-muted md:text-xs">
+              <span><strong className="font-semibold text-fg tabular-nums">{pyqCourses.length}</strong> courses</span>
+              <span className="text-border">·</span>
+              <span><strong className="font-semibold text-fg tabular-nums">{pyqTotals.papers}</strong> papers</span>
+              <span className="text-border">·</span>
+              <span><strong className="font-semibold text-fg tabular-nums">{pyqTotals.questions.toLocaleString("en-IN")}</strong> questions</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Minimalist Archive Distribution Bar */}
+        <div className="mt-3.5 flex flex-col gap-1.5">
+          <div className="flex h-1 w-full overflow-hidden rounded-full bg-border/40">
+            {PYQ_LEVELS.map((level, i) => {
+              const count = pyqCourses.filter((c) => c.level === level.slug && c.papers.length > 0).reduce((s, c) => s + c.papers.length, 0);
+              const pct = (count / pyqTotals.papers) * 100;
+              const bg = i === 0 ? "bg-brand" : i === 1 ? "bg-fg/60 dark:bg-white/60" : "bg-fg/30 dark:bg-white/30";
+              return (
+                <div
+                  key={level.slug}
+                  className={`h-full ${bg} transition-all`}
+                  style={{ width: `${pct}%` }}
+                  title={`${level.name}: ${count} papers (${pct.toFixed(0)}%)`}
+                />
+              );
+            })}
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] text-muted">
+            {PYQ_LEVELS.map((level, i) => {
+              const count = pyqCourses.filter((c) => c.level === level.slug && c.papers.length > 0).reduce((s, c) => s + c.papers.length, 0);
+              const dot = i === 0 ? "bg-brand" : i === 1 ? "bg-fg/60 dark:bg-white/60" : "bg-fg/30 dark:bg-white/30";
+              return (
+                <div key={level.slug} className="flex items-center gap-1.5">
+                  <span className={`size-1.5 rounded-full ${dot}`} />
+                  <span className="font-medium text-fg/75">{level.short}</span>
+                  <span className="tabular-nums text-muted/70">({count} papers)</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-6 sm:grid-cols-3 sm:gap-4 lg:gap-6">
           {PYQ_LEVELS.map((level) => {
             const courses = pyqCourses.filter((c) => c.level === level.slug && c.papers.length > 0);
             if (!courses.length) return null;
+            const totalPapers = courses.reduce((sum, c) => sum + c.papers.length, 0);
+            const totalQuestions = courses.reduce((sum, c) => sum + c.papers.reduce((p, q) => p + q.questions, 0), 0);
+            const maxPapers = Math.max(...courses.map((c) => c.papers.length));
+
             return (
-              <div key={level.slug}>
-                <h3 className="text-sm font-bold">
-                  <Link href={pyqLevelHref(level.slug)} className="hover:underline">
-                    {level.name} PYQs
-                  </Link>
-                </h3>
-                <ul className="mt-2 space-y-1 text-sm leading-snug">
+              <div key={level.slug} className="flex flex-col">
+                <div className="border-b border-border/80 pb-1.5">
+                  <div className="flex items-baseline justify-between">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-fg">
+                      <Link href={pyqLevelHref(level.slug)} className="hover:text-brand hover:underline">
+                        {level.name}
+                      </Link>
+                    </h3>
+                    <span className="font-mono text-[11px] font-semibold text-fg tabular-nums">
+                      {totalPapers} <span className="font-normal text-muted">papers</span>
+                    </span>
+                  </div>
+                  <div className="mt-0.5 flex items-center justify-between text-[10px] text-muted">
+                    <span>{courses.length} courses</span>
+                    <span className="tabular-nums">{totalQuestions.toLocaleString("en-IN")} questions</span>
+                  </div>
+                </div>
+                <ul className="group/list mt-2 space-y-0.5">
                   {courses.map((c) => (
-                    <li key={c.slug}>
-                      <Link href={c.href} className="text-muted hover:text-fg hover:underline">
-                        {c.name}
+                    <li key={c.slug} className="relative">
+                      <Link
+                        href={c.href}
+                        className="group/item -mx-2 flex items-center justify-between rounded-lg px-2 py-0.5 text-xs text-muted transition-all duration-200 ease-out group-hover/list:opacity-60 hover:!opacity-100 hover:z-30 hover:scale-[1.06] hover:bg-surface hover:px-3 hover:py-2 hover:text-sm hover:font-semibold hover:text-fg hover:shadow-lg hover:ring-1 hover:ring-brand/40"
+                      >
+                        <span className="truncate transition-colors group-hover/item:text-fg">{c.name}</span>
+                        <div className="ml-2 flex shrink-0 items-center gap-2">
+                          <div className="hidden h-1 w-6 overflow-hidden rounded-full bg-border/40 sm:block transition-all group-hover/item:w-9 group-hover/item:h-1.5">
+                            <div
+                              className="h-full rounded-full bg-muted/40 transition-colors group-hover/item:bg-brand"
+                              style={{ width: `${Math.max(15, Math.round((c.papers.length / maxPapers) * 100))}%` }}
+                            />
+                          </div>
+                          <span className="font-mono text-[10.5px] text-muted/50 tabular-nums transition-all group-hover/item:text-xs group-hover/item:font-bold group-hover/item:text-brand">
+                            {c.papers.length}
+                          </span>
+                        </div>
                       </Link>
                     </li>
                   ))}

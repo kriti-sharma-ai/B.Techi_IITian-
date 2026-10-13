@@ -227,6 +227,21 @@
   animation: math-float 8s ease-in-out infinite;
   will-change: translate, rotate;
 }
+@keyframes math-falling {
+  0% {
+    transform: translateY(-8px) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(6px) rotate(2deg);
+  }
+  100% {
+    transform: translateY(-8px) rotate(-3deg);
+  }
+}
+.math-falling {
+  animation: math-falling 6s ease-in-out infinite;
+  will-change: transform;
+}
 .math-layer {
   will-change: transform;
 }
@@ -256,7 +271,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .math-float, .math-layer, .math-spin { animation: none !important; }
+  .math-float, .math-layer, .math-spin, .math-falling { animation: none !important; }
 }
 
 /*

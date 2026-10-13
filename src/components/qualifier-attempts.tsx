@@ -17,6 +17,8 @@ const attemptPercent = (a: QualifierAttempt, key?: QualifierMock) => {
   return key ? scoreMock(key, a.responses).average : null;
 };
 
+const ACTION_LABELS = ["Start exam", "Resume", "Retake"] as const;
+
 /**
  * Start / Resume / Retake button for a paper, with the best score so far.
  */
@@ -53,7 +55,15 @@ export function MockAction({
         href={href ?? `/qualifier/${slug}`}
         className={buttonClass(inProgress ? "dark" : buttonVariant, compact ? "sm" : "md", compact ? "h-8 px-3 text-xs font-semibold" : "")}
       >
-        <Icon className={compact ? "size-3.5" : "size-4"} aria-hidden /> {label}
+        <Icon className={compact ? "size-3.5" : "size-4"} aria-hidden />{" "}
+        {/* Every label sits in the same grid cell, so the button keeps the longest one's width and nothing beside it moves. */}
+        <span className="grid">
+          {ACTION_LABELS.map((l) => (
+            <span key={l} className={cn("col-start-1 row-start-1", l !== label && "invisible")}>
+              {l}
+            </span>
+          ))}
+        </span>
       </Link>
       {best !== null && (
         <span className={cn("text-muted tabular-nums", compact ? "text-[11px]" : "text-sm")}>

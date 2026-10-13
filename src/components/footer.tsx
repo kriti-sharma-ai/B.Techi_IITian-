@@ -49,7 +49,7 @@ export function Footer() {
   if (pathname !== "/") return null;
 
   return (
-    <footer className="relative mt-20 flex min-h-dvh flex-col justify-between overflow-hidden border-t border-border bg-surface pb-24 text-fg md:pb-0">
+    <footer className="relative mt-20 flex min-h-[calc(100dvh-4rem)] flex-col justify-between overflow-hidden border-t border-border bg-surface pb-24 text-fg md:pb-0">
       {/* Background radial glow */}
       <div aria-hidden className="footer-glow pointer-events-none absolute inset-x-0 bottom-0 h-[70%]" />
 

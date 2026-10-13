@@ -8,6 +8,7 @@ import { ScrollPop } from "@/components/scroll-pop";
 import { ReviewsSection } from "@/components/reviews-section";
 import { Venn } from "@/components/venn";
 import { TermChart, type TermBar } from "@/components/term-chart";
+import { HomeFaq } from "@/components/home-faq";
 import { ButtonLink } from "@/components/ui";
 import { getDemoExam } from "@/lib/demo-exam";
 import { PYQ_LEVELS, getPyqIndex } from "@/lib/pyq-index";
@@ -68,7 +69,6 @@ export default async function HomePage() {
             href="/qualifier"
             className="group mb-[clamp(1.75rem,5svh,2.75rem)] inline-flex items-center gap-2.5 rounded-full border border-border/80 bg-surface/80 px-5 py-2 text-xs sm:gap-3 sm:px-6 sm:py-2.5 sm:text-sm font-medium text-fg shadow-xs backdrop-blur-sm transition-all hover:border-brand/60 hover:bg-surface hover:shadow-sm"
           >
-            <span className="flex size-2 shrink-0 rounded-full bg-brand animate-pulse" />
             <span className="font-semibold text-fg">Qualifier pack</span>
             <span className="text-muted">mock + cutoff check</span>
             <ArrowRight className="size-3.5 shrink-0 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-fg" aria-hidden />
@@ -254,17 +254,7 @@ export default async function HomePage() {
       {/* ───────── FAQ: answers for search and AI assistants, mirrored in FAQPage JSON-LD ───────── */}
       <section className="container-page pb-20 md:pb-28">
         <h2 className="border-t border-border pt-5 text-xl font-extrabold tracking-tight md:text-2xl">IIT Madras BS prep: frequently asked questions</h2>
-        <div className="mt-6 divide-y divide-border rounded-2xl border border-border/80 bg-surface/60">
-          {HOME_FAQ.map(({ q, a }) => (
-            <details key={q} className="group px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">
-                <h3>{q}</h3>
-                <ChevronDown className="size-4 shrink-0 text-muted transition-transform group-open:rotate-180" aria-hidden />
-              </summary>
-              <p className="mt-2 text-[15px] leading-relaxed text-muted">{a}</p>
-            </details>
-          ))}
-        </div>
+        <HomeFaq items={HOME_FAQ} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd).replace(/</g, "\\u003c") }} />
       </section>
       {/* ───────── Closing CTA ───────── */}

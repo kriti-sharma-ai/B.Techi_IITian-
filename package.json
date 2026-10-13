@@ -8,7 +8,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "postinstall": "node scripts/copy-pdf-worker.mjs",
-    "seed:papers": "tsx --env-file=.env.local scripts/seed-papers.mts"
+    "seed:papers": "tsx --env-file=.env.local scripts/seed-papers.mts",
+    "push:emails": "tsx --env-file=.env.local scripts/push-email-templates.mts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",

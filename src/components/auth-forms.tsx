@@ -42,6 +42,11 @@ function authMessage(error: AuthError) {
     case "over_request_rate_limit":
     case "over_email_send_rate_limit":
       return "Too many attempts. Wait a minute, then try again.";
+    // Login codes only go to existing accounts (see sendLoginCode).
+    case "otp_disabled":
+      return "No BTechi account uses this email. Sign up first.";
+    case "otp_expired":
+      return "That code is wrong or has expired. Check it, or send a new one.";
     default:
       return error.message;
   }
@@ -374,6 +379,77 @@ function StrengthBars({ score }: { score: number }) {
 const confirmationLink = (email: string) =>
   supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: window.location.origin + "/dashboard" } });
 
+// Login codes are for existing accounts; new students sign up so we get their name. The same email
+// carries a one-click link, which lands on `next` (supabase/email-templates/magic-link.html).
+const sendLoginCode = (email: string) =>
+  supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + nextPath() } });
+
+/** The "Enter your code" step: the 6-digit code from the login email. */
+function LoginCode({ email, onBack, onDone }: { email: string; onBack: () => void; onDone: (userId: string) => void }) {
+  const [code, setCode] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | undefined>();
+
+  const verify = async (typed: string) => {
+    const token = typed.replace(/\D/g, "");
+    // Supabase sends 6 digits by default; projects can set up to 10.
+    if (token.length < 6) return setError("Enter the code from the email.");
+    setError(undefined);
+    setBusy(true);
+    const { data, error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
+    if (error || !data.user) {
+      setBusy(false);
+      return setError(error ? authMessage(error) : "Couldn't log you in. Try again.");
+    }
+    // Stays busy while the next page loads.
+    onDone(data.user.id);
+  };
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    void verify(code);
+  };
+
+  return (
+    <CheckInbox
+      email={email}
+      link="a login code"
+      then="Enter it below, or open the link in the email."
+      resend={() => sendLoginCode(email)}
+      onChangeEmail={onBack}
+      action={
+        <form onSubmit={submit} noValidate className="space-y-4 text-left">
+          <Field id="code" label="Login code" error={error}>
+            <input
+              id="code"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              placeholder="123456"
+              maxLength={10}
+              autoFocus
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              // A pasted code logs in straight away; email apps can't offer a copy button, so pasting is the usual path.
+              onPaste={(e) => {
+                const pasted = e.clipboardData.getData("text").replace(/\D/g, "");
+                if (pasted.length < 6 || busy) return;
+                e.preventDefault();
+                setCode(pasted);
+                void verify(pasted);
+              }}
+              aria-invalid={!!error}
+              aria-describedby={error ? "code-error" : undefined}
+              className={cn(input, "text-center font-mono text-lg tracking-[0.3em]")}
+            />
+          </Field>
+          <SubmitButton busy={busy} busyLabel="Checking…">
+            Log in
+          </SubmitButton>
+        </form>
+      }
+    />
+  );
+}
+
 export function LoginForm() {
   const router = useRouter();
   const toast = useToast();
@@ -384,20 +460,21 @@ export function LoginForm() {
   // Supabase refused the login because the email isn't confirmed yet.
   const [unconfirmed, setUnconfirmed] = useState(false);
   const [sentTo, setSentTo] = useState<string | null>(null);
+  // The email a login code was sent to, while the student enters it.
+  const [codeSentTo, setCodeSentTo] = useState<string | null>(null);
+
+  // Staff land in the CMS, students on their dashboard, unless the URL asked for a page.
+  const goOn = async (userId: string, go: (path: string) => void) => {
+    const explicit = new URLSearchParams(window.location.search).get("next");
+    if (explicit) return go(safeNext(explicit));
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", userId).maybeSingle();
+    go(profile?.role && profile.role !== "student" ? "/admin" : "/dashboard");
+  };
 
   // Already signed in (a bookmark, or Back after logging in): skip the form.
   useEffect(() => {
     void supabase.auth.getSession().then(async ({ data }) => {
-      if (data.session) {
-        const explicit = new URLSearchParams(window.location.search).get("next");
-        if (explicit) {
-          router.replace(safeNext(explicit));
-        } else {
-          const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.session.user.id).maybeSingle();
-          const isStaff = profile?.role && profile.role !== "student";
-          router.replace(isStaff ? "/admin" : "/dashboard");
-        }
-      }
+      if (data.session) await goOn(data.session.user.id, (path) => router.replace(path));
     });
   }, [router]);
 
@@ -423,15 +500,23 @@ export function LoginForm() {
     // Stays busy while the next page loads, so the form can't be sent twice.
     const name: string = data.user.user_metadata?.name ?? address.split("@")[0];
     toast(`Welcome back, ${name.split(" ")[0]}`);
-    
-    const explicit = new URLSearchParams(window.location.search).get("next");
-    if (explicit) {
-      router.push(safeNext(explicit));
-    } else {
-      const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.user.id).maybeSingle();
-      const isStaff = profile?.role && profile.role !== "student";
-      router.push(isStaff ? "/admin" : "/dashboard");
+    await goOn(data.user.id, (path) => router.push(path));
+  };
+
+  const emailCode = async () => {
+    const address = email.trim();
+    setUnconfirmed(false);
+    if (!EMAIL.test(address)) {
+      const err = { email: "Enter your email first." };
+      setErrors(err);
+      return focusFirst(err);
     }
+    setErrors({});
+    setBusy(true);
+    const { error } = await sendLoginCode(address);
+    setBusy(false);
+    if (error) return setErrors({ form: authMessage(error) });
+    setCodeSentTo(address);
   };
 
   const resendConfirmation = async () => {
@@ -443,6 +528,18 @@ export function LoginForm() {
     setUnconfirmed(false);
     setSentTo(address);
   };
+
+  if (codeSentTo)
+    return (
+      <LoginCode
+        email={codeSentTo}
+        onBack={() => setCodeSentTo(null)}
+        onDone={(userId) => {
+          toast("Welcome back");
+          void goOn(userId, (path) => router.push(path));
+        }}
+      />
+    );
 
   if (sentTo)
     return (
@@ -518,6 +615,14 @@ export function LoginForm() {
         <SubmitButton busy={busy} busyLabel="Logging in…">
           Log in
         </SubmitButton>
+        <button
+          type="button"
+          onClick={emailCode}
+          disabled={busy}
+          className="block w-full text-center text-sm font-medium text-muted hover:text-fg hover:underline disabled:opacity-60"
+        >
+          Email me a login code instead
+        </button>
       </form>
     </>
   );

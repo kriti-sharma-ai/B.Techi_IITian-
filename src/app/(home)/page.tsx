@@ -154,7 +154,7 @@ export default async function HomePage() {
                 PYQs and mock tests for every IIT Madras BS level
               </h2>
               <p className="mt-0.5 text-xs text-muted">
-                Qualifier, Quiz 1, Quiz 2 and End Term papers across Data Science & Electronic Systems, Foundation to Degree.
+                Qualifier, Quiz 1, Quiz 2 and End Term papers across Data Science and Management & Data Science, Foundation to Degree.
               </p>
             </div>
             {/* Quick aggregate summary stat ribbon */}

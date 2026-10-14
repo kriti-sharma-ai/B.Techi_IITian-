@@ -37,7 +37,11 @@ export const SEO_KEYWORDS = [
   "IITM BS Python",
   "IITM BS foundation level",
   "IITM BS diploma level",
+  "IIT Madras qualifier",
+  "IIT Madras PYQ",
   "BTechi",
+  "BTechi IITian",
+  "BTechi IITM",
 ];
 
 export const SITE_DESCRIPTION =
@@ -55,6 +59,10 @@ export const HOME_FAQ: { q: string; a: string }[] = [
   {
     q: "Does BTechi cover the IIT Madras BS in Data Science and Applications?",
     a: "Yes. BTechi has papers and practice for both the BS in Data Science and Applications and the BS in Management and Data Science: the shared Foundation courses (Maths I, Stats I, Computational Thinking, English I), and Data Science courses such as Python, DBMS, PDSA, MAD, Machine Learning, Tools in Data Science and Deep Learning.",
+  },
+  {
+    q: "Which IITM BS exams and levels does BTechi cover?",
+    a: "Qualifier papers for the four qualifier courses, and Quiz 1, Quiz 2 and End Term papers for courses at Foundation, Diploma and Degree level. Every paper comes with the official answer key. BTechi does not cover the BS in Electronic Systems or the BS in Aeronautics and Space Technology.",
   },
   {
     q: "Where can I find IITM BS previous year question papers?",

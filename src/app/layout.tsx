@@ -56,6 +56,8 @@ const siteLd = {
       "@type": "EducationalOrganization",
       "@id": `${SITE_URL}/#organization`,
       name: "BTechi",
+      // Spellings students type for the brand, including the YouTube channel's name.
+      alternateName: ["Btechi", "BTechi IITian", "B-Techi IITian", "btechi.in"],
       url: SITE_URL,
       logo: `${SITE_URL}/logo-512.png`,
       email: CONTACT_EMAIL,

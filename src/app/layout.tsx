@@ -69,6 +69,7 @@ const siteLd = {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
       name: "BTechi",
+      alternateName: ["Btechi", "btechi.in"],
       url: SITE_URL,
       inLanguage: "en-IN",
       publisher: { "@id": `${SITE_URL}/#organization` },

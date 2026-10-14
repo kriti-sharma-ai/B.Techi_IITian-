@@ -82,7 +82,10 @@ export default async function HomePage() {
               Real exam portal.
             </span>
           </h1>
-          <ul className="mt-[clamp(2rem,6svh,3rem)] inline-flex flex-col items-start gap-1.5 text-sm text-muted sm:flex-row sm:items-center sm:gap-x-7 md:text-base">
+          <p className="mt-[clamp(1.25rem,3.5svh,1.75rem)] max-w-2xl text-base text-muted md:text-lg">
+            BTechi is a free study platform for IIT Madras BS students. Take real past papers, from the Qualifier to the End Term, in an exam portal like the real one.
+          </p>
+          <ul className="mt-[clamp(1.5rem,4.5svh,2.25rem)] inline-flex flex-col items-start gap-1.5 text-sm text-muted sm:flex-row sm:items-center sm:gap-x-7 md:text-base">
             {["Data Science & Management", "Qualifier to End Term", "Official answer keys"].map((point) => (
               <li key={point} className="flex items-center gap-1.5 whitespace-nowrap">
                 <Check className="size-3.5 shrink-0 text-brand md:size-4" aria-hidden />
@@ -108,8 +111,9 @@ export default async function HomePage() {
       </section>
 
       {/* ───────── The exam screen: pops up on scroll, and works ───────── */}
+      {/* data-nosnippet: keeps these sample questions out of Google snippets and AI Overviews for the site. */}
       {demo.length > 0 && (
-        <section className="px-4 pb-20 md:px-6 md:pb-28">
+        <section data-nosnippet className="px-4 pb-20 md:px-6 md:pb-28">
           <ScrollPop className="mx-auto max-w-[1200px]">
             {/* Clean card: thin border, soft shadow, nothing else. The screen scales itself to fit. */}
             <ExamShowcase

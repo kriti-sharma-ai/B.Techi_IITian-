@@ -84,6 +84,27 @@ function useFit() {
   return { frameRef, fit };
 }
 
+/**
+ * The demo exam, with its questions fetched after load from /api/demo-exam (blocked in robots.ts),
+ * so search engines see the home page's own text, not a sample question. Same size while loading.
+ */
+export function DemoExam({ className }: { className?: string }) {
+  const [sections, setSections] = useState<DemoSection[] | null>(null);
+  useEffect(() => {
+    let live = true;
+    fetch("/api/demo-exam")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((s: DemoSection[]) => live && setSections(s))
+      .catch(() => live && setSections([]));
+    return () => {
+      live = false;
+    };
+  }, []);
+  if (sections?.length === 0) return null;
+  if (!sections) return <div aria-hidden className={cn("mx-auto h-[clamp(480px,85svh,740px)] w-full rounded-2xl bg-surface", className)} />;
+  return <ExamShowcase sections={sections} className={className} />;
+}
+
 export function ExamShowcase({ sections, className }: { sections: DemoSection[]; className?: string }) {
   const { frameRef, fit } = useFit();
   const flat = useMemo(() => sections.flatMap((s, si) => s.questions.map((q, qi) => ({ q, si, qi }))), [sections]);

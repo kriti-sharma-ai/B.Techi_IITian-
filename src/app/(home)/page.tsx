@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
-import { ExamShowcase } from "@/components/exam-showcase";
+import { DemoExam } from "@/components/exam-showcase";
 import { LandingFeatures } from "@/components/landing-features";
 import { MathBackground } from "@/components/math-background";
 import { ScrollPop } from "@/components/scroll-pop";
@@ -10,7 +10,6 @@ import { Venn } from "@/components/venn";
 import { TermChart, type TermBar } from "@/components/term-chart";
 import { HomeFaq } from "@/components/home-faq";
 import { ButtonLink } from "@/components/ui";
-import { getDemoExam } from "@/lib/demo-exam";
 import { PYQ_LEVELS, getPyqIndex } from "@/lib/pyq-index";
 import { pyqTermHref, pyqTerms } from "@/lib/pyq-terms";
 import { pyqLevelHref } from "@/lib/pyq-urls";
@@ -43,7 +42,7 @@ function SectionHead({ title, children }: { title?: string; children?: React.Rea
 }
 
 export default async function HomePage() {
-  const [{ pyqTotals, pyqCourses }, demo] = await Promise.all([getPyqIndex(), getDemoExam()]);
+  const { pyqTotals, pyqCourses } = await getPyqIndex();
   // Archive size at the end of each IITM term, oldest first; each bar opens that term's papers.
   let runningTotal = 0;
   const terms: TermBar[] = pyqTerms(pyqCourses).map((t) => ({
@@ -111,18 +110,13 @@ export default async function HomePage() {
       </section>
 
       {/* ───────── The exam screen: pops up on scroll, and works ───────── */}
-      {/* data-nosnippet: keeps these sample questions out of Google snippets and AI Overviews for the site. */}
-      {demo.length > 0 && (
-        <section data-nosnippet className="px-4 pb-20 md:px-6 md:pb-28">
-          <ScrollPop className="mx-auto max-w-[1200px]">
-            {/* Clean card: thin border, soft shadow, nothing else. The screen scales itself to fit. */}
-            <ExamShowcase
-              sections={demo}
-              className="shadow-[0_2px_6px_rgb(0_0_0/0.04),0_24px_60px_-24px_rgb(0_0_0/0.3)] ring-1 ring-black/10 dark:ring-white/15"
-            />
-          </ScrollPop>
-        </section>
-      )}
+      {/* Questions load in the browser (DemoExam), so search engines describe BTechi, not a sample question. */}
+      <section data-nosnippet className="px-4 pb-20 md:px-6 md:pb-28">
+        <ScrollPop className="mx-auto max-w-[1200px]">
+          {/* Clean card: thin border, soft shadow, nothing else. The screen scales itself to fit. */}
+          <DemoExam className="shadow-[0_2px_6px_rgb(0_0_0/0.04),0_24px_60px_-24px_rgb(0_0_0/0.3)] ring-1 ring-black/10 dark:ring-white/15" />
+        </ScrollPop>
+      </section>
 
       {/* ───────── Features ───────── */}
       <section className="container-page pb-20 md:pb-28">

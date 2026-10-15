@@ -1,0 +1,25 @@
+Most IIT Madras BS students practise PYQs from a PDF.
+
+Then on exam day, everything is new: the screen, the timer, the palette, the calculator. You lose time just finding your way.
+
+So we built BTechi.
+
+You sit real past papers in a portal that looks and works like the real exam screen:
+- Live timer that auto-submits at zero
+- Question palette and mark for review
+- On-screen scientific calculator
+- Graded with the official answer keys
+
+Today it has 214 real papers and 4,923 questions across 46 courses. Qualifier, Quiz 1, Quiz 2 and End Term. Foundation to Degree.
+
+Writing the Qualifier? Take a full 4-subject mock and get a clear pass or fail against the cutoff.
+
+It is 100% free. No sign-up needed to start.
+
+Try a mock: https://www.btechi.in
+
+If you know someone writing the IITM BS exam, please share this with them.
+
+(BTechi is not affiliated with IIT Madras.)
+
+#IITMadras #IITMBS #DataScience #OnlineDegree #ExamPrep #StudentLife

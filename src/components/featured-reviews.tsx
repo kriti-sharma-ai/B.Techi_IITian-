@@ -47,7 +47,7 @@ export function FeaturedReviews({ reviews }: { reviews: ReviewEntry[] }) {
       </div>
       {/* key restarts the fade on every change */}
       <div key={r.key} className="animate-fade-up">
-        <blockquote className="mt-4 max-w-4xl text-[clamp(1.25rem,2.2vw,1.75rem)] leading-snug font-medium tracking-tight text-balance">
+        <blockquote className="mt-4 w-full text-[clamp(1.375rem,2.8vw,2.25rem)] leading-snug font-medium tracking-tight text-pretty">
           &ldquo;{r.content}&rdquo;
         </blockquote>
         <figcaption className="mt-5">

@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
-    "build": "next build",
+    "build": "node scripts/check-classes.mjs && next build",
+    "check:classes": "node scripts/check-classes.mjs",
     "start": "next start",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && node scripts/check-classes.mjs",
     "postinstall": "node scripts/copy-pdf-worker.mjs",
     "seed:papers": "tsx --env-file=.env.local scripts/seed-papers.mts",
     "push:emails": "tsx --env-file=.env.local scripts/push-email-templates.mts"

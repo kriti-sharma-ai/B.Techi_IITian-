@@ -5,7 +5,7 @@ export default function Loading() {
     <SkeletonRoot>
       <HeaderBone filters />
       <div className="container-page space-y-12 py-10">
-        <ScopeBone className="-mb-4" />
+        <ScopeBone className="mb-8" />
         {Array.from({ length: 2 }, (_, i) => (
           <section key={i}>
             <SectionHeadBone />

@@ -93,24 +93,34 @@ export function DownloadButton({
   );
 }
 
-export function ShareButton({ title, path }: { title: string; path: string }) {
+/** `compact` drops the label and the border: a plain icon button, like BookmarkButton without `withLabel`. */
+export function ShareButton({ title, path, compact = false }: { title: string; path: string; compact?: boolean }) {
   const toast = useToast();
+  const share = async () => {
+    const url = window.location.origin + path;
+    try {
+      if (navigator.share) await navigator.share({ title, url });
+      else {
+        await navigator.clipboard.writeText(url);
+        toast("Link copied");
+      }
+    } catch {
+      /* user cancelled */
+    }
+  };
+  if (compact)
+    return (
+      <button
+        type="button"
+        onClick={share}
+        aria-label={`Share ${title}`}
+        className="grid size-8 place-items-center rounded-lg text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+      >
+        <Share2 className="size-4" aria-hidden />
+      </button>
+    );
   return (
-    <Button
-      variant="secondary"
-      onClick={async () => {
-        const url = window.location.origin + path;
-        try {
-          if (navigator.share) await navigator.share({ title, url });
-          else {
-            await navigator.clipboard.writeText(url);
-            toast("Link copied");
-          }
-        } catch {
-          /* user cancelled */
-        }
-      }}
-    >
+    <Button variant="secondary" onClick={share}>
       <Share2 className="size-4" aria-hidden /> Share
     </Button>
   );

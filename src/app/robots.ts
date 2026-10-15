@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/utils";
 
-const disallow = ["/admin", "/dashboard", "/profile", "/saved", "/practice/session", "/practice/exam", "/search", "/api/demo-exam"];
+const disallow = ["/admin", "/dashboard", "/profile", "/saved", "/practice/session", "/practice/exam", "/search", "/api/demo-exam", "/api/guide"];
 
 // AI crawlers and assistants, named so it's explicit they may read the site (and /llms.txt).
 // A bot with its own group ignores the "*" group, so each gets the same disallow list.

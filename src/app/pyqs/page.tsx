@@ -52,7 +52,7 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
 
       <div className="container-page space-y-14 py-10 md:py-14">
         {scoped.mine > 0 && (
-          <div className="-mb-6 space-y-3 md:-mb-8">
+          <div className="mb-8 space-y-3 md:mb-6">
             <ScopeSwitch list={scoped} links={scopeLinks("/pyqs", sp)} />
             {noPapers.length > 0 && (
               <p className="text-sm text-muted">No past papers yet for {new Intl.ListFormat("en").format(noPapers)}.</p>

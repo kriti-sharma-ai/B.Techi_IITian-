@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, ArrowUp } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { ExamTag } from "@/components/exam-tag";
 import { PageHeader } from "@/components/ui";
 import { PracticeUnifiedSidebar } from "@/components/practice-unified-sidebar";
 import { PracticeFormatStudio } from "@/components/practice-format-studio";
 import { PracticeStats } from "@/components/practice-stats";
+import { PyqLevelBar } from "@/components/pyq-level-links";
 import { param } from "@/lib/filters";
 import { getSubject } from "@/lib/content";
 import { PYQ_LEVELS, getPyqIndex, type CoursePyqs, type PyqExam, type PyqIndex } from "@/lib/pyq-index";
@@ -22,7 +22,7 @@ import {
   type PracticePlan,
   type PyqPractice,
 } from "@/lib/pyq-practice";
-import { isPyqLevel, type PyqLevel } from "@/lib/pyq-urls";
+import { isPyqLevel, pyqLevelHref, type PyqLevel } from "@/lib/pyq-urls";
 import { getStudyScope, type StudyScope } from "@/lib/study-scope";
 import { loadContent } from "@/lib/cms";
 
@@ -152,10 +152,10 @@ function PracticeModes({
 
   return (
     <>
-      <PageHeader
-        crumbs={[{ label: "Practice" }]}
-        title="Practice"
-        description="Previous-year questions with official answer keys."
+      <PageHeader title="Practice" description="Previous-year questions with official answer keys." />
+      {/* The paper lists live under /pyqs; the navbar already counts them as Practice. Same bar as /pyqs/[level]. */}
+      <PyqLevelBar
+        levels={PYQ_LEVELS.filter((l) => levelsWithCourses.some((w) => w.levelSlug === l.slug)).map((l) => ({ slug: l.slug, label: l.short, href: pyqLevelHref(l.slug) }))}
       />
       <div className="container-page py-8">
         <div className="grid gap-8 lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start xl:grid-cols-[21rem_minmax(0,1fr)]">

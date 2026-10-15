@@ -38,9 +38,8 @@ export default async function BlogCategoryPage({ params }: PageProps<"/blog/cate
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <PageHeader crumbs={[{ label: "Blog", href: "/blog" }, { label: cat.name }]} title={cat.name} description={cat.description}>
-        <BlogCategoryNav current={cat.slug} />
-      </PageHeader>
+      <PageHeader crumbs={[{ label: "Blog", href: "/blog" }, { label: cat.name }]} title={cat.name} description={cat.description} />
+      <BlogCategoryNav current={cat.slug} />
       <div className="container-page py-8">
         {posts.length ? (
           <div className="max-w-3xl divide-y divide-border">

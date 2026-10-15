@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { hrefEnabled } from "@/lib/site";
 import { YOUTUBE_URL } from "@/lib/utils";
+import { ArrowUpRight } from "lucide-react";
 import { YoutubeMark } from "./youtube-mark";
 import { FooterWordmark } from "./footer-wordmark";
 
@@ -74,18 +75,13 @@ export function Footer() {
             href={YOUTUBE_URL}
             target="_blank"
             rel="noopener me"
-            className="group mt-2 flex w-full max-w-sm items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition-colors hover:border-[#FF0000]/40"
+            className="group mt-3 inline-flex w-fit items-center gap-2 text-sm text-muted transition-colors hover:text-fg"
           >
-            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#FF0000]/10">
-              <YoutubeMark className="size-7" />
+            <YoutubeMark className="size-5" />
+            <span>
+              <span className="font-medium text-fg">BTechi IITian</span> on YouTube
             </span>
-            <span className="min-w-0 flex-1 leading-tight">
-              <span className="block text-sm font-semibold text-fg">BTechi IITian</span>
-              <span className="mt-0.5 block truncate text-xs text-muted">@BTechiIITian · Free video lessons</span>
-            </span>
-            <span className="shrink-0 rounded-full bg-[#FF0000] px-3 py-1.5 text-xs font-semibold text-white transition-[filter] group-hover:brightness-110">
-              Subscribe
-            </span>
+            <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
           </a>
         </div>
 

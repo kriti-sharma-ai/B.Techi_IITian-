@@ -44,7 +44,7 @@ export default async function SubjectsPage({ searchParams }: PageProps<"/subject
         </Suspense>
       </PageHeader>
       <div className="container-page space-y-12 py-10">
-        <ScopeSwitch list={scoped} links={scopeLinks("/subjects", sp)} className="-mb-4" />
+        <ScopeSwitch list={scoped} links={scopeLinks("/subjects", sp)} className="mb-8" />
         {list.length === 0 && (
           <EmptyState icon={<BookDashed className="size-6" />} title="No courses match these filters." description="Try another level or clear the filters." />
         )}

@@ -209,7 +209,7 @@ export function WriteReviewButton({ next, className }: { next: string; className
   );
 }
 
-/** The row under the home page reviews. */
+/** "Read all" and "Write a review", beside the home page reviews heading. */
 export function ReviewActions() {
   const [count, setCount] = useState<number | null>(null);
 
@@ -223,12 +223,12 @@ export function ReviewActions() {
   const total = count === null ? null : count + REVIEWS.length;
 
   return (
-    <div className="mt-10 flex flex-wrap items-center gap-3">
+    <div className="flex shrink-0 flex-wrap items-center gap-3">
       <Link href="/reviews" className={buttonClass("secondary", "sm")}>
         <MessageSquareText className="size-3.5" aria-hidden />
         Read all reviews{total !== null && <span className="text-muted tabular-nums">({total})</span>}
       </Link>
-      <WriteReviewButton next="/#reviews" />
+      <WriteReviewButton next="/#reviews" className={buttonClass("primary", "sm")} />
     </div>
   );
 }
@@ -250,7 +250,7 @@ export function FloatingWriteReview({ next, hideWhenVisible }: { next: string; h
       aria-hidden={hidden}
       inert={hidden}
       className={cn(
-        "fixed right-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-30 transition-all duration-300 md:right-6 md:bottom-6",
+        "fixed right-[7.5rem] bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-30 flex h-12 items-center transition-all duration-300 md:right-[8rem] md:bottom-6",
         hidden ? "pointer-events-none translate-y-4 opacity-0" : "translate-y-0 opacity-100",
       )}
     >

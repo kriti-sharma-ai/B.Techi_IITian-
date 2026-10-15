@@ -1,9 +1,15 @@
-import { Bone, HeaderBone, SkeletonRoot } from "@/components/page-skeleton";
+import { Bone, SkeletonRoot } from "@/components/page-skeleton";
+import { PyqLevelBar } from "@/components/pyq-level-links";
+import { PageHeader } from "@/components/ui";
+import { PYQ_LEVELS } from "@/lib/pyq-index";
+import { pyqLevelHref } from "@/lib/pyq-urls";
 
 export default function Loading() {
   return (
     <SkeletonRoot>
-      <HeaderBone />
+      {/* The real header and level bar, as on the page, so only the practice area loads in. */}
+      <PageHeader title="Practice" description="Previous-year questions with official answer keys." />
+      <PyqLevelBar levels={PYQ_LEVELS.map((l) => ({ slug: l.slug, label: l.short, href: pyqLevelHref(l.slug) }))} />
       <div className="container-page py-8">
         <div className="grid gap-8 lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start xl:grid-cols-[21rem_minmax(0,1fr)]">
           <aside className="space-y-4">

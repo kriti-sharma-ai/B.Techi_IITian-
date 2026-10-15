@@ -1,23 +1,14 @@
-import { Bone, HeaderBone, ScopeBone, SectionHeadBone, SkeletonRoot } from "@/components/page-skeleton";
+import { Bone, ScopeBone, SectionHeadBone, SkeletonRoot } from "@/components/page-skeleton";
+import { PyqLevelLoadingTop } from "@/components/pyq-level-loading";
+import { PYQ_LEVELS } from "@/lib/pyq-index";
+import { pyqLevelHref } from "@/lib/pyq-urls";
+
+const LEVELS = PYQ_LEVELS.map((l) => ({ slug: l.slug, label: l.short, name: l.name, href: pyqLevelHref(l.slug) }));
 
 export default function Loading() {
   return (
     <SkeletonRoot>
-      <HeaderBone />
-      <div className="border-b border-border">
-        <div className="container-page flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-2.5">
-          <div className="flex gap-4">
-            {Array.from({ length: 4 }, (_, i) => (
-              <Bone key={i} className="h-6 w-20" />
-            ))}
-          </div>
-          <div className="flex gap-1.5">
-            {Array.from({ length: 4 }, (_, i) => (
-              <Bone key={i} className="h-8 w-20 rounded-lg" />
-            ))}
-          </div>
-        </div>
-      </div>
+      <PyqLevelLoadingTop levels={LEVELS} />
       <div className="container-page space-y-10 py-10">
         <ScopeBone />
         {Array.from({ length: 2 }, (_, g) => (

@@ -6,6 +6,7 @@ import { LandingFeatures } from "@/components/landing-features";
 import { MathBackground } from "@/components/math-background";
 import { ScrollPop } from "@/components/scroll-pop";
 import { ReviewsSection } from "@/components/reviews-section";
+import { ReviewActions } from "@/components/review-actions";
 import { Venn } from "@/components/venn";
 import { TermChart, type TermBar } from "@/components/term-chart";
 import { HomeFaq } from "@/components/home-faq";
@@ -33,11 +34,12 @@ const faqLd = {
 };
 
 // Hairline header shared by the sections below the exam screen.
-function SectionHead({ title, children }: { title?: string; children?: React.ReactNode }) {
+function SectionHead({ title, children, action }: { title?: string; children?: React.ReactNode; action?: React.ReactNode }) {
   return (
-    <h2 className="mb-8 border-t border-border pt-5 text-[clamp(1.75rem,3.5vw,2.75rem)] leading-tight font-extrabold tracking-tight md:mb-12">
-      {children ?? title}
-    </h2>
+    <div className="mb-8 flex flex-col gap-4 border-t border-border pt-5 md:mb-12 md:flex-row md:items-end md:justify-between">
+      <h2 className="text-[clamp(1.75rem,3.5vw,2.75rem)] leading-tight font-extrabold tracking-tight">{children ?? title}</h2>
+      {action}
+    </div>
   );
 }
 
@@ -135,7 +137,7 @@ export default async function HomePage() {
 
       {/* ───────── Reviews ───────── */}
       <section id="reviews" className="container-page scroll-mt-20 pb-20 md:pb-28">
-        <SectionHead title="From the students." />
+        <SectionHead title="From the students." action={<ReviewActions />} />
         <ReviewsSection />
       </section>
 

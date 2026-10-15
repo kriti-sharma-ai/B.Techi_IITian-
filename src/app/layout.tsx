@@ -7,6 +7,7 @@ import { Providers } from "@/components/providers";
 import { BottomNav, Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ScrollTop } from "@/components/scroll-top";
+import { Guide } from "@/components/guide";
 import { loadContent } from "@/lib/cms";
 import { CONTACT_EMAIL, SITE_URL, YOUTUBE_URL } from "@/lib/utils";
 import { REVIEWS, REVIEW_SUMMARY } from "@/lib/data/reviews";
@@ -122,7 +123,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // Questions stay on the server; pages hand them to client components as props.
   const { questions: _, ...content } = await loadContent();
   return (
-    <html lang="en" className={`${jakarta.variable} scroll-smooth`} suppressHydrationWarning>
+    <html lang="en" className={`${jakarta.variable} scroll-smooth`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className="min-h-dvh font-sans antialiased">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd).replace(/</g, "\\u003c") }} />
         <ContentSnapshot content={content}>
@@ -134,6 +135,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Footer />
             <BottomNav />
             <ScrollTop />
+            <Guide />
           </Providers>
         </ContentSnapshot>
       </body>

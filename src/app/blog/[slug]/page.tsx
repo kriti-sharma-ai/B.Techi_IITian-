@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, CalendarDays, Clock, ListTree } from "lucide-react";
+import { ArrowRight, ListTree } from "lucide-react";
 import { BlogCover } from "@/components/blog/cover";
 import { Markdown } from "@/components/blog/markdown";
 import { BlogToc, ReadingProgress } from "@/components/blog/toc";
 import { PostCard, toSummary } from "@/components/blog/post-card";
 import { BookmarkButton, ShareButton } from "@/components/resource-actions";
-import { Badge, Breadcrumbs, buttonClass } from "@/components/ui";
+import { Breadcrumbs, buttonClass } from "@/components/ui";
 import { blogPostHref, getAllPosts, getPost, relatedPosts } from "@/lib/blog";
 import { blogCategoryHref, getBlogCategory } from "@/lib/blog/categories";
 import { SITE_URL, formatDate } from "@/lib/utils";
@@ -105,22 +105,16 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
-      <header className="border-b border-border bg-surface">
-        <div className="container-page py-7 md:py-10">
+      <header className="border-b border-border">
+        <div className="container-page py-6 md:py-8">
           <Breadcrumbs items={[{ label: "Blog", href: "/blog" }, { label: cat.name, href: blogCategoryHref(cat.slug) }, { label: post.title }]} />
           <div className="mx-auto max-w-3xl lg:mx-0">
-            <Link href={blogCategoryHref(cat.slug)}>
-              <Badge tone="brand">{cat.name}</Badge>
-            </Link>
-            <h1 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-balance md:text-[2.6rem]">{post.title}</h1>
-            <p className="mt-3 text-lg text-muted">{post.description}</p>
-            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
-              <span className="inline-flex items-center gap-2">
-                <span className="grid size-7 place-items-center rounded-full bg-brand text-xs font-extrabold text-brand-ink">B</span>
-                <span className="font-semibold text-fg">{post.author}</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <CalendarDays className="size-4" aria-hidden />
+            <h1 className="text-3xl leading-tight font-extrabold tracking-tight text-balance md:text-[2.4rem]">{post.title}</h1>
+            <p className="mt-3 text-muted md:text-lg">{post.description}</p>
+            <div className="mt-5 flex items-center justify-between gap-4 text-sm text-muted">
+              <p>
+                <span className="text-fg">{post.author}</span>
+                <span className="mx-2 text-muted/50">·</span>
                 {post.updated !== post.date ? (
                   <>
                     Updated <time dateTime={post.updated}>{formatDate(post.updated)}</time>
@@ -128,14 +122,13 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
                 ) : (
                   <time dateTime={post.date}>{formatDate(post.date)}</time>
                 )}
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <Clock className="size-4" aria-hidden /> {post.minutes} min read
-              </span>
-            </div>
-            <div className="mt-5 flex flex-wrap gap-2 print:hidden">
-              <BookmarkButton withLabel item={{ kind: "note", id: `blog-${post.slug}`, title: post.title, href, subtitle: "Blog" }} />
-              <ShareButton title={post.title} path={href} />
+                <span className="mx-2 text-muted/50">·</span>
+                {post.minutes} min read
+              </p>
+              <div className="-mr-1.5 flex shrink-0 items-center print:hidden">
+                <BookmarkButton item={{ kind: "note", id: `blog-${post.slug}`, title: post.title, href, subtitle: "Blog" }} />
+                <ShareButton compact title={post.title} path={href} />
+              </div>
             </div>
           </div>
         </div>

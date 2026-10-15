@@ -1,5 +1,4 @@
 import { REVIEWS } from "@/lib/data/reviews";
-import { ReviewActions } from "./review-actions";
 import { Author } from "./review-author";
 
 export function ReviewsSection() {
@@ -26,7 +25,6 @@ export function ReviewsSection() {
         ))}
       </div>
 
-      <ReviewActions />
     </div>
   );
 }

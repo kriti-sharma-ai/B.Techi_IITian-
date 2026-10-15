@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 import { ScrollText } from "lucide-react";
 import { CourseList } from "@/components/pyq-papers";
 import { ScopeSwitch } from "@/components/study-scope";
-import { EmptyState, LinkTabs, PageHeader, buttonClass } from "@/components/ui";
+import { PyqLevelBar } from "@/components/pyq-level-links";
+import { Breadcrumbs, EmptyState, PageHeader, buttonClass } from "@/components/ui";
 import { param } from "@/lib/filters";
 import { PYQ_EXAMS, PYQ_LEVELS, getPyqIndex, groupCourses, type PyqExam } from "@/lib/pyq-index";
 import { isPyqLevel, pyqLevelHref } from "@/lib/pyq-urls";
@@ -51,10 +52,9 @@ export default async function PyqLevelPage({ params, searchParams }: PageProps<"
   const groups = groupCourses(courses.filter((c) => papersOf(c).length > 0));
 
   const levelTabs = PYQ_LEVELS.filter((l) => pyqCoursesForLevel(l.slug).length > 0).map((l) => ({
-    id: l.slug,
+    slug: l.slug,
     label: l.short,
     href: keepScope(pyqLevelHref(l.slug), scope),
-    count: pyqCoursesForLevel(l.slug).reduce((n, c) => n + c.papers.length, 0),
   }));
   const examPills = [
     { slug: undefined, label: "All exams", href: keepScope(pyqLevelHref(level.slug), scope), count: courses.reduce((n, c) => n + papersOf(c, undefined).length, 0) },
@@ -68,36 +68,32 @@ export default async function PyqLevelPage({ params, searchParams }: PageProps<"
 
   return (
     <>
-      <PageHeader
-        crumbs={[{ label: "PYQs", href: "/pyqs" }, { label: level.name }]}
-        title={`${level.name} papers`}
-        description="Pick a subject. Every paper has the official answer key."
-      />
+      {/* Breadcrumb kept for search engines and screen readers; on screen the bar below does its job. */}
+      <Breadcrumbs items={[{ label: "PYQs", href: "/pyqs" }, { label: level.name }]} className="sr-only" />
+      <PageHeader title={`${level.name} papers`} description="Pick a subject. Every paper has the official answer key." />
 
-      <div className="sticky top-16 z-20 border-b border-border bg-bg/90 backdrop-blur">
-        <div className="container-page flex flex-wrap items-center justify-between gap-x-6">
-          <LinkTabs tabs={levelTabs} active={level.slug} />
-          <nav aria-label="Exam" className="-mx-1 flex gap-1.5 overflow-x-auto px-1 py-2.5 [scrollbar-width:none]">
-            {examPills.map((e) => {
-              const on = e.slug === exam;
-              return (
-                <Link
-                  key={e.label}
-                  href={e.href}
-                  scroll={false}
-                  aria-current={on ? "true" : undefined}
-                  className={cn(
-                    "shrink-0 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors",
-                    on ? "border-fg bg-ink text-bg" : "border-border bg-surface hover:border-fg/30",
-                  )}
-                >
-                  {e.label} <span className={on ? "opacity-70" : "text-muted"}>{e.count}</span>
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-      </div>
+      {/* Same bar as /practice, plus the exam filter on the right. */}
+      <PyqLevelBar levels={levelTabs} active={level.slug} allHref={keepScope("/pyqs", scope)} back={{ href: "/practice", label: "Practice" }} sticky>
+        <nav aria-label="Exam" className="-mx-1 flex gap-1.5 overflow-x-auto px-1 py-2 [scrollbar-width:none]">
+          {examPills.map((e) => {
+            const on = e.slug === exam;
+            return (
+              <Link
+                key={e.label}
+                href={e.href}
+                scroll={false}
+                aria-current={on ? "true" : undefined}
+                className={cn(
+                  "shrink-0 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors",
+                  on ? "border-fg bg-ink text-bg" : "border-border bg-surface hover:border-fg/30",
+                )}
+              >
+                {e.label} <span className={on ? "opacity-70" : "text-muted"}>{e.count}</span>
+              </Link>
+            );
+          })}
+        </nav>
+      </PyqLevelBar>
 
       <div className="container-page space-y-10 py-10">
         <ScopeSwitch list={scoped} links={scopeLinks(pyqLevelHref(level.slug), sp)} />

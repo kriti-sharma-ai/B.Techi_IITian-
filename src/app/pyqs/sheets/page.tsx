@@ -53,7 +53,7 @@ export default async function QuestionSheetsPage({ searchParams }: PageProps<"/p
       </PageHeader>
 
       <div className="container-page space-y-14 py-10 md:py-14">
-        {scoped.mine > 0 && <ScopeSwitch list={scoped} links={scopeLinks(PYQ_SHEETS_HREF, sp)} className="-mb-6 md:-mb-8" />}
+        {scoped.mine > 0 && <ScopeSwitch list={scoped} links={scopeLinks(PYQ_SHEETS_HREF, sp)} className="mb-8 md:mb-6" />}
         {PYQ_LEVELS.map((level) => {
           const list = scoped.items.filter((s) => s.course.level === level.slug);
           if (!list.length) return null;

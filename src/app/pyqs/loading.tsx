@@ -6,7 +6,7 @@ export default function Loading() {
       <HeaderBone eyebrow stats={3} />
       <div className="container-page space-y-14 py-10 md:py-14">
         <Bone className="h-12 rounded-2xl" />
-        <ScopeBone className="-mb-6 md:-mb-8" />
+        <ScopeBone className="mb-8 md:mb-6" />
         {Array.from({ length: 2 }, (_, l) => (
           <section key={l}>
             <div className="mb-5 flex flex-wrap items-end justify-between gap-3">

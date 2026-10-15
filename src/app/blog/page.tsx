@@ -31,9 +31,8 @@ export default function BlogPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <PageHeader crumbs={[{ label: "Blog" }]} title="Blog" description="Guides on the IITM BS, exams and data careers.">
-        <BlogCategoryNav />
-      </PageHeader>
+      <PageHeader crumbs={[{ label: "Blog" }]} title="Blog" description="Guides on the IITM BS, exams and data careers." />
+      <BlogCategoryNav />
 
       <div className="container-page py-8">
         {posts.length ? (

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useRoutePath } from "@/lib/use-route-path";
 import { Fragment, useEffect, useRef, useState, type FormEvent } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -602,7 +603,7 @@ function MyCoursesNavButton({ mobile, onAction }: { mobile?: boolean; onAction?:
 /* ───────────── Main Navbar ───────────── */
 
 export function Navbar() {
-  const pathname = usePathname();
+  const pathname = useRoutePath();
   const [menuOpen, setMenuOpen] = useState(false);
   const user = useStore((s) => s.user);
   const hydrated = useHydrated();
@@ -701,7 +702,7 @@ export function Navbar() {
 
 /** App-style bottom navigation for phones (PRD §37). */
 export function BottomNav() {
-  const pathname = usePathname();
+  const pathname = useRoutePath();
   const user = useStore((s) => s.user);
   const hydrated = useHydrated();
   // Auth pages are full-screen; the bar would cover their submit buttons.

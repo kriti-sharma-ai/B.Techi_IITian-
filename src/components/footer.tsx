@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRoutePath } from "@/lib/use-route-path";
 import { hrefEnabled } from "@/lib/site";
 import { YOUTUBE_URL } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
@@ -45,7 +45,7 @@ const legal = [
 ];
 
 export function Footer() {
-  const pathname = usePathname();
+  const pathname = useRoutePath();
   // Only rendered on the landing page.
   if (pathname !== "/") return null;
 

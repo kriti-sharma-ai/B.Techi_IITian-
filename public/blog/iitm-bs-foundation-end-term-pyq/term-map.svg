@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="380" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">Which term does each End Term paper belong to?</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">Every term: weekly assignments, Quiz 1, Quiz 2, then the End Term on all 12 weeks.</text>
+  <g class="tm" fill="#667085" font-size="12" font-weight="700">
+    <text x="250" y="100" text-anchor="middle">Quiz 1</text>
+    <text x="420" y="100" text-anchor="middle">Quiz 2</text>
+    <text x="630" y="100" text-anchor="middle">End Term (paper name)</text>
+  </g>
+  <g class="ln" stroke="#e5e7eb" stroke-width="2">
+    <line x1="190" y1="133" x2="720" y2="133"/>
+    <line x1="190" y1="193" x2="720" y2="193"/>
+    <line x1="190" y1="253" x2="720" y2="253"/>
+    <line x1="190" y1="313" x2="720" y2="313"/>
+  </g>
+  <g class="t" fill="#171717" font-size="14" font-weight="700">
+    <text x="40" y="138">Sep 2024 term</text>
+    <text x="40" y="198">Jan 2025 term</text>
+    <text x="40" y="258">May 2025 term</text>
+    <text x="40" y="318">Sep 2025 term</text>
+  </g>
+  <g font-size="12" text-anchor="middle">
+    <rect class="bg2" x="190" y="116" width="120" height="34" rx="8" fill="#eef1f4"/>
+    <text class="tm" x="250" y="138" fill="#667085">Quiz 1</text>
+    <rect class="bg2" x="360" y="116" width="120" height="34" rx="8" fill="#eef1f4"/>
+    <text class="tm" x="420" y="138" fill="#667085">Quiz 2</text>
+    <rect class="brand" x="540" y="116" width="180" height="34" rx="8" fill="#ffd21c"/>
+    <text class="ink" x="630" y="138" font-weight="700" fill="#0b0b0b">End Term Dec 2024</text>
+
+    <rect class="bg2" x="190" y="176" width="120" height="34" rx="8" fill="#eef1f4"/>
+    <text class="tm" x="250" y="198" fill="#667085">Quiz 1</text>
+    <rect class="bg2" x="360" y="176" width="120" height="34" rx="8" fill="#eef1f4"/>
+    <text class="tm" x="420" y="198" fill="#667085">Quiz 2</text>
+    <rect class="brand" x="540" y="176" width="180" height="34" rx="8" fill="#ffd21c"/>
+    <text class="ink" x="630" y="198" font-weight="700" fill="#0b0b0b">End Term Apr 2025</text>
+
+    <rect class="bg2" x="190" y="236" width="120" height="34" rx="8" fill="#eef1f4"/>
+    <text class="tm" x="250" y="258" fill="#667085">Quiz 1</text>
+    <rect class="blue" x="360" y="236" width="120" height="34" rx="8" fill="#2563eb"/>
+    <text x="420" y="258" font-weight="700" fill="#fff">Quiz 2 Aug 2025</text>
+    <rect class="brand" x="540" y="236" width="180" height="34" rx="8" fill="#ffd21c"/>
+    <text class="ink" x="630" y="258" font-weight="700" fill="#0b0b0b">End Term Aug 2025</text>
+
+    <rect class="blue" x="190" y="296" width="120" height="34" rx="8" fill="#2563eb"/>
+    <text x="250" y="318" font-weight="700" fill="#fff">Quiz 1 Oct 2025</text>
+    <rect class="bg2" x="360" y="296" width="120" height="34" rx="8" fill="#eef1f4"/>
+    <text class="tm" x="420" y="318" fill="#667085">Quiz 2</text>
+    <rect class="bg2" x="540" y="296" width="180" height="34" rx="8" fill="#eef1f4"/>
+    <text class="tm" x="630" y="318" fill="#667085">End Term</text>
+  </g>
+  <text class="tm" x="40" y="366" font-size="11" fill="#667085">Coloured boxes are papers you can sit on BTechi. FN and AN sessions of one End Term often share question patterns.</text>
+</svg>

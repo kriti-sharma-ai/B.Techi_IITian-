@@ -488,7 +488,7 @@ This plan assumes about **2–3 hours a day**, five or six days a week, which is
 
 - Revise Class 10 algebra: linear equations, factorising, the quadratic formula.
 - Read our four [cheat notes](/qualifier/notes) once each, slowly, without trying to memorise.
-- Try one [previous-year paper](/pyqs) untimed, simply to see what the questions look like. Don't score it; note what felt unfamiliar.
+- Try one [previous-year paper](/blog/iitm-qualifier-pyq-with-answer-key) untimed, simply to see what the questions look like. Don't score it; note what felt unfamiliar.
 
 ### Week 1: build the system
 
@@ -607,7 +607,7 @@ Four weeks of four courses on top of everything else in your life is a real load
 
 ## How to use previous-year papers properly
 
-Past papers are the best preparation resource there is, and most people waste them. Here's how to get full value. (We've collected the qualifier papers with official keys in BTechi's [PYQ library](/pyqs), which you can attempt in an exam-style portal.)
+Past papers are the best preparation resource there is, and most people waste them. Here's how to get full value. For the most repeated questions in each course, see our guides to [Maths important questions](/blog/iitm-qualifier-maths-important-questions), [Stats important questions](/blog/iitm-qualifier-stats-important-questions), [Computational Thinking PYQs](/blog/iitm-qualifier-computational-thinking-pyq) and [English important questions](/blog/iitm-qualifier-english-important-questions). (We've collected the qualifier papers with official keys in BTechi's [PYQ library](/pyqs), which you can attempt in an exam-style portal.)
 
 **Don't start with full papers.** In weeks 1–3, use past papers **topic by topic**: after finishing week 2 content, do only the week 1–2 questions. This tells you whether you've learned the material while there's still time to fix gaps.
 

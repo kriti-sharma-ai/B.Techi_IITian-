@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 336" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="336" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">Where the Stats I qualifier marks go</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">5 past qualifier papers (Jan 2023 to May 2024): 74 questions, 200 marks in total.</text>
+  <text class="t" x="256" y="117" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Association of two variables</text>
+  <rect class="bg2" x="270" y="100" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="brand" x="270" y="100" width="330" height="24" rx="6" fill="#ffd21c"/>
+  <text class="tm" x="612" y="117" font-size="12" fill="#667085">47 marks · 23.5% · 15 Qs</text>
+  <text class="t" x="256" y="155" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Variance, percentiles, IQR</text>
+  <rect class="bg2" x="270" y="138" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="brand" x="270" y="138" width="295" height="24" rx="6" fill="#ffd21c"/>
+  <text class="tm" x="612" y="155" font-size="12" fill="#667085">42 marks · 21% · 13 Qs</text>
+  <text class="t" x="256" y="193" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Types of data and scales</text>
+  <rect class="bg2" x="270" y="176" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="brand" x="270" y="176" width="281" height="24" rx="6" fill="#ffd21c"/>
+  <text class="tm" x="612" y="193" font-size="12" fill="#667085">40 marks · 20% · 17 Qs</text>
+  <text class="t" x="256" y="231" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Categorical data and charts</text>
+  <rect class="bg2" x="270" y="214" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="blue" x="270" y="214" width="274" height="24" rx="6" fill="#2563eb"/>
+  <text class="tm" x="612" y="231" font-size="12" fill="#667085">39 marks · 19.5% · 17 Qs</text>
+  <text class="t" x="256" y="269" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Mean, median and mode</text>
+  <rect class="bg2" x="270" y="252" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="blue" x="270" y="252" width="225" height="24" rx="6" fill="#2563eb"/>
+  <text class="tm" x="612" y="269" font-size="12" fill="#667085">32 marks · 16% · 12 Qs</text>
+  <text class="tm" x="40" y="318" font-size="11" fill="#667085">Source: official papers and answer keys on BTechi, tagged by topic. Top 3 topics highlighted.</text>
+</svg>

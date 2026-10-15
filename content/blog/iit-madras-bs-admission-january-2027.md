@@ -180,7 +180,7 @@ You have more time than the deadline suggests. Here's how to use it, assuming yo
 ### December 2026: preview the qualifier
 
 - Read BTechi's [cheat notes for all four qualifier courses](/qualifier/notes) once, slowly. Don't memorise; just notice what feels hard.
-- Attempt one [previous-year qualifier paper](/pyqs) untimed. Score it **by course** and write down your weakest one.
+- Attempt one [previous-year qualifier paper](/blog/iitm-qualifier-pyq-with-answer-key) untimed. Score it **by course** and write down your weakest one.
 - Practise tracing simple step-by-step procedures on paper for CT.
 
 ### January 2027: apply and warm up

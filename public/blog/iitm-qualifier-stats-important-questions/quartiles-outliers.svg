@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="420" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">Quartiles and outliers, the IITM way</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">Stats I qualifier, May 2023 Q13 to Q15. Prices of 10 t-shirts (Rs), sorted first.</text>
+  <rect class="bg2" x="60" y="96" width="60" height="40" rx="8" fill="#eef1f4"/>
+  <text class="t" x="90" y="121" font-size="15" font-weight="700" fill="#171717" text-anchor="middle">150</text>
+  <text class="tm" x="90" y="154" font-size="11" fill="#667085" text-anchor="middle">#1</text>
+  <rect class="bg2" x="128" y="96" width="60" height="40" rx="8" fill="#eef1f4"/>
+  <text class="t" x="158" y="121" font-size="15" font-weight="700" fill="#171717" text-anchor="middle">180</text>
+  <text class="tm" x="158" y="154" font-size="11" fill="#667085" text-anchor="middle">#2</text>
+  <rect class="brand" x="196" y="96" width="60" height="40" rx="8" fill="#ffd21c"/>
+  <text class="ink" x="226" y="121" font-size="15" font-weight="700" fill="#0b0b0b" text-anchor="middle">200</text>
+  <text class="tm" x="226" y="154" font-size="11" fill="#667085" text-anchor="middle">#3</text>
+  <rect class="bg2" x="264" y="96" width="60" height="40" rx="8" fill="#eef1f4"/>
+  <text class="t" x="294" y="121" font-size="15" font-weight="700" fill="#171717" text-anchor="middle">240</text>
+  <text class="tm" x="294" y="154" font-size="11" fill="#667085" text-anchor="middle">#4</text>
+  <rect class="bg2" x="332" y="96" width="60" height="40" rx="8" fill="#eef1f4"/>
+  <text class="t" x="362" y="121" font-size="15" font-weight="700" fill="#171717" text-anchor="middle">300</text>
+  <text class="tm" x="362" y="154" font-size="11" fill="#667085" text-anchor="middle">#5</text>
+  <rect class="bg2" x="400" y="96" width="60" height="40" rx="8" fill="#eef1f4"/>
+  <text class="t" x="430" y="121" font-size="15" font-weight="700" fill="#171717" text-anchor="middle">320</text>
+  <text class="tm" x="430" y="154" font-size="11" fill="#667085" text-anchor="middle">#6</text>
+  <rect class="bg2" x="468" y="96" width="60" height="40" rx="8" fill="#eef1f4"/>
+  <text class="t" x="498" y="121" font-size="15" font-weight="700" fill="#171717" text-anchor="middle">420</text>
+  <text class="tm" x="498" y="154" font-size="11" fill="#667085" text-anchor="middle">#7</text>
+  <rect class="brand" x="536" y="96" width="60" height="40" rx="8" fill="#ffd21c"/>
+  <text class="ink" x="566" y="121" font-size="15" font-weight="700" fill="#0b0b0b" text-anchor="middle">550</text>
+  <text class="tm" x="566" y="154" font-size="11" fill="#667085" text-anchor="middle">#8</text>
+  <rect class="bg2" x="604" y="96" width="60" height="40" rx="8" fill="#eef1f4"/>
+  <text class="t" x="634" y="121" font-size="15" font-weight="700" fill="#171717" text-anchor="middle">700</text>
+  <text class="tm" x="634" y="154" font-size="11" fill="#667085" text-anchor="middle">#9</text>
+  <rect class="bg2" x="672" y="96" width="60" height="40" rx="8" fill="#eef1f4"/>
+  <text class="t" x="702" y="121" font-size="15" font-weight="700" fill="#171717" text-anchor="middle">750</text>
+  <text class="tm" x="702" y="154" font-size="11" fill="#667085" text-anchor="middle">#10</text>
+  <text class="t" x="60" y="186" font-size="13" font-weight="700" fill="#171717">Q1: i = 0.25 × 10 = 2.5, not whole, round up to #3 = 200</text>
+  <text class="t" x="60" y="208" font-size="13" font-weight="700" fill="#171717">Q3: i = 0.75 × 10 = 7.5, not whole, round up to #8 = 550</text>
+  <text class="tm" x="60" y="230" font-size="13" fill="#667085">IQR = 550 − 200 = 350. Fences: 200 − 525 = −325 and 550 + 525 = 1075.</text>
+  <line class="ln" x1="60" y1="320" x2="735" y2="320" stroke="#e5e7eb" stroke-width="2"/>
+  <text class="tm" x="60" y="346" font-size="11" fill="#667085" text-anchor="middle">-400</text>
+  <text class="tm" x="240" y="346" font-size="11" fill="#667085" text-anchor="middle">0</text>
+  <text class="tm" x="420" y="346" font-size="11" fill="#667085" text-anchor="middle">400</text>
+  <text class="tm" x="600" y="346" font-size="11" fill="#667085" text-anchor="middle">800</text>
+  <rect class="green" x="93.75" y="300" width="630" height="40" rx="6" fill="#15803d" fill-opacity="0.12"/>
+  <line class="s-muted" x1="93.75" y1="282" x2="93.75" y2="340" stroke="#667085" stroke-width="2" stroke-dasharray="5 4"/>
+  <line class="s-muted" x1="723.75" y1="282" x2="723.75" y2="340" stroke="#667085" stroke-width="2" stroke-dasharray="5 4"/>
+  <text class="tm" x="93.75" y="276" font-size="12" fill="#667085" text-anchor="middle">lower fence −325</text>
+  <text class="tm" x="723.75" y="276" font-size="12" fill="#667085" text-anchor="middle">upper fence 1075</text>
+  <circle class="blue" cx="307.5" cy="320" r="5" fill="#2563eb"/>
+  <circle class="blue" cx="321.0" cy="320" r="5" fill="#2563eb"/>
+  <circle class="blue" cx="330.0" cy="320" r="5" fill="#2563eb"/>
+  <circle class="blue" cx="348.0" cy="320" r="5" fill="#2563eb"/>
+  <circle class="blue" cx="375.0" cy="320" r="5" fill="#2563eb"/>
+  <circle class="blue" cx="384.0" cy="320" r="5" fill="#2563eb"/>
+  <circle class="blue" cx="429.0" cy="320" r="5" fill="#2563eb"/>
+  <circle class="blue" cx="487.5" cy="320" r="5" fill="#2563eb"/>
+  <circle class="blue" cx="555.0" cy="320" r="5" fill="#2563eb"/>
+  <circle class="blue" cx="577.5" cy="320" r="5" fill="#2563eb"/>
+  <text class="t" x="40" y="384" font-size="14" font-weight="700" fill="#171717">Every price sits inside the fences, so the number of outliers is 0 (official key: 0).</text>
+  <text class="tm" x="40" y="406" font-size="11" fill="#667085">Rule from the Stats I course: i = P × n / 100. Fraction: round up. Whole number: average positions i and i + 1.</text>
+</svg>

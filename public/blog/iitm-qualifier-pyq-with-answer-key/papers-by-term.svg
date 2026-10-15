@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="350" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">IITM qualifier papers on BTechi, by term</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">18 course papers with official answer keys. A full 4-hour exam exists when all four courses are there.</text>
+  <!-- column headers -->
+  <g class="t" fill="#171717" font-size="13" font-weight="700" text-anchor="middle">
+    <text x="245" y="100">Jan 2023</text>
+    <text x="355" y="100">May 2023</text>
+    <text x="465" y="100">Sep 2023</text>
+    <text x="575" y="100">Jan 2024</text>
+    <text x="685" y="100">May 2024</text>
+  </g>
+  <!-- row labels -->
+  <g class="t" fill="#171717" font-size="14" font-weight="700">
+    <text x="40" y="136">Maths I</text>
+    <text x="40" y="180">Stats I</text>
+    <text x="40" y="224">Computational Thinking</text>
+    <text x="40" y="268">English I</text>
+  </g>
+  <!-- available cells (green) -->
+  <g class="green" fill="#15803d">
+    <rect x="200" y="114" width="90" height="32" rx="8"/>
+    <rect x="310" y="114" width="90" height="32" rx="8"/>
+    <rect x="420" y="114" width="90" height="32" rx="8"/>
+    <rect x="530" y="114" width="90" height="32" rx="8"/>
+    <rect x="640" y="114" width="90" height="32" rx="8"/>
+    <rect x="200" y="158" width="90" height="32" rx="8"/>
+    <rect x="310" y="158" width="90" height="32" rx="8"/>
+    <rect x="420" y="158" width="90" height="32" rx="8"/>
+    <rect x="530" y="158" width="90" height="32" rx="8"/>
+    <rect x="640" y="158" width="90" height="32" rx="8"/>
+    <rect x="310" y="202" width="90" height="32" rx="8"/>
+    <rect x="420" y="202" width="90" height="32" rx="8"/>
+    <rect x="530" y="202" width="90" height="32" rx="8"/>
+    <rect x="640" y="202" width="90" height="32" rx="8"/>
+    <rect x="310" y="246" width="90" height="32" rx="8"/>
+    <rect x="420" y="246" width="90" height="32" rx="8"/>
+    <rect x="530" y="246" width="90" height="32" rx="8"/>
+    <rect x="640" y="246" width="90" height="32" rx="8"/>
+  </g>
+  <!-- missing cells -->
+  <g class="bg2" fill="#eef1f4">
+    <rect x="200" y="202" width="90" height="32" rx="8"/>
+    <rect x="200" y="246" width="90" height="32" rx="8"/>
+  </g>
+  <g fill="#fff" font-size="12" font-weight="700" text-anchor="middle">
+    <text x="245" y="135">Paper</text><text x="355" y="135">Paper</text><text x="465" y="135">Paper</text><text x="575" y="135">Paper</text><text x="685" y="135">Paper</text>
+    <text x="245" y="179">Paper</text><text x="355" y="179">Paper</text><text x="465" y="179">Paper</text><text x="575" y="179">Paper</text><text x="685" y="179">Paper</text>
+    <text x="355" y="223">Paper</text><text x="465" y="223">Paper</text><text x="575" y="223">Paper</text><text x="685" y="223">Paper</text>
+    <text x="355" y="267">Paper</text><text x="465" y="267">Paper</text><text x="575" y="267">Paper</text><text x="685" y="267">Paper</text>
+  </g>
+  <g class="tm" fill="#667085" font-size="12" text-anchor="middle">
+    <text x="245" y="223">not on BTechi</text>
+    <text x="245" y="267">not on BTechi</text>
+  </g>
+  <!-- full exam row -->
+  <g class="ln" stroke="#e5e7eb" stroke-width="1"><line x1="40" y1="292" x2="760" y2="292"/></g>
+  <text class="t" x="40" y="320" font-size="14" font-weight="700" fill="#171717">Full 4-hour exam</text>
+  <g class="brand" fill="#ffd21c">
+    <rect x="310" y="302" width="90" height="28" rx="8"/>
+    <rect x="420" y="302" width="90" height="28" rx="8"/>
+    <rect x="530" y="302" width="90" height="28" rx="8"/>
+    <rect x="640" y="302" width="90" height="28" rx="8"/>
+  </g>
+  <g class="ink" fill="#0b0b0b" font-size="12" font-weight="700" text-anchor="middle">
+    <text x="355" y="321">4 courses</text><text x="465" y="321">4 courses</text><text x="575" y="321">4 courses</text><text x="685" y="321">4 courses</text>
+  </g>
+</svg>

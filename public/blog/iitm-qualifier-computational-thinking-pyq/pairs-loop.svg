@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="400" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">How the "pairs" nested loop visits every pair once</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">Table 1 has 4 cards: A, B, C, D. X is moved to Table 2, so it is never compared again.</text>
+  <g font-size="13">
+    <!-- Round 1 -->
+    <rect class="bg2" x="40" y="86" width="230" height="250" rx="14" fill="#eef1f4"/>
+    <text class="t" x="56" y="112" font-weight="800" fill="#171717">Round 1: X = A</text>
+    <text class="tm" x="56" y="134" fill="#667085">Y runs over B, C, D</text>
+    <rect class="purple" x="56" y="150" width="198" height="30" rx="8" fill="#7c3aed"/>
+    <text x="155" y="170" fill="#fff" font-weight="700" text-anchor="middle">(A, B)</text>
+    <rect class="purple" x="56" y="188" width="198" height="30" rx="8" fill="#7c3aed"/>
+    <text x="155" y="208" fill="#fff" font-weight="700" text-anchor="middle">(A, C)</text>
+    <rect class="purple" x="56" y="226" width="198" height="30" rx="8" fill="#7c3aed"/>
+    <text x="155" y="246" fill="#fff" font-weight="700" text-anchor="middle">(A, D)</text>
+    <text class="tm" x="56" y="284" fill="#667085">Then Table 3 goes back</text>
+    <text class="tm" x="56" y="304" fill="#667085">to Table 1: B, C, D</text>
+    <text class="t" x="56" y="326" font-weight="700" fill="#171717">3 pairs</text>
+    <!-- Round 2 -->
+    <rect class="bg2" x="285" y="86" width="230" height="250" rx="14" fill="#eef1f4"/>
+    <text class="t" x="301" y="112" font-weight="800" fill="#171717">Round 2: X = B</text>
+    <text class="tm" x="301" y="134" fill="#667085">Y runs over C, D</text>
+    <rect class="blue" x="301" y="150" width="198" height="30" rx="8" fill="#2563eb"/>
+    <text x="400" y="170" fill="#fff" font-weight="700" text-anchor="middle">(B, C)</text>
+    <rect class="blue" x="301" y="188" width="198" height="30" rx="8" fill="#2563eb"/>
+    <text x="400" y="208" fill="#fff" font-weight="700" text-anchor="middle">(B, D)</text>
+    <text class="tm" x="301" y="284" fill="#667085">A is already in Table 2,</text>
+    <text class="tm" x="301" y="304" fill="#667085">so (B, A) never happens</text>
+    <text class="t" x="301" y="326" font-weight="700" fill="#171717">2 pairs</text>
+    <!-- Round 3 -->
+    <rect class="bg2" x="530" y="86" width="230" height="250" rx="14" fill="#eef1f4"/>
+    <text class="t" x="546" y="112" font-weight="800" fill="#171717">Round 3: X = C</text>
+    <text class="tm" x="546" y="134" fill="#667085">Y runs over D</text>
+    <rect class="teal" x="546" y="150" width="198" height="30" rx="8" fill="#0d9488"/>
+    <text x="645" y="170" fill="#fff" font-weight="700" text-anchor="middle">(C, D)</text>
+    <text class="tm" x="546" y="284" fill="#667085">Round 4: X = D, Table 1</text>
+    <text class="tm" x="546" y="304" fill="#667085">is empty, inner loop skips</text>
+    <text class="t" x="546" y="326" font-weight="700" fill="#171717">1 pair</text>
+  </g>
+  <rect class="brand" x="40" y="352" width="720" height="34" rx="10" fill="#ffd21c"/>
+  <text class="ink" x="400" y="374" font-size="14" font-weight="700" fill="#0b0b0b" text-anchor="middle">3 + 2 + 1 = 6 pairs = 4 x 3 / 2. With n cards: n(n - 1) / 2 comparisons.</text>
+</svg>

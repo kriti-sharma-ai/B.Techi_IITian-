@@ -1,4 +1,4 @@
-# BTechi blog: editorial plan (102 posts)
+# BTechi blog: editorial plan (110 posts)
 
 Files starting with `_` are not published. Each post is `content/blog/<slug>.md`.
 Status: ✅ published · ✍️ next up · ⬜ planned. ★ = pillar page (long, links out to its cluster).
@@ -55,6 +55,8 @@ featured: false
 | 18 | ⬜ | iitm-bs-scholarships-income-based-waivers | iit madras bs scholarship | Evergreen |
 | 19 | ⬜ | iitm-bs-first-week-survival-guide | iitm bs first week | Evergreen |
 | 20 | ⬜ | iitm-bs-higher-studies-after-degree | iit madras bs masters abroad | Evergreen |
+| 103 | ✅ | iit-madras-bs-data-science-pyq | iit madras bs data science pyq | ★ Pillar |
+| 104 | ✅ | iitm-qualifier-pyq-with-answer-key | iitm qualifier previous year question paper | ★ Pillar |
 
 ## Exam Prep (20)
 
@@ -80,6 +82,12 @@ featured: false
 | 38 | ⬜ | failed-the-qualifier-what-next | failed iitm qualifier | Evergreen |
 | 39 | ⬜ | note-taking-for-online-lectures | how to take notes from video lectures | Evergreen |
 | 40 | ⬜ | python-for-data-analytics-course-guide | iitm python for data analytics | Course guide |
+| 105 | ✅ | iitm-qualifier-maths-important-questions | iitm qualifier maths important questions | PYQ guide |
+| 106 | ✅ | iitm-qualifier-stats-important-questions | iitm qualifier stats important questions | PYQ guide |
+| 107 | ✅ | iitm-qualifier-computational-thinking-pyq | iitm qualifier computational thinking pyq | PYQ guide |
+| 108 | ✅ | iitm-qualifier-english-important-questions | iitm qualifier english important questions | PYQ guide |
+| 109 | ✅ | iitm-bs-foundation-end-term-pyq | iitm bs foundation end term pyq | PYQ guide |
+| 110 | ✅ | iitm-bs-diploma-pyq-important-topics | iitm bs diploma pyq | PYQ guide |
 
 ## Data Skills (25)
 

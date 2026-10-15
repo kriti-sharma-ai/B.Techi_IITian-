@@ -273,7 +273,7 @@ You don't need to prepare before applying, but a short warm-up makes the four qu
 | 6–8 | Logical thinking for CT | Write step-by-step instructions for everyday tasks; trace simple loops on paper ("start with sum = 0, for each number add it…") |
 | 9–10 | English | Parts of speech; commonly confused words; read one editorial a day and note five useful phrases |
 | 11–12 | The real thing | Read our [cheat notes](/qualifier/notes) for all four courses, slowly, without trying to memorise |
-| 13–14 | One paper | Attempt one [previous-year qualifier paper](/pyqs) untimed, then check every answer and note which topics felt unfamiliar |
+| 13–14 | One paper | Attempt one [previous-year qualifier paper](/blog/iitm-qualifier-pyq-with-answer-key) untimed, then check every answer and note which topics felt unfamiliar |
 
 The goal isn't to finish the syllabus early. It's to make sure that when week 1 opens, nothing feels completely foreign, and to tell you honestly which of the four courses will need the most attention. For a full plan once the qualifier weeks begin, see our [qualifier exam guide](/blog/iitm-bs-qualifier-exam-guide).
 
@@ -571,7 +571,7 @@ Credits you've used for an IITM diploma or degree can't be transferred elsewhere
 4. **Fill the application** on the programme site. You can edit it until you pay the fee; after that, details like your personal email can't be changed, so get them right.
 5. **Pay the application fee.**
 6. **Choose two exam cities** in order of preference. You can change them up to four weeks before the qualifier exam.
-7. **Start week 1 the day it opens.** Use BTechi's free [qualifier cheat notes](/qualifier/notes), [previous-year papers](/pyqs) and [mock qualifier exams](/qualifier) alongside the official content.
+7. **Start week 1 the day it opens.** Use BTechi's free [qualifier cheat notes](/qualifier/notes), [previous-year papers](/pyqs) ([how to use them by level](/blog/iit-madras-bs-data-science-pyq)) and [mock qualifier exams](/qualifier) alongside the official content.
 8. **Submit every assignment** before its deadline, and aim well above the minimum: those scores are your safety margin.
 9. **Sit the qualifier exam.** Read the exam-day instructions twice.
 10. **Register for Foundation courses** once you've qualified and your documents are verified. You'll get a roll number and an official IITM student email.
@@ -654,7 +654,7 @@ If you're starting now, here's where we'd begin:
 
 - Read the [qualifier exam guide](/blog/iitm-bs-qualifier-exam-guide) end to end.
 - Skim the [Maths I, Stats I, CT and English I cheat notes](/qualifier/notes) to see what weeks 1–4 cover.
-- Try one [previous-year qualifier paper](/pyqs) untimed, just to see the style of questions.
+- Try one [previous-year qualifier paper](/blog/iitm-qualifier-pyq-with-answer-key) untimed, just to see the style of questions.
 - Decide your programme with the [Management vs Data Science comparison](/blog/iitm-bs-management-vs-data-science).
 
 ## Frequently asked questions

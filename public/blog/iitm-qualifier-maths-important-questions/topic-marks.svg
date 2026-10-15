@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 412" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="412" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">Where the Maths I qualifier marks go</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">5 past qualifier papers (Jan 2023 to May 2024): 63 questions, 240 marks in total.</text>
+  <text class="t" x="256" y="117" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Polynomials and graphs</text>
+  <rect class="bg2" x="270" y="100" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="brand" x="270" y="100" width="330" height="24" rx="6" fill="#ffd21c"/>
+  <text class="tm" x="612" y="117" font-size="12" fill="#667085">61 marks · 25.4% · 14 Qs</text>
+  <text class="t" x="256" y="155" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Quadratic functions</text>
+  <rect class="bg2" x="270" y="138" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="brand" x="270" y="138" width="249" height="24" rx="6" fill="#ffd21c"/>
+  <text class="tm" x="612" y="155" font-size="12" fill="#667085">46 marks · 19.2% · 13 Qs</text>
+  <text class="t" x="256" y="193" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Straight lines</text>
+  <rect class="bg2" x="270" y="176" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="brand" x="270" y="176" width="222" height="24" rx="6" fill="#ffd21c"/>
+  <text class="tm" x="612" y="193" font-size="12" fill="#667085">41 marks · 17.1% · 11 Qs</text>
+  <text class="t" x="256" y="231" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Relations and functions</text>
+  <rect class="bg2" x="270" y="214" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="blue" x="270" y="214" width="206" height="24" rx="6" fill="#2563eb"/>
+  <text class="tm" x="612" y="231" font-size="12" fill="#667085">38 marks · 15.8% · 11 Qs</text>
+  <text class="t" x="256" y="269" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Sets and Venn diagrams</text>
+  <rect class="bg2" x="270" y="252" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="blue" x="270" y="252" width="151" height="24" rx="6" fill="#2563eb"/>
+  <text class="tm" x="612" y="269" font-size="12" fill="#667085">28 marks · 11.7% · 8 Qs</text>
+  <text class="t" x="256" y="307" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Best-fit line and SSE</text>
+  <rect class="bg2" x="270" y="290" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="blue" x="270" y="290" width="92" height="24" rx="6" fill="#2563eb"/>
+  <text class="tm" x="612" y="307" font-size="12" fill="#667085">17 marks · 7.1% · 4 Qs</text>
+  <text class="t" x="256" y="345" font-size="13" font-weight="600" fill="#171717" text-anchor="end">Functions with |x|</text>
+  <rect class="bg2" x="270" y="328" width="330" height="24" rx="6" fill="#eef1f4"/>
+  <rect class="blue" x="270" y="328" width="49" height="24" rx="6" fill="#2563eb"/>
+  <text class="tm" x="612" y="345" font-size="12" fill="#667085">9 marks · 3.8% · 2 Qs</text>
+  <text class="tm" x="40" y="394" font-size="11" fill="#667085">Source: official papers and answer keys on BTechi, tagged by topic. Top 3 topics highlighted.</text>
+</svg>

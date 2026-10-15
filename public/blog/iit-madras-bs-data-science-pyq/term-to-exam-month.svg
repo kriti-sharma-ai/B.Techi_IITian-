@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" font-family="system-ui, sans-serif">
+  <rect class="bg" width="800" height="340" fill="#fff"/>
+  <text class="t" x="40" y="40" font-size="20" font-weight="700" fill="#171717">Term name vs exam month</text>
+  <text class="tm" x="40" y="63" font-size="14" fill="#667085">A paper is named by the month it was held. The term page groups it with its term.</text>
+  <!-- header row -->
+  <g class="tm" fill="#667085" font-size="12" font-weight="700">
+    <text x="40" y="104">TERM</text>
+    <text x="230" y="104">WHAT IS ON BTECHI</text>
+    <text x="560" y="104">PAPER NAME STARTS WITH</text>
+  </g>
+  <g class="ln" stroke="#e5e7eb" stroke-width="1">
+    <line x1="40" y1="114" x2="760" y2="114"/>
+    <line x1="40" y1="164" x2="760" y2="164"/>
+    <line x1="40" y1="214" x2="760" y2="214"/>
+    <line x1="40" y1="264" x2="760" y2="264"/>
+  </g>
+  <!-- row 1: Sep 2024 -->
+  <text class="t" x="40" y="145" font-size="15" font-weight="700" fill="#171717">September 2024</text>
+  <text class="tm" x="230" y="145" font-size="13" fill="#667085">End term, held in December</text>
+  <rect class="green" x="560" y="128" width="196" height="26" rx="8" fill="#15803d"/>
+  <text x="570" y="146" font-size="13" font-weight="700" fill="#fff">end-term-dec-2024</text>
+  <!-- row 2: Jan 2025 -->
+  <text class="t" x="40" y="195" font-size="15" font-weight="700" fill="#171717">January 2025</text>
+  <text class="tm" x="230" y="195" font-size="13" fill="#667085">End term, held in April</text>
+  <rect class="green" x="560" y="178" width="196" height="26" rx="8" fill="#15803d"/>
+  <text x="570" y="196" font-size="13" font-weight="700" fill="#fff">end-term-apr-2025</text>
+  <!-- row 3: May 2025 -->
+  <text class="t" x="40" y="245" font-size="15" font-weight="700" fill="#171717">May 2025</text>
+  <text class="tm" x="230" y="245" font-size="13" fill="#667085">Quiz 2 and end term, held in August</text>
+  <rect class="blue" x="560" y="228" width="196" height="26" rx="8" fill="#2563eb"/>
+  <text x="570" y="246" font-size="13" font-weight="700" fill="#fff">quiz-2 / end-term-aug-2025</text>
+  <!-- row 4: Sep 2025 -->
+  <text class="t" x="40" y="295" font-size="15" font-weight="700" fill="#171717">September 2025</text>
+  <text class="tm" x="230" y="295" font-size="13" fill="#667085">Quiz 1, held in October</text>
+  <rect class="purple" x="560" y="278" width="196" height="26" rx="8" fill="#7c3aed"/>
+  <text x="570" y="296" font-size="13" font-weight="700" fill="#fff">quiz-1-oct-2025</text>
+  <text class="tm" x="40" y="328" font-size="11" fill="#667085">Qualifier papers (January 2023 to May 2024) are named by their own month, for example qualifier-may-2024.</text>
+</svg>

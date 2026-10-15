@@ -2,13 +2,14 @@
 
 import { Printer } from "lucide-react";
 import { buttonClass } from "./ui";
+import { printWithImages } from "@/lib/print";
 import { cn } from "@/lib/utils";
 
 export function PrintSheetButton({ className }: { className?: string }) {
   return (
     <button
       type="button"
-      onClick={() => window.print()}
+      onClick={() => printWithImages()}
       className={cn(buttonClass("secondary", "sm"), className)}
       title="Print this question sheet or save as PDF (Ctrl+P / Cmd+P)"
     >

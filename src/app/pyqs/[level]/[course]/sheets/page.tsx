@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps<"/pyqs/[level]/[cou
   if (!s) return {};
   const c = s.course;
   return pageMetadata({
-    title: `${c.name}${c.code ? ` (${c.code})` : ""} PYQs Topic Wise & Year Wise, with Answers`,
+    title: `${c.name}${c.code ? ` (${c.code})` : ""} PYQs PDF: Topic Wise & Year Wise, with Answers`,
     description: `${c.name} previous year questions set out to solve on paper: ${c.papers.length} papers year wise${
       s.topics.length ? `, ${s.topics.length} topic-wise sets` : ""
     }${s.repeated ? ` and the ${s.repeated.types} most repeated question types` : ""}. Official answer key at the end of every sheet.`,

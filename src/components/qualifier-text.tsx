@@ -9,7 +9,8 @@ export function RichText({ text }: { text: string }) {
   const parts: React.ReactNode[] = [];
   let last = 0;
   for (const m of text.matchAll(FIGURE)) {
-    if (m.index > last) parts.push(text.slice(last, m.index));
+    // A figure is a block, so line breaks right around it would only add empty lines.
+    if (m.index > last) parts.push(text.slice(last, m.index).replace(last ? /^\n+|\n+$/g : /\n+$/, ""));
     parts.push(
       <img
         key={m.index}
@@ -23,7 +24,7 @@ export function RichText({ text }: { text: string }) {
     );
     last = m.index + m[0].length;
   }
-  if (last < text.length) parts.push(text.slice(last));
+  if (last < text.length) parts.push(last ? text.slice(last).replace(/^\n+/, "") : text);
   return <>{parts}</>;
 }
 

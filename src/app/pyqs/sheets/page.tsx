@@ -10,8 +10,8 @@ import { PYQ_SHEETS_HREF } from "@/lib/pyq-urls";
 import { getStudyScope, narrow, scopeLinks } from "@/lib/study-scope";
 
 export const metadata: Metadata = pageMetadata({
-  title: "IIT Madras BS PYQs Year Wise, Topic Wise & Most Repeated, with Answers",
-  description: "Every IIT Madras BS previous year paper set out to solve on paper: level wise, course wise, year wise and topic wise, plus each course's most repeated questions. Official answer key at the end of every sheet.",
+  title: "IIT Madras BS PYQs PDF: Year Wise, Topic Wise & Most Repeated, with Answers",
+  description: "Every IIT Madras BS previous year paper set out to solve on paper: level wise, course wise, year wise and topic wise, plus each course's most repeated questions. Official answer key at the end of every sheet. Free to print or save as PDF.",
   path: PYQ_SHEETS_HREF,
 });
 

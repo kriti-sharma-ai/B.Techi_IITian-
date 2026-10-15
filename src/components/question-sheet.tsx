@@ -8,6 +8,7 @@ import { QuestionPassage, QuestionPrompt, RichText } from "./qualifier-text";
 import { Badge } from "./ui";
 import type { QuestionSheet, SheetGroup, SheetQuestion } from "@/lib/pyq-sheets";
 import type { QualifierQuestion } from "@/lib/types";
+import { printWithImages } from "@/lib/print";
 import { cn } from "@/lib/utils";
 
 // A question sheet (lib/pyq-sheets.ts) laid out like a printed paper: a paper
@@ -136,7 +137,7 @@ export function SheetPaper({ sheet }: { sheet: QuestionSheet }) {
       {sheet.groups.map((g) => (
         <section key={g.id} id={g.id} aria-labelledby={headed ? `${g.id}-title` : undefined} className="scroll-mt-28">
           {headed && (
-            <div className="border-b border-border bg-surface-2/60 px-5 py-3 sm:px-10">
+            <div className="sheet-group-head border-b border-border bg-surface-2/60 px-5 py-3 sm:px-10">
               {g.eyebrow && <p className="text-xs font-bold uppercase tracking-wider text-muted">{g.eyebrow}</p>}
               <h3 id={`${g.id}-title`} className="flex flex-wrap items-center gap-2 font-bold leading-snug text-base text-fg">
                 {g.title}
@@ -159,8 +160,10 @@ export function SheetPaper({ sheet }: { sheet: QuestionSheet }) {
 
 function SheetItem({ q, showSource, passageRange, showReference }: { q: SheetQuestion; showSource: boolean; passageRange?: string; showReference: boolean }) {
   const shortOptions = q.options?.every((o) => o.length <= 36 && !o.includes("![")) ?? false;
+  // Picture options keep the full width in print too; two columns would shrink them.
+  const figureOptions = q.options?.some((o) => o.includes("![")) ?? false;
   return (
-    <li id={`q${q.n}`} className="scroll-mt-28 px-5 py-6 sm:px-10 sm:py-8 border-b border-border/70 last:border-b-0 hover:bg-surface-2/20 transition-colors">
+    <li id={`q${q.n}`} className="scroll-mt-28 px-5 py-6 sm:px-10 sm:py-8 print:px-5 print:py-3.5 border-b border-border/70 last:border-b-0 hover:bg-surface-2/20 transition-colors">
       {showReference && (
         <details className="mb-5 rounded-xl border border-border bg-surface-2/40 text-[15px] leading-relaxed">
           <summary className="cursor-pointer px-4 py-2.5 text-sm font-semibold text-fg">Useful Reference Data for this Paper</summary>
@@ -168,7 +171,7 @@ function SheetItem({ q, showSource, passageRange, showReference }: { q: SheetQue
         </details>
       )}
       {passageRange && (
-        <div className="mb-5 rounded-xl border border-border bg-surface-2/60 p-4 text-[15px] leading-relaxed shadow-2xs">
+        <div className="sheet-passage mb-5 rounded-xl border border-border bg-surface-2/60 p-4 text-[15px] leading-relaxed shadow-2xs">
           <p className="mb-2 text-xs font-bold uppercase tracking-wider text-muted">
             Read the passage below, then answer {passageRange}
           </p>
@@ -176,11 +179,11 @@ function SheetItem({ q, showSource, passageRange, showReference }: { q: SheetQue
         </div>
       )}
 
-      <div>
+      <div className="sheet-question">
         {/* Question Header Bar */}
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="grid size-7 place-items-center rounded-lg bg-fg font-mono text-xs font-bold text-bg tabular-nums shadow-xs">
+            <span className="grid h-7 min-w-7 place-items-center rounded-lg bg-fg px-1 font-mono text-xs font-bold text-bg tabular-nums shadow-xs print:border print:border-fg print:bg-transparent print:text-fg">
               Q{q.n}
             </span>
             <span className="rounded-md border border-border bg-surface-2 px-2 py-0.5 text-xs font-bold text-fg">
@@ -200,7 +203,7 @@ function SheetItem({ q, showSource, passageRange, showReference }: { q: SheetQue
                 <Repeat className="size-3" aria-hidden /> Asked {q.repeat.count} times
               </Link>
             )}
-            <a href="#answer-key" className="text-xs font-medium text-muted hover:text-fg hover:underline">
+            <a href="#answer-key" className="text-xs font-medium text-muted hover:text-fg hover:underline print:hidden">
               Key ↓
             </a>
           </div>
@@ -223,11 +226,11 @@ function SheetItem({ q, showSource, passageRange, showReference }: { q: SheetQue
           </div>
 
           {q.options && q.options.length > 0 ? (
-            <ol className={cn("mt-4 grid gap-x-6 gap-y-2.5", shortOptions && "sm:grid-cols-2")}>
+            <ol className={cn("mt-4 grid gap-x-6 gap-y-2.5 print:mt-2.5 print:gap-x-4 print:gap-y-1.5", !figureOptions && "print:grid-cols-2", shortOptions && "sm:grid-cols-2")}>
               {q.options.map((o, i) => (
                 <li
                   key={i}
-                  className="flex min-w-0 items-start gap-3 rounded-xl border border-border/80 bg-surface px-3 py-2.5 transition-colors hover:border-fg/30 hover:bg-surface-2/40"
+                  className="flex min-w-0 items-start gap-3 rounded-xl border border-border/80 bg-surface px-3 py-2.5 print:px-2 print:py-1 transition-colors hover:border-fg/30 hover:bg-surface-2/40"
                 >
                   <span
                     className="grid size-6 shrink-0 place-items-center rounded-full border border-border bg-surface-2 font-mono text-xs font-bold text-fg"
@@ -235,7 +238,7 @@ function SheetItem({ q, showSource, passageRange, showReference }: { q: SheetQue
                   >
                     {letter(i)}
                   </span>
-                  <span className="min-w-0 flex-1 pt-0.5 text-[15px] leading-normal [overflow-wrap:anywhere]">
+                  <span className="min-w-0 flex-1 whitespace-pre-line pt-0.5 text-[15px] leading-normal [overflow-wrap:anywhere]">
                     <RichText text={o} />
                   </span>
                 </li>
@@ -262,12 +265,12 @@ function AnswerKey({ questions }: { questions: SheetQuestion[] }) {
         <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-5 sm:px-10 [&::-webkit-details-marker]:hidden border-b border-border">
           <div>
             <div className="flex items-center gap-2">
-              <span className="rounded-md bg-fg px-2 py-0.5 text-xs font-bold text-bg uppercase">Official Key</span>
+              <span className="rounded-md bg-fg px-2 py-0.5 text-xs font-bold text-bg uppercase print:border print:border-fg print:bg-transparent print:text-fg">Official Key</span>
               <h2 className="text-lg font-bold tracking-tight text-fg">Master Answer Key & Explanations</h2>
             </div>
             <p className="mt-0.5 text-xs text-muted">Official answer keys from IIT Madras BS past papers. Click any question to review.</p>
           </div>
-          <span className="shrink-0 rounded-xl border border-border bg-surface px-3.5 py-1.5 text-xs font-bold text-fg shadow-2xs hover:bg-surface-2 transition-colors">
+          <span className="shrink-0 rounded-xl border border-border bg-surface px-3.5 py-1.5 text-xs font-bold text-fg shadow-2xs hover:bg-surface-2 transition-colors print:hidden">
             <span className="group-open:hidden">Reveal Key</span>
             <span className="hidden group-open:inline">Collapse Key</span>
           </span>
@@ -293,7 +296,7 @@ function AnswerKey({ questions }: { questions: SheetQuestion[] }) {
                 {notes.map((q) => (
                   <div key={q.id} className="rounded-xl border border-border bg-surface-2/30 p-4">
                     <dt className="flex items-center gap-2 font-bold text-fg mb-1.5">
-                      <span className="rounded bg-fg px-1.5 py-0.5 font-mono text-xs text-bg">Q{q.n}</span>
+                      <span className="rounded bg-fg px-1.5 py-0.5 font-mono text-xs text-bg print:border print:border-fg print:bg-transparent print:text-fg">Q{q.n}</span>
                       <span>Answer: <RichText text={answerText(q)} /></span>
                     </dt>
                     <dd className="whitespace-pre-line text-sm text-muted">
@@ -324,7 +327,7 @@ export function QuestionPalette({ questions }: { questions: SheetQuestion[] }) {
         document.getElementById("answer-key")?.scrollIntoView({ behavior: "smooth", block: "start" });
       } else if (e.key === "p" || e.key === "P") {
         e.preventDefault();
-        window.print();
+        printWithImages();
       } else if (e.key === "j" || e.key === "J") {
         e.preventDefault();
         const qElements = Array.from(document.querySelectorAll<HTMLElement>("[id^='q']"));

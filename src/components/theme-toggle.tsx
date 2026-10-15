@@ -6,9 +6,10 @@ import { useHydrated } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
+  const { forcedTheme, resolvedTheme, setTheme } = useTheme();
   const hydrated = useHydrated();
-  const dark = hydrated && resolvedTheme === "dark";
+  // forcedTheme is set only while printing (providers.tsx), when resolvedTheme briefly reads "light".
+  const dark = hydrated && (forcedTheme ?? resolvedTheme) === "dark";
   return (
     <button
       type="button"

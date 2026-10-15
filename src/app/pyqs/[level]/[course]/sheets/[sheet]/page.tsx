@@ -24,10 +24,10 @@ async function load(params: Promise<{ level: string; course: string; sheet: stri
 
 const metaTitle = (s: QuestionSheet) =>
   ({
-    paper: `${s.course.short} ${s.title} Question Paper with Answer Key`,
-    year: `${s.course.short} ${s.title.replace(/^All /, "")}: Every PYQ with Answers`,
-    topic: `${s.course.short} PYQs on ${s.title} (Topic Wise, with Answers)`,
-    repeated: `${s.course.short} Most Repeated PYQs, with Answers`,
+    paper: `${s.course.short} ${s.title} Question Paper PDF with Answer Key`,
+    year: `${s.course.short} ${s.title.replace(/^All /, "")}: Every PYQ with Answers (PDF)`,
+    topic: `${s.course.short} PYQs on ${s.title} (Topic Wise PDF, with Answers)`,
+    repeated: `${s.course.short} Most Repeated PYQs PDF, with Answers`,
   })[s.kind];
 
 export async function generateMetadata({ params }: PageProps<"/pyqs/[level]/[course]/sheets/[sheet]">): Promise<Metadata> {
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: PageProps<"/pyqs/[level]/[cou
   if (!s) return {};
   return pageMetadata({
     title: metaTitle(s),
-    description: `${s.questions} ${s.course.name} past questions (${s.marks} marks) from ${s.papers} IIT Madras BS ${s.papers === 1 ? "paper" : "papers"}, set out to solve on paper. Official answer key at the end.`,
+    description: `${s.questions} ${s.course.name} past questions (${s.marks} marks) from ${s.papers} IIT Madras BS ${s.papers === 1 ? "paper" : "papers"}, set out to solve on paper. Official answer key at the end. Free to print or save as PDF.`,
     path: s.href,
   });
 }
@@ -55,7 +55,8 @@ export default async function SheetPage({ params }: PageProps<"/pyqs/[level]/[co
 
   return (
     <>
-      <div className="border-b border-border bg-surface">
+      {/* Screen only: the printed paper has its own header with the same facts. */}
+      <div className="border-b border-border bg-surface print:hidden">
         <div className="mx-auto max-w-[1380px] px-4 py-4 sm:px-6 lg:px-8">
           <Breadcrumbs className="mb-2" items={[{ label: "PYQs", href: "/pyqs" }, { label: c.short, href: sheetsHref }, { label: s.title }]} />
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -84,7 +85,7 @@ export default async function SheetPage({ params }: PageProps<"/pyqs/[level]/[co
       </div>
 
       <div className="mx-auto w-full max-w-[1380px] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
-        <div className="grid gap-8 lg:grid-cols-[250px_minmax(0,1fr)] xl:grid-cols-[250px_minmax(0,1fr)_260px] items-start">
+        <div className="grid gap-8 lg:grid-cols-[250px_minmax(0,1fr)] xl:grid-cols-[250px_minmax(0,1fr)_260px] items-start print:block">
           {/* Left Column: Outline / Sections */}
           <aside aria-label="On this sheet" className="hidden lg:block sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1">
             {s.groups.length > 1 && (

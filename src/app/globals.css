@@ -1,7 +1,16 @@
 @import "tailwindcss";
 
-/* `.light` pins a subtree to the light theme (the exam portal), so `dark:` utilities skip it. */
-@custom-variant dark (&:where(.dark, .dark *):not(:where(.light, .light *)));
+/*
+ * `.light` pins a subtree to the light theme (the exam portal), so `dark:` utilities skip it.
+ * Screen only: printed pages and saved PDFs always use the light theme.
+ */
+@custom-variant dark {
+  @media not print {
+    &:where(.dark, .dark *):not(:where(.light, .light *)) {
+      @slot;
+    }
+  }
+}
 /* Viewport-height variants for full-screen pages (sign-up): squeeze on short and tiny screens. */
 @custom-variant short (@media (max-height: 820px));
 @custom-variant tiny (@media (max-height: 700px));
@@ -36,23 +45,26 @@
   color-scheme: light;
 }
 
-.dark {
-  --bg: #0b0b0b;
-  --surface: #151515;
-  --surface-2: #1f1f1f;
-  --fg: #ffffff;
-  --muted: #a0a0a0;
-  --border: #2a2a2a;
-  --ink: #ffffff;
+/* Screen only: paper is always light, whatever theme the site is showing. */
+@media not print {
+  .dark {
+    --bg: #0b0b0b;
+    --surface: #151515;
+    --surface-2: #1f1f1f;
+    --fg: #ffffff;
+    --muted: #a0a0a0;
+    --border: #2a2a2a;
+    --ink: #ffffff;
 
-  --blue: #60a5fa;
-  --green: #4ade80;
-  --purple: #a78bfa;
-  --teal: #2dd4bf;
-  --red: #f87171;
-  --amber: #fbbf24;
-  --math-accent: var(--brand);
-  color-scheme: dark;
+    --blue: #60a5fa;
+    --green: #4ade80;
+    --purple: #a78bfa;
+    --teal: #2dd4bf;
+    --red: #f87171;
+    --amber: #fbbf24;
+    --math-accent: var(--brand);
+    color-scheme: dark;
+  }
 }
 
 @theme inline {
@@ -374,14 +386,16 @@
 .footer-wordmark-accent {
   background: linear-gradient(transparent 52%, var(--brand) 52%, var(--brand) 80%, transparent 80%);
 }
-.dark .footer-wordmark-accent {
-  background: none;
-  color: var(--brand);
-}
-.dark .footer-glow {
-  background:
-    radial-gradient(60% 80% at 75% 100%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 70%),
-    radial-gradient(50% 70% at 15% 100%, color-mix(in srgb, var(--brand) 8%, transparent), transparent 70%);
+@media not print {
+  .dark .footer-wordmark-accent {
+    background: none;
+    color: var(--brand);
+  }
+  .dark .footer-glow {
+    background:
+      radial-gradient(60% 80% at 75% 100%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 70%),
+      radial-gradient(50% 70% at 15% 100%, color-mix(in srgb, var(--brand) 8%, transparent), transparent 70%);
+  }
 }
 
 /*
@@ -440,6 +454,10 @@
 
 /* Printing a sheet: just the notes/paper, in light colours, solutions open. */
 @media print {
+  /* Beats the inline color-scheme next-themes sets on <html> in dark mode. */
+  :root {
+    color-scheme: light !important;
+  }
   body:has(.cheat-reader, .sheet-paper) :is(header, footer, nav):not(.cheat-reader *, .sheet-paper *) {
     display: none !important;
   }
@@ -459,10 +477,26 @@
     border: none !important;
     box-shadow: none !important;
   }
-  .sheet-paper li,
-  .sheet-paper section,
-  .sheet-paper article {
+  /* Keep each question (and each option) whole; groups and the paper itself flow across pages. */
+  .sheet-paper li {
     break-inside: avoid;
+  }
+  /* A shared passage can be longer than a page: let it break, but keep its question whole. */
+  .sheet-paper li:has(> .sheet-passage) {
+    break-inside: auto;
+  }
+  .sheet-paper .sheet-passage,
+  .sheet-paper .sheet-question,
+  .sheet-paper .sheet-group-head {
+    break-inside: avoid;
+  }
+  /* Never leave a group heading alone at the bottom of a page. */
+  .sheet-paper .sheet-group-head {
+    break-after: avoid;
+  }
+  /* The answer key starts on its own page, so a student can solve without seeing it. */
+  .sheet-paper #answer-key {
+    break-before: page;
   }
   .cheat-reader {
     --bg: #ffffff;
@@ -488,6 +522,11 @@
   .cheat-reader li {
     break-inside: avoid;
   }
+  /* A topic's title bar stays with its first block, never alone at a page bottom. */
+  .cheat-reader section > header {
+    break-inside: avoid;
+    break-after: avoid;
+  }
 }
 
 /* Print branding (components/print-frame.tsx): invisible on screen, repeated on every printed page. */
@@ -498,7 +537,8 @@
   display: contents;
 }
 .print-frame > thead,
-.print-frame > tfoot {
+.print-frame > tfoot,
+.print-foot-pinned {
   display: none;
 }
 @media print {
@@ -541,9 +581,22 @@
   .print-brand-name {
     font-weight: 800;
   }
+  .print-brand-home {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: inherit;
+    text-decoration: none;
+  }
   .print-brand-url {
     margin-left: auto;
     color: #4b5563;
+  }
+  /* Inline-block: Chrome copies a repeated header's inline links onto each page once per page. */
+  .print-brand-url a {
+    display: inline-block;
+    color: inherit;
+    text-decoration: none;
   }
   .print-foot {
     display: block;
@@ -557,6 +610,17 @@
   }
   .print-foot b {
     color: #111827;
+  }
+  .print-foot-spacer {
+    visibility: hidden;
+  }
+  .print-foot-pinned {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    background: #ffffff;
   }
 }
 
@@ -698,7 +762,7 @@
   }
 }
 
-/* Light mode: yellow text/icons vanish on white, so show them in plain black. */
+/* Light mode and print: yellow text/icons vanish on white, so show them in plain black. */
 :root:not(.dark) :is(.text-brand, [class*="text-brand/"]) {
   color: var(--ink);
 }
@@ -707,4 +771,15 @@
 }
 :root:not(.dark) .stroke-brand {
   stroke: var(--ink);
+}
+@media print {
+  :is(.text-brand, [class*="text-brand/"]) {
+    color: var(--ink);
+  }
+  .fill-brand {
+    fill: var(--ink);
+  }
+  .stroke-brand {
+    stroke: var(--ink);
+  }
 }

@@ -104,7 +104,7 @@ export function GuideBot({ data }: { data: GuideData }) {
       return;
     }
     // The rules didn't place it: ask the AI model, keeping the rules' answer if that fails.
-    const key = text.toLowerCase();
+    const key = `${ctx.signedIn ? "in" : "out"}:${text.toLowerCase()}`;
     const seen = aiCache.current.get(key);
     if (seen) {
       setTimeout(() => show(seen), 280);
@@ -114,7 +114,7 @@ export function GuideBot({ data }: { data: GuideData }) {
     fetch("/api/guide", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ q: text, path: pathname, history }),
+      body: JSON.stringify({ q: text, path: pathname, history, signedIn: ctx.signedIn }),
       signal: AbortSignal.timeout(12_000),
     })
       .then((r) => (r.ok ? (r.json() as Promise<GuideReply>) : Promise.reject(r.status)))

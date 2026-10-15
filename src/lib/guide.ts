@@ -206,7 +206,7 @@ type Intent =
 const INTENTS: [Intent, string[]][] = [
   ["password", ["forgot password", "reset password", "change password", "password"]],
   ["signup", ["sign up", "signup", "register", "create account", "new account", "join"]],
-  ["login", ["log in", "login", "sign in", "signin", "logout", "log out", "account"]],
+  ["login", ["log in", "login", "sign in", "signin", "logout", "log out", "sign out", "signout", "account"]],
   ["cutoff", ["cutoff", "cut off", "pass", "passing", "pass mark", "minimum marks", "marks needed", "how much marks", "eligibility", "score needed"]],
   ["syllabus", ["syllabus", "topics", "chapters", "what comes", "what is asked", "portion"]],
   ["calculator", ["calculator", "calc"]],
@@ -532,7 +532,9 @@ function smallTalk(text: string, data: GuideData, ctx: GuideContext, wantsSometh
   if (exact(text, ["official", "affiliated", "from iit", "by iit", "run by", "owned by", "who made", "who built", "who created"]))
     return { text: "BTechi is an independent, free study site. It is not run by or linked to IIT Madras.", links: [PAGES.about] };
   if (exact(text, ["without login", "need login", "need to login", "must login", "need account", "without account", "without signing"]))
-    return { text: "No login needed. You can sit papers and practice as a guest. Log in only to keep your scores on all your devices.", links: [PAGES.signup] };
+    return ctx.signedIn
+      ? { text: "You are already logged in, so your scores are saved on all your devices. Login is never needed to sit papers or practice.", links: [PAGES.dashboard] }
+      : { text: "No login needed. You can sit papers and practice as a guest. Log in only to keep your scores on all your devices.", links: [PAGES.signup, PAGES.login] };
   if (exact(text, ["hindi", "tamil", "telugu", "bengali", "kannada", "malayalam", "marathi", "other language", "my language"]))
     return { text: "The site is in English for now, the same as the IITM exams." };
   if (exact(text, ["dark mode", "light mode", "night mode", "theme"]))
@@ -625,8 +627,23 @@ export function answer(raw: string, data: GuideData, ctx: GuideContext): GuideRe
   if (exam === "qualifier") return qualifierReply(data, intents);
 
   // Account and site pages.
-  if (is("password")) return { text: "You can reset your password here:", links: [PAGES.reset, PAGES.login] };
-  if (is("signup")) return { text: "Accounts are free. They save your scores across devices.", links: [PAGES.signup, PAGES.login] };
+  // Account: never offer sign up or log in to someone already logged in.
+  if (is("password"))
+    return ctx.signedIn
+      ? { text: "To change your password, use the reset page. You will get an email link.", links: [PAGES.reset] }
+      : { text: "You can reset your password here:", links: [PAGES.reset, PAGES.login] };
+  if (is("signup") || is("login")) {
+    if (ctx.signedIn)
+      return {
+        text: exact(text, ["logout", "log out", "sign out", "signout"])
+          ? "You are logged in. To log out, open your dashboard and tap Sign out."
+          : "You are already logged in. Your scores and saved items are kept on all your devices.",
+        links: exact(text, ["logout", "log out", "sign out", "signout"]) ? [PAGES.dashboard] : [PAGES.dashboard, PAGES.saved],
+      };
+    return is("signup")
+      ? { text: "Accounts are free. They save your scores across devices.", links: [PAGES.signup, PAGES.login] }
+      : { text: "Log in to keep your scores on all your devices. No account yet? It is free.", links: [PAGES.login, PAGES.signup] };
+  }
   if (is("progress")) return { text: ctx.signedIn ? "Your scores and attempts are on your dashboard." : "Your dashboard shows scores and attempts. Log in to keep them safe across devices.", links: ctx.signedIn ? [PAGES.dashboard] : [PAGES.dashboard, PAGES.login] };
   if (is("saved")) return { text: "Things you bookmark show up here:", links: [PAGES.saved] };
   if (is("profile")) return { text: "Set your level and courses. Then I and the site show your courses first.", links: [PAGES.profile] };

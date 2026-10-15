@@ -41,6 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...sheetCourses().flatMap((s) => [url(s.href, 0.8), ...sheetLinks(s.course.slug).map((l) => url(l.href, l.kind === "paper" ? 0.6 : 0.7))]),
     ...skillCourses.map((c) => url(`/skills/${c.slug}`, 0.8)),
     ...skillNotes.map((n) => url(skillNotesHref(n.skill), 0.8)),
+    url("/reviews", 0.5),
     url("/blog", 0.8),
     ...blogCategories.map((c) => url(blogCategoryHref(c.slug), 0.6)),
     ...getAllPosts().map((p) => ({ ...url(blogPostHref(p.slug), 0.8), lastModified: p.updated })),

@@ -134,7 +134,7 @@ export default async function HomePage() {
       )}
 
       {/* ───────── Reviews ───────── */}
-      <section className="container-page pb-20 md:pb-28">
+      <section id="reviews" className="container-page scroll-mt-20 pb-20 md:pb-28">
         <SectionHead title="From the students." />
         <ReviewsSection />
       </section>

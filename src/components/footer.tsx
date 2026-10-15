@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SquarePlay } from "lucide-react";
 import { hrefEnabled } from "@/lib/site";
 import { YOUTUBE_URL } from "@/lib/utils";
+import { YoutubeMark } from "./youtube-mark";
 import { FooterWordmark } from "./footer-wordmark";
 
 const columns = [
@@ -74,10 +74,18 @@ export function Footer() {
             href={YOUTUBE_URL}
             target="_blank"
             rel="noopener me"
-            className="mt-2 inline-flex w-fit items-center gap-2 rounded-lg border border-border bg-surface-muted/40 px-3 py-1.5 text-sm font-medium text-fg/90 transition-all hover:border-brand/50 hover:bg-surface-muted hover:text-fg dark:hover:text-brand"
+            className="group mt-2 flex w-full max-w-sm items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition-colors hover:border-[#FF0000]/40"
           >
-            <SquarePlay className="size-4 text-brand dark:text-brand" aria-hidden />
-            <span>BTechi IITian on YouTube</span>
+            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#FF0000]/10">
+              <YoutubeMark className="size-7" />
+            </span>
+            <span className="min-w-0 flex-1 leading-tight">
+              <span className="block text-sm font-semibold text-fg">BTechi IITian</span>
+              <span className="mt-0.5 block truncate text-xs text-muted">@BTechiIITian · Free video lessons</span>
+            </span>
+            <span className="shrink-0 rounded-full bg-[#FF0000] px-3 py-1.5 text-xs font-semibold text-white transition-[filter] group-hover:brightness-110">
+              Subscribe
+            </span>
           </a>
         </div>
 

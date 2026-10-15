@@ -28,12 +28,13 @@ import {
 import { Logo } from "./logo";
 import { skillIcons } from "./skill-icons";
 import { ThemeToggle } from "./theme-toggle";
+import { YoutubeMark } from "./youtube-mark";
 import { openStudySetup } from "./study-setup";
 import { skillCategories, skillCourses } from "@/lib/data/skills";
 import { getStudyCourse } from "@/lib/study-courses";
 import { hrefEnabled, sectionEnabled } from "@/lib/site";
 import { useHydrated, useStore } from "@/lib/store";
-import { cn, isAuthPage } from "@/lib/utils";
+import { cn, isAuthPage, YOUTUBE_URL } from "@/lib/utils";
 
 /* ───────────── Navigation data ───────────── */
 
@@ -297,6 +298,23 @@ function SearchButton() {
   );
 }
 
+/** Link to the BTechi IITian channel. */
+function YoutubeButton() {
+  return (
+    <a
+      href={YOUTUBE_URL}
+      target="_blank"
+      rel="noopener me"
+      aria-label="BTechi IITian on YouTube"
+      title="BTechi IITian on YouTube"
+      className="hidden h-8 items-center gap-1.5 rounded-md px-2 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-fg sm:flex"
+    >
+      <YoutubeMark className="size-5" />
+      <span className="hidden xl:inline">YouTube</span>
+    </a>
+  );
+}
+
 /** Two lines that turn into a cross. */
 function MenuIcon({ open }: { open: boolean }) {
   return (
@@ -395,6 +413,14 @@ function MobileMenu({
             </>
           )}
         </nav>
+        <a
+          href={YOUTUBE_URL}
+          target="_blank"
+          rel="noopener me"
+          className="mt-8 flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-surface text-sm font-medium text-fg transition-colors hover:bg-surface-2"
+        >
+          <YoutubeMark className="size-5" /> Watch on YouTube
+        </a>
         <div className="mt-8 flex items-center justify-between">
           <span className="text-sm text-muted">Theme</span>
           <ThemeToggle />
@@ -625,6 +651,7 @@ export function Navbar() {
 
         <div className="ml-auto flex items-center gap-2">
           {sectionEnabled("search") && <SearchButton />}
+          <YoutubeButton />
           <div className="hidden lg:block">
             <ThemeToggle />
           </div>

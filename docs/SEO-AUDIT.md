@@ -56,7 +56,7 @@ The biggest gaps are **not technical**:
 
 | URC | Assumption | How to check |
 |---|---|---|
-| URC-A01 | Search Console may already be verified by DNS (no meta tag found). | Open Search Console and look for the `www.btechi.in` or `btechi.in` Domain property. |
+| URC-A01 | **Confirmed 16 Oct 2026:** Search Console is verified by a DNS TXT record on `btechi.in`. | Submit the sitemap; check Pages and Queries after 2–4 weeks. |
 | URC-A02 | Vercel Firewall does not block AI bots by IP. My test only changed the user agent, not the IP. | Vercel → Project → Firewall → Bot Management: make sure "AI Bots" is not set to Deny. Check Firewall logs for OAI-SearchBot / PerplexityBot. |
 | URC-A03 | Core Web Vitals are OK. PageSpeed API quota was used up, so no lab score. | Run PageSpeed Insights on `/`, a course page and an English sheet page. |
 | URC-A04 | Search volumes. No keyword tool was used, so no volume numbers are given. | Use Search Console queries after 4 weeks, plus Google Keyword Planner. |
@@ -87,7 +87,7 @@ Impact and effort: H = high, M = medium, L = low.
 | URC | # | Task | Impact | Effort | Business value |
 |---|---|---|---|---|---|
 | URC-P01 | 1 | Deploy the fixes in section 4 | M | L | Clean structured data, better titles |
-| URC-P02 | 2 | Verify Search Console + Bing Webmaster, submit sitemap | H | L | Shows queries, clicks, index errors |
+| URC-P02 | 2 | ~~Verify Search Console~~ (done, DNS) + Bing Webmaster, submit sitemap | H | L | Shows queries, clicks, index errors |
 | URC-P03 | 3 | Add privacy-friendly analytics + AI referral tracking + sign-up/mock events (section 6) | H | L | Measure everything else |
 | URC-P04 | 4 | Check Vercel Firewall does not block AI bots (URC-A02) | H | L | AI search can read the site |
 | URC-P05 | 5 | Add real people to About + blog author pages (name, role, IITM BS link if true) | H | M | E-E-A-T trust; AI systems prefer named sources |

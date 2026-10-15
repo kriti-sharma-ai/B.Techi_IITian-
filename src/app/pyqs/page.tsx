@@ -1,23 +1,46 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, FileText } from "lucide-react";
+import { HomeFaq } from "@/components/home-faq";
 import { PyqHistory } from "@/components/qualifier-attempts";
 import { ScopeSwitch } from "@/components/study-scope";
 import { PageHeader } from "@/components/ui";
 import { PYQ_LEVELS, getPyqIndex, groupCourses } from "@/lib/pyq-index";
-import { pyqLevelHref } from "@/lib/pyq-urls";
+import { PYQ_SHEETS_HREF, pyqLevelHref } from "@/lib/pyq-urls";
 import { getStudyCourse } from "@/lib/study-courses";
 import { getStudyScope, keepScope, narrow, scopeLinks } from "@/lib/study-scope";
 
 export const metadata: Metadata = pageMetadata({
-  title: "IIT Madras BS PYQs: Previous Year Papers for Every Course",
-  description: "Previous year question papers for every IIT Madras BS course, Foundation to Degree: Qualifier, Quiz and End Term papers with the official answer key. Sit each paper in a timed exam portal.",
+  title: "IIT Madras BS PYQ: Previous Year Papers PDF with Answer Key",
+  description: "Free IITM BS PYQs: Qualifier, Quiz 1, Quiz 2 and End Term papers for every Foundation, Diploma and Degree course, with the official answer key. Practise timed or save as PDF.",
   path: "/pyqs",
 });
 
 // Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
 export const revalidate = 300;
+
+// Answers to what students search next to "iit madras bs pyq". Rendered below and as FAQPage JSON-LD, so both match.
+function pyqFaq(totals: { courses: number; papers: number }) {
+  return [
+    {
+      q: "Where can I download IIT Madras BS PYQ PDFs?",
+      a: "Open the question sheets for your course. Each paper is laid out like a printed paper with the official answer key at the end. Press Save PDF to keep it as a PDF or print it.",
+    },
+    {
+      q: "Which IITM BS previous year papers are on BTechi?",
+      a: `${totals.papers} papers from ${totals.courses} courses: Qualifier papers for the four qualifier courses, and Quiz 1, Quiz 2 and End Term papers at Foundation, Diploma and Degree level. OPPE programming exams are not covered yet.`,
+    },
+    {
+      q: "Do the IITM BS PYQs come with answers?",
+      a: "Yes. Every paper has the official IIT Madras answer key. In the exam portal your answers are checked against it, and you can review every question after you submit.",
+    },
+    {
+      q: "Are the PYQs free?",
+      a: "Yes. Every paper is free and you can take any paper without an account. BTechi is a student project, not affiliated with IIT Madras.",
+    },
+  ];
+}
 
 export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
   const sp = await searchParams;
@@ -27,13 +50,19 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
   const noPapers = scoped.narrowed
     ? scope.courses.filter((slug) => !pyqCourses.some((c) => c.slug === slug)).map((slug) => getStudyCourse(slug)!.name)
     : [];
+  const faq = pyqFaq(pyqTotals);
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map(({ q, a }) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+  };
   return (
     <>
       <PageHeader
         crumbs={[{ label: "PYQs" }]}
-        eyebrow="Previous-year questions"
-        title="Previous year papers"
-        description="Real IIT Madras BS papers with the official answer key, organised by level and course. Pick a course, sit any paper in the timed exam portal, then review every answer."
+        eyebrow="Previous year question papers"
+        title="IIT Madras BS PYQs"
+        description="Real IITM BS Qualifier, Quiz 1, Quiz 2 and End Term papers with the official answer key, organised by level and course. Sit any paper in the timed exam portal, or save its question sheet as a PDF."
       >
         <dl className="grid grid-cols-3 gap-6 sm:max-w-xl">
           {[
@@ -48,6 +77,9 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
             </div>
           ))}
         </dl>
+        <Link href={PYQ_SHEETS_HREF} className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold hover:underline">
+          <FileText className="size-4" aria-hidden /> PYQ PDFs: question sheets with answer key <ArrowRight className="size-4" aria-hidden />
+        </Link>
       </PageHeader>
 
       <div className="container-page space-y-14 py-10 md:py-14">
@@ -109,6 +141,12 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
       </div>
 
       <PyqHistory />
+
+      <section className="container-page pb-10 md:pb-14">
+        <h2 className="border-t border-border pt-5 text-xl font-bold tracking-tight md:text-2xl">IIT Madras BS PYQs: frequently asked questions</h2>
+        <HomeFaq items={faq} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd).replace(/</g, "\\u003c") }} />
+      </section>
 
       <section className="container-page pb-14 md:pb-20">
         <p className="flex items-start gap-2 text-xs text-muted">

@@ -1,11 +1,12 @@
 // LinkedIn carousel (first post): 8 slides at 1080x1350 (4:5).
-// Writes PNGs and one PDF to marketing/linkedin-carousel-1/. Upload the PDF as a "document" post.
+// Writes to marketing/linkedin/post-01-carousel/: carousel.pdf (upload with "Add a document")
+// and images/01.png ... 08.png (upload with "Add media", in order).
 // Run: node scripts/generate-carousel.mjs
 import fs from "fs";
 import path from "path";
 import sharp from "sharp";
 
-const OUT_DIR = path.resolve("marketing/linkedin-carousel-1");
+const OUT_DIR = path.resolve("marketing/linkedin/post-01-carousel");
 const W = 1080;
 const H = 1350;
 const SCALE = 2; // render at 2x so text stays sharp after LinkedIn compresses it
@@ -269,16 +270,16 @@ function buildPdf(jpegs, pageW, pageH, pxW, pxH) {
 }
 
 async function run() {
-  fs.mkdirSync(OUT_DIR, { recursive: true });
+  fs.mkdirSync(path.join(OUT_DIR, "images"), { recursive: true });
   const jpegs = [];
   for (const [i, svg] of slides.entries()) {
-    const name = `slide-${String(i + 1).padStart(2, "0")}`;
+    const name = String(i + 1).padStart(2, "0");
     const img = sharp(Buffer.from(svg), { density: 72 * SCALE });
-    await img.clone().png().toFile(path.join(OUT_DIR, `${name}.png`));
+    await img.clone().png().toFile(path.join(OUT_DIR, "images", `${name}.png`));
     jpegs.push(await img.clone().flatten({ background: "#FFFFFF" }).jpeg({ quality: 92 }).toBuffer());
   }
-  fs.writeFileSync(path.join(OUT_DIR, "btechi-carousel.pdf"), buildPdf(jpegs, W, H, W * SCALE, H * SCALE));
-  console.log(`Wrote ${slides.length} slides and btechi-carousel.pdf to ${path.relative(process.cwd(), OUT_DIR)}/`);
+  fs.writeFileSync(path.join(OUT_DIR, "carousel.pdf"), buildPdf(jpegs, W, H, W * SCALE, H * SCALE));
+  console.log(`Wrote ${slides.length} slides and carousel.pdf to ${path.relative(process.cwd(), OUT_DIR)}/`);
 }
 
 run().catch((e) => { console.error(e); process.exit(1); });

@@ -31,10 +31,13 @@ async function load(params: Promise<{ level: string; course: string }>) {
 export async function generateMetadata({ params }: PageProps<"/pyqs/[level]/[course]">): Promise<Metadata> {
   const c = await load(params);
   if (!c) return {};
-  const exams = PYQ_EXAMS.filter((e) => c.papers.some((p) => p.exam === e.slug)).map((e) => e.label);
+  // In the order a term runs (Qualifier, Quiz 1, Quiz 2, End Term), as "A, B & C" so the title reads naturally.
+  const exams = PYQ_EXAMS.filter((e) => c.papers.some((p) => p.exam === e.slug)).map((e) => e.label).reverse();
+  const list = (and: string) => (exams.length > 1 ? `${exams.slice(0, -1).join(", ")} ${and} ${exams.at(-1)}` : exams[0]);
   return pageMetadata({
-    title: `${c.name}${c.code ? ` (${c.code})` : ""} PYQs: ${exams.join(" & ")} Papers`,
-    description: `${c.papers.length} ${c.name} previous year question papers from the IIT Madras BS (${exams.join(" and ")}), with the official answer key. Sit each one in a timed exam portal and review every answer.`,
+    // Course name and "PYQs" first: search results cut titles at about 60 characters.
+    title: `${c.name} PYQs${c.code ? ` (${c.code})` : ""}: ${list("&")} Papers`,
+    description: `${c.papers.length} ${c.name} previous year question papers from the IIT Madras BS (${list("and")}), with the official answer key. Sit each one in a timed exam portal and review every answer.`,
     path: c.href,
   });
 }

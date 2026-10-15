@@ -26,45 +26,61 @@ const SITE = SITE_URL.replace(/^https?:\/\//, "");
 export const PAGES: Record<string, InfoPage> = {
   about: {
     title: "About BTechi",
-    description: "A structured academic platform where students learn, practise and prepare.",
+    description: "A free, independent study site for the IIT Madras BS: real past papers in an exam-like portal.",
+    // Lists only what is live, so search engines and AI assistants describe the site correctly.
     body: (
       <>
         <p>
-          BTechi started as the <a href={YOUTUBE_URL} target="_blank" rel="noopener me">BTechi IITian YouTube channel</a>: AI,
-          automation, tech and education explained simply. This platform is the next step, starting with the IIT Madras BS
-          in Data Science and Applications and the BS in Management and Data Science.
+          BTechi is a free, independent study website for students of the IIT Madras BS in Data Science and
+          Applications and the IIT Madras BS in Management and Data Science. Its main tool is an online exam portal
+          where you sit real previous-year papers (Qualifier, Quiz 1, Quiz 2 and End Term) under a timer, then check
+          every answer against the official answer key.
         </p>
         <p>
-          Instead of hunting through WhatsApp groups, Telegram channels and random Drive links, students get one
-          structured place: Level → Course → Week → Topic, with notes, videos, books, practice and previous-year
-          questions mapped to every topic.
+          BTechi started as the <a href={YOUTUBE_URL} target="_blank" rel="noopener me">BTechi IITian YouTube channel</a>.
+          The website exists because past papers were scattered across WhatsApp groups, Telegram channels and Drive
+          links, with no way to practise them under exam conditions.
         </p>
-        <h2>What you'll find here</h2>
+        <h2>What you can do on BTechi</h2>
         <ul>
           <li>
-            <strong>Courses</strong> organised week by week, from Foundation to Degree level.
+            <strong><Link href="/exam">Exam portal</Link></strong>: sit a real paper, or combine up to four courses, with
+            a timer, a question palette and a scientific calculator.
           </li>
           <li>
-            <strong>Previous-year questions</strong> for quizzes and end terms, which you can attempt in an exam-style
-            portal and check against the answer keys.
+            <strong><Link href="/qualifier">Qualifier pack</Link></strong>: mock tests for Maths I, Stats I,
+            Computational Thinking and English I, with a pass or not-yet result against the General-category cutoff,
+            plus printable cheat sheets.
           </li>
           <li>
-            <strong>Practice</strong> sets with an explanation for every answer.
+            <strong><Link href="/pyqs">Previous-year papers</Link></strong>: sorted by level (Foundation, Diploma,
+            Degree), course and term, with the topics that repeat most, and printable question sheets you can save as PDF.
           </li>
           <li>
-            <strong>Notes, videos and books</strong>, linked from the topic they belong to.
+            <strong><Link href="/practice">Practice</Link></strong>: short sets, drills and full tests from past
+            questions, filtered by course, week, topic and difficulty.
           </li>
           <li>
-            <strong>Qualifier prep</strong>: mock exams and quick-revision notes.
-          </li>
-          <li>
-            <strong>Progress tracking</strong>: bookmarks, completed topics and attempt history, saved to your account.
+            <strong><Link href="/blog">Guides</Link></strong>: the qualifier, admissions, choosing a programme, and
+            data careers.
           </li>
         </ul>
+        <h2>Where the questions and answers come from</h2>
+        <p>
+          Questions come from past IIT Madras BS exam papers. Each paper shows its course, exam and term. Answers are
+          graded against the official answer key for that paper. Explanations and solutions are written by BTechi or
+          its contributors. Facts about the programme, such as cutoffs and fees, are checked against the official{" "}
+          <a href="https://study.iitm.ac.in/" target="_blank" rel="noopener">IIT Madras BS website</a>.
+        </p>
+        <h2>How we fix mistakes</h2>
+        <p>
+          Every question and resource has a <strong>Report</strong> button, and guests can use it too. Reports go to
+          our moderators, who correct the question or the key and republish it. You can also email <Mail subject="Correction" />.
+        </p>
         <h2>Free to use</h2>
         <p>
-          BTechi is free. You can browse and practise without an account; signing up just keeps your progress safe
-          across devices.
+          BTechi is free, with no paid plan and no ads. You can sit any paper without an account; signing up only keeps
+          your attempts and saved items across devices.
         </p>
         <h2>Not an official IIT Madras website</h2>
         <p>
@@ -73,7 +89,7 @@ export const PAGES: Record<string, InfoPage> = {
         </p>
       </>
     ),
-    cta: { label: "Explore programs", href: "/programs" },
+    cta: { label: "Start a mock exam", href: "/exam" },
   },
 
   contact: {

@@ -44,8 +44,9 @@ export const SEO_KEYWORDS = [
   "BTechi IITM",
 ];
 
+// About 160 characters, so search results show all of it.
 export const SITE_DESCRIPTION =
-  `Free IIT Madras BS prep, rated ${rating} by students: real previous-year papers (Qualifier, Quiz 1, Quiz 2, End Term) in an exam portal like the real one, graded with official answer keys. For the BS in Data Science and Applications and the BS in Management and Data Science.`;
+  "Free IIT Madras BS prep: real Qualifier, Quiz and End Term papers in a timed exam portal, graded with official answer keys, for Data Science and Management students.";
 
 /**
  * Questions students ask Google and AI assistants, answered in one or two sentences each.

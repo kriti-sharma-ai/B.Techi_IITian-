@@ -6,7 +6,7 @@ import { FloatingWriteReview, WriteReviewButton } from "@/components/review-acti
 import { buttonClass } from "@/components/ui";
 import { getAllReviews } from "@/lib/reviews";
 import { pageMetadata } from "@/lib/seo";
-import { cn } from "@/lib/utils";
+import { SITE_URL, cn } from "@/lib/utils";
 
 // New reviews show within a minute; posting one also refreshes this page for its author.
 export const revalidate = 60;
@@ -43,9 +43,31 @@ export default async function ReviewsPage() {
   const average = reviews.reduce((s, r) => s + r.rating, 0) / n;
   const fiveStar = Math.round((reviews.filter((r) => r.rating === 5).length / n) * 100);
   const rest = reviews.slice(1);
+  // The exam portal rated from the reviews on this page. Only here, where every review is visible, as Google requires.
+  const appLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "@id": `${SITE_URL}/#app`,
+    name: "BTechi IIT Madras BS Exam Portal",
+    url: `${SITE_URL}/exam`,
+    applicationCategory: "EducationalApplication",
+    operatingSystem: "Any (web browser)",
+    description:
+      "Sit real IIT Madras BS Qualifier, Quiz 1, Quiz 2 and End Term papers in a timed exam portal with a scientific calculator, graded against the official answer keys.",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    aggregateRating: { "@type": "AggregateRating", ratingValue: Math.round(average * 10) / 10, bestRating: 5, worstRating: 1, ratingCount: n, reviewCount: n },
+    review: reviews.map((r) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: r.name },
+      reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 },
+      reviewBody: r.content,
+    })),
+  };
 
   return (
     <div className="container-page py-10 md:py-14">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd).replace(/</g, "\\u003c") }} />
       {/* ───────── Hero: title left, numbers right ───────── */}
       <header className="flex flex-col gap-8 border-b border-border pb-8 lg:flex-row lg:items-end lg:justify-between">
         <div>

@@ -10,7 +10,6 @@ import { ScrollTop } from "@/components/scroll-top";
 import { Guide } from "@/components/guide";
 import { loadContent } from "@/lib/cms";
 import { CONTACT_EMAIL, SITE_URL, YOUTUBE_URL } from "@/lib/utils";
-import { REVIEWS, REVIEW_SUMMARY } from "@/lib/data/reviews";
 import { IITM_ALIASES, IITM_PROGRAMMES, SEO_KEYWORDS, SITE_DESCRIPTION } from "@/lib/seo";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -80,33 +79,6 @@ const siteLd = {
         "@type": "EducationalOccupationalProgram",
         name: `IIT Madras ${name}`,
         provider: { "@type": "CollegeOrUniversity", name: "Indian Institute of Technology Madras", sameAs: "https://study.iitm.ac.in/" },
-      })),
-    },
-    // The exam portal as a free web app, rated from the real reviews shown on the home page.
-    {
-      "@type": "WebApplication",
-      "@id": `${SITE_URL}/#app`,
-      name: "BTechi IIT Madras BS Exam Portal",
-      url: `${SITE_URL}/exam`,
-      applicationCategory: "EducationalApplication",
-      operatingSystem: "Any (web browser)",
-      description:
-        "Sit real IIT Madras BS Qualifier, Quiz 1, Quiz 2 and End Term papers in a timed exam portal with a scientific calculator, graded against the official answer keys.",
-      offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
-      publisher: { "@id": `${SITE_URL}/#organization` },
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: REVIEW_SUMMARY.average,
-        bestRating: 5,
-        worstRating: 1,
-        ratingCount: REVIEW_SUMMARY.count,
-        reviewCount: REVIEW_SUMMARY.count,
-      },
-      review: REVIEWS.map((r) => ({
-        "@type": "Review",
-        author: { "@type": "Person", name: r.name },
-        reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 },
-        reviewBody: r.content,
       })),
     },
   ],

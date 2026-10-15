@@ -81,9 +81,10 @@ export function SheetPaper({ sheet }: { sheet: QuestionSheet }) {
               {sheet.course.code && <span>{sheet.course.code} · </span>}
               {sheet.course.name}
             </p>
-            <h1 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl text-fg">
+            {/* h2: the page header above holds the page's one h1. */}
+            <h2 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl text-fg">
               {sheet.title}
-            </h1>
+            </h2>
           </div>
           {sheet.kind && (
             <div className="flex items-center gap-1.5">

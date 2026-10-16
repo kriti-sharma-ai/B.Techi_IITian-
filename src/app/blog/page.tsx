@@ -8,8 +8,8 @@ import { SITE_URL } from "@/lib/utils";
 
 export const metadata: Metadata = {
   ...pageMetadata({
-    title: "Blog: IITM BS Guides, Exam Strategy, Data Skills & Careers",
-    description: "In-depth guides for IIT Madras BS learners and aspiring analysts: the qualifier, exam strategy, Python, SQL, Excel, Power BI, AI trends and data careers in India.",
+    title: "IIT Madras BS Blog: Qualifier, PYQ PDFs, Exam Tips & Careers",
+    description: "Guides for IIT Madras BS students: the qualifier, PYQ PDFs and important questions, exam strategy, Python, SQL, Power BI, and data careers in India.",
     path: "/blog",
   }),
   alternates: { canonical: "/blog", types: { "application/rss+xml": `${SITE_URL}/blog/rss.xml` } },
@@ -31,7 +31,7 @@ export default function BlogPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <PageHeader crumbs={[{ label: "Blog" }]} title="Blog" description="Guides on the IITM BS, exams and data careers." />
+      <PageHeader crumbs={[{ label: "Blog" }]} title="IIT Madras BS blog" description="Guides on the IITM BS qualifier, PYQs, exams and data careers." />
       <BlogCategoryNav />
 
       <div className="container-page py-8">

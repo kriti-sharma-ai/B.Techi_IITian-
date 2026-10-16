@@ -1,0 +1,14 @@
+Maths I: 8 set formulas that keep coming back in the IIT Madras BS Qualifier.
+
+Power set: 2^n
+Proper subsets: 2^n − 1
+Two sets: |A ∪ B| = |A| + |B| − |A ∩ B|
+None: Total − union
+
+Plus the method for Venn questions: fill the diagram from the centre out.
+
+Save this for your revision. Tonight: a real Venn question to solve.
+
+Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier/notes?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-02-am-maths-sets-formulas
+
+#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree

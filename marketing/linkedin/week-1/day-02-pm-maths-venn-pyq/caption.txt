@@ -1,0 +1,12 @@
+Maths I question (Jan 2024 Qualifier pattern):
+
+Of 100 customers, 50 bought milk, 40 bread and 30 fruits. 20 bought milk and bread, 15 milk and fruits, 10 bread and fruits, and 5 bought all three.
+
+(a) How many bought milk and fruits, but not bread?
+(b) How many bought none?
+
+Comment your answer first. Then swipe for the solution.
+
+Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier/notes?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-02-pm-maths-venn-pyq
+
+#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree

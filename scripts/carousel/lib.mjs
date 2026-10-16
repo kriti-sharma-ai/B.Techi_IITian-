@@ -71,9 +71,9 @@ export function pill(label, x, y, { fill = C.soft, stroke = C.line, color = C.te
   </g>`;
 }
 
-/** Greedy word wrap by estimated glyph width (Helvetica averages about 0.5em; bold a bit more). */
+/** Greedy word wrap by estimated glyph width (measured: Helvetica averages about 0.44em, bold about 0.48em; kept a little wider for safety). */
 export function wrap(str, size, maxW, weight = 400) {
-  const maxChars = Math.floor(maxW / (size * (weight >= 700 ? 0.56 : 0.51)));
+  const maxChars = Math.floor(maxW / (size * (weight >= 700 ? 0.52 : 0.47)));
   const lines = [];
   for (const para of String(str).split("\n")) {
     let line = "";
@@ -144,15 +144,15 @@ const layouts = {
     let [svg, y] = heading(spec);
     const tx = X + 132, tw = CW - 132 - 32;
     spec.items.forEach((it, i) => {
-      const tl = wrap(it.title, 34, tw, 700), dl = it.desc ? wrap(it.desc, 28, tw) : [];
-      const h = Math.max(128, 36 + tl.length * 42 + dl.length * 38 + 30);
+      const tl = wrap(it.title, 36, tw, 700), dl = it.desc ? wrap(it.desc, 30, tw) : [];
+      const h = Math.max(128, 32 + tl.length * 44 + dl.length * 40 + 26);
       svg += `<rect x="${X}" y="${y}" width="${CW}" height="${h}" rx="20" fill="#FFFFFF" stroke="${C.line}" stroke-width="2"/>
         <rect x="${X + 28}" y="${y + 28}" width="72" height="72" rx="16" fill="${C.yellow}"/>`;
       svg += it.icon ? icon(it.icon, X + 44, y + 44, 40)
         : text([it.num ?? String(i + 1)], X + 64, y + 76, { size: 32, weight: 800, color: C.ink, anchor: "middle" });
-      svg += text(tl, tx, y + 62, { size: 34, weight: 700, color: C.ink, lh: 1.24 });
-      if (dl.length) svg += text(dl, tx, y + 62 + tl.length * 42 + 6, { size: 28, color: C.muted, lh: 1.36 });
-      y += h + 22;
+      svg += text(tl, tx, y + 62, { size: 36, weight: 700, color: C.ink, lh: 1.22 });
+      if (dl.length) svg += text(dl, tx, y + 62 + tl.length * 44 + 4, { size: 30, color: C.muted, lh: 1.33 });
+      y += h + 18;
     });
     return [svg, y];
   },
@@ -163,9 +163,9 @@ const layouts = {
     const tone = spec.tone ?? "dot";
     const color = { x: C.red, check: C.green, alert: "#D97706", dot: C.ink }[tone];
     spec.items.forEach((item) => {
-      const [t, h] = block(item, X + 72, y, CW - 72, { size: 32, color: C.ink, lh: 1.36 });
-      svg += tone === "dot" ? `<rect x="${X + 6}" y="${y + 14}" width="18" height="18" rx="4" fill="${C.yellow}"/>` : icon(tone, X, y + 1, 44, color);
-      svg += t; y += h + 34;
+      const [t, h] = block(item, X + 72, y, CW - 72, { size: 36, color: C.ink, lh: 1.36 });
+      svg += tone === "dot" ? `<rect x="${X + 6}" y="${y + 14}" width="18" height="18" rx="4" fill="${C.yellow}"/>` : icon(tone, X, y + 3, 44, color);
+      svg += t; y += h + 40;
     });
     return [svg, y];
   },
@@ -177,8 +177,8 @@ const layouts = {
     const top = y; y += 30;
     spec.rows.forEach(([label, f], i) => {
       if (i) { svg += `<line x1="${X + 32}" y1="${y - 16}" x2="${X + CW - 32}" y2="${y - 16}" stroke="${C.line}" stroke-width="2"/>`; }
-      svg += text([label], X + 36, y + 22, { size: 24, weight: 700, color: C.muted });
-      const [t, h] = block(f, X + 36, y + 38, CW - 72, { size: 36, weight: 600, color: C.ink, lh: 1.3 });
+      svg += text([label], X + 36, y + 22, { size: 26, weight: 700, color: C.muted });
+      const [t, h] = block(f, X + 36, y + 38, CW - 72, { size: 40, weight: 600, color: C.ink, lh: 1.28 });
       svg += t; y += 38 + h + 34;
     });
     svg = svg.replace("__H__", String(y - top));
@@ -297,13 +297,17 @@ const layouts = {
   },
 };
 
+/** Layouts whose content is centred vertically between the header and the footer. */
+const CENTRED = new Set(["list", "bullets", "formulas", "question", "answer", "scorecard", "stats"]);
+
 /** Turns a post's slide specs into SVG strings. Warns if any slide runs past the footer. */
 export function buildSlides(post) {
   const total = post.slides.length;
   return post.slides.map((spec, i) => {
     const [body, endY] = layouts[spec.type](spec);
     if (endY > BOTTOM) console.warn(`  ! ${post.slug} slide ${i + 1} (${spec.type}) runs to y=${Math.round(endY)}, limit ${BOTTOM}`);
-    return frame(i + 1, total, body, { last: i === total - 1 });
+    const shift = CENTRED.has(spec.type) ? Math.max(0, (BOTTOM - endY) / 2) : 0;
+    return frame(i + 1, total, shift ? `<g transform="translate(0, ${shift})">${body}</g>` : body, { last: i === total - 1 });
   });
 }
 

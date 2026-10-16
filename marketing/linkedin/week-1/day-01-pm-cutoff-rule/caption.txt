@@ -1,0 +1,14 @@
+The IIT Madras BS Qualifier has two rules, not one (General category):
+
+1. At least 40% in every subject.
+2. At least 50% average across the 4 subjects.
+
+Student A: 80, 70, 35, 75. Average 65%. Fail, because CT is below 40%.
+Student B: 45, 48, 52, 50. Every subject above 40%. Fail, because the average is 48.75%.
+Student C: 42, 55, 60, 50. Pass.
+
+So fix your weakest subject first. Which subject is yours? Tell us in the comments.
+
+Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-01-pm-cutoff-rule
+
+#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree

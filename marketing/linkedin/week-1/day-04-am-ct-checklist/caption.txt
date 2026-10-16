@@ -1,0 +1,15 @@
+Computational Thinking: a 5-step checklist for any pseudocode question.
+
+1. Start value
+2. Update
+3. Filter
+4. Scope
+5. Dry-run
+
+Exam tip: options often differ by one thing only. > vs ≥, and vs or, first vs last. Check those first.
+
+Save it. Tonight: a CT question to try.
+
+Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier/notes?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-04-am-ct-checklist
+
+#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree

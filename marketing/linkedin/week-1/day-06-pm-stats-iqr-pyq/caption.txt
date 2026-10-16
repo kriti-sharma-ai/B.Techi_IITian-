@@ -1,0 +1,9 @@
+Stats I question (Sep 2023 Qualifier):
+
+Find the IQR of 14, 20, 40, 23, 18. Are there any outliers?
+
+Try it with the IITM method before you swipe. The full steps are inside, plus 3 quartile traps.
+
+Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier/notes?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-06-pm-stats-iqr-pyq
+
+#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree

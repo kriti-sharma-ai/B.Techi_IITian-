@@ -1,0 +1,13 @@
+Stats I: 5 data-type traps in the IIT Madras BS Qualifier.
+
+1. PIN codes and roll numbers are categorical, not numerical.
+2. °C is interval, not ratio.
+3. Counts (votes, cars) are numerical, discrete, ratio.
+4. A 'year' column does not make data time series.
+5. No mean for categorical data. No median for nominal data.
+
+Quick check inside: an election symbol is which type of data?
+
+Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier/notes?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-03-am-stats-data-types
+
+#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree

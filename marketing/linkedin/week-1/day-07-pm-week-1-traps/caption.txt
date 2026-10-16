@@ -1,0 +1,16 @@
+Week 1 recap: 8 traps from the IIT Madras BS Qualifier.
+
+1. {∅} is not empty.
+2. Transitive needs (1, 1) and (2, 2) if (1, 2) and (2, 1) are in R.
+3. PIN codes are categorical.
+4. 2(x̄ − 5) is not 2x̄ − 5.
+5. min starts large, never 0.
+6. count(A or B) = A + B − both.
+7. foot is short u, food is long uu.
+8. Compare first sounds, not letters.
+
+Save this and read it before every mock. Week 2 starts tomorrow: Maths I and Stats I.
+
+Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier/notes?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-07-pm-week-1-traps
+
+#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree

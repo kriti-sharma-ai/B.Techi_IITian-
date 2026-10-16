@@ -1,0 +1,14 @@
+Maths I: relations in 1 post.
+
+Reflexive: (a, a) for every a.
+Symmetric: (a, b) means (b, a).
+Transitive: (a, b) and (b, c) mean (a, c).
+Equivalence: all three.
+
+The biggest trap: if (1, 2) and (2, 1) are in R, transitive needs (1, 1) and (2, 2) too.
+
+Plus a real May 2023 PYQ to solve inside.
+
+Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier/notes?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-06-am-maths-relations
+
+#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree

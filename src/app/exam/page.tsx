@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { ExamPortalStudio, type PortalCourse } from "@/components/exam-portal-studio";
+import { PageFaq } from "@/components/page-faq";
 import { PageHeader } from "@/components/ui";
 import { END_TERM_SUBJECTS } from "@/lib/data/end-term/subjects";
 import { getPyqIndex } from "@/lib/pyq-index";
@@ -9,7 +10,7 @@ import { getStudyScope } from "@/lib/study-scope";
 import { loadContent } from "@/lib/cms";
 
 export const metadata: Metadata = pageMetadata({
-  title: "IITM BS Mock Test: Exam Portal with Real Quiz & End Term Papers",
+  title: "IIT Madras BS Mock Test: Free Quiz & End Term Exam Portal",
   description:
     "Free IIT Madras BS mock tests: sit real End Term, Quiz 1 and Quiz 2 papers for Data Science and Management courses on a timed exam screen with a calculator. Take 1 to 4 subjects together.",
   path: "/exam",
@@ -79,12 +80,32 @@ export default async function ExamPortalPage({
     <>
       <PageHeader
         crumbs={[{ label: "Exam Portal" }]}
-        title="Exam Portal"
-        description="Timed End Term and Quiz papers. Take 1 to 4 subjects together."
+        title="IIT Madras BS mock test portal"
+        description="Timed End Term, Quiz 1 and Quiz 2 papers from past IITM BS exams. Take 1 to 4 subjects together."
       />
       <div className="container-page py-8">
         <ExamPortalStudio courses={portalCourses} initialPlanned={scope.courses} />
       </div>
+      <PageFaq title="IIT Madras BS mock test: frequently asked questions" items={EXAM_FAQ} />
     </>
   );
 }
+
+const EXAM_FAQ = [
+  {
+    q: "Is there a free IIT Madras BS mock test for Quiz 1, Quiz 2 and End Term?",
+    a: "Yes. The BTechi Exam Portal has real past End Term, Quiz 1 and Quiz 2 papers as timed mock tests. It is free and needs no account.",
+  },
+  {
+    q: "Is the mock test like the real IITM BS exam?",
+    a: "It uses real past papers, a timer and an on-screen calculator, and you can sit 1 to 4 subjects in one go, like an exam day. Your score is checked against the official answer key at the end.",
+  },
+  {
+    q: "Which courses have mock tests?",
+    a: "Courses at Foundation, Diploma and Degree level of the BS in Data Science and Applications and the BS in Management and Data Science, wherever past papers are available.",
+  },
+  {
+    q: "Where is the qualifier mock test?",
+    a: "The qualifier has its own page, the Qualifier Pack, with full 4-subject qualifier papers and a cutoff check.",
+  },
+];

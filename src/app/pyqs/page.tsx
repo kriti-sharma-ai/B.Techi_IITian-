@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, FileText } from "lucide-react";
-import { HomeFaq } from "@/components/home-faq";
+import { PageFaq } from "@/components/page-faq";
 import { PyqHistory } from "@/components/qualifier-attempts";
 import { ScopeSwitch } from "@/components/study-scope";
 import { PageHeader } from "@/components/ui";
@@ -20,7 +20,7 @@ export const metadata: Metadata = pageMetadata({
 // Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
 export const revalidate = 300;
 
-// Answers to what students search next to "iit madras bs pyq". Rendered below and as FAQPage JSON-LD, so both match.
+// Answers to what students search next to "iit madras bs pyq".
 function pyqFaq(totals: { courses: number; papers: number }) {
   return [
     {
@@ -50,12 +50,6 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
   const noPapers = scoped.narrowed
     ? scope.courses.filter((slug) => !pyqCourses.some((c) => c.slug === slug)).map((slug) => getStudyCourse(slug)!.name)
     : [];
-  const faq = pyqFaq(pyqTotals);
-  const faqLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faq.map(({ q, a }) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
-  };
   return (
     <>
       <PageHeader
@@ -142,11 +136,7 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
 
       <PyqHistory />
 
-      <section className="container-page pb-10 md:pb-14">
-        <h2 className="border-t border-border pt-5 text-xl font-bold tracking-tight md:text-2xl">IIT Madras BS PYQs: frequently asked questions</h2>
-        <HomeFaq items={faq} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd).replace(/</g, "\\u003c") }} />
-      </section>
+      <PageFaq title="IIT Madras BS PYQs: frequently asked questions" items={pyqFaq(pyqTotals)} />
 
       <section className="container-page pb-14 md:pb-20">
         <p className="flex items-start gap-2 text-xs text-muted">

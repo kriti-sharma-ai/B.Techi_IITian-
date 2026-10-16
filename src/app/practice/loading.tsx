@@ -8,7 +8,10 @@ export default function Loading() {
   return (
     <SkeletonRoot>
       {/* The real header and level bar, as on the page, so only the practice area loads in. */}
-      <PageHeader title="Practice" description="Previous-year questions with official answer keys." />
+      <PageHeader
+        title="IIT Madras BS practice questions"
+        description="Real Quiz 1, Quiz 2, End Term and Qualifier questions with the official answer key. Practise online, by topic or most repeated."
+      />
       <PyqLevelBar levels={PYQ_LEVELS.map((l) => ({ slug: l.slug, label: l.short, href: pyqLevelHref(l.slug) }))} />
       <div className="container-page py-8">
         <div className="grid gap-8 lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start xl:grid-cols-[21rem_minmax(0,1fr)]">

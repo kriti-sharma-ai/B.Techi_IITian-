@@ -63,9 +63,6 @@ export function Footer() {
           <h2 className="text-2xl font-bold tracking-tight text-fg md:text-3xl">
             Learn. Practise. Prepare.
           </h2>
-          <p className="max-w-md text-sm leading-relaxed text-muted">
-            A structured academic platform where students learn, practise and prepare.
-          </p>
 
           <div className="mt-1 flex flex-wrap items-center gap-3">
             <span className="inline-block rounded-full bg-brand px-3 py-1 text-xs font-semibold tracking-wide text-brand-ink dark:border dark:border-brand/40 dark:bg-brand/10 dark:text-brand">

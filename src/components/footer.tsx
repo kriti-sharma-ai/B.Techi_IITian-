@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useRoutePath } from "@/lib/use-route-path";
 import { hrefEnabled } from "@/lib/site";
-import { LINKEDIN_URL, YOUTUBE_URL } from "@/lib/utils";
+import { GITHUB_URL, LINKEDIN_URL, YOUTUBE_URL } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
+import { GithubMark } from "./github-mark";
 import { LinkedinMark } from "./linkedin-mark";
 import { YoutubeMark } from "./youtube-mark";
 import { FooterWordmark } from "./footer-wordmark";
@@ -94,6 +95,18 @@ export function Footer() {
               <LinkedinMark className="size-5" />
               <span>
                 <span className="font-medium text-fg">BTechi</span> on LinkedIn
+              </span>
+              <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
+            </a>
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener me"
+              className="group inline-flex w-fit items-center gap-2 text-sm text-muted transition-colors hover:text-fg"
+            >
+              <GithubMark className="size-5 text-fg" />
+              <span>
+                <span className="font-medium text-fg">BTechi</span> on GitHub
               </span>
               <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
             </a>

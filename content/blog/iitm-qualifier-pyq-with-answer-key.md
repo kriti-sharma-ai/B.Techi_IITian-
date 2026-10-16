@@ -14,6 +14,8 @@ featured: false
 
 Every **IITM qualifier previous year question paper** on BTechi is listed on this page, with its official answer key. There are 18 course papers from five qualifier sittings (January 2023 to May 2024) for Maths I, Stats I, Computational Thinking (CT) and English I. There are also 4 full four-course exams and 2 mocks. You can sit any paper in a timed exam portal, or download it as a free **IITM qualifier previous year question paper PDF** with the answer key.
 
+Quiz and End Term papers for later courses are on the [IIT Madras BS PYQ](/pyqs) page.
+
 Below you will find a table of every paper by course and term, what each paper looks like, four solved questions from real papers, and a plan to sit these papers like the real 4-hour exam.
 
 If you want the rules first (syllabus, cut-offs, fees), read our [IITM BS qualifier exam guide](/blog/iitm-bs-qualifier-exam-guide). For the PYQs of every other course in the programme, see the [IIT Madras BS Data Science PYQ hub](/blog/iit-madras-bs-data-science-pyq).

@@ -13,6 +13,8 @@ featured: false
 
 The best **IITM BS Foundation end term PYQ** strategy is simple: practise the topics that carry most of the marks first. On BTechi you can sit 39 Foundation End Term papers (December 2024, April 2025 and August 2025), each with its official answer key, and each one can be downloaded as a free **end term PYQ PDF**. We tagged every question by topic. The data is clear. In Maths 2, two calculus topics carry 38% of End Term questions. In Stats 2, hypothesis testing and estimation carry 64%. In Maths 1 and Stats 1, the End Term is mostly about the weeks after the qualifier.
 
+Papers for the other levels and exams are on the [IIT Madras BS PYQ](/pyqs) page.
+
 This guide shows those numbers course by course. It then links you to the exact papers, topic sheets and most repeated sheets, so you can start practising straight away.
 
 If you are still at the qualifier stage, read our [IITM BS qualifier exam guide](/blog/iitm-bs-qualifier-exam-guide) first. For the full picture of the programme, see the [complete guide to the IIT Madras BS degree](/blog/iit-madras-bs-degree-complete-guide).

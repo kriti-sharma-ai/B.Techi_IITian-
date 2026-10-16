@@ -69,6 +69,10 @@ export const HOME_FAQ: { q: string; a: string }[] = [
     a: "Qualifier papers for the four qualifier courses, and Quiz 1, Quiz 2 and End Term papers for courses at Foundation, Diploma and Degree level. Every paper comes with the official answer key. BTechi does not cover the BS in Electronic Systems or the BS in Aeronautics and Space Technology.",
   },
   {
+    q: "What is IITM BS PYQ?",
+    a: "PYQ means previous year questions: the real questions from past IIT Madras BS exams (Qualifier, Quiz 1, Quiz 2 and End Term). Solving them shows you the exam pattern and the topics that come up most. BTechi has them for every level, with the official answer key.",
+  },
+  {
     q: "Where can I find IITM BS previous year question papers?",
     a: "On the BTechi PYQs page, sorted by level (Foundation, Diploma, Degree) and course. Each paper can be taken as a timed test in the exam portal or downloaded as a printable question sheet.",
   },

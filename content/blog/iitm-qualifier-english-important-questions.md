@@ -13,6 +13,8 @@ featured: false
 
 The most important **IITM qualifier English important questions** come from five blocks that appear in every English I qualifier paper: a reading comprehension passage, a five-blank telephone conversation, a five-item word-matching question, sound questions (vowels, diphthongs, semi-vowels), and short grammar items (articles, prepositions, parts of speech). These five blocks cover almost all the marks. Below we show the numbers from four real papers, solve real questions with the official answers, and link to every paper and topic sheet so you can practise.
 
+For the other qualifier subjects and later courses, see all [IIT Madras BS PYQs](/pyqs).
+
 The data comes from the four official English I qualifier papers on BTechi: [May 2023](/pyqs/foundation/english-1/qualifier-may-2023), [September 2023](/pyqs/foundation/english-1/qualifier-september-2023), [January 2024](/pyqs/foundation/english-1/qualifier-january-2024) and [May 2024](/pyqs/foundation/english-1/qualifier-may-2024). Together they have 150 questions, each with the official answer key. You can download each paper as a free **English 1 qualifier PYQ PDF**.
 
 If you are new to the qualifier, read our [IITM BS qualifier exam guide](/blog/iitm-bs-qualifier-exam-guide) first for the process, fees and cut-offs.

@@ -500,8 +500,8 @@ function AnswerLines({ q, response }: { q: PyqItem; response: QualifierResponse 
         <span className="font-semibold">Answer key: </span>
         {answerKey(q)}
       </p>
-      {/* Notes on numerical questions only restate the accepted range, which the key above already shows. */}
-      {q.type !== "numerical" && q.explanation && <p className="text-fg/85">{q.explanation}</p>}
+      {/* A bare accepted-range note only restates the key above, so it is hidden. */}
+      {q.explanation && !/^Official answer key accepts any value/i.test(q.explanation) && <p className="text-fg/85">{q.explanation}</p>}
       <p className="pt-1 text-xs text-muted">
         Asked in the{" "}
         <Link href={q.paperHref} className="font-medium text-fg underline-offset-2 hover:underline">

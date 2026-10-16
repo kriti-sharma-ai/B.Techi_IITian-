@@ -13,6 +13,8 @@ featured: false
 
 The **IITM qualifier stats important questions** are spread evenly over five topics: association between two variables, variance and percentiles, types of data and scales, categorical data, and mean, median and mode. We tagged every question in the five past Stats I qualifier papers on BTechi (74 questions, 200 marks). Each topic carries 16% to 24% of the marks. So unlike Maths I, you cannot skip any week. Every paper below is also a free **Stats 1 qualifier PYQ PDF** with the answer key.
 
+For the other qualifier subjects and later courses, see all [IIT Madras BS PYQs](/pyqs).
+
 The good news: Stats I questions repeat a lot. "Identify the scale of measurement" came up 5 times in 5 papers. This post gives you the data, the repeated question types, four real past-year questions solved step by step (checked against the official answer key), and the exact practice sheet for each topic.
 
 New to the qualifier? Start with our [IITM BS qualifier exam guide](/blog/iitm-bs-qualifier-exam-guide). It explains the process, the cut-offs and the four-week plan.

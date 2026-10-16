@@ -32,7 +32,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Row 8: Total score is out of range",
             ],
             answer: [1, 2, 3],
-            explanation: "",
+            explanation: "Row 4: a date of birth needs a year, so '30 November' is invalid. Row 6: subject marks lie between 0 and 100, so Physics = 145 is out of range. Row 8: the total of three subjects can be at most 300, so 398 is out of range. Row 1 is fine, because card number 1 is an integer.",
           },
           {
             id: "ct-may-2024-q4",
@@ -46,7 +46,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Returns “True” if and only if the difference between the maximum Chemistry marks and the minimum Physics marks is less than B",
             ],
             answer: 2,
-            explanation: "",
+            explanation: "C keeps the maximum Physics marks and D keeps the minimum Chemistry marks. The procedure returns False when C − D ≥ B, and True otherwise. So it returns True only when (max Physics − min Chemistry) < B.",
           },
           {
             id: "ct-may-2024-q5",
@@ -60,7 +60,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Number of students with lowest marks in Physics and highest marks in Mathematics.",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "isInSeq returns 1 only when Physics < Mathematics and Mathematics < Chemistry. So Chemistry is the highest and Physics is the lowest of the three subjects. A counts such students.",
           },
           {
             id: "ct-may-2024-q6",
@@ -88,7 +88,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-may-2024/q7-opt4.jpg#647x194)",
             ],
             answer: [1, 3],
-            explanation: "",
+            explanation: "We need True only when 4 ≤ LetterCount ≤ 8. Option B checks C1 ≤ LetterCount and LetterCount ≤ C2 directly. Option D returns False when LetterCount < C1 or LetterCount > C2, and True otherwise, which is the same test. Option A uses C1 ≥ LetterCount, and option C gives the opposite result.",
           },
           {
             id: "ct-may-2024-q8",
@@ -116,7 +116,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-may-2024/q9-opt4.jpg#647x99)",
             ],
             answer: [0, 1, 3],
-            explanation: "",
+            explanation: "We need bills that are from Big Bazaar and have TotalBillAmount > Avg. Options A and B check both conditions with nested ifs, and option D checks them with 'and'. Option C uses 'or', so it also counts bills that meet only one condition.",
           },
           {
             id: "ct-may-2024-q10",
@@ -130,7 +130,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "No mistake",
             ],
             answer: [1, 2],
-            explanation: "",
+            explanation: "Line 15 should divide by CountS (words in the current sentence), not CountT, to get the sentence average. Line 16 should be C < B, because we want sentences with average below the dataset average B. Line 8 is correct: B = SumT / CountT is the dataset average.",
           },
           {
             id: "ct-may-2024-q11",
@@ -144,7 +144,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-may-2024/q11-opt4.jpg#647x195)",
             ],
             answer: [1, 3],
-            explanation: "",
+            explanation: "A conjugate pair has different words, the same number of vowels and a different number of consonants. Consonants = LetterCount − vCount. Option D checks this directly. Option B also works: if the vowel counts are equal and the letter counts differ, the consonant counts must differ.",
           },
           {
             id: "ct-may-2024-q12",
@@ -152,7 +152,7 @@ export const ctPyqPapers: QualifierMock[] = [
             marks: 3,
             prompt: "![Figure](/pyq/ct-may-2024/q12-1.jpg#647x474)",
             answer: 6,
-            explanation: "",
+            explanation: "mSum(4, 4, 2): the first check is A ≥ C (4 ≥ 2) and A ≥ B (4 ≥ 4), which is True. So the first branch runs and Sum = B + C = 4 + 2 = 6.",
           },
           {
             id: "ct-may-2024-q13",
@@ -160,7 +160,7 @@ export const ctPyqPapers: QualifierMock[] = [
             marks: 5,
             prompt: "![Figure](/pyq/ct-may-2024/q13-1.jpg#647x624)",
             answer: 2,
-            explanation: "",
+            explanation: "flag stays True only until the first word that ends with a full stop, so only the first sentence is checked. In it, the words that start with 'su' are Surrounded and Susan. Words like stroll, savoring, soothing and sounds do not have 'u' as the second letter. So count = 2.",
           },
           {
             id: "ct-may-2024-q14",
@@ -174,7 +174,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "count represents the number of pairs of students having the same gender but not from the same city.",
             ],
             answer: 2,
-            explanation: "",
+            explanation: "A is True for the same gender and B is True for the same city. findPair returns 1 when both are True or both are False. So count is the number of pairs that share both gender and city, or share neither.",
           },
         ],
       },
@@ -205,7 +205,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Number of books that are written by author Kalam or in English or both",
             ],
             answer: 3,
-            explanation: "",
+            explanation: "A counts books whose author is not Kalam and whose language is not English. count is the total number of books. So B = count − A is the number of books by Kalam or in English or both.",
           },
           {
             id: "ct-january-2024-q4",
@@ -219,7 +219,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-january-2024/q4-opt4.jpg#264x55)",
             ],
             answer: 2,
-            explanation: "",
+            explanation: "count2 is updated in the else part, so it counts rows where (A or B) is False, that is, not A and not B. For male students with Physics ≤ Mathematics, not A must mean Gender is M and not B must mean Mathematics ≥ Physics. So A is X.Gender == 'F' and B is X.Mathematics < X.Physics.",
           },
           {
             id: "ct-january-2024-q5",
@@ -233,7 +233,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Number of students with lowest marks in Physics among the three subjects",
             ],
             answer: 3,
-            explanation: "",
+            explanation: "isInSeq returns 1 when Mathematics > Physics and Chemistry > Physics. Then Physics is lower than both other subjects. So A counts students with the lowest marks in Physics among the three subjects.",
           },
           {
             id: "ct-january-2024-q6",
@@ -247,7 +247,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Number of words with at most two pairs of the same vowel occurring consecutively",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "A is True when the previous letter was a vowel. B becomes True when the current letter is a vowel and A is True, that is, two vowels come one after another. count adds 1 for each word where B is True, so it counts words with at least one pair of consecutive vowels.",
           },
           {
             id: "ct-january-2024-q7",
@@ -261,7 +261,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Statement 1: X.LetterCount == Y.LetterCount Statement 2: X.PartOfSpeech == Y.PartOfSpeech Statement 3: X.Word and Y.Word end with a full stop",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "Y must also be a noun, so Statement 1 is X.PartOfSpeech == Y.PartOfSpeech. Then count goes up if the letter counts are equal (Statement 2), else if both words end with a full stop (Statement 3). The if-else adds 1 only once per pair, which matches option A.",
           },
           {
             id: "ct-january-2024-q8",
@@ -275,7 +275,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-january-2024/q8-opt4.jpg#304x105)",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "A is True when the total is above AvgT. B, C and D are True when the student is below average in Mathematics, Physics or Chemistry. We need A and at least one of B, C, D. So the condition is A and (B or C or D).",
           },
           {
             id: "ct-january-2024-q9",
@@ -289,7 +289,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Number of words with average letter count less than the average letter count per word of dataset",
             ],
             answer: 1,
-            explanation: "",
+            explanation: "B is the average letter count of all words. In the second loop, SumS and CountS hold the letters and words of the current sentence. At each full stop, C = SumS / CountS is the sentence average, and A goes up when C < B. So A counts sentences whose average letter count is less than the dataset average.",
           },
           {
             id: "ct-january-2024-q10",
@@ -303,7 +303,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-january-2024/q10-opt4.jpg#273x164)",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "The first if handles A as the largest, so Sum = B + C. In the else part, if B is the largest then Sum = A + C, else C is the largest and Sum = A + B. Option A does this. In options B, C and D, Sum can be overwritten after the first case, or the wrong pair is added.",
           },
           {
             id: "ct-january-2024-q11",
@@ -317,7 +317,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Year gap between first and second latest medal won by a player",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "A keeps the earliest year. When a smaller year comes, the old A moves to B, and B also takes any year between A and B. So at the end, A is the year of the first medal and B is the year of the second medal. B − A is the year gap between the first and second medal.",
           },
           {
             id: "ct-january-2024-q12",
@@ -331,7 +331,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "The number of players having the different name but of same nationality.",
             ],
             answer: 1,
-            explanation: "",
+            explanation: "Each pair (X, Y) is checked once, with X before Y. count goes up only when the names differ and both Nationality and Medal are the same. So count is the number of pairs of players with the same nationality and the same medal.",
           },
           {
             id: "ct-january-2024-q13",
@@ -345,7 +345,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-january-2024/q13-opt4.jpg#494x250)",
             ],
             answer: [1, 3],
-            explanation: "",
+            explanation: "hasItem must return True when item A appears anywhere on the card. Option B starts with False and sets True when A is found. Option D sets C to False when A is found and returns not(C), which gives the same result. Option A can reset C to False on a later item, and option C always returns True.",
           },
           {
             id: "ct-january-2024-q14",
@@ -361,7 +361,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Row 4: Invalid value of Letter Count",
             ],
             answer: [0, 1, 5],
-            explanation: "",
+            explanation: "Row 1: card number must be an integer, but 'xyz' is a string. Row 2: Word must be a string, but 1 is a number. Row 4: −5 is an invalid Letter Count, because a count cannot be negative. Row 3 is fine, since 'Noun' is a valid part of speech.",
           },
           {
             id: "ct-january-2024-q15",
@@ -375,7 +375,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Line 21: It should return(0)",
             ],
             answer: [0, 2],
-            explanation: "",
+            explanation: "We need pairs where exactly one of A (same gender) and B (same city) is True. Line 13 must set B = False, otherwise B is always True. Line 20 must use 'or' between the two parts: (A and not B) or (not A and B). With 'and', the condition can never be True.",
           },
           {
             id: "ct-january-2024-q16",
@@ -383,7 +383,7 @@ export const ctPyqPapers: QualifierMock[] = [
             marks: 3,
             prompt: "The following pseudocode is executed using a dataset similar to the \"Words\" dataset, based on the following paragraph.\n\n\"Surrounded by nature, Susan often takes a stroll, savoring the soothing sounds of chirping birds.Such moments underline the significance of embracing simple joys in life. Rustlings in the trees suggest squirrels beginning their day, searching for sustenance. Surely, the beauty of a sunrise holds unparalleled magic.\"\n\n![Figure](/pyq/ct-january-2024/q16-1.jpg#505x415)\n\nWhat would be the value of count at the end of the execution of the above pseudocode? Assume that upper case and lower case are ignored during comparison of letters.",
             answer: 3,
-            explanation: "",
+            explanation: "flag is True only for the first word and for each word just after a full stop, so only the first word of each sentence is checked. These words are Surrounded, Such, Rustlings and Surely. Surrounded, Such and Surely start with 'su', so count = 3.",
           },
         ],
       },
@@ -415,7 +415,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q3-opt5.jpg#318x30)",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "a: 2 == 2 is True, so the 'or' is True. b: 2 > 3 is False, so the 'and' is False. c: 2 = 3 tries to assign a value to a number, so it is invalid. d: a number cannot be added to a string, so it is invalid. e: 2 < 3 is True. So a-2, b-3, c-1, d-1, e-2.",
           },
           {
             id: "ct-september-2023-q4",
@@ -429,7 +429,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q4-opt4.jpg#524x30)",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "countT counts books by Narayan and countG counts those books that are Fiction. The procedure returns True when countG / countT ≥ 10/100. So it returns True if at least 10 percent of Narayan's books are Fiction.",
           },
           {
             id: "ct-september-2023-q5",
@@ -443,7 +443,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q5-opt4.jpg#228x161)",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "The first if handles A as the largest, so Sum = B + C. The rest must be in an else: if B is the largest, Sum = A + C, otherwise C is the largest and Sum = A + B. Only option A does this. Without the else, option B overwrites Sum when A is the largest.",
           },
           {
             id: "ct-september-2023-q6",
@@ -457,7 +457,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q6-opt4.jpg#458x32)",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "For each word X, the inner loop moves every later copy of the same word to Table 3 and puts the other words back in Table 1. So Table 2 keeps only the first time each word appears. Removing the repeats gives: she sells seashells by the seashore shells are I'm sure.",
           },
           {
             id: "ct-september-2023-q7",
@@ -471,7 +471,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q7-opt4.jpg#644x33)",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "Lucknow: Saturday = 30 + 20 = 50 and Sunday = 50 + 50 = 100, so it returns Sunday. Chennai: Saturday = 20 + 30 = 50 and Sunday = 30 + 20 = 50. For a tie, countSun ≥ countSat is True, so it also returns Sunday.",
           },
           {
             id: "ct-september-2023-q8",
@@ -485,7 +485,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Number of words in which the same vowel occurs consecutively at least twice",
             ],
             answer: 1,
-            explanation: "",
+            explanation: "letter stores the last vowel seen, and A is True when the previous letter was a vowel. C becomes 1 when the current vowel is the same as the vowel just before it, that is, the same vowel occurs twice in a row. Count adds 1 for every word with C = 1, so it counts words where this happens at least once.",
           },
           {
             id: "ct-september-2023-q9",
@@ -499,7 +499,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q9-opt4.jpg#642x28)",
             ],
             answer: [0, 1, 2],
-            explanation: "",
+            explanation: "To find a maximum, max must start with a value that is not above the real maximum. The Total of any card (random or top) works, because larger totals replace it later. A value below the minimum possible total also works. A value above the maximum is never replaced, so D is wrong.",
           },
           {
             id: "ct-september-2023-q10",
@@ -513,7 +513,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q10-opt4.jpg#603x108)",
             ],
             answer: [0, 1],
-            explanation: "",
+            explanation: "countOverall must count every student with Total ≥ 180. countPerSub must count those students who also have at least 60 in all three subjects. Options A and B do this; the order of the two statements does not matter. C and D update countOverall only for students who pass the subject check.",
           },
           {
             id: "ct-september-2023-q11",
@@ -527,7 +527,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q11-opt4.jpg#449x36)",
             ],
             answer: [3],
-            explanation: "",
+            explanation: "Y is read but not moved, so it stays at the top of Table 1 and becomes X in the next round. So every pair of consecutive words is compared, including the last word. Table 2 does not need to be restored to get count, so the pseudocode is correct (assuming countSomething adds 1 to i in its loop).",
           },
           {
             id: "ct-september-2023-q12",
@@ -542,7 +542,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q12-opt5.jpg#78x30)",
             ],
             answer: [2],
-            explanation: "",
+            explanation: "findItem should return the highest price on the card. Line 16 updates maxPrice when maxPrice ≥ Z.Price, which keeps the smaller value. It should be maxPrice < Z.Price. The other lines are correct: findItem is called only for Big Bazaar cards, and Line 6 keeps the larger value in A.",
           },
           {
             id: "ct-september-2023-q13",
@@ -557,7 +557,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q13-opt4.jpg#374x27)",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "i is 0 at the start and becomes 0 again after every full stop. So only the first word of each sentence goes to Table 2. The sentences start with IIT, Anyone, There, There, The, Learners and The. So Table 2 has these seven words.",
           },
           {
             id: "ct-september-2023-q14",
@@ -587,7 +587,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q15-opt4.jpg#387x52)",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "A keeps the smallest year seen. When a smaller year comes, the old A moves to B, and B also takes any year between A and B. So A is the year of the first book and B is the year of the second book of that author. doSomething returns B − A, the gap between the first and second book of the same author.",
           },
           {
             id: "ct-september-2023-q16",
@@ -602,7 +602,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-september-2023/q16-opt4.jpg#405x78)",
             ],
             answer: 0,
-            explanation: "",
+            explanation: "Each round puts all books of one author in Table 2, and Diff is the gap between that author's first and second book. If Diff is larger than max, max is updated and Count is reset to 1. If Diff equals max, Count goes up. So Count is the number of authors with the maximum gap between the first and second book.",
           },
         ],
       },
@@ -633,7 +633,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Number of words which are not adjectives and have exactly two letters",
             ],
             answer: 2,
-            explanation: "",
+            explanation: "flag becomes True if the word is an adjective, and also if LetterCount ≤ 2. count goes up when flag is True. So count is the number of words that are adjectives or have at most two letters or both.",
           },
           {
             id: "ct-may-2023-q4",
@@ -647,7 +647,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Number of books that are written by Kalam or in English or both",
             ],
             answer: 3,
-            explanation: "",
+            explanation: "A first counts books that are not by Kalam and not in English. count is the total number of books. So A = count − A gives the books by Kalam or in English or both.",
           },
           {
             id: "ct-may-2023-q5",
@@ -661,7 +661,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Average letter count of words containing at most two vowels in the dataset",
             ],
             answer: 2,
-            explanation: "",
+            explanation: "vCount(X) > 1 means the word has at least two vowels. SumT adds the letter counts of these words and CountT counts them. So B = SumT / CountT is the average letter count of words with at least two vowels.",
           },
           {
             id: "ct-may-2023-q6",
@@ -675,7 +675,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Sum of Physics marks of students whose Physics marks are less than the average Physics marks",
             ],
             answer: 1,
-            explanation: "",
+            explanation: "DoSomething returns the average Physics marks and moves all rows to Table 2. The loop then adds X.Total to C for each student whose Physics marks are more than this average. So C is the sum of Total marks of students with Physics above the average.",
           },
           {
             id: "ct-may-2023-q7",
@@ -689,7 +689,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "Number of words with exactly two vowels",
             ],
             answer: 1,
-            explanation: "",
+            explanation: "The inner loop counts the vowels of each word in B. A goes up only when B > 2, that is, when the word has at least three vowels.",
           },
           {
             id: "ct-may-2023-q8",
@@ -703,7 +703,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "SilverStriker and BronzeStriker",
             ],
             answer: [0],
-            explanation: "",
+            explanation: "All three scores (167, 180, 180) are above 75, so maxMatch is called. Trial > TestSeries is False (167 < 180), so we go to the else part. TestSeries > WorldCup is False (180 = 180), so it returns WorldCup and A goes up. So the player joins GoldStriker.",
           },
           {
             id: "ct-may-2023-q9",
@@ -717,7 +717,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-may-2023/q9-opt4.jpg#335x196)",
             ],
             answer: [1, 3],
-            explanation: "",
+            explanation: "A starts at 101, above any possible mark, so we must keep the smaller value: X.Chemistry < A. The student must be male (Gender == 'M' or Gender != 'F') and from Vellore. Options B and D do this. Options A and C use >, so they cannot find the minimum.",
           },
           {
             id: "ct-may-2023-q10",
@@ -731,7 +731,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "No error in the code",
             ],
             answer: [1, 2],
-            explanation: "",
+            explanation: "C should mean a female player from India, so Line 5 must check Gender == 'F' and Nationality == 'India'. D should mean the event in Australia in 2006, so Line 8 must check Year == 2006 and HostCountry == 'Australia'. The two lines mix up these conditions. Line 1 (A = 0) is correct.",
           },
           {
             id: "ct-may-2023-q11",
@@ -745,7 +745,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-may-2023/q11-opt4.jpg#628x199)",
             ],
             answer: [0, 3],
-            explanation: "",
+            explanation: "A Special pair has different words, different letter counts and the same number of vowels. Option A checks exactly these three conditions. Option D also works: with equal vowels, different consonant counts (LetterCount − vCount) means different letter counts. B needs the same word and C needs equal letter counts, so both are wrong.",
           },
           {
             id: "ct-may-2023-q12",
@@ -753,7 +753,7 @@ export const ctPyqPapers: QualifierMock[] = [
             marks: 4,
             prompt: "![Figure](/pyq/ct-may-2023/q12-1.jpg#647x406)",
             answer: 7,
-            explanation: "",
+            explanation: "The loop adds the last digit (n % 10) to s and then removes it (n // 10). So s is the sum of the digits of 1024: 1 + 0 + 2 + 4 = 7.",
           },
           {
             id: "ct-may-2023-q13",
@@ -761,7 +761,7 @@ export const ctPyqPapers: QualifierMock[] = [
             marks: 3,
             prompt: "Let the value of X be \"aeroplane\". What is the value of A at the end of the execution of the pseudocode ?\n\n![Figure](/pyq/ct-may-2023/q13-1.jpg#372x218)",
             answer: 32,
-            explanation: "",
+            explanation: "A starts at 1 and is doubled for every vowel in the word. 'aeroplane' has 5 vowels: a, e, o, a, e. So A = 2 × 2 × 2 × 2 × 2 = 32.",
           },
           {
             id: "ct-may-2023-q14",
@@ -776,7 +776,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-may-2023/q14-opt4.jpg#302x197)",
             ],
             answer: 2,
-            explanation: "",
+            explanation: "Up to 50 units, cost = unit × 2. Above 50, the first 50 units cost 50 × 2 = 100 and only the extra units cost 3 each: 50 × 2 + (unit − 50) × 3. Check with 60 units: 100 + 30 = 130, as in the example. Option C does this.",
           },
           {
             id: "ct-may-2023-q15",
@@ -791,7 +791,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-may-2023/q15-opt4.jpg#647x80)",
             ],
             answer: 3,
-            explanation: "",
+            explanation: "Statement I must put grade 4 users (Units > 550) in Table 5. For each pair in a grade table, we need the same area and a different year of registration. So Statement II is Y.YearOfRegistration != Z.YearOfRegistration and Y.Area == Z.Area, which is option D.",
           },
           {
             id: "ct-may-2023-q16",
@@ -805,7 +805,7 @@ export const ctPyqPapers: QualifierMock[] = [
               "![Figure](/pyq/ct-may-2023/q16-opt4.jpg#372x285)",
             ],
             answer: [0, 2],
-            explanation: "",
+            explanation: "We need pairs where exactly one of same gender and same city is True. Option A counts pairs with at least one match (or) and subtracts pairs with both (and), so it gives 1 only for exactly one. Option C checks (A and not B) or (not A and B) directly. B can return −1, and D counts pairs where both or neither match.",
           },
         ],
       },

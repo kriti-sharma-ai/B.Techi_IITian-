@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: PageProps<"/pyqs/[level]/[cou
   const title = pyqTitle(r.uploaded!);
   return pageMetadata({
     title: `${title} Question Paper`,
-    description: `${title} previous year paper (${r.uploaded!.marks} marks). View, download, or practise with explanations.`,
+    description: `${title} previous year paper (${r.uploaded!.marks} marks). View, download, or practise it online with the answer key.`,
     path: uploadedPyqHref(r.uploaded!),
   });
 }
@@ -163,7 +163,7 @@ function UploadedPaper({ pyq, course }: { pyq: Pyq; course: CoursePyqs }) {
             ))}
           </ol>
           <Link href={`/practice/session?pyq=${pyq.id}`} className={buttonClass("dark", "lg", "mt-6")}>
-            Practise with explanations →
+            Practise these questions →
           </Link>
         </section>
       )}

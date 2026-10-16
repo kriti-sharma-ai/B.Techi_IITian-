@@ -13,6 +13,8 @@ featured: false
 
 The **IITM qualifier maths important questions** come from six topics: polynomials, quadratic functions, straight lines, relations, three-set Venn counting and best-fit lines (SSE). We tagged every question in the five past Maths I qualifier papers on BTechi (63 questions, 240 marks). Polynomials alone carry about a quarter of the marks. The top three topics carry more than 60%. Some questions even come back word for word. Every paper below is also a free **Maths 1 qualifier PYQ PDF** with the answer key.
 
+For the other qualifier subjects and later courses, see all [IIT Madras BS PYQs](/pyqs).
+
 This post shows the data, the question types that repeat, four real past-year questions solved step by step (checked against the official answer key), and the exact practice sheet for each topic.
 
 If you are new to the qualifier itself, read our [IITM BS qualifier exam guide](/blog/iitm-bs-qualifier-exam-guide) first. It covers the process, the cut-offs and the four-week plan.

@@ -13,6 +13,8 @@ featured: false
 
 The best **IITM qualifier Computational Thinking PYQ** set to practise is the four official CT qualifier papers: [May 2023](/pyqs/foundation/computational-thinking/qualifier-may-2023), [September 2023](/pyqs/foundation/computational-thinking/qualifier-september-2023), [January 2024](/pyqs/foundation/computational-thinking/qualifier-january-2024) and [May 2024](/pyqs/foundation/computational-thinking/qualifier-may-2024). Each has 12 to 14 questions worth 50 marks, and each comes with the official answer key. You can sit all four free on BTechi in a timed exam portal, or download each one as a free **CT qualifier PYQ PDF** with the answer key.
 
+For the other qualifier subjects and later courses, see all [IIT Madras BS PYQs](/pyqs).
+
 This post goes one step further. We sorted all 54 questions from those papers by what they ask you to do, then solved seven real ones and checked every answer against the official key.
 
 New to the qualifier itself? Read our [IITM BS qualifier exam guide](/blog/iitm-bs-qualifier-exam-guide) first. It covers the cut-offs, fees and the four-week process.

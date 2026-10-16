@@ -15,6 +15,7 @@ const columns = [
     title: "Prepare",
     links: [
       ["Programs", "/programs"],
+      ["PYQs", "/pyqs"],
       ["Practice", "/practice"],
       ["Exam Portal", "/exam"],
       ["Qualifier Pack", "/qualifier"],

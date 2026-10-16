@@ -147,7 +147,9 @@ export default async function HomePage() {
           <div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between">
             <div>
               <h2 className="text-base font-bold tracking-tight md:text-lg">
-                PYQs and mock tests for every IIT Madras BS level
+                <Link href="/pyqs" className="hover:underline">
+                  IIT Madras BS PYQs and mock tests for every level
+                </Link>
               </h2>
               <p className="mt-0.5 text-xs text-muted">
                 Qualifier, Quiz 1, Quiz 2 and End Term papers across Data Science and Management & Data Science, Foundation to Degree.

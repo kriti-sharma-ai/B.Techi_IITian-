@@ -13,6 +13,8 @@ featured: false
 
 **IITM BS Diploma PYQ** practice works best when you know which topics IITM asks most. BTechi has 76 Diploma level papers from 15 courses: 55 End Term papers, 10 Quiz 2 papers and 11 Quiz 1 papers. Every paper has its official answer key, and you can download any paper as a free **Diploma PYQ PDF**. We tagged each question by topic, so for every course we can show you the topics with the most questions and the question types that repeat. This guide lists them course by course, with direct links to each paper, topic sheet and most repeated sheet.
 
+Foundation and Degree papers are on the same site too: browse all [IIT Madras BS PYQs](/pyqs) by level and course.
+
 The short version: in most Diploma courses, two or three topics carry a large share of past questions. In Tools in Data Science, one topic (Apache log analysis) alone gives 30% of all tagged questions.
 
 New to the Diploma level? Read the [complete guide to the IIT Madras BS degree](/blog/iit-madras-bs-degree-complete-guide) for how levels and exits work. Still finishing Foundation? Start with our [Foundation End Term PYQ guide](/blog/iitm-bs-foundation-end-term-pyq).

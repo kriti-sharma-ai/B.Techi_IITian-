@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useRoutePath } from "@/lib/use-route-path";
 import { hrefEnabled } from "@/lib/site";
-import { YOUTUBE_URL } from "@/lib/utils";
+import { LINKEDIN_URL, YOUTUBE_URL } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
+import { LinkedinMark } from "./linkedin-mark";
 import { YoutubeMark } from "./youtube-mark";
 import { FooterWordmark } from "./footer-wordmark";
 
@@ -71,18 +72,32 @@ export function Footer() {
             </span>
           </div>
 
-          <a
-            href={YOUTUBE_URL}
-            target="_blank"
-            rel="noopener me"
-            className="group mt-3 inline-flex w-fit items-center gap-2 text-sm text-muted transition-colors hover:text-fg"
-          >
-            <YoutubeMark className="size-5" />
-            <span>
-              <span className="font-medium text-fg">BTechi IITian</span> on YouTube
-            </span>
-            <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
-          </a>
+          <div className="mt-3 flex flex-col gap-2.5">
+            <a
+              href={YOUTUBE_URL}
+              target="_blank"
+              rel="noopener me"
+              className="group inline-flex w-fit items-center gap-2 text-sm text-muted transition-colors hover:text-fg"
+            >
+              <YoutubeMark className="size-5" />
+              <span>
+                <span className="font-medium text-fg">BTechi IITian</span> on YouTube
+              </span>
+              <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
+            </a>
+            <a
+              href={LINKEDIN_URL}
+              target="_blank"
+              rel="noopener me"
+              className="group inline-flex w-fit items-center gap-2 text-sm text-muted transition-colors hover:text-fg"
+            >
+              <LinkedinMark className="size-5" />
+              <span>
+                <span className="font-medium text-fg">BTechi</span> on LinkedIn
+              </span>
+              <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
+            </a>
+          </div>
         </div>
 
         {/* Navigation links grid */}

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { CONTACT_EMAIL, SITE_URL, YOUTUBE_URL } from "@/lib/utils";
+import { CONTACT_EMAIL, LINKEDIN_URL, SITE_URL, YOUTUBE_URL } from "@/lib/utils";
 
 // Copy for the footer pages. The legal pages describe what the code actually
 // does (lib/store.ts, lib/supabase/sync.ts, supabase/schema.sql); update them,
@@ -129,10 +129,11 @@ export const PAGES: Record<string, InfoPage> = {
           Please don't send passwords or answer-sheet screenshots that show other students' personal details. We will
           never ask for your password.
         </p>
-        <h2>YouTube</h2>
+        <h2>YouTube and LinkedIn</h2>
         <p>
           You can also reach us through comments and community posts on the{" "}
-          <a href={YOUTUBE_URL} target="_blank" rel="noopener me">BTechi IITian YouTube channel</a>.
+          <a href={YOUTUBE_URL} target="_blank" rel="noopener me">BTechi IITian YouTube channel</a>, or on the{" "}
+          <a href={LINKEDIN_URL} target="_blank" rel="noopener me">BTechi LinkedIn page</a>.
         </p>
       </>
     ),

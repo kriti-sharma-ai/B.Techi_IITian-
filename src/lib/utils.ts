@@ -31,6 +31,9 @@ export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "btechi.at
 /** The BTechi IITian YouTube channel, where BTechi started. Listed as the site's official profile (JSON-LD sameAs). */
 export const YOUTUBE_URL = "https://www.youtube.com/@BTechiIITian";
 
+/** BTechi's LinkedIn company page, also listed in JSON-LD sameAs. */
+export const LINKEDIN_URL = "https://www.linkedin.com/company/btechi";
+
 /** Full-screen auth pages (components/auth-shell.tsx), which hide the footer and bottom nav. */
 export const isAuthPage = (pathname: string) => ["/login", "/signup", "/reset-password"].includes(pathname);
 

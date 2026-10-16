@@ -34,6 +34,9 @@ export const YOUTUBE_URL = "https://www.youtube.com/@BTechiIITian";
 /** BTechi's LinkedIn company page, also listed in JSON-LD sameAs. */
 export const LINKEDIN_URL = "https://www.linkedin.com/company/btechi";
 
+/** BTechi's GitHub profile, listed in JSON-LD sameAs. */
+export const GITHUB_URL = "https://github.com/Btechi";
+
 /** Full-screen auth pages (components/auth-shell.tsx), which hide the footer and bottom nav. */
 export const isAuthPage = (pathname: string) => ["/login", "/signup", "/reset-password"].includes(pathname);
 

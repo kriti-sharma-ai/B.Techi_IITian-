@@ -6,7 +6,6 @@ import {
   BookOpen,
 } from "lucide-react";
 import { QualifierHistory } from "@/components/qualifier-attempts";
-import { PageFaq } from "@/components/page-faq";
 import { QualifierExamList } from "@/components/qualifier-exam-list";
 import { getSubject } from "@/lib/content";
 import { cheatSheetForSubject, cheatSheetHref } from "@/lib/data/cheat-notes";
@@ -103,29 +102,9 @@ export default async function QualifierPage({ searchParams }: PageProps<"/qualif
         </div>
         <QualifierHistory answerKeys={allQualifierPapers.map(answerKey)} />
       </div>
-      <PageFaq title="IIT Madras BS qualifier: frequently asked questions" items={QUALIFIER_FAQ} />
     </>
   );
 }
-
-const QUALIFIER_FAQ = [
-  {
-    q: "Is there a free IIT Madras BS qualifier mock test?",
-    a: "Yes. The Qualifier Pack has full qualifier papers for Maths 1, Stats 1, Computational Thinking and English 1, including real previous-year papers. It is free and needs no account.",
-  },
-  {
-    q: "What is the IIT Madras BS qualifier cutoff?",
-    a: `For the General category you need at least ${QUALIFIER_CUTOFF.perSubject}% in every qualifier course and at least ${QUALIFIER_CUTOFF.average}% on average across the four courses. Cutoffs are lower for OBC, SC, ST and PwD candidates; check the official IIT Madras BS website for the current rules.`,
-  },
-  {
-    q: "How long is the IITM BS qualifier exam?",
-    a: "4 hours, with all four courses in one sitting. The official past papers here are timed the same way, and at the end you see if your score would clear the cutoff.",
-  },
-  {
-    q: "Where can I get IITM BS qualifier PYQs?",
-    a: "On this page. Press Practice next to a subject to practise its qualifier PYQs one by one, or start a full paper to sit all four subjects as a timed mock test.",
-  },
-];
 
 function SectionTitle({ id, title }: { id: string; title: string }) {
   return (

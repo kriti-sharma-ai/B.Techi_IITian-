@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { ExamPortalStudio, type PortalCourse } from "@/components/exam-portal-studio";
-import { PageFaq } from "@/components/page-faq";
 import { PageHeader } from "@/components/ui";
 import { END_TERM_SUBJECTS } from "@/lib/data/end-term/subjects";
 import { getPyqIndex } from "@/lib/pyq-index";
@@ -86,26 +85,6 @@ export default async function ExamPortalPage({
       <div className="container-page py-8">
         <ExamPortalStudio courses={portalCourses} initialPlanned={scope.courses} />
       </div>
-      <PageFaq title="IIT Madras BS mock test: frequently asked questions" items={EXAM_FAQ} />
     </>
   );
 }
-
-const EXAM_FAQ = [
-  {
-    q: "Is there a free IIT Madras BS mock test for Quiz 1, Quiz 2 and End Term?",
-    a: "Yes. The BTechi Exam Portal has real past End Term, Quiz 1 and Quiz 2 papers as timed mock tests. It is free and needs no account.",
-  },
-  {
-    q: "Is the mock test like the real IITM BS exam?",
-    a: "It uses real past papers, a timer and an on-screen calculator, and you can sit 1 to 4 subjects in one go, like an exam day. Your score is checked against the official answer key at the end.",
-  },
-  {
-    q: "Which courses have mock tests?",
-    a: "Courses at Foundation, Diploma and Degree level of the BS in Data Science and Applications and the BS in Management and Data Science, wherever past papers are available.",
-  },
-  {
-    q: "Where is the qualifier mock test?",
-    a: "The qualifier has its own page, the Qualifier Pack, with full 4-subject qualifier papers and a cutoff check.",
-  },
-];

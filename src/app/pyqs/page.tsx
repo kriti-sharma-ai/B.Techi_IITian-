@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, FileText } from "lucide-react";
-import { PageFaq } from "@/components/page-faq";
 import { PyqHistory } from "@/components/qualifier-attempts";
 import { ScopeSwitch } from "@/components/study-scope";
 import { PageHeader } from "@/components/ui";
@@ -19,28 +18,6 @@ export const metadata: Metadata = pageMetadata({
 
 // Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
 export const revalidate = 300;
-
-// Answers to what students search next to "iit madras bs pyq".
-function pyqFaq(totals: { courses: number; papers: number }) {
-  return [
-    {
-      q: "Where can I download IIT Madras BS PYQ PDFs?",
-      a: "Open the question sheets for your course. Each paper is laid out like a printed paper with the official answer key at the end. Press Save PDF to keep it as a PDF or print it.",
-    },
-    {
-      q: "Which IITM BS previous year papers are on BTechi?",
-      a: `${totals.papers} papers from ${totals.courses} courses: Qualifier papers for the four qualifier courses, and Quiz 1, Quiz 2 and End Term papers at Foundation, Diploma and Degree level. OPPE programming exams are not covered yet.`,
-    },
-    {
-      q: "Do the IITM BS PYQs come with answers?",
-      a: "Yes. Every paper has the official IIT Madras answer key. In the exam portal your answers are checked against it, and you can review every question after you submit.",
-    },
-    {
-      q: "Are the PYQs free?",
-      a: "Yes. Every paper is free and you can take any paper without an account. BTechi is a student project, not affiliated with IIT Madras.",
-    },
-  ];
-}
 
 export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
   const sp = await searchParams;
@@ -135,8 +112,6 @@ export default async function PyqsPage({ searchParams }: PageProps<"/pyqs">) {
       </div>
 
       <PyqHistory />
-
-      <PageFaq title="IIT Madras BS PYQs: frequently asked questions" items={pyqFaq(pyqTotals)} />
 
       <section className="container-page pb-14 md:pb-20">
         <p className="flex items-start gap-2 text-xs text-muted">

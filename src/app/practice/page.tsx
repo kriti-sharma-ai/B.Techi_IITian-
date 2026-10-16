@@ -3,7 +3,6 @@ import { pageMetadata } from "@/lib/seo";
 import { redirect } from "next/navigation";
 import { ArrowUp } from "lucide-react";
 import { ExamTag } from "@/components/exam-tag";
-import { PageFaq } from "@/components/page-faq";
 import { PageHeader } from "@/components/ui";
 import { PracticeUnifiedSidebar } from "@/components/practice-unified-sidebar";
 import { PracticeFormatStudio } from "@/components/practice-format-studio";
@@ -185,29 +184,9 @@ function PracticeModes({
           </div>
         </div>
       </div>
-      <PageFaq title="IIT Madras BS practice: frequently asked questions" items={PRACTICE_FAQ} />
     </>
   );
 }
-
-const PRACTICE_FAQ = [
-  {
-    q: "How do I practise IIT Madras BS PYQs online?",
-    a: "Pick your level, course and exam (Qualifier, Quiz 1, Quiz 2 or End Term) on the left. Then answer the questions online. Each answer is checked against the official answer key straight away.",
-  },
-  {
-    q: "Can I practise IITM BS questions topic wise?",
-    a: "Yes. Open the By Topic tab to get one course's past questions grouped by topic, or the Most Repeated tab for the question types that come back most often.",
-  },
-  {
-    q: "What is the difference between Practice and the Exam Portal?",
-    a: "Practice is untimed: you answer questions one by one and see the answer at once. The Exam Portal is a timed mock test of full papers, scored at the end like the real exam.",
-  },
-  {
-    q: "Is BTechi practice free?",
-    a: "Yes. All practice is free and needs no account. BTechi is a student project, not affiliated with IIT Madras.",
-  },
-];
 
 /** Compact minimalist course & exam header */
 function CourseHeader({ plan }: { plan: PracticePlan }) {

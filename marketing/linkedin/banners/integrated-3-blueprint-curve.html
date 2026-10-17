@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FAFAFA;
+      color: #0F172A;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px 60px 30px 360px;
+    }
+
+    .main-content {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+    }
+
+    .super-title {
+      font-size: 108px;
+      font-weight: 900;
+      letter-spacing: -4.5px;
+      line-height: 0.9;
+      color: #0F172A;
+      text-transform: uppercase;
+    }
+
+    /* Integrated Full Curve SVG */
+    .curve-container {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      color: #64748B;
+      padding-top: 10px;
+    }
+    .footer-row strong {
+      color: #0F172A;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-content">
+    <h1 class="super-title">DATA SCIENTIST</h1>
+
+    <div class="curve-container">
+      <svg width="1160" height="120" viewBox="0 0 1160 120" fill="none">
+        <!-- Baseline -->
+        <line x1="10" y1="100" x2="1150" y2="100" stroke="#CBD5E1" stroke-width="2"/>
+
+        <!-- Shaded ±1σ Interval -->
+        <path d="M 430 100 
+                 C 485 100, 525 22, 580 22 
+                 C 635 22, 675 100, 730 100 
+                 Z" 
+              fill="#0F172A" fill-opacity="0.06"/>
+
+        <!-- Smooth Gaussian Bell Curve -->
+        <path d="M 10 99 
+                 C 260 99, 390 95, 470 60
+                 C 520 32, 550 22, 580 22 
+                 C 610 22, 640 32, 690 60
+                 C 770 95, 900 99, 1150 99" 
+              stroke="#0F172A" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- Mean Vertical Line -->
+        <line x1="580" y1="22" x2="580" y2="100" stroke="#2563EB" stroke-width="2" stroke-dasharray="3 3"/>
+        <circle cx="580" cy="22" r="4.5" fill="#2563EB"/>
+
+        <!-- Sigma Marks -->
+        <line x1="430" y1="60" x2="430" y2="100" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="2 2"/>
+        <line x1="730" y1="60" x2="730" y2="100" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="2 2"/>
+
+        <text x="280" y="115" font-family="'JetBrains Mono', monospace" font-size="11" fill="#94A3B8" text-anchor="middle">-2σ</text>
+        <text x="430" y="115" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" fill="#475569" text-anchor="middle">-1σ</text>
+        <text x="580" y="115" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#2563EB" text-anchor="middle">μ</text>
+        <text x="730" y="115" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" fill="#475569" text-anchor="middle">+1σ</text>
+        <text x="880" y="115" font-family="'JetBrains Mono', monospace" font-size="11" fill="#94A3B8" text-anchor="middle">+2σ</text>
+
+        <!-- Statistical Insight -->
+        <text x="580" y="14" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#2563EB" text-anchor="middle">68.2% EXPECTED REALITY</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="footer-row">
+    <div><strong>masuddarrahaman31@gmail.com</strong></div>
+    <div>P(Clean Data) = 0 • 95% Confidence</div>
+  </div>
+</body>
+</html>

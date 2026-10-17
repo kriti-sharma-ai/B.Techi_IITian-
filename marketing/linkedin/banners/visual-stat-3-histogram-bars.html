@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FAFAFA;
+      color: #0F172A;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      margin-left: 360px;
+      margin-right: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 270px;
+    }
+
+    .title-block {
+      margin-top: 15px;
+    }
+
+    .main-title {
+      font-size: 72px;
+      font-weight: 900;
+      letter-spacing: -3px;
+      line-height: 0.95;
+      color: #0F172A;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .sub-axiom {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      color: #64748B;
+      font-weight: 500;
+    }
+    .sub-axiom strong {
+      color: #0F172A;
+    }
+
+    .bottom-mail {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #64748B;
+      letter-spacing: 0.5px;
+    }
+    .mail-dot {
+      width: 6px;
+      height: 6px;
+      background: #0F172A;
+    }
+
+    /* Histogram Card */
+    .hist-box {
+      width: 520px;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 20px 24px 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .hist-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #64748B;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-col">
+      <div class="title-block">
+        <h1 class="main-title">DATA SCIENTIST</h1>
+        <div class="sub-axiom">
+          <strong>Signal Extractor</strong> • Finding structure in empirical data
+        </div>
+      </div>
+
+      <div class="bottom-mail">
+        <span class="mail-dot"></span>
+        <span>masuddarrahaman31@gmail.com</span>
+      </div>
+    </div>
+
+    <!-- Architectural Bar Chart / Histogram with Fitted Gaussian -->
+    <div class="hist-box">
+      <div class="hist-meta">
+        <span style="color:#0F172A; font-weight:700;">EMPIRICAL DISTRIBUTION</span>
+        <span>n = 10,000 samples</span>
+      </div>
+
+      <svg width="470" height="140" viewBox="0 0 470 140" fill="none">
+        <!-- Baseline -->
+        <line x1="15" y1="120" x2="455" y2="120" stroke="#CBD5E1" stroke-width="1.5"/>
+
+        <!-- Histogram Bars (17 clean vertical bars following Gaussian shape) -->
+        <!-- x, width: 20, height calculated by normal pdf -->
+        <rect x="25" y="116" width="20" height="4" fill="#F1F5F9" stroke="#E2E8F0" rx="2"/>
+        <rect x="50" y="112" width="20" height="8" fill="#F1F5F9" stroke="#E2E8F0" rx="2"/>
+        <rect x="75" y="105" width="20" height="15" fill="#E2E8F0" stroke="#CBD5E1" rx="2"/>
+        <rect x="100" y="94" width="20" height="26" fill="#E2E8F0" stroke="#CBD5E1" rx="2"/>
+        <rect x="125" y="78" width="20" height="42" fill="#E2E8F0" stroke="#CBD5E1" rx="2"/>
+        <rect x="150" y="58" width="20" height="62" fill="#CBD5E1" stroke="#94A3B8" rx="2"/>
+        <rect x="175" y="40" width="20" height="80" fill="#CBD5E1" stroke="#94A3B8" rx="2"/>
+        <rect x="200" y="28" width="20" height="92" fill="#94A3B8" stroke="#64748B" rx="2"/>
+        <rect x="225" y="22" width="20" height="98" fill="#0F172A" stroke="#0F172A" rx="2"/> <!-- Center Peak -->
+        <rect x="250" y="28" width="20" height="92" fill="#94A3B8" stroke="#64748B" rx="2"/>
+        <rect x="275" y="40" width="20" height="80" fill="#CBD5E1" stroke="#94A3B8" rx="2"/>
+        <rect x="300" y="58" width="20" height="62" fill="#CBD5E1" stroke="#94A3B8" rx="2"/>
+        <rect x="325" y="78" width="20" height="42" fill="#E2E8F0" stroke="#CBD5E1" rx="2"/>
+        <rect x="350" y="94" width="20" height="26" fill="#E2E8F0" stroke="#CBD5E1" rx="2"/>
+        <rect x="375" y="105" width="20" height="15" fill="#E2E8F0" stroke="#CBD5E1" rx="2"/>
+        <rect x="400" y="112" width="20" height="8" fill="#F1F5F9" stroke="#E2E8F0" rx="2"/>
+        <rect x="425" y="116" width="20" height="4" fill="#F1F5F9" stroke="#E2E8F0" rx="2"/>
+
+        <!-- Fitted Bell Curve Line on top -->
+        <path d="M 25 116 
+                 C 90 115, 140 100, 175 60
+                 C 200 30, 220 20, 235 20
+                 C 250 20, 270 30, 295 60
+                 C 330 100, 380 115, 445 116" 
+              stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Axis labels -->
+        <text x="235" y="135" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#0F172A" text-anchor="middle">μ</text>
+        <text x="135" y="135" font-family="'JetBrains Mono', monospace" font-size="10" fill="#64748B" text-anchor="middle">-1σ</text>
+        <text x="335" y="135" font-family="'JetBrains Mono', monospace" font-size="10" fill="#64748B" text-anchor="middle">+1σ</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

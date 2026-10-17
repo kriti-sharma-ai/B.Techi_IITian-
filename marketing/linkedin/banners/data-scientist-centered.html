@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0B111E;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 40px;
+    }
+
+    .content-center {
+      width: 100%;
+      max-width: 1400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-top: -8px;
+    }
+
+    .hero-title {
+      font-size: 122px;
+      font-weight: 900;
+      letter-spacing: -4.5px;
+      line-height: 0.88;
+      color: #0B111E;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .curve-svg-box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="content-center">
+    <h1 class="hero-title">DATA SCIENTIST</h1>
+
+    <div class="curve-svg-box">
+      <svg width="1380" height="150" viewBox="0 0 1380 150" fill="none">
+        <!-- Baseline axis across entire centered span -->
+        <line x1="10" y1="115" x2="1370" y2="115" stroke="#CBD5E1" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Shaded ±1σ Expected Reality Area (Centered at x = 690) -->
+        <path d="M 520 115 
+                 C 590 115, 630 22, 690 22 
+                 C 750 22, 790 115, 860 115 
+                 Z" 
+              fill="#0B111E" fill-opacity="0.055"/>
+
+        <!-- Gaussian Bell Curve Stroke (Centered at x = 690) -->
+        <path d="M 10 114 
+                 C 320 114, 470 108, 560 65
+                 C 615 32, 650 22, 690 22 
+                 C 730 22, 765 32, 820 65
+                 C 910 108, 1060 114, 1370 114" 
+              stroke="#0B111E" stroke-width="3.5" stroke-linecap="round"/>
+
+        <!-- Center Mean (μ) Vertical Dotted Line at exact middle (x = 690) -->
+        <line x1="690" y1="22" x2="690" y2="115" stroke="#2563EB" stroke-width="2.5" stroke-dasharray="3 3"/>
+        <circle cx="690" cy="22" r="5" fill="#2563EB"/>
+
+        <!-- -1σ and +1σ Vertical Tick Lines (x = 520, x = 860) -->
+        <line x1="520" y1="65" x2="520" y2="115" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="2 2"/>
+        <line x1="860" y1="65" x2="860" y2="115" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="2 2"/>
+
+        <!-- Axis Labels -->
+        <text x="350" y="136" font-family="'JetBrains Mono', monospace" font-size="12.5" fill="#94A3B8" text-anchor="middle">-2σ</text>
+        <text x="520" y="136" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="600" fill="#475569" text-anchor="middle">-1σ</text>
+        <text x="690" y="138" font-family="'JetBrains Mono', monospace" font-size="14.5" font-weight="700" fill="#2563EB" text-anchor="middle">μ</text>
+        <text x="860" y="136" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="600" fill="#475569" text-anchor="middle">+1σ</text>
+        <text x="1030" y="136" font-family="'JetBrains Mono', monospace" font-size="12.5" fill="#94A3B8" text-anchor="middle">+2σ</text>
+
+        <!-- Peak Text -->
+        <text x="690" y="12" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#2563EB" text-anchor="middle" letter-spacing="0.5">68.2% EXPECTED REALITY</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

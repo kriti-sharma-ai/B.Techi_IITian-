@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0F172A;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 38px 60px 32px 360px;
+    }
+
+    /* Subtle architectural grid across the whole canvas */
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, #F8FAFC 1px, transparent 1px),
+        linear-gradient(to bottom, #F8FAFC 1px, transparent 1px);
+    }
+
+    .content-layer {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    /* Giant Monumental Typography */
+    .hero-title {
+      font-size: 102px;
+      font-weight: 900;
+      letter-spacing: -4.5px;
+      line-height: 0.92;
+      color: #0F172A;
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+
+    /* Integrated Full-Width Curve Container (NO separate box!) */
+    .integrated-curve-wrap {
+      width: 100%;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .bottom-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid #E2E8F0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #64748B;
+    }
+    .mail-tag {
+      color: #0F172A;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mail-tag .dot {
+      width: 6px;
+      height: 6px;
+      background: #2563EB;
+      border-radius: 50%;
+    }
+    .formula-tag {
+      color: #64748B;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <div class="content-layer">
+    <!-- Giant Title -->
+    <div>
+      <h1 class="hero-title">DATA SCIENTIST</h1>
+    </div>
+
+    <!-- Integrated Vector Standard Deviation Curve (flows seamlessly across content width) -->
+    <div class="integrated-curve-wrap">
+      <svg width="1160" height="110" viewBox="0 0 1160 110" fill="none">
+        <!-- Baseline axis -->
+        <line x1="10" y1="92" x2="1150" y2="92" stroke="#CBD5E1" stroke-width="1.5"/>
+
+        <!-- Shaded ±1σ zone (from x=420 to x=740, center x=580) -->
+        <path d="M 420 92 
+                 C 480 92, 520 18, 580 18 
+                 C 640 18, 680 92, 740 92 
+                 Z" 
+              fill="#2563EB" fill-opacity="0.08"/>
+
+        <!-- Continuous Gaussian Curve spanning the entire width -->
+        <path d="M 10 91 
+                 C 250 91, 380 88, 460 55
+                 C 515 28, 545 18, 580 18 
+                 C 615 18, 645 28, 700 55
+                 C 780 88, 910 91, 1150 91" 
+              stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Vertical standard deviation markers -->
+        <!-- Center Mean (μ) -->
+        <line x1="580" y1="18" x2="580" y2="92" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="580" cy="18" r="4" fill="#2563EB"/>
+
+        <!-- -1σ and +1σ -->
+        <line x1="420" y1="55" x2="420" y2="92" stroke="#94A3B8" stroke-width="1" stroke-dasharray="2 2"/>
+        <line x1="740" y1="55" x2="740" y2="92" stroke="#94A3B8" stroke-width="1" stroke-dasharray="2 2"/>
+
+        <!-- -2σ and +2σ -->
+        <line x1="260" y1="82" x2="260" y2="92" stroke="#CBD5E1" stroke-width="1"/>
+        <line x1="900" y1="82" x2="900" y2="92" stroke="#CBD5E1" stroke-width="1"/>
+
+        <!-- Labels along the curve -->
+        <text x="260" y="106" font-family="'JetBrains Mono', monospace" font-size="11" fill="#94A3B8" text-anchor="middle">-2σ</text>
+        <text x="420" y="106" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" fill="#475569" text-anchor="middle">-1σ</text>
+        <text x="580" y="106" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#2563EB" text-anchor="middle">μ (MEAN)</text>
+        <text x="740" y="106" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" fill="#475569" text-anchor="middle">+1σ</text>
+        <text x="900" y="106" font-family="'JetBrains Mono', monospace" font-size="11" fill="#94A3B8" text-anchor="middle">+2σ</text>
+
+        <!-- Shaded Area annotation -->
+        <text x="580" y="11" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#2563EB" text-anchor="middle">68.27% CONFIDENCE INTERVAL</text>
+      </svg>
+    </div>
+
+    <!-- Bottom Bar with Email -->
+    <div class="bottom-bar">
+      <div class="mail-tag">
+        <span class="dot"></span>
+        <span>masuddarrahaman31@gmail.com</span>
+      </div>
+      <div class="formula-tag">
+        y = f(X) + ε  [ where ε ~ 𝒩(0, σ²) ]
+      </div>
+    </div>
+  </div>
+</body>
+</html>

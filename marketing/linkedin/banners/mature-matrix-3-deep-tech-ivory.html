@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FBFBFA;
+      color: #18181B;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .top-hairline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #18181B;
+    }
+
+    .content-area {
+      width: 100%;
+      margin-left: 360px;
+      margin-right: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .left-hero {
+      flex: 1;
+    }
+
+    .name-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: #71717A;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .giant-title {
+      font-size: 78px;
+      font-weight: 900;
+      letter-spacing: -3.5px;
+      line-height: 0.95;
+      color: #18181B;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .tagline {
+      font-size: 15px;
+      font-weight: 600;
+      color: #52525B;
+    }
+    .tagline strong {
+      color: #18181B;
+    }
+
+    /* Elegant Minimal Grid: 4 Clean Squares in a Line */
+    .squares-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .sq-tile {
+      width: 82px;
+      height: 82px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      gap: 4px;
+    }
+
+    .tile-black {
+      background: #18181B;
+      color: #FFFFFF;
+    }
+    .tile-navy {
+      background: #1E3A8A;
+      color: #FFFFFF;
+    }
+    .tile-border {
+      background: #FFFFFF;
+      border: 1px solid #D4D4D8;
+      color: #27272A;
+    }
+    .tile-stone {
+      background: #F4F4F5;
+      color: #3F3F46;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-hairline"></div>
+
+  <div class="content-area">
+    <div class="left-hero">
+      <div class="name-badge">MASUDDAR RAHAMAN</div>
+      <h1 class="giant-title">DATA SCIENTIST</h1>
+      <div class="tagline">
+        <strong>Founder @ KaizenStat</strong> • Statistical Modeling &amp; Machine Learning
+      </div>
+    </div>
+
+    <!-- 4 Sophisticated Square Tiles -->
+    <div class="squares-row">
+      <div class="sq-tile tile-black">
+        <span style="font-size:9px; color:#A1A1AA;">01</span>
+        <span>ML</span>
+      </div>
+      <div class="sq-tile tile-border">
+        <svg width="28" height="16" viewBox="0 0 100 50" fill="none" stroke="#18181B" stroke-width="2.5">
+          <path d="M 0 48 Q 30 48 40 30 Q 50 2 60 30 Q 70 48 100 48"/>
+        </svg>
+        <span style="font-size:9px; color:#71717A;">STATS</span>
+      </div>
+      <div class="sq-tile tile-navy">
+        <span style="font-size:9px; color:#93C5FD;">02</span>
+        <span>KAIZEN</span>
+      </div>
+      <div class="sq-tile tile-stone">
+        <span style="font-size:9px; color:#71717A;">CORE</span>
+        <span>PYTHON</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0A0D14;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Minimalist top accent line */
+    .top-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #2563EB 0%, #10B981 50%, #F59E0B 100%);
+    }
+
+    .content-box {
+      margin-left: 360px;
+      margin-right: 60px;
+    }
+
+    .meta-row {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .meta-row .highlight {
+      color: #2563EB;
+    }
+
+    .giant-title {
+      font-size: 88px;
+      font-weight: 900;
+      letter-spacing: -4px;
+      line-height: 0.95;
+      color: #0A0D14;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    /* Horizontal Strip of Colored Square Boxes */
+    .tiles-strip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .color-block {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .block-cobalt { background: #2563EB; color: #FFFFFF; }
+    .block-amber { background: #F59E0B; color: #FFFFFF; }
+    .block-emerald { background: #10B981; color: #FFFFFF; }
+    .block-violet { background: #8B5CF6; color: #FFFFFF; }
+    .block-slate { background: #0F172A; color: #FFFFFF; }
+    .block-wire { 
+      background: #FFFFFF; 
+      border: 1.5px solid #CBD5E1; 
+      color: #475569; 
+    }
+
+    .strip-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      margin-left: 14px;
+      letter-spacing: 0.5px;
+    }
+    .strip-label strong {
+      color: #0A0D14;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-line"></div>
+
+  <div class="content-box">
+    <div class="meta-row">
+      <span>MASUDDAR RAHAMAN</span>
+      <span>•</span>
+      <span class="highlight">FOUNDER @ KAIZENSTAT</span>
+    </div>
+
+    <h1 class="giant-title">DATA SCIENTIST</h1>
+
+    <!-- Minimalist Square Blocks Swatch Strip -->
+    <div class="tiles-strip">
+      <div class="color-block block-cobalt">DS</div>
+      <div class="color-block block-wire">+</div>
+      <div class="color-block block-emerald">ML</div>
+      <div class="color-block block-amber">θ*</div>
+      <div class="color-block block-wire">
+        <svg width="22" height="14" viewBox="0 0 100 50" fill="none" stroke="#2563EB" stroke-width="4">
+          <path d="M 0 48 Q 30 48 40 30 Q 50 2 60 30 Q 70 48 100 48"/>
+        </svg>
+      </div>
+      <div class="color-block block-violet">Py</div>
+      <div class="color-block block-slate">AI</div>
+
+      <div class="strip-label">
+        <strong>Statistical Modeling</strong> • Reproducible Pipelines • Open Source
+      </div>
+    </div>
+  </div>
+</body>
+</html>

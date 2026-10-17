@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    /* YouTube Banner Canvas: 2560 x 1440 px */
+    body {
+      width: 2560px;
+      height: 1440px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0B0B0B;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+    }
+
+    /* Full Canvas Math Grid */
+    .bg-math-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 28px 28px;
+      background-image: 
+        linear-gradient(to right, #E2E8F0 1px, transparent 1px),
+        linear-gradient(to bottom, #E2E8F0 1px, transparent 1px);
+    }
+
+    /* Edge-to-Edge Yellow Accent Line across the entire 2560px canvas */
+    .yellow-brand-line {
+      position: absolute;
+      top: 712px;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: #FFD21C;
+      z-index: 20;
+    }
+
+    /* Top and Bottom Accent Bars for TV view (subtle architectural grounding) */
+    .tv-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 14px;
+      background: #FFD21C;
+      z-index: 20;
+    }
+    .tv-bottom-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 14px;
+      background: #0B0B0B;
+      z-index: 20;
+    }
+
+    /* YouTube Safe Area (1546 x 423 px) centered at x: 507-2053, y: 508.5-931.5 */
+    .safe-area-container {
+      position: absolute;
+      top: 508.5px;
+      left: 507px;
+      width: 1546px;
+      height: 423px;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px 60px;
+    }
+
+    /* Top Section (Above Yellow Line): Logo & Channel Identity */
+    .top-section {
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-lockup {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-icon {
+      width: 68px;
+      height: 68px;
+      background: #FFD21C;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(255, 210, 28, 0.35);
+    }
+
+    .logo-text-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 58px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      color: #0B0B0B;
+      line-height: 1;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 800;
+      background: #0B0B0B;
+      color: #FFFFFF;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .brand-subline {
+      font-size: 16px;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 0.5px;
+      margin-top: 6px;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Right Badge: Channel Handle */
+    .handle-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #F8FAFC;
+      border: 1.5px solid #E2E8F0;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0B0B0B;
+    }
+    .handle-pill .yt-dot {
+      width: 10px;
+      height: 10px;
+      background: #FF0000;
+      border-radius: 50%;
+    }
+
+    /* Bottom Section (Below Yellow Line): Tagline & Value Props */
+    .bottom-section {
+      height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .tagline-h2 {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: #0B0B0B;
+      line-height: 1.15;
+    }
+
+    .features-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14.5px;
+      color: #64748B;
+      font-weight: 700;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-dot {
+      width: 7px;
+      height: 7px;
+      background: #FFD21C;
+      border-radius: 50%;
+    }
+
+    .site-tag {
+      margin-left: auto;
+      font-weight: 800;
+      color: #0B0B0B;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="tv-top-bar"></div>
+  <div class="tv-bottom-bar"></div>
+  <div class="bg-math-grid"></div>
+
+  <!-- The Signature BTechi Yellow Line (Runs edge-to-edge across the entire 2560px banner) -->
+  <div class="yellow-brand-line"></div>
+
+  <!-- YouTube Safe Area (1546 x 423 px) -->
+  <div class="safe-area-container">
+    <!-- Top Section (Above Yellow Line) -->
+    <div class="top-section">
+      <div class="logo-lockup">
+        <!-- BTechi Official Logo Mark -->
+        <div class="logo-icon">
+          <svg width="42" height="42" viewBox="0 0 32 32" fill="none">
+            <path d="M10 7.5h7.2c3.6 0 5.8 1.8 5.8 4.6 0 1.9-1 3.2-2.6 3.8 2.1.5 3.4 2 3.4 4.2 0 3.2-2.4 5.4-6.3 5.4H10V7.5Zm4.2 3.4v4h2.4c1.4 0 2.2-.7 2.2-2s-.8-2-2.2-2h-2.4Zm0 7.1v4.6h2.9c1.6 0 2.5-.8 2.5-2.3s-.9-2.3-2.5-2.3h-2.9Z" fill="#0B0B0B" fill-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="logo-text-col">
+          <div class="brand-title">
+            <span>BTechi</span>
+            <span class="brand-badge">IITian</span>
+          </div>
+          <div class="brand-subline">// AI · DATA SCIENCE · EXAM PREP</div>
+        </div>
+      </div>
+
+      <!-- Channel Handle -->
+      <div class="handle-pill">
+        <span class="yt-dot"></span>
+        <span>@BTechiIITian</span>
+      </div>
+    </div>
+
+    <!-- Bottom Section (Below Yellow Line) -->
+    <div class="bottom-section">
+      <h2 class="tagline-h2">Study companion for IIT Madras BS.</h2>
+      <div class="features-row">
+        <div class="feature-item">
+          <span class="feature-dot"></span>
+          <span>REAL EXAM PORTAL</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-dot"></span>
+          <span>OFFICIAL PYQs</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-dot"></span>
+          <span>EXPLAINED SIMPLY</span>
+        </div>
+        <div class="site-tag">
+          <span style="color:#FFD21C; font-size:18px;">•</span>
+          <span>btechi.in</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

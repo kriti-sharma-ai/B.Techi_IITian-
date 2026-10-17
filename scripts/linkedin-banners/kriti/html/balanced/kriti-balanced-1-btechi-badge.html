@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0B0B0B;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+    }
+
+    .yellow-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: #FFD21C;
+      z-index: 20;
+    }
+
+    .bg-math-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 24px 24px;
+      background-image: 
+        linear-gradient(to right, #E2E8F0 0.85px, transparent 0.85px),
+        linear-gradient(to bottom, #E2E8F0 0.85px, transparent 0.85px);
+    }
+
+    /* TOP-LEFT BRAND BADGE (Fills the empty space above avatar!) */
+    .top-left-brand {
+      position: absolute;
+      top: 36px;
+      left: 50px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 15;
+    }
+    .badge-icon {
+      width: 44px;
+      height: 44px;
+      background: #FFD21C;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: 900;
+      color: #0B0B0B;
+      letter-spacing: -0.5px;
+      box-shadow: 0 2px 8px rgba(255, 210, 28, 0.35);
+    }
+    .badge-text-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .badge-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 800;
+      color: #0B0B0B;
+      letter-spacing: 0.5px;
+    }
+    .badge-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748B;
+      letter-spacing: 0.5px;
+    }
+
+    .main-wrap {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      margin-left: 380px;
+      margin-right: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px 0;
+    }
+
+    .text-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 640px;
+    }
+
+    .kicker-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 800;
+      color: #0B0B0B;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .kicker-tag::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #FFD21C;
+      border: 1.5px solid #0B0B0B;
+      border-radius: 2px;
+    }
+
+    .big-title {
+      font-size: 74px;
+      font-weight: 900;
+      letter-spacing: -3.2px;
+      line-height: 0.95;
+      color: #0B0B0B;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+    }
+    .line-1 { white-space: nowrap; }
+    .line-2 { white-space: nowrap; margin-top: 4px; }
+
+    .mail-row {
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      color: #64748B;
+      font-weight: 600;
+    }
+    .mail-row strong { color: #0B0B0B; }
+    .dot-yellow {
+      width: 8px;
+      height: 8px;
+      background: #FFD21C;
+      border-radius: 50%;
+    }
+
+    .venn-container {
+      width: 480px;
+      height: 290px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="yellow-top-bar"></div>
+  <div class="bg-math-grid"></div>
+
+  <!-- Top-Left Branded Icon (Direct homage to BTechi screenshot) -->
+  <div class="top-left-brand">
+    <div class="badge-icon">KS</div>
+    <div class="badge-text-box">
+      <div class="badge-title">IIT MADRAS BS</div>
+      <div class="badge-sub">DATA &amp; STRATEGY</div>
+    </div>
+  </div>
+
+  <div class="main-wrap">
+    <div class="text-column">
+      <div class="kicker-tag">CORE COMPETENCY // LEADERSHIP</div>
+      <h1 class="big-title">
+        <span class="line-1">DATA MINDED</span>
+        <span class="line-2">&amp; MANAGEMENT.</span>
+      </h1>
+      <div class="mail-row">
+        <span class="dot-yellow"></span>
+        <span><strong>kritisharma1481550@gmail.com</strong></span>
+      </div>
+    </div>
+
+    <div class="venn-container">
+      <svg width="480" height="280" viewBox="0 0 480 280" fill="none">
+        <defs>
+          <clipPath id="b1Clip">
+            <circle cx="165" cy="140" r="110"/>
+          </clipPath>
+        </defs>
+
+        <circle cx="165" cy="140" r="110" stroke="#0B0B0B" stroke-width="2.5" fill="#FFFFFF" fill-opacity="0.85"/>
+        <circle cx="315" cy="140" r="110" stroke="#0B0B0B" stroke-width="2.5" fill="#FFFFFF" fill-opacity="0.85"/>
+        <circle cx="315" cy="140" r="110" fill="#FFD21C" clip-path="url(#b1Clip)"/>
+        
+        <circle cx="165" cy="140" r="110" stroke="#0B0B0B" stroke-width="2.5" fill="none"/>
+        <circle cx="315" cy="140" r="110" stroke="#0B0B0B" stroke-width="2.5" fill="none"/>
+
+        <text x="105" y="136" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="900" fill="#0B0B0B" text-anchor="middle" letter-spacing="-0.5">DATA</text>
+        <text x="105" y="156" font-family="'JetBrains Mono', monospace" font-size="11.5" font-weight="700" fill="#64748B" text-anchor="middle">MINDED</text>
+
+        <text x="375" y="136" font-family="'Plus Jakarta Sans', sans-serif" font-size="15" font-weight="900" fill="#0B0B0B" text-anchor="middle" letter-spacing="-0.5">MANAGEMENT</text>
+        <text x="375" y="156" font-family="'JetBrains Mono', monospace" font-size="11.5" font-weight="700" fill="#64748B" text-anchor="middle">EXECUTION</text>
+
+        <circle cx="240" cy="130" r="5" fill="#0B0B0B"/>
+        <text x="240" y="154" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#0B0B0B" text-anchor="middle" letter-spacing="-0.3">IMPACT</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

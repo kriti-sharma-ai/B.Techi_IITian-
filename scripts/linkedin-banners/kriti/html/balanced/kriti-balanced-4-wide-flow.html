@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0B0B0B;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+    }
+
+    .yellow-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: #FFD21C;
+      z-index: 20;
+    }
+
+    .bg-math-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 24px 24px;
+      background-image: 
+        linear-gradient(to right, #E2E8F0 0.85px, transparent 0.85px),
+        linear-gradient(to bottom, #E2E8F0 0.85px, transparent 0.85px);
+    }
+
+    /* LINE 1 STARTS ABOVE THE AVATAR (x = 60px, y = 48px) */
+    .line-top-hero {
+      position: absolute;
+      top: 48px;
+      left: 60px;
+      font-size: 80px;
+      font-weight: 900;
+      letter-spacing: -3.8px;
+      color: #0B0B0B;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+      z-index: 15;
+    }
+
+    /* LINE 2 & CONTENT STARTS AT x = 380px TO CLEAR AVATAR */
+    .line-bottom-content {
+      position: absolute;
+      top: 155px;
+      left: 380px;
+      right: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    .mgmt-block {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .line-bottom-text {
+      font-size: 80px;
+      font-weight: 900;
+      letter-spacing: -3.8px;
+      line-height: 1;
+      color: #0B0B0B;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .mail-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      color: #64748B;
+      font-weight: 600;
+    }
+    .mail-row strong { color: #0B0B0B; }
+    .dot-yellow {
+      width: 8px;
+      height: 8px;
+      background: #FFD21C;
+      border-radius: 50%;
+    }
+
+    .venn-container {
+      width: 440px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="yellow-top-bar"></div>
+  <div class="bg-math-grid"></div>
+
+  <!-- Line 1: DATA MINDED spanning from the top-left above avatar -->
+  <div class="line-top-hero">DATA MINDED</div>
+
+  <!-- Line 2: & MANAGEMENT + Venn Diagram beside avatar -->
+  <div class="line-bottom-content">
+    <div class="mgmt-block">
+      <div class="line-bottom-text">&amp; MANAGEMENT.</div>
+      <div class="mail-row">
+        <span class="dot-yellow"></span>
+        <span><strong>kritisharma1481550@gmail.com</strong></span>
+      </div>
+    </div>
+
+    <div class="venn-container">
+      <svg width="420" height="190" viewBox="0 0 420 190" fill="none">
+        <defs>
+          <clipPath id="w1Clip"><circle cx="150" cy="95" r="75"/></clipPath>
+        </defs>
+
+        <circle cx="150" cy="95" r="75" stroke="#0B0B0B" stroke-width="2.5" fill="#FFFFFF" fill-opacity="0.9"/>
+        <circle cx="270" cy="95" r="75" stroke="#0B0B0B" stroke-width="2.5" fill="#FFFFFF" fill-opacity="0.9"/>
+        <circle cx="270" cy="95" r="75" fill="#FFD21C" clip-path="url(#w1Clip)"/>
+
+        <circle cx="150" cy="95" r="75" stroke="#0B0B0B" stroke-width="2.5" fill="none"/>
+        <circle cx="270" cy="95" r="75" stroke="#0B0B0B" stroke-width="2.5" fill="none"/>
+
+        <text x="110" y="100" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#0B0B0B" text-anchor="middle">DATA</text>
+        <text x="310" y="100" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#0B0B0B" text-anchor="middle">MGMT</text>
+        <text x="210" y="99" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="800" fill="#0B0B0B" text-anchor="middle">IMPACT</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

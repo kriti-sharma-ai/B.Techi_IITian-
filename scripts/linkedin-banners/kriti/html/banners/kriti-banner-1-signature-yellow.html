@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0B0B0B;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+    }
+
+    /* Math square box grid lines (Exact BTechi pattern) */
+    .bg-math-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 26px 26px;
+      background-image: 
+        linear-gradient(to right, #EBF0F7 1px, transparent 1px),
+        linear-gradient(to bottom, #EBF0F7 1px, transparent 1px);
+    }
+
+    /* BTechi Signature Yellow Bar spanning across */
+    .yellow-brand-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 150px;
+      height: 10px;
+      background: #FFD21C;
+    }
+
+    /* Main Content Container starting after safe zone (x = 360px) */
+    .content-container {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      margin-left: 360px;
+      margin-right: 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 42px 0 35px;
+    }
+
+    /* Top Section (Above Yellow Line) */
+    .top-block {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .name-heading {
+      font-size: 54px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1;
+      color: #0B0B0B;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .badge-yellow {
+      background: #FFD21C;
+      color: #0B0B0B;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+
+    .top-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      letter-spacing: 0.5px;
+    }
+
+    /* Bottom Section (Below Yellow Line) */
+    .bottom-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .statements-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: #1E293B;
+    }
+    .statements-row .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #FFD21C;
+    }
+
+    .footer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid #E2E8F0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #64748B;
+    }
+    .email-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #0B0B0B;
+      font-weight: 600;
+    }
+    .email-item svg {
+      color: #FFD21C;
+    }
+    .pill-items {
+      display: flex;
+      gap: 10px;
+    }
+    .meta-tag {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-math-grid"></div>
+  <div class="yellow-brand-bar"></div>
+
+  <div class="content-container">
+    <!-- Top Block: Name & Identity -->
+    <div class="top-block">
+      <div class="name-heading">
+        <span>KRITI SHARMA</span>
+        <span class="badge-yellow">LEADERSHIP &amp; DATA</span>
+      </div>
+      <div class="top-meta">TECH • BUSINESS • STRATEGY</div>
+    </div>
+
+    <!-- Bottom Block: Her signature 3 statements & contact -->
+    <div class="bottom-block">
+      <div class="statements-row">
+        <span>Future-focused.</span>
+        <span class="dot"></span>
+        <span>Data-driven.</span>
+        <span class="dot"></span>
+        <span>Management mindset.</span>
+      </div>
+
+      <div class="footer-bar">
+        <div class="email-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <span>kritisharma1481550@gmail.com</span>
+        </div>
+        <div class="pill-items">
+          <span class="meta-tag">Product &amp; Strategy</span>
+          <span class="meta-tag">Data-Backed Decisions</span>
+          <span class="meta-tag">Execution</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

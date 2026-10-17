@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0B0B0B;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 40px;
+    }
+
+    .yellow-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: #FFD21C;
+    }
+
+    .bg-math-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 24px 24px;
+      background-image: 
+        linear-gradient(to right, #E2E8F0 0.85px, transparent 0.85px),
+        linear-gradient(to bottom, #E2E8F0 0.85px, transparent 0.85px);
+    }
+
+    .content-center {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-top: -6px;
+    }
+
+    .hero-title {
+      font-size: 84px;
+      font-weight: 900;
+      letter-spacing: -3.8px;
+      line-height: 0.95;
+      color: #0B0B0B;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      white-space: nowrap;
+    }
+
+    .venn-svg-box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .mail-footer {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      color: #64748B;
+      font-weight: 600;
+    }
+    .mail-footer strong { color: #0B0B0B; }
+    .dot-yellow {
+      width: 8px;
+      height: 8px;
+      background: #FFD21C;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <div class="yellow-top-bar"></div>
+  <div class="bg-math-grid"></div>
+
+  <div class="content-center">
+    <!-- Huge Centered Title: Fills left, center, and right -->
+    <h1 class="hero-title">DATA MINDED &amp; MANAGEMENT.</h1>
+
+    <div class="venn-svg-box">
+      <svg width="680" height="175" viewBox="0 0 680 175" fill="none">
+        <defs>
+          <clipPath id="cenClip"><circle cx="270" cy="88" r="85"/></clipPath>
+        </defs>
+
+        <!-- Circles -->
+        <circle cx="270" cy="88" r="85" stroke="#0B0B0B" stroke-width="2.5" fill="#FFFFFF" fill-opacity="0.9"/>
+        <circle cx="410" cy="88" r="85" stroke="#0B0B0B" stroke-width="2.5" fill="#FFFFFF" fill-opacity="0.9"/>
+
+        <!-- Intersection -->
+        <circle cx="410" cy="88" r="85" fill="#FFD21C" clip-path="url(#cenClip)"/>
+
+        <!-- Re-stroke -->
+        <circle cx="270" cy="88" r="85" stroke="#0B0B0B" stroke-width="2.5" fill="none"/>
+        <circle cx="410" cy="88" r="85" stroke="#0B0B0B" stroke-width="2.5" fill="none"/>
+
+        <!-- Axis Baseline -->
+        <line x1="40" y1="162" x2="640" y2="162" stroke="#CBD5E1" stroke-width="1.5"/>
+
+        <!-- Labels Inside Circles -->
+        <text x="200" y="86" font-family="'Plus Jakarta Sans', sans-serif" font-size="15" font-weight="900" fill="#0B0B0B" text-anchor="middle">DATA</text>
+        <text x="200" y="104" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" fill="#64748B" text-anchor="middle">MINDSET</text>
+
+        <text x="480" y="86" font-family="'Plus Jakarta Sans', sans-serif" font-size="14.5" font-weight="900" fill="#0B0B0B" text-anchor="middle">MANAGEMENT</text>
+        <text x="480" y="104" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" fill="#64748B" text-anchor="middle">EXECUTION</text>
+
+        <!-- Center Intersection Point & Label -->
+        <circle cx="340" cy="78" r="4.5" fill="#0B0B0B"/>
+        <text x="340" y="98" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="900" fill="#0B0B0B" text-anchor="middle">SWEET SPOT</text>
+      </svg>
+    </div>
+
+    <div class="mail-footer">
+      <span class="dot-yellow"></span>
+      <span><strong>kritisharma1481550@gmail.com</strong></span>
+      <span>•</span>
+      <span>STRATEGY &amp; DECISIONING</span>
+    </div>
+  </div>
+</body>
+</html>

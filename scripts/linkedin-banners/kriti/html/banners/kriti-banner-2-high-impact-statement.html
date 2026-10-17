@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0B0B0B;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .bg-math-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 26px 26px;
+      background-image: 
+        linear-gradient(to right, #EEF2F6 1px, transparent 1px),
+        linear-gradient(to bottom, #EEF2F6 1px, transparent 1px);
+    }
+
+    .accent-bar-left {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 100%;
+      background: #FFD21C;
+    }
+
+    .main-wrap {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      margin-left: 360px;
+      margin-right: 90px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 38px 0 32px;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .author-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .author-name strong {
+      color: #0B0B0B;
+      font-size: 15px;
+    }
+    .yellow-pip {
+      width: 8px;
+      height: 8px;
+      background: #FFD21C;
+      border-radius: 2px;
+    }
+
+    .meta-track {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #64748B;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    /* Giant 2-Line Statement */
+    .big-statement {
+      font-size: 58px;
+      font-weight: 900;
+      letter-spacing: -2.2px;
+      line-height: 1.06;
+      color: #0B0B0B;
+      margin: 8px 0;
+    }
+    .highlight-yellow {
+      background: #FFD21C;
+      color: #0B0B0B;
+      padding: 2px 14px;
+      border-radius: 6px;
+      display: inline-block;
+      line-height: 1.1;
+      box-shadow: 0 4px 12px rgba(255, 210, 28, 0.3);
+    }
+
+    .bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 2px solid #0B0B0B;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+    }
+    .mail-tag {
+      color: #0B0B0B;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mail-tag svg {
+      color: #FFD21C;
+      fill: #FFD21C;
+    }
+    .tag-right {
+      color: #64748B;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="accent-bar-left"></div>
+  <div class="bg-math-grid"></div>
+
+  <div class="main-wrap">
+    <div class="header-row">
+      <div class="author-name">
+        <span class="yellow-pip"></span>
+        <strong>KRITI SHARMA</strong> // EXECUTIVE PROFILE
+      </div>
+      <div class="meta-track">
+        DATA • BUSINESS • STRATEGY
+      </div>
+    </div>
+
+    <div class="big-statement">
+      <div>Future-focused. Data-driven.</div>
+      <div><span class="highlight-yellow">Management mindset.</span></div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="mail-tag">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        <span>kritisharma1481550@gmail.com</span>
+      </div>
+      <div class="tag-right">
+        STRATEGY × EXECUTION
+      </div>
+    </div>
+  </div>
+</body>
+</html>

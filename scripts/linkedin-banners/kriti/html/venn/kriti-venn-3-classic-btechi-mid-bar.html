@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0B0B0B;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+    }
+
+    .yellow-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: #FFD21C;
+      z-index: 20;
+    }
+
+    .bg-math-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 26px 26px;
+      background-image: 
+        linear-gradient(to right, #EEF2F6 1px, transparent 1px),
+        linear-gradient(to bottom, #EEF2F6 1px, transparent 1px);
+    }
+
+    .main-wrap {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      margin-left: 380px;
+      margin-right: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px 0;
+    }
+
+    .text-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 640px;
+    }
+
+    .headline {
+      font-size: 72px;
+      font-weight: 900;
+      letter-spacing: -3.2px;
+      line-height: 1.02;
+      color: #0B0B0B;
+      text-transform: uppercase;
+    }
+    .line-top {
+      white-space: nowrap;
+    }
+
+    .yellow-highlight {
+      background: #FFD21C;
+      color: #0B0B0B;
+      padding: 2px 14px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 4px;
+      box-shadow: 0 4px 14px rgba(255, 210, 28, 0.35);
+      white-space: nowrap;
+    }
+
+    .footer-line {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      color: #64748B;
+    }
+    .footer-line strong {
+      color: #0B0B0B;
+    }
+    .square-indicator {
+      width: 7px;
+      height: 7px;
+      background: #0B0B0B;
+    }
+
+    .venn-container {
+      width: 480px;
+      height: 290px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="yellow-top-bar"></div>
+  <div class="bg-math-grid"></div>
+
+  <div class="main-wrap">
+    <div class="text-column">
+      <div class="headline">
+        <div class="line-top">DATA MINDED</div>
+        <div><span class="yellow-highlight">&amp; MANAGEMENT.</span></div>
+      </div>
+
+      <div class="footer-line">
+        <span class="square-indicator"></span>
+        <span><strong>kritisharma1481550@gmail.com</strong></span>
+        <span>•</span>
+        <span>STRATEGY &amp; EXECUTION</span>
+      </div>
+    </div>
+
+    <!-- 3-Circle Venn Graphic -->
+    <div class="venn-container">
+      <svg width="450" height="280" viewBox="0 0 450 280" fill="none">
+        <defs>
+          <clipPath id="v1Clip"><circle cx="170" cy="165" r="90"/></clipPath>
+          <clipPath id="v2Clip"><circle cx="280" cy="165" r="90"/></clipPath>
+        </defs>
+
+        <circle cx="170" cy="165" r="90" stroke="#0B0B0B" stroke-width="2.5" fill="#FFFFFF" fill-opacity="0.88"/>
+        <circle cx="280" cy="165" r="90" stroke="#0B0B0B" stroke-width="2.5" fill="#FFFFFF" fill-opacity="0.88"/>
+        <circle cx="225" cy="90" r="90" stroke="#0B0B0B" stroke-width="2.5" fill="#FFFFFF" fill-opacity="0.88"/>
+
+        <g clip-path="url(#v1Clip)">
+          <g clip-path="url(#v2Clip)">
+            <circle cx="225" cy="90" r="90" fill="#FFD21C"/>
+          </g>
+        </g>
+
+        <circle cx="170" cy="165" r="90" stroke="#0B0B0B" stroke-width="2.5" fill="none"/>
+        <circle cx="280" cy="165" r="90" stroke="#0B0B0B" stroke-width="2.5" fill="none"/>
+        <circle cx="225" cy="90" r="90" stroke="#0B0B0B" stroke-width="2.5" fill="none"/>
+
+        <text x="120" y="195" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="800" fill="#0B0B0B" text-anchor="middle">DATA</text>
+        <text x="330" y="195" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="800" fill="#0B0B0B" text-anchor="middle">MANAGEMENT</text>
+        <text x="225" y="45" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="800" fill="#0B0B0B" text-anchor="middle">STRATEGY</text>
+
+        <circle cx="225" cy="138" r="4.5" fill="#0B0B0B"/>
+        <text x="225" y="152" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="900" fill="#0B0B0B" text-anchor="middle">EXECUTION</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

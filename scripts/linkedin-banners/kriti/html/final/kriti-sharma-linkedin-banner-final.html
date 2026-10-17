@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0B0B0B;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+    }
+
+    /* BTechi Top Yellow Bar */
+    .yellow-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: #FFD21C;
+      z-index: 20;
+    }
+
+    /* BTechi Math Square Grid */
+    .bg-math-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 24px 24px;
+      background-image: 
+        linear-gradient(to right, #E2E8F0 0.85px, transparent 0.85px),
+        linear-gradient(to bottom, #E2E8F0 0.85px, transparent 0.85px);
+    }
+
+    /* TOP-LEFT: PURE WORD "Statistical" ONLY - ENLARGED */
+    .top-left-stat-pure {
+      position: absolute;
+      top: 42px;
+      left: 55px;
+      font-size: 40px;
+      font-weight: 900;
+      color: #0B0B0B;
+      letter-spacing: -1.2px;
+      line-height: 1;
+      z-index: 15;
+    }
+
+    /* Main Container (clearing avatar on left) */
+    .main-wrap {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      margin-left: 380px;
+      margin-right: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px 0;
+    }
+
+    /* Big Text Column - NO kicker tag */
+    .text-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 630px;
+    }
+
+    .big-title {
+      font-size: 75px;
+      font-weight: 900;
+      letter-spacing: -3.5px;
+      line-height: 0.94;
+      color: #0B0B0B;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+    }
+    .line-1 { white-space: nowrap; }
+    .line-2 { white-space: nowrap; margin-top: 4px; }
+
+    .mail-row {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: #64748B;
+      font-weight: 600;
+    }
+    .mail-row strong { color: #0B0B0B; }
+    .dot-yellow {
+      width: 8px;
+      height: 8px;
+      background: #FFD21C;
+      border-radius: 50%;
+    }
+
+    /* Venn Diagram Container */
+    .venn-container {
+      width: 500px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="yellow-top-bar"></div>
+  <div class="bg-math-grid"></div>
+
+  <!-- Top-Left: Pure word "Statistical" only -->
+  <div class="top-left-stat-pure">Statistical</div>
+
+  <div class="main-wrap">
+    <!-- Big Headline -->
+    <div class="text-column">
+      <h1 class="big-title">
+        <span class="line-1">DATA MINDED</span>
+        <span class="line-2">&amp; MANAGEMENT.</span>
+      </h1>
+      <div class="mail-row">
+        <span class="dot-yellow"></span>
+        <span><strong>kritisharma1481550@gmail.com</strong></span>
+      </div>
+    </div>
+
+    <!-- Venn Diagram Column: JUST DATA, MANAGEMENT, and IMPACT (with huge, visible fonts) -->
+    <div class="venn-container">
+      <svg width="500" height="300" viewBox="0 0 500 300" fill="none">
+        <defs>
+          <clipPath id="finalClip">
+            <circle cx="160" cy="136" r="115"/>
+          </clipPath>
+          <marker id="arrowhead" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+            <path d="M 0 2 L 8 5 L 0 8 L 2 5 Z" fill="#0B0B0B"/>
+          </marker>
+        </defs>
+
+        <!-- Circle 1: Left -->
+        <circle cx="160" cy="136" r="115" stroke="#0B0B0B" stroke-width="2.5" fill="#FFFFFF" fill-opacity="0.9"/>
+        
+        <!-- Circle 2: Right -->
+        <circle cx="330" cy="136" r="115" stroke="#0B0B0B" stroke-width="2.5" fill="#FFFFFF" fill-opacity="0.9"/>
+
+        <!-- Middle Yellow Intersection -->
+        <circle cx="330" cy="136" r="115" fill="#FFD21C" clip-path="url(#finalClip)"/>
+        
+        <!-- Re-stroke circle boundaries -->
+        <circle cx="160" cy="136" r="115" stroke="#0B0B0B" stroke-width="2.5" fill="none"/>
+        <circle cx="330" cy="136" r="115" stroke="#0B0B0B" stroke-width="2.5" fill="none"/>
+
+        <!-- Left Circle Label: DATA (Big, Bold, Centered) -->
+        <text x="115" y="136" dominant-baseline="central" font-family="'Plus Jakarta Sans', sans-serif" font-size="26" font-weight="900" fill="#0B0B0B" text-anchor="middle" letter-spacing="-0.5">DATA</text>
+
+        <!-- Right Circle Label: MANAGEMENT (Big, Bold, 100% visible with ample margin) -->
+        <text x="360" y="136" dominant-baseline="central" font-family="'Plus Jakarta Sans', sans-serif" font-size="18.5" font-weight="900" fill="#0B0B0B" text-anchor="middle" letter-spacing="-0.3">MANAGEMENT</text>
+
+        <!-- Refined Graceful Curved Callout Arrow pointing into the intersection -->
+        <path d="M 260 250 Q 278 190 247 136" stroke="#0B0B0B" stroke-width="2.2" stroke-linecap="round" fill="none" marker-end="url(#arrowhead)"/>
+
+        <!-- External "IMPACT" Label (Prominent, High-Impact 32px Font) -->
+        <text x="245" y="272" dominant-baseline="central" font-family="'Plus Jakarta Sans', sans-serif" font-size="30" font-weight="900" fill="#0B0B0B" text-anchor="middle" letter-spacing="2">IMPACT</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

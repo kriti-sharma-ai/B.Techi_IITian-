@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1584px;
+      height: 396px;
+      overflow: hidden;
+      background: #FFFFFF;
+      color: #0B0B0B;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      position: relative;
+    }
+
+    .bg-math-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 24px 24px;
+      background-image: 
+        linear-gradient(to right, #E2E8F0 0.85px, transparent 0.85px),
+        linear-gradient(to bottom, #E2E8F0 0.85px, transparent 0.85px);
+    }
+
+    .yellow-top-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: #FFD21C;
+    }
+
+    .main-wrap {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      margin-left: 360px;
+      margin-right: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 35px 0;
+    }
+
+    /* Left Column: Her 3-line statement */
+    .statement-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .pillar-line {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      font-size: 44px;
+      font-weight: 900;
+      letter-spacing: -1.8px;
+      color: #0B0B0B;
+      line-height: 1.1;
+    }
+    .pillar-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 800;
+      color: #FFD21C;
+      background: #0B0B0B;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+    .pillar-line.active {
+      color: #0B0B0B;
+    }
+    .pillar-line.muted {
+      color: #334155;
+    }
+
+    /* Right Column: Identity Card */
+    .identity-card {
+      width: 360px;
+      height: 100%;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 14px;
+      padding: 26px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    }
+
+    .id-top {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .id-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0B0B0B;
+      background: #FFD21C;
+      padding: 3px 8px;
+      border-radius: 4px;
+      width: fit-content;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .id-name {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -1.2px;
+      color: #0B0B0B;
+      margin-top: 4px;
+    }
+    .id-sub {
+      font-size: 13.5px;
+      color: #64748B;
+      font-weight: 600;
+    }
+
+    .id-contact {
+      border-top: 1px solid #F1F5F9;
+      padding-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+    .mail-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #0B0B0B;
+      font-weight: 700;
+    }
+    .mail-link svg {
+      color: #FFD21C;
+    }
+    .id-footer-tag {
+      color: #94A3B8;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-math-grid"></div>
+  <div class="yellow-top-line"></div>
+
+  <div class="main-wrap">
+    <!-- Left: 3 Stacked Pillars -->
+    <div class="statement-col">
+      <div class="pillar-line active">
+        <span class="pillar-num">01</span>
+        <span>Future-focused.</span>
+      </div>
+      <div class="pillar-line muted">
+        <span class="pillar-num">02</span>
+        <span>Data-driven.</span>
+      </div>
+      <div class="pillar-line muted">
+        <span class="pillar-num">03</span>
+        <span>Management mindset.</span>
+      </div>
+    </div>
+
+    <!-- Right: Profile Card -->
+    <div class="identity-card">
+      <div class="id-top">
+        <div class="id-badge">Leadership</div>
+        <div class="id-name">KRITI SHARMA</div>
+        <div class="id-sub">Tech • Data Strategy • Execution</div>
+      </div>
+
+      <div class="id-contact">
+        <div class="mail-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <span>kritisharma1481550@gmail.com</span>
+        </div>
+        <div class="id-footer-tag">IIT MADRAS BS COMMUNITY</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

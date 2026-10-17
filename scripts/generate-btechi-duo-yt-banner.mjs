@@ -299,7 +299,7 @@ function getBTechiDuoYtBannerHtml() {
   <div class="bg-math-grid"></div>
 
   <!-- Ultrawide Desktop Wing Details -->
-  <div class="desktop-wing-left">IITM BS DATA SCIENCE // ES</div>
+  <div class="desktop-wing-left">IITM BS DATA SCIENCE</div>
   <div class="desktop-wing-right">BTECHI.IN // STUDY COMPANION</div>
 
   <!-- Signature Edge-to-Edge BTechi Yellow Line -->
@@ -325,8 +325,6 @@ function getBTechiDuoYtBannerHtml() {
         </div>
         <span class="brand-title">BTechi</span>
         <span class="iitian-badge">IITian</span>
-        <span class="brand-sep">/</span>
-        <span class="brand-subtext">IIT Madras BS</span>
       </div>
 
       <!-- Monumental Normal Big Text (74px) -->

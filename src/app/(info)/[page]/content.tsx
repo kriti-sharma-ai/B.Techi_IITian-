@@ -6,7 +6,7 @@ import { CONTACT_EMAIL, LINKEDIN_URL, SITE_URL, YOUTUBE_URL } from "@/lib/utils"
 // does (lib/store.ts, lib/supabase/sync.ts, supabase/schema.sql); update them,
 // and LEGAL_UPDATED, whenever that changes.
 
-export const LEGAL_UPDATED = "12 October 2026";
+export const LEGAL_UPDATED = "17 October 2026";
 
 export type InfoPage = {
   title: string;
@@ -199,7 +199,7 @@ export const PAGES: Record<string, InfoPage> = {
         <ul>
           <li>You can use most of BTechi without an account. As a guest, your progress stays in your browser.</li>
           <li>If you sign up, we store your account details and learning progress so they sync across devices.</li>
-          <li>We don't show ads, we don't use third-party analytics or advertising trackers, and we never sell your data.</li>
+          <li>We don't show ads or use advertising trackers, and we never sell your data. We use Google Analytics to count visits.</li>
           <li>You can ask us to export or delete your data at any time.</li>
         </ul>
 
@@ -243,7 +243,10 @@ export const PAGES: Record<string, InfoPage> = {
         </p>
 
         <h2 id="cookies">Cookies and local storage</h2>
-        <p>We only use storage that the Service needs to work. There are no advertising or tracking cookies.</p>
+        <p>
+          We use storage that the Service needs to work, plus Google Analytics cookies to count visits. There are no
+          advertising cookies.
+        </p>
         <ul>
           <li>
             <strong>Sign-in session</strong> (local storage): keeps you signed in.
@@ -259,6 +262,10 @@ export const PAGES: Record<string, InfoPage> = {
           <li>
             <strong>Preferences</strong> (local storage): light/dark theme, notes text size and revision ticks, and an
             in-progress mock exam, so a refresh doesn't lose your answers.
+          </li>
+          <li>
+            <strong>Analytics</strong> (<code>_ga</code> cookies): set by Google Analytics to count visits and see which
+            pages are used most.
           </li>
         </ul>
         <p>
@@ -291,7 +298,9 @@ export const PAGES: Record<string, InfoPage> = {
             <strong>Our hosting provider</strong>: serves the website.
           </li>
           <li>
-            <strong>Google</strong>: only if you choose "Continue with Google".
+            <strong>Google</strong>: Google Analytics receives the pages you visit, your browser and device type, and
+            your approximate location, to give us visit statistics. It also gets your name and email only if you
+            choose "Continue with Google".
           </li>
           <li>
             <strong>GitHub</strong>: only if you choose "Continue with GitHub".

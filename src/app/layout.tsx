@@ -1,6 +1,7 @@
 import { PrintFrame } from "@/components/print-frame";
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { ContentSnapshot } from "@/components/content-snapshot";
 import { Providers } from "@/components/providers";
@@ -19,6 +20,9 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 const TITLE = "BTechi: IIT Madras BS PYQs, Qualifier Mock Tests & Exam Portal";
+
+// Google Analytics 4 measurement ID (G-…). Unset locally and on previews, so only the live site is counted.
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 // Search Console / Bing Webmaster ownership tags, set per deployment.
 const verification: Metadata["verification"] = {
@@ -111,6 +115,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </Providers>
         </ContentSnapshot>
       </body>
+      {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
     </html>
   );
 }

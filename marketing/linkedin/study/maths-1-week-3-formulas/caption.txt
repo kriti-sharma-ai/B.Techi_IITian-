@@ -1,0 +1,21 @@
+IITM Qualifier Maths I week 3 formulas PDF: quadratic functions and equations.
+
+Everything from Maths I week 3 in one carousel: Quadratic functions & parabolas, Quadratic equations & roots.
+
+Key formulas:
+Standard form: f(x) = ax² + bx + c, a ≠ 0
+Vertex x: h = −b/2a
+Vertex y: k = f(h) = −D/4a = c − b²/4a
+Axis of symmetry: x = −b/2a
+Vertex form: f(x) = a(x − h)² + k
+Opens: a > 0: up, minimum = k · a < 0: down, maximum = k
+Range: a > 0: [k, ∞) · a < 0: (−∞, k]
+y-intercept: (0, c)
+
+Common trap: The max/min value is k (the y-coordinate). The input that gives it is h. Read which one is asked.
+
+Save this PDF for your revision.
+
+Full Maths I notes, formula sheet and traps: https://www.btechi.in/qualifier/notes/maths-1?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=maths-1-week-3-formulas
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

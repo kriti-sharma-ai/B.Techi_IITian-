@@ -1,3 +1,5 @@
+IITM Qualifier cutoff explained: the 40/50 pass rule.
+
 The IIT Madras BS Qualifier has two rules, not one (General category):
 
 1. At least 40% in every subject.
@@ -9,6 +11,6 @@ Student C: 42, 55, 60, 50. Pass.
 
 So fix your weakest subject first. Which subject is yours? Tell us in the comments.
 
-Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-01-pm-cutoff-rule
+Full Qualifier guide (syllabus, cutoffs, prep plan): https://www.btechi.in/blog/iitm-bs-qualifier-exam-guide?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-01-pm-cutoff-rule
 
-#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, ArrowUp, MessageCircle, RotateCcw, X } from "lucide-react";
-import { answer, welcome, type GuideContext, type GuideData, type GuideReply } from "@/lib/guide";
+import { answer, understand, welcome, type GuideCatalog, type GuideContext, type GuideData, type GuideReply } from "@/lib/guide";
 import { useHydrated, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -47,6 +47,15 @@ export function GuideBot({ data }: { data: GuideData }) {
   const nextId = useRef(1);
   /** AI answers already given in this visit, so asking twice costs nothing. */
   const aiCache = useRef(new Map<string, GuideReply>());
+  /** Topic, year and most-repeated sheets, fetched once when the bubble first opens. */
+  const catalog = useRef<Promise<GuideCatalog | undefined>>(undefined);
+  const loadCatalog = () =>
+    (catalog.current ??= fetch("/api/guide/catalog")
+      .then((r) => (r.ok ? (r.json() as Promise<GuideCatalog>) : undefined))
+      .catch(() => {
+        catalog.current = undefined; // try again next time
+        return undefined;
+      }));
 
   const ctx: GuideContext = useMemo(() => {
     const last = [...attempts].reverse().find((a) => a.href && a.title);
@@ -70,6 +79,7 @@ export function GuideBot({ data }: { data: GuideData }) {
 
   // First open: say hello, with tips for the page they are on.
   useEffect(() => {
+    if (open) loadCatalog();
     if (open && messages.length === 0) setMessages([{ id: nextId.current++, from: "bot", text: "", reply: welcome(ctx, data) }]);
     if (open) setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 50);
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -87,13 +97,22 @@ export function GuideBot({ data }: { data: GuideData }) {
 
   if (HIDDEN.some((p) => pathname.startsWith(p))) return null;
 
-  const ask = (q: string) => {
+  const ask = async (q: string) => {
     const text = q.trim();
     if (!text || thinking) return;
     setInput("");
     setMessages((m) => [...m, { id: nextId.current++, from: "me", text }]);
     setThinking(true);
-    const local = answer(text, data, ctx);
+    // Usually loaded already; if it is slow, answer without it rather than wait.
+    const sheets = await Promise.race([loadCatalog(), new Promise<undefined>((r) => setTimeout(r, 2500))]);
+    // The course of the last messages that named one, for follow-ups like "what about quiz 2".
+    const lastCourse = messages
+      .filter((m) => m.from === "me")
+      .slice(-3)
+      .reverse()
+      .map((m) => understand(m.text, data).courses[0]?.slug)
+      .find(Boolean);
+    const local = answer(text, { ...data, catalog: sheets }, { ...ctx, lastCourse });
     const show = (reply: GuideReply) => {
       setMessages((m) => [...m, { id: nextId.current++, from: "bot", text: "", reply }]);
       setThinking(false);
@@ -110,16 +129,19 @@ export function GuideBot({ data }: { data: GuideData }) {
       setTimeout(() => show(seen), 280);
       return;
     }
-    const history = messages.filter((m) => m.from === "me").map((m) => m.text).slice(-2);
+    // The last two turns, with what the guide answered, so follow-ups make sense.
+    const history = messages
+      .flatMap((m, i) => (m.from === "me" ? [{ q: m.text, a: messages[i + 1]?.reply?.text }] : []))
+      .slice(-2);
     fetch("/api/guide", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ q: text, path: pathname, history, signedIn: ctx.signedIn }),
-      signal: AbortSignal.timeout(12_000),
+      body: JSON.stringify({ q: text, path: pathname, history, signedIn: ctx.signedIn, plan: ctx.planCourses }),
+      signal: AbortSignal.timeout(14_000),
     })
       .then((r) => (r.ok ? (r.json() as Promise<GuideReply>) : Promise.reject(r.status)))
       .then((ai) => {
-        const reply = { ...ai, chips: ai.links?.length ? undefined : local.chips };
+        const reply = { ...ai, chips: ai.chips ?? (ai.links?.length ? undefined : local.chips) };
         aiCache.current.set(key, reply);
         show(reply);
       })

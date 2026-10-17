@@ -1,0 +1,19 @@
+IITM Qualifier CT week 4 patterns PDF: nested loops, binning and tracing.
+
+Everything from CT week 4 in one carousel: Nested iterations: comparing pairs, Binning, Tracing: 'What does A represent?'.
+
+Key patterns:
+Unordered pairs (each once): (n(n − 1))/2
+Ordered pairs, X ≠ Y: n(n − 1)
+Every X with every Y, itself included: n²
+Pairs within groups of sizes k₁, k₂, …: Σ (kᵢ(kᵢ − 1))/2
+Pairs across two groups: k₁ × k₂
+Comparisons with bins: Σ (kᵢ(kᵢ − 1))/2
+
+Common trap: Read whether the question asks for matching pairs or for comparisons made. Comparisons = n(n − 1)/2, whatever the if says.
+
+Save this PDF for your revision.
+
+Full CT notes, pattern sheet and traps: https://www.btechi.in/qualifier/notes/ct?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=ct-week-4-patterns
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

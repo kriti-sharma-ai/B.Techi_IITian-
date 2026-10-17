@@ -1,0 +1,21 @@
+IITM Qualifier Stats I week 4 formulas PDF: association between two variables.
+
+Everything from Stats I week 4 in one carousel: Two categorical variables, Scatter plots & covariance, Correlation coefficient (r), Point bi-serial correlation.
+
+Key formulas:
+Joint relative frequency: cell/(grand total)
+Row relative frequency: cell/(row total)
+Column relative frequency: cell/(column total)
+Population covariance: (Σ(xᵢ − μₓ)(yᵢ − μ_(y)))/n
+Scaling: cov(ax + b, cy + d) = ac · cov(x, y)
+With itself: cov(x, x) = Var(x)
+Pearson r: r = (cov(x, y))/(sₓ s_(y))
+Range: −1 ≤ r ≤ 1
+
+Common trap: PYQs ask both kinds: 'population covariance' ⇒ ÷ n, 'sample covariance' ⇒ ÷ (n − 1).
+
+Save this PDF for your revision.
+
+Full Stats I notes, formula sheet and traps: https://www.btechi.in/qualifier/notes/stats-1?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=stats-1-week-4-formulas
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

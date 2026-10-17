@@ -170,19 +170,74 @@ const layouts = {
     return [svg, y];
   },
 
-  /** Label + formula rows, like a cheat sheet. */
+  /** Label + formula rows, like a cheat sheet. A row is [label, formula, note?]. Long formulas get smaller text. */
   formulas(spec) {
     let [svg, y] = heading(spec);
     svg += `<rect x="${X}" y="${y}" width="${CW}" height="__H__" rx="22" fill="#FFFFFF" stroke="${C.line}" stroke-width="2"/>`;
     const top = y; y += 30;
-    spec.rows.forEach(([label, f], i) => {
+    spec.rows.forEach(([label, f, note], i) => {
       if (i) { svg += `<line x1="${X + 32}" y1="${y - 16}" x2="${X + CW - 32}" y2="${y - 16}" stroke="${C.line}" stroke-width="2"/>`; }
-      svg += text([label], X + 36, y + 22, { size: 26, weight: 700, color: C.muted });
-      const [t, h] = block(f, X + 36, y + 38, CW - 72, { size: 40, weight: 600, color: C.ink, lh: 1.28 });
-      svg += t; y += 38 + h + 34;
+      const [l, lh] = block(label, X + 36, y, CW - 72, { size: 26, weight: 700, color: C.muted, lh: 1.25 });
+      svg += l; y += lh + 8;
+      const [t, h] = block(f, X + 36, y, CW - 72, { size: f.length > 48 ? 32 : 40, weight: 600, color: C.ink, lh: 1.28 });
+      svg += t; y += h;
+      if (note) { const [n, nh] = block(note, X + 36, y + 6, CW - 72, { size: 24, color: C.muted, lh: 1.3 }); svg += n; y += nh + 6; }
+      y += 34;
     });
     svg = svg.replace("__H__", String(y - top));
     if (spec.note) { const [t, h] = block(spec.note, X, y + 26, CW, { size: 26, color: C.muted }); svg += t; y += h + 26; }
+    return [svg, y];
+  },
+
+  /** A table. Columns get width by their longest text; short columns (like ✓ / ✗) are centred. */
+  table(spec) {
+    let [svg, y] = heading(spec);
+    const n = spec.head.length, pad = 28, inner = CW - 2 * pad;
+    const longest = (c) => Math.max(...[spec.head[c], ...spec.rows.map((r) => r[c] ?? "")].map((s) => s.length));
+    const weight = spec.head.map((_, c) => Math.min(40, Math.max(8, longest(c))));
+    let widths = weight.map((w) => (inner * w) / weight.reduce((a, b) => a + b, 0));
+    // Every column is at least as wide as its longest word (bold, 28px), so words never run into the next column.
+    const minW = spec.head.map((_, c) => Math.max(...[spec.head[c], ...spec.rows.map((r) => r[c] ?? "")].flatMap((t) => t.split(" ")).map((w) => w.length)) * 28 * 0.56 + 24);
+    const short = widths.map((w, c) => w < minW[c]);
+    if (short.some(Boolean)) {
+      const fixed = widths.reduce((sum, w, c) => sum + (short[c] ? minW[c] : 0), 0);
+      const flex = widths.reduce((sum, w, c) => sum + (short[c] ? 0 : w), 0);
+      widths = widths.map((w, c) => (short[c] ? minW[c] : (w * (inner - fixed)) / flex));
+    }
+    const centred = spec.head.map((_, c) => c > 0 && longest(c) <= 12);
+    const colX = (c) => X + pad + widths.slice(0, c).reduce((a, b) => a + b, 0);
+    const cell = (s, c, cy, opts) => centred[c]
+      ? block(s, colX(c) + widths[c] / 2, cy, widths[c] - 12, { ...opts, anchor: "middle" })
+      : block(s, colX(c) + (c ? 12 : 0), cy, widths[c] - 30, opts);
+    svg += `<rect x="${X}" y="${y}" width="${CW}" height="__H__" rx="22" fill="#FFFFFF" stroke="${C.line}" stroke-width="2"/>`;
+    const top = y; y += 24;
+    const hs = spec.head.map((h, c) => cell(h, c, y, { size: 24, weight: 700, color: C.muted, lh: 1.25 }));
+    svg += hs.map(([t]) => t).join(""); y += Math.max(...hs.map(([, h]) => h)) + 16;
+    spec.rows.forEach((row) => {
+      svg += `<line x1="${X + pad}" y1="${y}" x2="${X + CW - pad}" y2="${y}" stroke="${C.line}" stroke-width="2"/>`;
+      const cs = row.map((s, c) => {
+        const mark = s === "✓" || s === "✗";
+        return cell(s, c, y + 16, { size: n === 2 ? 28 : 28, weight: c === 0 || mark ? 600 : 400, color: s === "✓" ? C.green : s === "✗" ? C.red : C.ink, lh: 1.3 });
+      });
+      svg += cs.map(([t]) => t).join(""); y += Math.max(...cs.map(([, h]) => h)) + 32;
+    });
+    svg = svg.replace("__H__", String(y - top + 8));
+    return [svg, y + 8];
+  },
+
+  /** Monospaced pseudocode in a card, with an optional note under it. */
+  code(spec) {
+    let [svg, y] = heading(spec);
+    const lines = spec.code.split("\n");
+    const noteH = spec.note ? wrap(spec.note, 28, CW).length * 28 * 1.36 + 26 : 0;
+    // Largest size from 26 down to 18 that fits the longest line and the slide height.
+    let size = 26;
+    while (size > 18 && (lines.some((l) => l.length * size * 0.61 > CW - 72) || y + lines.length * size * 1.5 + 56 + noteH > BOTTOM)) size -= 2;
+    const lh = size * 1.5;
+    svg += `<rect x="${X}" y="${y}" width="${CW}" height="${lines.length * lh + 56}" rx="22" fill="${C.soft}" stroke="${C.line}" stroke-width="2"/>`;
+    svg += lines.map((l, i) => `<text x="${X + 36}" y="${y + 28 + size + i * lh}" xml:space="preserve" fill="${C.ink}" font-family="Menlo, Monaco, 'Courier New', monospace" font-size="${size}">${esc(l)}</text>`).join("");
+    y += lines.length * lh + 56;
+    if (spec.note) { const [t, h] = block(spec.note, X, y + 26, CW, { size: 28, color: C.text, lh: 1.36 }); svg += t; y += h + 26; }
     return [svg, y];
   },
 
@@ -298,7 +353,10 @@ const layouts = {
 };
 
 /** Layouts whose content is centred vertically between the header and the footer. */
-const CENTRED = new Set(["list", "bullets", "formulas", "question", "answer", "scorecard", "stats"]);
+const CENTRED = new Set(["list", "bullets", "formulas", "table", "code", "question", "answer", "scorecard", "stats"]);
+
+/** True if a slide spec fits above the footer. Used to split long content across slides. */
+export const fits = (spec) => layouts[spec.type](spec)[1] <= BOTTOM;
 
 /** Turns a post's slide specs into SVG strings. Warns if any slide runs past the footer. */
 export function buildSlides(post) {
@@ -313,7 +371,10 @@ export function buildSlides(post) {
 
 // ---------- Minimal PDF writer (one full-page JPEG per page) ----------
 
-function buildPdf(jpegs, pageW, pageH, pxW, pxH) {
+// PDF text strings: ASCII only, with \, ( and ) escaped. Non-ASCII characters are dropped.
+const pdfStr = (s) => `(${String(s).replace(/[^\x20-\x7E]/g, "").replace(/[\\()]/g, (c) => "\\" + c)})`;
+
+function buildPdf(jpegs, pageW, pageH, pxW, pxH, meta = {}) {
   const parts = [];
   const offsets = [];
   let len = 0;
@@ -336,25 +397,28 @@ function buildPdf(jpegs, pageW, pageH, pxW, pxH) {
       push("\nendstream");
     });
   });
-  const total = 3 + n * 3;
+  const info = 3 + n * 3;
+  obj(info, () => push(`<< /Title ${pdfStr(meta.title ?? "BTechi")} /Author (BTechi) /Subject ${pdfStr(meta.subject ?? "IIT Madras BS Qualifier preparation")} /Keywords ${pdfStr(meta.keywords ?? "IITM BS, IIT Madras Qualifier")} /Creator (btechi.in) >>`));
+  const total = info + 1;
   const xref = len;
   push(`xref\n0 ${total}\n0000000000 65535 f \n`);
   for (let id = 1; id < total; id++) push(`${String(offsets[id]).padStart(10, "0")} 00000 n \n`);
-  push(`trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+  push(`trailer\n<< /Size ${total} /Root 1 0 R /Info ${info} 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
   return Buffer.concat(parts);
 }
 
 /**
- * Writes <dir>/carousel.pdf and <dir>/caption.txt.
+ * Writes <dir>/carousel.pdf, <dir>/caption.txt and, with `meta.title`, <dir>/title.txt (the LinkedIn document title).
  * With `previewDir`, also writes one contact-sheet PNG of all slides there (for checking, not for posting).
  */
-export async function writePost(dir, svgs, caption, previewDir) {
+export async function writePost(dir, svgs, caption, previewDir, meta = {}) {
   fs.mkdirSync(dir, { recursive: true });
   const jpegs = [];
   for (const svg of svgs) {
     jpegs.push(await sharp(Buffer.from(svg), { density: 72 * SCALE }).flatten({ background: "#FFFFFF" }).jpeg({ quality: 92 }).toBuffer());
   }
-  fs.writeFileSync(path.join(dir, "carousel.pdf"), buildPdf(jpegs, W, H, W * SCALE, H * SCALE));
+  fs.writeFileSync(path.join(dir, "carousel.pdf"), buildPdf(jpegs, W, H, W * SCALE, H * SCALE, meta));
+  if (meta.title) fs.writeFileSync(path.join(dir, "title.txt"), meta.title + "\n");
   if (caption) fs.writeFileSync(path.join(dir, "caption.txt"), caption.trim() + "\n");
 
   if (previewDir) {

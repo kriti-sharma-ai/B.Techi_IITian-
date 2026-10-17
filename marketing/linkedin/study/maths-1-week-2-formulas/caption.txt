@@ -1,0 +1,21 @@
+IITM Qualifier Maths I week 2 formulas PDF: coordinate geometry and straight lines.
+
+Everything from Maths I week 2 in one carousel: Coordinate geometry, Straight lines, Straight-line fit.
+
+Key formulas:
+Distance: d = √((x₂ − x₁)² + (y₂ − y₁)²)
+Midpoint: ((x₁ + x₂)/2, (y₁ + y₂)/2)
+Section, internal m : n: ((mx₂ + nx₁)/(m + n), (my₂ + ny₁)/(m + n))
+Section, external m : n: ((mx₂ − nx₁)/(m − n), (my₂ − ny₁)/(m − n))
+Centroid: ((x₁ + x₂ + x₃)/3, (y₁ + y₂ + y₃)/3)
+Area of triangle: ½ |x₁(y₂ − y₃) + x₂(y₃ − y₁) + x₃(y₁ − y₂)|
+Collinear points: area = 0 (or equal slopes)
+Distance from the axes: from x-axis: |y| · from y-axis: |x|
+
+Common trap: In the section formula, m multiplies the second point (x₂, y₂).
+
+Save this PDF for your revision.
+
+Full Maths I notes, formula sheet and traps: https://www.btechi.in/qualifier/notes/maths-1?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=maths-1-week-2-formulas
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

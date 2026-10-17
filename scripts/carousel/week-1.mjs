@@ -1,12 +1,69 @@
 // Week 1 of the 30-day Qualifier plan (marketing/linkedin/content-plan.md): 2 carousels a day.
 // AM = teach one topic. PM = one question to solve, answer on the next slide.
 // Facts and PYQs come from the cheat sheets in src/lib/data/cheat-notes/. Keep them in sync.
+//
+// Google search: each post's first line starts with the search phrase (LinkedIn builds the post URL
+// and Google's title from it), and the one link goes to the btechi.in page that should rank for it.
 
 const SITE = "https://www.btechi.in";
 const utm = (p, post) => `${SITE}${p}?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=${post}`;
-const TAGS = "#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree";
-const caption = (post, body, link = "/qualifier") => `${body.trim()}\n\nPractise real Qualifier PYQs free on the real exam screen: ${utm(link, post)}\n\n${TAGS}`;
+const TAGS = "#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience";
 const cta = { type: "cta" };
+
+// Pages on btechi.in that each post sends people to, with the line that goes before the link.
+const PAGES = {
+  guide: ["/blog/iitm-bs-qualifier-exam-guide", "Full Qualifier guide (syllabus, cutoffs, prep plan)"],
+  maths: ["/blog/iitm-qualifier-maths-important-questions", "Maths I important questions and PYQs, with answers"],
+  stats: ["/blog/iitm-qualifier-stats-important-questions", "Stats I important questions and PYQs, with answers"],
+  ct: ["/blog/iitm-qualifier-computational-thinking-pyq", "Computational Thinking PYQs, with answers"],
+  english: ["/blog/iitm-qualifier-english-important-questions", "English I important questions and PYQs, with answers"],
+  mock: ["/qualifier", "Free full Qualifier mock with a pass/fail check"],
+  notes: ["/qualifier/notes", "Free Qualifier notes and formula sheets"],
+};
+
+/**
+ * SEO for each post. `first` is the caption's first line (search phrase first). `replace` swaps it in for
+ * the body's first line; otherwise it goes above the body. `pdf` is the document title typed in LinkedIn
+ * and stored in the PDF.
+ */
+const SEO = {
+  "day-01-am-30-day-plan": { page: "guide", replace: true, keyword: "iitm qualifier study plan", pdf: "IITM Qualifier 30-day study plan PDF",
+    first: "IITM Qualifier study plan: how to clear the IIT Madras BS Qualifier in 30 days." },
+  "day-01-pm-cutoff-rule": { page: "guide", keyword: "iitm qualifier cutoff", pdf: "IITM Qualifier cutoff explained: the 40/50 rule",
+    first: "IITM Qualifier cutoff explained: the 40/50 pass rule." },
+  "day-02-am-maths-sets-formulas": { page: "maths", replace: true, keyword: "iitm qualifier maths important questions", pdf: "IITM Qualifier Maths formulas PDF: sets and Venn diagrams",
+    first: "IITM Qualifier Maths important questions: 8 set formulas that keep coming back." },
+  "day-02-pm-maths-venn-pyq": { page: "maths", keyword: "iitm qualifier maths pyq", pdf: "IITM Qualifier Maths PYQ: Venn diagram (Jan 2024 pattern)",
+    first: "IITM Qualifier Maths PYQ: a Venn diagram question to solve in 2 minutes." },
+  "day-03-am-stats-data-types": { page: "stats", replace: true, keyword: "iitm qualifier stats important questions", pdf: "IITM Qualifier Stats PDF: 5 data-type traps",
+    first: "IITM Qualifier Stats important questions: 5 data-type traps that cost easy marks." },
+  "day-03-pm-stats-mean-pyq": { page: "stats", keyword: "iitm qualifier stats pyq", pdf: "IITM Qualifier Stats PYQ: mean (Sep 2023 pattern)",
+    first: "IITM Qualifier Stats PYQ: most students pick the wrong answer here." },
+  "day-04-am-ct-checklist": { page: "ct", replace: true, keyword: "iitm qualifier computational thinking", pdf: "IITM Qualifier Computational Thinking PDF: pseudocode checklist",
+    first: "IITM Qualifier Computational Thinking: a 5-step checklist for any pseudocode question." },
+  "day-04-pm-ct-or-filter": { page: "ct", keyword: "iitm qualifier computational thinking pyq", pdf: "IITM Qualifier CT PYQ: filtering with 'or'",
+    first: "IITM Qualifier Computational Thinking PYQ: how many cards pass this filter?" },
+  "day-05-am-english-vowels": { page: "english", replace: true, keyword: "iitm qualifier english important questions", pdf: "IITM Qualifier English PDF: vowel sounds and PYQ answers",
+    first: "IITM Qualifier English important questions: the vowel sounds IITM asks about." },
+  "day-05-pm-english-odd-sound": { page: "english", keyword: "iitm qualifier english pyq", pdf: "IITM Qualifier English PYQ: odd one out by sound (May 2024)",
+    first: "IITM Qualifier English PYQ: find the odd one out by sound." },
+  "day-06-am-maths-relations": { page: "maths", replace: true, keyword: "iitm qualifier maths relations", pdf: "IITM Qualifier Maths PDF: relations and their traps",
+    first: "IITM Qualifier Maths: relations explained in one post." },
+  "day-06-pm-stats-iqr-pyq": { page: "stats", keyword: "iitm qualifier stats iqr", pdf: "IITM Qualifier Stats PYQ: IQR and outliers (Sep 2023)",
+    first: "IITM Qualifier Stats PYQ: find the IQR and the outlier." },
+  "day-07-am-first-mock": { page: "mock", replace: true, keyword: "iitm qualifier mock test", pdf: "IITM Qualifier mock test: how to take your first one",
+    first: "IITM Qualifier mock test: take your first full mock today." },
+  "day-07-pm-week-1-traps": { page: "notes", replace: true, keyword: "iitm qualifier notes pdf", pdf: "IITM Qualifier notes PDF: 8 traps from week 1",
+    first: "IITM Qualifier notes: 8 traps from week 1 of the 30-day plan." },
+};
+
+function caption(slug, body) {
+  const seo = SEO[slug];
+  const [path, label] = PAGES[seo.page];
+  let lines = body.trim().split("\n");
+  if (seo.replace) lines = lines.slice(1);
+  return `${seo.first}\n\n${lines.join("\n").trim()}\n\n${label}: ${utm(path, slug)}\n\n${TAGS}`;
+}
 
 export const week1 = [
   // ---------------- Day 1 ----------------
@@ -450,4 +507,4 @@ Week 1 recap: 8 traps from the IIT Madras BS Qualifier.
 
 Save this and read it before every mock. Week 2 starts tomorrow: Maths I and Stats I.`,
   },
-].map((p) => ({ ...p, caption: caption(p.slug, p.caption, p.slug.includes("cutoff") || p.slug.includes("mock") ? "/qualifier" : "/qualifier/notes") }));
+].map((p) => ({ ...p, seo: SEO[p.slug], caption: caption(p.slug, p.caption) }));

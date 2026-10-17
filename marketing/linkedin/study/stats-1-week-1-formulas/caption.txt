@@ -1,0 +1,11 @@
+IITM Qualifier Stats I week 1 formulas PDF: types of data and scales.
+
+Everything from Stats I week 1 in one carousel: Data, population & sample, Variable types & scales of measurement.
+
+Common trap: Data from many villages or students collected at one time is cross-sectional, even if the table has a 'year' column.
+
+Save this PDF for your revision.
+
+Full Stats I notes, formula sheet and traps: https://www.btechi.in/qualifier/notes/stats-1?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=stats-1-week-1-formulas
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

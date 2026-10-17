@@ -1,0 +1,17 @@
+IITM Qualifier CT week 2 patterns PDF: filtering, AND / OR, max and min.
+
+Everything from CT week 2 in one carousel: Pseudocode, filtering & AND / OR, Max, min & 'who has it'.
+
+Key patterns:
+De Morgan: not (A and B) = (not A) or (not B)
+De Morgan: not (A or B) = (not A) and (not B)
+Count of A or B: count(A) + count(B) − count(A and B)
+Exactly one of A, B: (A and not B) or (B and not A)
+
+Common trap: min = 0 bug: no mark is below 0, so min never changes. A favourite 'find the mistake' option.
+
+Save this PDF for your revision.
+
+Full CT notes, pattern sheet and traps: https://www.btechi.in/qualifier/notes/ct?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=ct-week-2-patterns
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

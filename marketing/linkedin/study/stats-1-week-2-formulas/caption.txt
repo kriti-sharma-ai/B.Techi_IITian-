@@ -1,0 +1,19 @@
+IITM Qualifier Stats I week 2 formulas PDF: describing categorical data.
+
+Everything from Stats I week 2 in one carousel: Describing categorical data.
+
+Key formulas:
+Relative frequency: f/n
+Percentage: f/n × 100
+Pie-chart angle: f/n × 360°
+Count from a slice: n × angle/360°  or  n × percentage
+Mode: the category with the highest frequency
+Median (ordinal only): the middle category after ordering
+
+Common trap: Mean makes no sense for categorical data, even when categories are coded as numbers.
+
+Save this PDF for your revision.
+
+Full Stats I notes, formula sheet and traps: https://www.btechi.in/qualifier/notes/stats-1?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=stats-1-week-2-formulas
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

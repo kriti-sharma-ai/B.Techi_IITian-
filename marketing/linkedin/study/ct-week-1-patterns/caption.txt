@@ -1,0 +1,11 @@
+IITM Qualifier CT week 1 patterns PDF: datasets, variables and iteration.
+
+Everything from CT week 1 in one carousel: The datasets & datatypes, Variables, iteration & flowcharts.
+
+Common trap: Initialising inside the loop resets the variable on every card, so it ends up holding only the last card's value.
+
+Save this PDF for your revision.
+
+Full CT notes, pattern sheet and traps: https://www.btechi.in/qualifier/notes/ct?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=ct-week-1-patterns
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

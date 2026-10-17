@@ -1,0 +1,21 @@
+IITM Qualifier Maths I week 1 formulas PDF: sets, Venn diagrams, relations and functions.
+
+Everything from Maths I week 1 in one carousel: Number systems & sets, Venn diagrams & counting, Relations, Functions.
+
+Key formulas:
+Chain: ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ
+Rational: p/q, p, q ∈ ℤ, q ≠ 0
+Irrational: √2, √3, π, e
+gcd × lcm: gcd(a, b) × lcm(a, b) = a × b
+Power set: |P(A)| = 2ⁿ
+Proper subsets: 2ⁿ − 1
+Subsets of size k: C(n, k) = n!/(k!(n − k)!)
+Cartesian product: |A × B| = |A| · |B|
+
+Common trap: ∈ is for elements, ⊆ is for sets: 1 ∈ {1, 2} but {1} ⊆ {1, 2}.
+
+Save this PDF for your revision.
+
+Full Maths I notes, formula sheet and traps: https://www.btechi.in/qualifier/notes/maths-1?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=maths-1-week-1-formulas
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

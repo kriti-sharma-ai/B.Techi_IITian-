@@ -5,9 +5,10 @@
 import { getAllPosts, blogPostHref } from "@/lib/blog";
 import { cheatSheetHref, cheatSheets } from "@/lib/data/cheat-notes";
 import { QUALIFIER_CUTOFF, QUALIFIER_SUBJECTS, QUALIFIER_SYLLABUS } from "@/lib/data/qualifier-meta";
-import type { GuideCourse, GuideData } from "@/lib/guide";
+import type { GuideCatalog, GuideCourse, GuideData } from "@/lib/guide";
 import { getPyqIndex } from "@/lib/pyq-index";
 import { practiceHref } from "@/lib/pyq-practice";
+import { getQuestionSheets } from "@/lib/pyq-sheets";
 import { pyqSheetsHref } from "@/lib/pyq-urls";
 import { optionalSections, sectionEnabled } from "@/lib/site";
 
@@ -52,4 +53,24 @@ export async function getGuideData(): Promise<GuideData> {
     sections: optionalSections.filter(sectionEnabled),
     ai: Boolean(process.env.OPENROUTER_API_KEY),
   };
+}
+
+/**
+ * Each course's question sheets by topic, by year and most repeated, for topic-wise,
+ * year-wise and "most repeated" questions. Loaded by the bubble only when it opens
+ * (app/api/guide/catalog), so pages don't carry it.
+ */
+export async function getGuideCatalog(): Promise<GuideCatalog> {
+  const sheets = await getQuestionSheets();
+  const catalog: GuideCatalog = {};
+  for (const s of sheets.sheetCourses()) {
+    catalog[s.course.slug] = {
+      topics: s.topics.map((t) => ({ title: t.title, href: t.href, questions: t.questions })),
+      years: s.years.map((y) => ({ year: y.year, href: y.href, questions: y.questions })),
+      repeated: s.repeated
+        ? { href: s.repeated.href, types: s.repeated.types, top: s.repeated.top.slice(0, 3).map((t) => ({ title: t.title, count: t.count, href: t.href })) }
+        : undefined,
+    };
+  }
+  return catalog;
 }

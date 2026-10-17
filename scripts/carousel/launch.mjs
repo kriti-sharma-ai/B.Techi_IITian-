@@ -164,6 +164,8 @@ export const launch = {
   slug: "day-0-launch",
   svgs: slides,
   caption: `
+IIT Madras BS mock tests and PYQs, free: sit the real exam before exam day.
+
 Most IIT Madras BS students practise PYQs from a PDF.
 
 Then on exam day, everything is new: the screen, the timer, the palette, the calculator. You lose time just finding your way.

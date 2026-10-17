@@ -1,0 +1,21 @@
+IITM Qualifier Maths I week 4 formulas PDF: polynomials and their graphs.
+
+Everything from Maths I week 4 in one carousel: Polynomials: algebra & division, Graphs of polynomials.
+
+Key formulas:
+Degree: highest power with a non-zero coefficient
+Degree rules: deg(pq) = deg p + deg q · deg(p ± q) ≤ max(deg p, deg q)
+Division algorithm: p(x) = d(x) · q(x) + r(x),  deg r < deg d
+Remainder theorem: p(x) ÷ (x − a) leaves remainder p(a)
+Factor theorem: (x − a) is a factor ⇔ p(a) = 0
+Sum of coefficients: p(1)
+Square: (a ± b)² = a² ± 2ab + b²
+Difference of squares: a² − b² = (a + b)(a − b)
+
+Common trap: 'Distinct roots' counts each root once. Counted with multiplicity, (x − 1)² is two roots.
+
+Save this PDF for your revision.
+
+Full Maths I notes, formula sheet and traps: https://www.btechi.in/qualifier/notes/maths-1?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=maths-1-week-4-formulas
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

@@ -1,3 +1,5 @@
+IITM Qualifier Computational Thinking PYQ: how many cards pass this filter?
+
 Computational Thinking question (Qualifier pattern):
 
 In Scores, 14 students are female, 12 are from Chennai, and 5 are female and from Chennai.
@@ -8,6 +10,6 @@ A. 26  B. 21  C. 31  D. 5
 
 Comment your answer, then swipe.
 
-Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier/notes?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-04-pm-ct-or-filter
+Computational Thinking PYQs, with answers: https://www.btechi.in/blog/iitm-qualifier-computational-thinking-pyq?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-04-pm-ct-or-filter
 
-#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

@@ -28,6 +28,16 @@ export type GuideCourse = {
 
 export type GuidePost = { title: string; href: string; keyword: string; tags: string[] };
 
+/** Each course's question sheets by topic, by year and most repeated (lib/guide-data.ts, getGuideCatalog). */
+export type GuideCatalog = Record<
+  string,
+  {
+    topics: { title: string; href: string; questions: number }[];
+    years: { year: string; href: string; questions: number }[];
+    repeated?: { href: string; types: number; top: { title: string; count: number; href: string }[] };
+  }
+>;
+
 export type GuideData = {
   courses: GuideCourse[];
   posts: GuidePost[];
@@ -39,6 +49,8 @@ export type GuideData = {
   sections: string[];
   /** True when the server has an AI model to ask about questions the rules can't place. */
   ai: boolean;
+  /** Topic, year and most-repeated sheets; the bubble loads it when it opens (app/api/guide/catalog). */
+  catalog?: GuideCatalog;
 };
 
 /* ───────────── What the guide answers with ───────────── */
@@ -63,6 +75,8 @@ export type GuideContext = {
   planLevel?: PyqLevel;
   planCourses: string[];
   lastAttempt?: { title: string; href: string };
+  /** Course named in one of the last messages, for follow-ups like "what about quiz 2". */
+  lastCourse?: string;
 };
 
 /* ───────────── Words ───────────── */
@@ -158,7 +172,8 @@ const sameFamily = (a: GuideCourse, b: GuideCourse) => a.slug !== b.slug && fami
 const LEVELS: { slug: PyqLevel; name: string; words: string[] }[] = [
   { slug: "foundation", name: "Foundation", words: ["foundation"] },
   { slug: "diploma", name: "Diploma", words: ["diploma", "programming diploma", "data science diploma"] },
-  { slug: "degree", name: "Degree", words: ["degree level", "bs degree", "degree"] },
+  // Plain "degree" means the whole programme ("can I do this degree while working"), not the level.
+  { slug: "degree", name: "Degree", words: ["degree level", "degree courses", "degree course", "degree subjects", "degree papers"] },
 ];
 
 const EXAMS: { slug: PyqExam; name: string; words: string[] }[] = [
@@ -208,7 +223,7 @@ const INTENTS: [Intent, string[]][] = [
   ["signup", ["sign up", "signup", "register", "create account", "new account", "join"]],
   ["login", ["log in", "login", "sign in", "signin", "logout", "log out", "sign out", "signout", "account"]],
   ["cutoff", ["cutoff", "cut off", "pass", "passing", "pass mark", "minimum marks", "marks needed", "how much marks", "eligibility", "score needed"]],
-  ["syllabus", ["syllabus", "topics", "chapters", "what comes", "what is asked", "portion"]],
+  ["syllabus", ["syllabus", "what comes", "what is asked", "portion"]],
   ["calculator", ["calculator", "calc"]],
   ["sheets", ["pdf", "print", "download", "question sheet", "sheets", "worksheet", "offline", "on paper", "repeated", "most asked", "important questions"]],
   ["mock", ["mock", "mock test", "test", "exam portal", "portal", "timed", "attempt", "sit", "simulate", "real exam", "exam"]],
@@ -277,6 +292,8 @@ const START_CHIPS: GuideChip[] = [
   { label: "Past papers (PYQs)", query: "past papers" },
   { label: "Take a mock test", query: "mock test" },
   { label: "Qualifier help", query: "qualifier" },
+  { label: "Topic-wise PYQs", query: "topic wise" },
+  { label: "Most repeated", query: "most repeated" },
   { label: "Download PDF sheets", query: "pdf sheets" },
   { label: "Cheat notes", query: "cheat notes" },
   { label: "My progress", query: "dashboard" },
@@ -367,12 +384,13 @@ function courseReply(c: GuideCourse, intents: Intent[], exam?: PyqExam): GuideRe
   };
 }
 
-function levelReply(level: PyqLevel, data: GuideData, intents: Intent[]): GuideReply {
+function levelReply(level: PyqLevel, data: GuideData, intents: Intent[], mode?: SheetMode): GuideReply {
   const list = data.courses.filter((c) => c.level === level);
+  const then = mode ? MODE_WORDS[mode] : intents.includes("sheets") ? "pdf" : intents.includes("practice") ? "practice" : "";
   return {
     text: `${levelName(level)} level has ${list.length} courses with past papers. Pick one:`,
     links: [{ label: `${levelName(level)} past papers`, href: `/pyqs/${level}` }],
-    chips: list.map((c) => ({ label: c.short, query: `${c.short} ${intents.includes("sheets") ? "pdf" : intents.includes("practice") ? "practice" : ""}`.trim() })),
+    chips: list.map((c) => ({ label: c.short, query: `${c.short} ${then}`.trim() })),
   };
 }
 
@@ -450,6 +468,165 @@ function matchPosts(text: string, posts: GuidePost[], n = 3) {
 function dedupe(links: GuideLink[]) {
   const seen = new Set<string>();
   return links.filter((l) => !seen.has(l.href) && seen.add(l.href));
+}
+
+/* ───────────── Topic-wise, year-wise, most repeated, week-wise ───────────── */
+
+type SheetMode = "topics" | "years" | "repeated" | "weeks";
+
+/** What a mode is called in a follow-up chip, e.g. "Maths I topic wise". */
+const MODE_WORDS: Record<SheetMode, string> = { topics: "topic wise", years: "year wise", repeated: "most repeated", weeks: "week wise" };
+
+const MODE_PHRASES: [SheetMode, string[]][] = [
+  ["repeated", ["most repeated", "repeated", "repeat", "repeating", "frequently asked", "most asked", "asked again", "important questions", "imp questions", "important", "imp", "common questions"]],
+  ["weeks", ["week wise", "weekwise", "weekly", "week", "weeks"]],
+  ["years", ["year wise", "yearwise", "by year", "yearly", "year", "years", "term wise", "termwise", "session wise"]],
+  ["topics", ["topic wise", "topicwise", "by topic", "topic", "topics", "chapter wise", "chapterwise", "chapter", "chapters", "unit wise", "module wise", "concept wise", "concepts"]],
+];
+
+/** Which kind of sheet they ask for. A bare year ("stats 1 2024") counts only when a course is named. */
+function sheetMode(text: string, withCourse: boolean): SheetMode | undefined {
+  const found = MODE_PHRASES.find(([, words]) => exact(text, words))?.[0];
+  if (found) return found;
+  if (withCourse && /\b20[12]\d\b/.test(text)) return "years";
+  return undefined;
+}
+
+/** Words that say nothing about a topic, left out when matching topic titles. */
+const TOPIC_STOP = new Set(
+  "the and for with from into what which where when how want need give show find get all any some more most from about over under past paper papers pyq pyqs question questions sheet sheets practice practise wise topic topics chapter chapters week weeks year years repeated important level foundation diploma degree course courses exam quiz term end qualifier maths math mathematics stats statistics english data science please only list cheat notes note formula formulas mock test tests download print latest newest online answer answers keys timed portal".split(" "),
+);
+
+/** Topics whose titles share real words with the question, best first. */
+function matchTopics<T extends { title: string }>(text: string, topics: T[], n = 6): T[] {
+  const words = text.trim().split(" ").filter((w) => w.length >= 4 && !TOPIC_STOP.has(w) && !/^\d+$/.test(w));
+  if (!words.length) return [];
+  return topics
+    .map((t) => {
+      const title = normalize(t.title);
+      // "joins" finds "join cost", "hashing" finds "hash tables".
+      const stem = (w: string) => (w.length > 5 ? w.replace(/(ing|es|s)$/, "") : w.replace(/s$/, ""));
+      return { t, score: words.filter((w) => has(title, w) || title.includes(` ${stem(w)}`)).length };
+    })
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, n)
+    .map((x) => x.t);
+}
+
+const MAX_LIST = 8;
+const qs = (n: number) => `${n} ${n === 1 ? "question" : "questions"}`;
+
+function modeReply(c: GuideCourse, mode: SheetMode, text: string, data: GuideData): GuideReply {
+  const cat = data.catalog?.[c.slug];
+  const tab = (view: string) => `${c.practiceHref}&view=${view}`;
+  const allSheets = { label: `All ${c.short} question sheets`, href: c.sheetsHref, note: "By paper, year, topic and most repeated" };
+
+  if (mode === "weeks") return weekReply(c, text);
+
+  // The catalog is still loading or the course has no sheets yet: send them to the course's sheets.
+  if (!cat) return { text: `${c.name}. Its sheets by topic, year and most repeated are here:`, links: [allSheets, { label: `Practice ${c.short}`, href: c.practiceHref }] };
+
+  if (mode === "topics") {
+    if (!cat.topics.length)
+      return { text: `${c.short} has no topic-wise sheets yet. You can go year-wise or paper-wise:`, links: [allSheets], chips: [{ label: `${c.short} year wise`, query: `${c.short} year wise` }] };
+    const hits = matchTopics(text, cat.topics);
+    if (hits.length)
+      return {
+        text: `${c.short} topics that match:`,
+        links: hits.map((t) => ({ label: t.title, href: t.href, note: qs(t.questions) })),
+        chips: [{ label: `All ${c.short} topics`, query: `${c.short} topic wise` }],
+      };
+    const shown = cat.topics.slice(0, MAX_LIST);
+    return {
+      text: `${c.short} past questions in ${cat.topics.length} topics. Pick one:`,
+      links: [
+        ...shown.map((t) => ({ label: t.title, href: t.href, note: qs(t.questions) })),
+        ...(cat.topics.length > shown.length ? [{ label: `See all ${cat.topics.length} topics`, href: tab("topics"), note: "On the practice page" }] : []),
+      ],
+      chips: [{ label: "Most repeated", query: `${c.short} most repeated` }, { label: "Year wise", query: `${c.short} year wise` }],
+    };
+  }
+
+  if (mode === "years") {
+    const year = text.match(/\b(20[12]\d)\b/)?.[1];
+    const pick = year ? cat.years.filter((y) => y.year === year) : [];
+    if (year && !pick.length)
+      return {
+        text: `I have no ${year} papers for ${c.short}. Years I have: ${cat.years.map((y) => y.year).join(", ") || "none yet"}.`,
+        links: cat.years.slice(0, MAX_LIST).map((y) => ({ label: `${c.short} ${y.year} questions`, href: y.href, note: qs(y.questions) })),
+      };
+    const list = pick.length ? pick : cat.years;
+    if (!list.length) return { text: `${c.short} has no year-wise sheets yet.`, links: [allSheets] };
+    return {
+      text: pick.length ? `Every ${c.short} question from ${year}:` : `${c.short} questions, year by year:`,
+      links: [
+        ...list.slice(0, MAX_LIST).map((y) => ({ label: `${c.short} ${y.year} questions`, href: y.href, note: qs(y.questions) })),
+        { label: `${c.short} papers one by one`, href: tab("papers"), note: "Each paper as a sheet" },
+      ],
+      chips: [{ label: "Topic wise", query: `${c.short} topic wise` }, { label: "Most repeated", query: `${c.short} most repeated` }],
+    };
+  }
+
+  // Most repeated.
+  if (!cat.repeated)
+    return cat.topics.length
+      ? { text: `${c.short} has no most-repeated list yet. Topic-wise questions show what comes often:`, links: [{ label: `${c.short} topic wise`, href: tab("topics") }] }
+      : { text: `${c.short} has no most-repeated list yet. You can go through its papers year by year:`, links: [allSheets], chips: [{ label: `${c.short} year wise`, query: `${c.short} year wise` }] };
+  return {
+    text: `${cat.repeated.types} ${c.short} question types came back in more than one paper. Most asked:`,
+    links: [
+      { label: `All ${c.short} most repeated questions`, href: cat.repeated.href, note: `${cat.repeated.types} types, most asked first` },
+      ...cat.repeated.top.map((t) => ({ label: t.title, href: t.href, note: `Asked ${t.count} times` })),
+    ],
+    chips: [{ label: "Topic wise", query: `${c.short} topic wise` }, { label: "Year wise", query: `${c.short} year wise` }],
+  };
+}
+
+/**
+ * Papers carry no week tags, but each exam covers fixed weeks: the Qualifier and
+ * Quiz 1 weeks 1–4, Quiz 2 weeks 5–8, the End Term the whole course.
+ */
+function weekReply(c: GuideCourse, text: string): GuideReply {
+  const week = Number(text.match(/\bweeks? (\d{1,2})\b/)?.[1] ?? 0);
+  const examFor = (w: number): PyqExam[] => (w <= 4 ? ["quiz-1", "qualifier"] : w <= 8 ? ["quiz-2"] : ["end-term"]);
+  if (!week)
+    return {
+      text: `Past papers are set by weeks: Quiz 1 and the Qualifier cover weeks 1 to 4, Quiz 2 covers weeks 5 to 8, and the End Term covers all weeks. Which weeks?`,
+      chips: [
+        { label: "Weeks 1 to 4", query: `${c.short} week 1` },
+        { label: "Weeks 5 to 8", query: `${c.short} week 5` },
+        { label: "All weeks", query: `${c.short} week 12` },
+      ],
+      links: [{ label: `${c.short} topic wise`, href: `${c.practiceHref}&view=topics`, note: "Or pick a topic instead" }],
+    };
+  const exams = examFor(week).filter((e) => c.exams[e]);
+  const range = week <= 4 ? "weeks 1 to 4" : week <= 8 ? "weeks 5 to 8" : "all weeks";
+  if (!exams.length)
+    return {
+      text: `${c.short} has no papers for ${range} yet.`,
+      links: [{ label: `${c.short} past papers`, href: c.href }],
+    };
+  const links: GuideLink[] = exams.flatMap((e) => [
+    { label: `${c.short} ${examName(e)} papers`, href: `${c.href}#${e}`, note: `${c.exams[e]} papers, ${range}` },
+    { label: `Practice ${c.short} ${examName(e)} questions`, href: `${c.practiceHref}${e === "end-term" ? "" : `&exam=${e}`}`, note: "With answer keys" },
+  ]);
+  if (c.notesHref && week <= 4) links.push({ label: `${c.short} cheat notes`, href: c.notesHref, note: "Week by week, weeks 1 to 4" });
+  return { text: `Week ${week} is in ${exams.map(examName).join(" and the ")} (${range}).`, links: dedupe(links) };
+}
+
+/** Topic-wise without a course: search every course's topics, else ask which course. */
+function modeWithoutCourse(mode: SheetMode, text: string, data: GuideData, ctx: GuideContext): GuideReply {
+  if (mode === "topics" && data.catalog) {
+    const all = data.courses.flatMap((c) => (data.catalog![c.slug]?.topics ?? []).map((t) => ({ ...t, course: c })));
+    const hits = matchTopics(text, all);
+    if (hits.length)
+      return { text: "Topics that match, from all courses:", links: hits.map((t) => ({ label: `${t.course.short}: ${t.title}`, href: t.href, note: qs(t.questions) })) };
+  }
+  const mine = data.courses.filter((c) => ctx.planCourses.includes(c.slug));
+  const ask = mode === "weeks" ? "Week-wise papers" : mode === "years" ? "Year-wise questions" : mode === "repeated" ? "Most repeated questions" : "Topic-wise questions";
+  if (mine.length) return { text: `${ask}. Which course?`, chips: mine.map((c) => ({ label: c.short, query: `${c.short} ${MODE_WORDS[mode]}` })) };
+  return { text: `${ask}. Which level is your course in?`, chips: LEVELS.map((l) => ({ label: l.name, query: `${l.name} ${MODE_WORDS[mode]}` })) };
 }
 
 /* ───────────── Guardrails ───────────── */
@@ -586,6 +763,9 @@ export function answer(raw: string, data: GuideData, ctx: GuideContext): GuideRe
   if (blocked) return blocked;
   const intents = findIntents(text);
   const courses = findCourses(text, data.courses);
+  // A follow-up ("what about quiz 2", "topic wise", "and 2024?") keeps the course of the last message.
+  const earlier = ctx.lastCourse && data.courses.find((c) => c.slug === ctx.lastCourse);
+  if (earlier && !courses.length && isFollowUp(text)) courses.push(earlier);
   // Two levels named ("foundation vs diploma") is a comparison, not a pick: leave it to guides or the AI.
   const levels = LEVELS.filter((l) => any(text, l.words));
   const level = levels.length === 1 ? levels[0].slug : undefined;
@@ -608,8 +788,12 @@ export function answer(raw: string, data: GuideData, ctx: GuideContext): GuideRe
   }
 
   // Course named: the strongest signal.
+  const mode = sheetMode(text, courses.length > 0);
   if (courses.length === 1 || (courses.length > 1 && exam === "qualifier")) {
     const c = courses[0];
+    if (mode) return modeReply(c, mode, text, data);
+    // "maths 1 quadratic": the rest of the message names one of its topics.
+    if (!exam && matchTopics(text, data.catalog?.[c.slug]?.topics ?? []).length) return modeReply(c, "topics", text, data);
     if (is("syllabus") && c.exams.qualifier) return syllabusReply(data, c);
     if (is("cutoff")) return cutoffReply(data);
     return courseReply(c, intents, exam);
@@ -617,7 +801,7 @@ export function answer(raw: string, data: GuideData, ctx: GuideContext): GuideRe
   if (courses.length > 1)
     return {
       text: "You named a few courses. Which one?",
-      chips: courses.slice(0, 6).map((c) => ({ label: c.short, query: `${c.short} ${exam ? examName(exam) : ""} ${is("sheets") ? "pdf" : ""}`.trim() })),
+      chips: courses.slice(0, 6).map((c) => ({ label: c.short, query: `${c.short} ${mode ? MODE_WORDS[mode] : exam ? examName(exam) : ""} ${!mode && is("sheets") ? "pdf" : ""}`.replace(/\s+/g, " ").trim() })),
       links: is("mock") ? [{ ...PAGES.exam, note: "You can sit up to 4 courses together" }] : undefined,
     };
 
@@ -649,8 +833,19 @@ export function answer(raw: string, data: GuideData, ctx: GuideContext): GuideRe
   if (is("profile")) return { text: "Set your level and courses. Then I and the site show your courses first.", links: [PAGES.profile] };
   if (is("calculator")) return { text: "The exam portal has a scientific calculator, like the real exam. Open any paper and tap the calculator button.", links: [PAGES.exam, PAGES.qualifier] };
 
-  // Level named.
-  if (level && !exam) return levelReply(level, data, intents);
+  // Level named, in a short or paper-related message ("diploma pyqs"). A longer question about a level goes to the AI.
+  const aboutPapers = is("papers") || is("practice") || is("sheets") || is("mock") || is("notes");
+  if (level && !exam && (mode || aboutPapers || short(text, 3))) return levelReply(level, data, intents, mode);
+
+  // Topic-wise, year-wise, most repeated or week-wise, no course named.
+  if (mode && !exam) return modeWithoutCourse(mode, text, data, ctx);
+
+  // "quadratic questions": a topic from any course.
+  if (!exam && data.catalog && (is("papers") || is("practice") || is("sheets") || short(text, 4)) && !is("blog") && !is("admission")) {
+    const all = data.courses.flatMap((c) => (data.catalog![c.slug]?.topics ?? []).map((t) => ({ ...t, course: c })));
+    const hits = matchTopics(text, all);
+    if (hits.length) return { text: "Topics that match, from all courses:", links: hits.map((t) => ({ label: `${t.course.short}: ${t.title}`, href: t.href, note: qs(t.questions) })) };
+  }
 
   // Exam named.
   if (exam) {
@@ -696,6 +891,30 @@ export function answer(raw: string, data: GuideData, ctx: GuideContext): GuideRe
   };
 }
 
+/** Short and only about an exam, a kind of sheet or a year, or said as a follow-up. */
+function isFollowUp(text: string) {
+  if (LEVELS.some((l) => any(text, l.words))) return false;
+  if (exact(text, ["what about", "how about", "and for", "same for", "also for", "now for", "for that", "that course", "this course", "same course"])) return true;
+  return short(text, 5) && (EXAMS.some((e) => any(text, e.words)) || !!sheetMode(text, false) || /\b20[12]\d\b/.test(text));
+}
+
+/* ───────────── What the rules understood, for the AI model ───────────── */
+
+/** The course, level, exam and kind of sheet the rules read in a message, so the AI starts from the same reading. */
+export function understand(raw: string, data: GuideData) {
+  const text = normalize(raw);
+  const courses = findCourses(text, data.courses);
+  const levels = LEVELS.filter((l) => any(text, l.words));
+  const mode = sheetMode(text, courses.length > 0);
+  return {
+    courses,
+    level: levels.length === 1 ? levels[0].name : undefined,
+    exam: EXAMS.find((e) => any(text, e.words))?.name,
+    wants: mode ? MODE_WORDS[mode] : undefined,
+    intents: findIntents(text).filter((i) => !CHAT_INTENTS.includes(i)),
+  };
+}
+
 /* ───────────── Links the AI model may use ───────────── */
 
 /** Every page the guide can send a student to, so the AI model picks from real pages only. */
@@ -713,5 +932,15 @@ export function siteLinks(data: GuideData): GuideLink[] {
     ...(c.notesHref ? [{ label: `${c.short} cheat notes`, href: c.notesHref }] : []),
   ]);
   const posts = data.posts.map((p) => ({ label: p.title, href: p.href }));
-  return dedupe([...pages, ...levels, ...courses, ...posts]);
+  const sheets = data.courses.flatMap((c) => {
+    const cat = data.catalog?.[c.slug];
+    if (!cat) return [];
+    return [
+      { label: `${c.short} topic-wise questions (all topics)`, href: `${c.practiceHref}&view=topics` },
+      ...cat.topics.map((t) => ({ label: `${c.short} topic: ${t.title}`, href: t.href })),
+      ...cat.years.map((y) => ({ label: `${c.short} ${y.year} questions (year-wise)`, href: y.href })),
+      ...(cat.repeated ? [{ label: `${c.short} most repeated questions`, href: cat.repeated.href }] : []),
+    ];
+  });
+  return dedupe([...pages, ...levels, ...courses, ...sheets, ...posts]);
 }

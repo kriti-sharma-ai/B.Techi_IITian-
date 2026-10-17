@@ -1,3 +1,5 @@
+IITM Qualifier Stats PYQ: most students pick the wrong answer here.
+
 Stats I question (Sep 2023 Qualifier pattern):
 
 The average annual package is ₹8 lakh. From each value, 5 is subtracted, and then the result is doubled. What is the new average?
@@ -9,6 +11,6 @@ D. ₹16 lakh
 
 Comment A, B, C or D. Then swipe for the answer and the trap.
 
-Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier/notes?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-03-pm-stats-mean-pyq
+Stats I important questions and PYQs, with answers: https://www.btechi.in/blog/iitm-qualifier-stats-important-questions?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-03-pm-stats-mean-pyq
 
-#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

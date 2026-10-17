@@ -1,0 +1,11 @@
+IITM Qualifier CT week 3 patterns PDF: procedures, slabs and multiple passes.
+
+Everything from CT week 3 in one carousel: Procedures, parameters & return, Slab and bill problems (if / else if), Multiple (non-nested) iterations.
+
+Common trap: Wrong-option pattern: cost = unit * 10 for unit > 200, which charges every unit at the top rate.
+
+Save this PDF for your revision.
+
+Full CT notes, pattern sheet and traps: https://www.btechi.in/qualifier/notes/ct?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=ct-week-3-patterns
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

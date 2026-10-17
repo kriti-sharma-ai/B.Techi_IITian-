@@ -1,0 +1,21 @@
+IITM Qualifier Stats I week 3 formulas PDF: describing numerical data.
+
+Everything from Stats I week 3 in one carousel: Numerical data: tables & charts, Mean, median & mode, Range, variance & standard deviation, Percentiles, quartiles, IQR & outliers.
+
+Key formulas:
+Class width: upper limit − lower limit
+Class mark (midpoint): (lower + upper)/2
+Mean of grouped data: (Σ fᵢxᵢ)/(Σ fᵢ)
+Mean: x̄ = (Σ xᵢ)/n
+Mode: most frequent value (there may be none, or several)
+Combined mean: (n₁x̄₁ + n₂x̄₂)/(n₁ + n₂)
+Add one value x: new mean = (nx̄ + x)/(n + 1)
+Fix a wrong value: new mean = x̄ + (correct − wrong)/n
+
+Common trap: 'Above 23' excludes 23; 'at least 23' includes it.
+
+Save this PDF for your revision.
+
+Full Stats I notes, formula sheet and traps: https://www.btechi.in/qualifier/notes/stats-1?utm_source=linkedin&utm_medium=social&utm_campaign=study-notes&utm_content=stats-1-week-3-formulas
+
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

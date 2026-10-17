@@ -1,4 +1,4 @@
-Stats I: 5 data-type traps in the IIT Madras BS Qualifier.
+IITM Qualifier Stats important questions: 5 data-type traps that cost easy marks.
 
 1. PIN codes and roll numbers are categorical, not numerical.
 2. °C is interval, not ratio.
@@ -8,6 +8,6 @@ Stats I: 5 data-type traps in the IIT Madras BS Qualifier.
 
 Quick check inside: an election symbol is which type of data?
 
-Practise real Qualifier PYQs free on the real exam screen: https://www.btechi.in/qualifier/notes?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-03-am-stats-data-types
+Stats I important questions and PYQs, with answers: https://www.btechi.in/blog/iitm-qualifier-stats-important-questions?utm_source=linkedin&utm_medium=social&utm_campaign=qualifier30&utm_content=day-03-am-stats-data-types
 
-#IITMadras #IITMBS #IITMadrasQualifier #DataScience #OnlineDegree
+#IITMadras #IITMBS #IITMadrasQualifier #IITMQualifier #DataScience

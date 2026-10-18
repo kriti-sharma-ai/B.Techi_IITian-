@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, CalendarDays, FileText, Layers, MonitorCheck, Repeat } from "lucide-react";
+import { ArrowRight, CalendarDays, Download, FileText, Layers, MonitorCheck, Repeat } from "lucide-react";
 import { EXAM_BADGE } from "@/components/pyq-papers";
 import { Badge, PageHeader, buttonClass } from "@/components/ui";
+import { courseDownloadsHref } from "@/lib/downloads";
 import { PYQ_LEVELS } from "@/lib/pyq-index";
 import { getQuestionSheets, paperTitle } from "@/lib/pyq-sheets";
 import { PYQ_SHEETS_HREF, pyqLevelHref } from "@/lib/pyq-urls";
@@ -86,6 +87,9 @@ export default async function CourseSheetsPage({ params }: PageProps<"/pyqs/[lev
                 <j.icon className="size-4" aria-hidden /> {j.label}
               </a>
             ))}
+            <Link href={courseDownloadsHref(c.slug)} className={buttonClass("ghost")}>
+              <Download className="size-4" aria-hidden /> Download {c.short} PDFs
+            </Link>
             <Link href={c.href} className={buttonClass("ghost")}>
               <MonitorCheck className="size-4" aria-hidden /> Sit papers online
             </Link>

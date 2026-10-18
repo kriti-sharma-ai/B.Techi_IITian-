@@ -6,7 +6,7 @@
 
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
-import { ChevronDown, Download, LoaderCircle, Search } from "lucide-react";
+import { ArrowRight, ChevronDown, Download, LoaderCircle, Search } from "lucide-react";
 import { normalize } from "@/lib/guide";
 import { SAVE_PDF_HASH, printWithImages } from "@/lib/print";
 import type { PyqLevel } from "@/lib/pyq-urls";
@@ -65,7 +65,21 @@ async function savePdf(href: string) {
   await printWithImages(5000, f.contentWindow!);
 }
 
-export function DownloadHub({ courses, levels }: { courses: DownloadCourse[]; levels: { slug: PyqLevel; name: string }[] }) {
+/** The "Your courses / All" switch, when the visitor's study profile has some of these courses. */
+export type DownloadScope = { mine: number; all: number; narrowed: boolean; links: { mine: string; all: string } };
+
+export function DownloadHub({
+  courses,
+  levels,
+  scope,
+  single,
+}: {
+  courses: DownloadCourse[];
+  levels: { slug: PyqLevel; name: string }[];
+  scope?: DownloadScope;
+  /** One course's own page (/downloads/<course>): always open, no folding. */
+  single?: boolean;
+}) {
   const [query, setQuery] = useState("");
   const [kind, setKind] = useState<Kind | "all">("all");
   const [open, setOpen] = useState<Set<string>>(new Set());
@@ -90,6 +104,8 @@ export function DownloadHub({ courses, levels }: { courses: DownloadCourse[]; le
   }, [courses, query, kind]);
 
   const filtering = query.trim() !== "" || kind !== "all";
+  /** Only the types some course here has: a course without cheat notes shows no "Cheat notes" filter. */
+  const kinds = KINDS.filter((k) => courses.some((c) => itemsOf(c, k.id).length > 0));
 
   const download = async (href: string) => {
     if (busy) return;
@@ -113,30 +129,53 @@ export function DownloadHub({ courses, levels }: { courses: DownloadCourse[]; le
     });
 
   return (
-    <div className="max-w-4xl space-y-8">
-      <div className="space-y-3">
-        <label className="flex h-11 max-w-xl items-center gap-2.5 rounded-xl border border-border bg-surface px-3.5 transition-colors focus-within:border-fg/30">
-          <Search className="size-4 shrink-0 text-muted" aria-hidden />
-          <input
-            ref={searchRef}
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Find a course or topic, e.g. stats 1, probability"
-            aria-label="Find a course or topic"
-            className="h-full min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
-          />
-        </label>
-        <div className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0" role="group" aria-label="Type of PDF">
-          {[{ id: "all" as const, label: "All" }, ...KINDS].map((k) => (
+    <div className="max-w-4xl space-y-6">
+      {/* One compact toolbar, pinned under the navbar while the long list scrolls. */}
+      <div className="sticky top-16 z-20 -mx-4 space-y-2 bg-bg/95 px-4 py-2.5 backdrop-blur md:mx-0 md:px-0">
+        <div className="flex items-center gap-2">
+          <label className="flex h-10 min-w-0 flex-1 items-center gap-2.5 rounded-xl border border-border bg-surface px-3.5 transition-colors focus-within:border-fg/30">
+            <Search className="size-4 shrink-0 text-muted" aria-hidden />
+            <input
+              ref={searchRef}
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={single ? "Find a topic or year" : "Find a course or topic"}
+              aria-label={single ? "Find a topic or year" : "Find a course or topic"}
+              className="h-full min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
+            />
+          </label>
+          {scope && (
+            <nav aria-label="Courses shown" className="flex h-10 shrink-0 rounded-xl border border-border bg-surface p-1 text-sm font-medium">
+              {[
+                { href: scope.links.mine, on: scope.narrowed, label: "Mine", long: "Your courses", n: scope.mine },
+                { href: scope.links.all, on: !scope.narrowed, label: "All", long: "All courses", n: scope.all },
+              ].map((t) => (
+                <Link
+                  key={t.label}
+                  href={t.href}
+                  scroll={false}
+                  aria-current={t.on ? "true" : undefined}
+                  className={cn("flex items-center gap-1.5 rounded-lg px-2.5 whitespace-nowrap transition-colors", t.on ? "bg-ink text-bg" : "text-muted hover:text-fg")}
+                >
+                  <span className="sm:hidden">{t.label}</span>
+                  <span className="hidden sm:inline">{t.long}</span>
+                  <span className={cn("tabular-nums", t.on ? "opacity-70" : "text-muted")}>{t.n}</span>
+                </Link>
+              ))}
+            </nav>
+          )}
+        </div>
+        <div className="-mx-4 flex gap-1 overflow-x-auto px-4 [scrollbar-width:none] md:mx-0 md:px-0" role="group" aria-label="Type of PDF">
+          {[{ id: "all" as const, label: "All" }, ...kinds].map((k) => (
             <button
               key={k.id}
               type="button"
               onClick={() => setKind(k.id)}
               aria-pressed={kind === k.id}
               className={cn(
-                "shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors",
-                kind === k.id ? "border-fg bg-fg text-bg" : "border-border bg-surface text-muted hover:border-fg/30 hover:text-fg",
+                "h-7 shrink-0 rounded-full px-3 text-xs font-medium transition-colors",
+                kind === k.id ? "bg-fg text-bg" : "text-muted hover:bg-surface-2 hover:text-fg",
               )}
             >
               {k.label}
@@ -166,14 +205,16 @@ export function DownloadHub({ courses, levels }: { courses: DownloadCourse[]; le
         const list = shown.filter((c) => c.course.level === level.slug);
         if (!list.length) return null;
         return (
-          <section key={level.slug} aria-labelledby={`dl-${level.slug}`}>
-            <h2 id={`dl-${level.slug}`} className="mb-3 text-lg font-bold tracking-tight">
-              {level.name}
-            </h2>
+          <section key={level.slug} aria-labelledby={single ? undefined : `dl-${level.slug}`}>
+            {!single && (
+              <h2 id={`dl-${level.slug}`} className="mb-3 text-lg font-bold tracking-tight">
+                {level.name}
+              </h2>
+            )}
             <ul className="space-y-2.5">
               {list.map(({ course: c, sections, count }) => {
                 // Searching or filtering opens every course that still has matches.
-                const expanded = filtering || open.has(c.slug);
+                const expanded = single || filtering || open.has(c.slug);
                 return (
                   <li key={c.slug} id={c.slug} className="scroll-mt-24 overflow-hidden rounded-xl border border-border bg-surface">
                     <h3>
@@ -182,7 +223,7 @@ export function DownloadHub({ courses, levels }: { courses: DownloadCourse[]; le
                         onClick={() => toggle(c.slug)}
                         aria-expanded={expanded}
                         aria-controls={`${c.slug}-pdfs`}
-                        disabled={filtering}
+                        disabled={single || filtering}
                         className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors enabled:hover:bg-surface-2"
                       >
                         <span className="min-w-0 flex-1">
@@ -195,11 +236,17 @@ export function DownloadHub({ courses, levels }: { courses: DownloadCourse[]; le
                         <span className="shrink-0 text-xs text-muted tabular-nums">
                           {count} {count === 1 ? "PDF" : "PDFs"}
                         </span>
-                        {!filtering && <ChevronDown className={cn("size-4 shrink-0 text-muted transition-transform", expanded && "rotate-180")} aria-hidden />}
+                        {!single && !filtering && <ChevronDown className={cn("size-4 shrink-0 text-muted transition-transform", expanded && "rotate-180")} aria-hidden />}
                       </button>
                     </h3>
                     {/* Always in the page, only hidden when folded: search engines read every PDF link. */}
                     <div id={`${c.slug}-pdfs`} hidden={!expanded} className="space-y-5 border-t border-border px-4 py-4">
+                      {!single && (
+                        // Same path as courseDownloadsHref in lib/downloads (server-only data, not imported here).
+                        <Link href={`/downloads/${c.slug}`} className="inline-flex items-center gap-1 text-sm font-medium underline-offset-2 hover:underline">
+                          All {c.short} PDFs on one page <ArrowRight className="size-3.5" aria-hidden />
+                        </Link>
+                      )}
                       {sections.map((s) => (
                         <div key={s.id}>
                           <h4 className="mb-2 text-xs font-semibold tracking-wide text-muted uppercase">

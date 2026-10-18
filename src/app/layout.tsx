@@ -8,6 +8,7 @@ import { Providers } from "@/components/providers";
 import { BottomNav, Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ScrollTop } from "@/components/scroll-top";
+import { SavePdfHash } from "@/components/save-pdf-hash";
 import { Guide } from "@/components/guide";
 import { loadContent } from "@/lib/cms";
 import { CONTACT_EMAIL, FOUNDERS, GITHUB_URL, LINKEDIN_URL, SITE_URL, YOUTUBE_URL } from "@/lib/utils";
@@ -103,6 +104,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={`${jakarta.variable} scroll-smooth`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className="min-h-dvh font-sans antialiased">
+        {/* Inside the BTechi AI page panel (same-site iframe): show the page only, without site chrome. */}
+        <script dangerouslySetInnerHTML={{ __html: "if(window.self!==window.top)document.documentElement.dataset.embed=''" }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd).replace(/</g, "\\u003c") }} />
         <ContentSnapshot content={content}>
           <Providers>
@@ -114,6 +117,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <BottomNav />
             <ScrollTop />
             <Guide />
+            <SavePdfHash />
           </Providers>
         </ContentSnapshot>
       </body>

@@ -38,6 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...pyqs.map((p) => url(uploadedPyqHref(p), 0.7)),
     // Question sheets are server-rendered, so each sheet is a page to index.
     url(PYQ_SHEETS_HREF, 0.8),
+    url("/downloads", 0.8),
     ...sheetCourses().flatMap((s) => [url(s.href, 0.8), ...sheetLinks(s.course.slug).map((l) => url(l.href, l.kind === "paper" ? 0.6 : 0.7))]),
     ...skillCourses.map((c) => url(`/skills/${c.slug}`, 0.8)),
     ...skillNotes.map((n) => url(skillNotesHref(n.skill), 0.8)),

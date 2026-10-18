@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { DemoExam } from "@/components/exam-showcase";
 import { LandingFeatures } from "@/components/landing-features";
 import { MathBackground } from "@/components/math-background";
@@ -10,6 +10,7 @@ import { ReviewActions } from "@/components/review-actions";
 import { Venn } from "@/components/venn";
 import { TermChart, type TermBar } from "@/components/term-chart";
 import { HomeFaq } from "@/components/home-faq";
+import { HeroAsk } from "@/components/hero-ask";
 import { ButtonLink } from "@/components/ui";
 import { PYQ_LEVELS, getPyqIndex } from "@/lib/pyq-index";
 import { pyqTermHref, pyqTerms } from "@/lib/pyq-terms";
@@ -68,14 +69,14 @@ export default async function HomePage() {
           {/* Flagship Qualifier Pack Pill Banner */}
           <Link
             href="/qualifier"
-            className="group mb-[clamp(1.75rem,5svh,2.75rem)] inline-flex items-center gap-2.5 rounded-full border border-border/80 bg-surface/80 px-5 py-2 text-xs sm:gap-3 sm:px-6 sm:py-2.5 sm:text-sm font-medium text-fg shadow-xs backdrop-blur-sm transition-all hover:border-brand/60 hover:bg-surface hover:shadow-sm"
+            className="group mb-[clamp(1.25rem,4svh,2rem)] inline-flex items-center gap-2.5 rounded-full border border-border/80 bg-surface/80 px-5 py-2 text-xs sm:gap-3 sm:px-6 sm:py-2.5 sm:text-sm font-medium text-fg shadow-xs backdrop-blur-sm transition-all hover:border-brand/60 hover:bg-surface hover:shadow-sm"
           >
             <span className="font-semibold text-fg">Qualifier pack</span>
             <span className="text-muted">mock + cutoff check</span>
             <ArrowRight className="size-3.5 shrink-0 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-fg" aria-hidden />
           </Link>
 
-          <h1 className="text-[clamp(2.25rem,min(6vw,8svh),4rem)] leading-[1.15] font-extrabold tracking-[-0.02em]">
+          <h1 className="text-[clamp(2rem,min(5vw,7svh),3.25rem)] leading-[1.15] font-extrabold tracking-[-0.02em]">
             IITM BS past papers.
             <br />
             <span className="relative whitespace-nowrap">
@@ -83,27 +84,14 @@ export default async function HomePage() {
               Real exam portal.
             </span>
           </h1>
-          <p className="mt-[clamp(1.25rem,3.5svh,1.75rem)] max-w-2xl text-base text-muted md:text-lg">
-            BTechi is a free study platform for IIT Madras BS students. Take real past papers, from the Qualifier to the End Term, in an exam portal like the real one.
+          <p className="mt-[clamp(0.875rem,2.5svh,1.25rem)] max-w-2xl text-base text-muted">
+            Free for IIT Madras BS students, from the Qualifier to the End Term.
           </p>
-          <ul className="mt-[clamp(1.5rem,4.5svh,2.25rem)] inline-flex flex-col items-start gap-1.5 text-sm text-muted sm:flex-row sm:items-center sm:gap-x-7 md:text-base">
-            {["Data Science & Management", "Qualifier to End Term", "Official answer keys"].map((point) => (
-              <li key={point} className="flex items-center gap-1.5 whitespace-nowrap">
-                <Check className="size-3.5 shrink-0 text-brand md:size-4" aria-hidden />
-                {point}
-              </li>
-            ))}
-          </ul>
-          {/* Phones: two equal full-width buttons, stacked. Wider: side by side. */}
-          <div className="mt-[clamp(2rem,6svh,3rem)] flex w-full max-w-xs flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:justify-center">
-            <ButtonLink href="/exam" size="lg" className="w-full sm:w-auto">
-              Start a mock exam <ArrowRight className="size-4" aria-hidden />
-            </ButtonLink>
-            <ButtonLink href="/practice" size="lg" variant="secondary" className="w-full sm:w-auto">
-              Practise PYQs
-            </ButtonLink>
+          {/* Ask in plain words: opens BTechi AI with the page on the right. */}
+          <div className="mt-[clamp(1.5rem,4.5svh,2.25rem)] flex w-full justify-center">
+            <HeroAsk />
           </div>
-          <p className="mt-[clamp(1.5rem,4svh,2.25rem)] text-sm text-muted md:text-base">
+          <p className="mt-[clamp(1.25rem,3.5svh,1.75rem)] text-sm text-muted">
             <span className="font-bold text-fg tabular-nums">{pyqTotals.papers.toLocaleString("en-IN")}</span> papers
             <span className="mx-2 text-muted/50">·</span>
             <span className="font-bold text-fg tabular-nums">{pyqTotals.questions.toLocaleString("en-IN")}</span> questions

@@ -142,7 +142,7 @@ function excerpts(question: string, n = 3) {
 
 /* ───────────── Pages it may link ───────────── */
 
-const CORE = ["/", "/pyqs", "/pyqs/sheets", "/exam", "/qualifier", "/qualifier/notes", "/practice", "/blog", "/dashboard", "/profile", "/saved", "/signup", "/login", "/contact", "/about"];
+const CORE = ["/", "/pyqs", "/pyqs/sheets", "/downloads", "/exam", "/qualifier", "/qualifier/notes", "/practice", "/blog", "/dashboard", "/profile", "/saved", "/signup", "/login", "/contact", "/about"];
 
 function likelyLinks(all: GuideLink[], question: string, courseShorts: string[]) {
   const words = [...keywords(question)];

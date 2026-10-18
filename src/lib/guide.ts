@@ -261,6 +261,7 @@ const PAGES = {
   home: { label: "Home", href: "/" },
   pyqs: { label: "All past papers", href: "/pyqs", note: "Every PYQ by level and course" },
   sheets: { label: "Question sheets (PDF)", href: "/pyqs/sheets", note: "Print or save papers as PDF" },
+  downloads: { label: "Downloads", href: "/downloads", note: "Every PDF in one place, by course" },
   exam: { label: "Exam portal", href: "/exam", note: "Timed End Term and quiz papers, 1 to 4 courses" },
   qualifier: { label: "Qualifier pack", href: "/qualifier", note: "Full 4-hour mocks with the cutoff check" },
   qualifierNotes: { label: "Qualifier cheat notes", href: "/qualifier/notes", note: "Formulas, quick notes and traps" },
@@ -857,7 +858,7 @@ export function answer(raw: string, data: GuideData, ctx: GuideContext): GuideRe
   }
 
   // Broad wants.
-  if (is("sheets")) return { ...askLevel("Question sheets can be printed or saved as PDF. Which level?", "pdf"), links: [PAGES.sheets] };
+  if (is("sheets")) return { ...askLevel("Every sheet can be saved as a PDF, all in one place on Downloads. Or pick a level:", "pdf"), links: [PAGES.downloads, PAGES.sheets] };
   if (is("mock")) return { text: "Two places to sit timed papers:", links: [PAGES.exam, PAGES.qualifier], chips: EXAMS.map((e) => ({ label: e.name, query: `${e.name} papers` })) };
   if (is("practice")) return { ...askLevel("Practice real past questions with answer keys. Which level?", "practice"), links: [PAGES.practice] };
   if (is("papers")) return { ...askLevel("Past papers, sorted by level and course. Which level?", "papers"), links: [PAGES.pyqs] };

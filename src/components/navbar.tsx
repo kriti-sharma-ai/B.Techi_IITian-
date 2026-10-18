@@ -44,10 +44,12 @@ type NavItem = NavLink & { description: string; icon: LucideIcon };
 
 /** Top-level links, in order. The Skills menu (when that section is on) follows Programs; Resources closes the row. */
 const primaryLinks: NavLink[] = [
+  { href: "/ai", label: "BTechi AI" },
   { href: "/programs", label: "Programs" },
   { href: "/practice", label: "Practice" },
   { href: "/exam", label: "Exam Portal" },
   { href: "/qualifier", label: "Qualifier Pack" },
+  { href: "/downloads", label: "Downloads" },
 ].filter((l) => hrefEnabled(l.href));
 
 const resources: NavItem[] = ([
@@ -623,10 +625,13 @@ export function Navbar() {
     };
   }, [menuOpen]);
 
+  // BTechi AI is a full-screen app with its own top bar.
+  if (pathname === "/ai") return null;
+
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 border-b transition-[border-color,background-color] duration-200",
+        "embed-hide sticky top-0 z-50 border-b transition-[border-color,background-color] duration-200",
         menuOpen
           ? "border-border bg-bg"
           : scrolled
@@ -705,8 +710,8 @@ export function BottomNav() {
   const pathname = useRoutePath();
   const user = useStore((s) => s.user);
   const hydrated = useHydrated();
-  // Auth pages are full-screen; the bar would cover their submit buttons.
-  if (pathname.startsWith("/admin") || isAuthPage(pathname)) return null;
+  // Auth pages are full-screen; the bar would cover their submit buttons. BTechi AI has its own input there.
+  if (pathname.startsWith("/admin") || pathname === "/ai" || isAuthPage(pathname)) return null;
   const items = [
     { href: "/", label: "Home", icon: Home },
     sectionEnabled("programs")
@@ -723,7 +728,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="App"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
+      className="embed-hide fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
     >
       <ul className="grid grid-cols-5">
         {items.map(({ href, label, icon: Icon }) => {

@@ -12,8 +12,8 @@ type Message = { id: number; from: "bot" | "me"; text: string; reply?: GuideRepl
 
 const STORE_KEY = "btechi-guide";
 
-/** Pages where the bubble would get in the way: timed practice and admin. */
-const HIDDEN = ["/practice/session", "/practice/exam", "/admin"];
+/** Pages where the bubble would get in the way: timed practice, admin and BTechi AI (the full-page chat). */
+const HIDDEN = ["/practice/session", "/practice/exam", "/admin", "/ai"];
 
 function load(): Message[] {
   try {
@@ -39,6 +39,8 @@ export function GuideBot({ data }: { data: GuideData }) {
   const plan = useStore((s) => s.plan);
   const attempts = useStore((s) => s.qualifierAttempts);
   const [open, setOpen] = useState(false);
+  /** The landing hero's own question box is on screen, so the bubble would ask twice. */
+  const [heroAsk, setHeroAsk] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
@@ -87,6 +89,15 @@ export function GuideBot({ data }: { data: GuideData }) {
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, thinking, open]);
+
+  // Landing page: hide the bubble while the hero's question box is in view.
+  useEffect(() => {
+    const box = pathname === "/" ? document.getElementById("hero-ask") : null;
+    if (!box) return setHeroAsk(false);
+    const io = new IntersectionObserver(([e]) => setHeroAsk(e.isIntersecting));
+    io.observe(box);
+    return () => io.disconnect();
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -161,7 +172,7 @@ export function GuideBot({ data }: { data: GuideData }) {
   const lastBot = [...messages].reverse().find((m) => m.from === "bot")?.id;
 
   return (
-    <div className="print:hidden">
+    <div className="embed-hide print:hidden">
       {open && (
         <div
           role="dialog"
@@ -231,7 +242,11 @@ export function GuideBot({ data }: { data: GuideData }) {
         aria-expanded={open}
         aria-label={open ? "Close guide" : "Open guide: find anything on BTechi"}
         title="Ask BTechi"
-        className="fixed right-4 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-50 flex h-12 items-center gap-2 rounded-full bg-brand pr-4 pl-3.5 font-semibold text-brand-ink shadow-lg transition-transform hover:scale-[1.03] active:scale-95 md:right-6 md:bottom-6"
+        tabIndex={heroAsk && !open ? -1 : undefined}
+        className={cn(
+          "fixed right-4 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-50 flex h-12 items-center gap-2 rounded-full bg-brand pr-4 pl-3.5 font-semibold text-brand-ink shadow-lg transition-[transform,opacity] duration-300 hover:scale-[1.03] active:scale-95 md:right-6 md:bottom-6",
+          heroAsk && !open && "pointer-events-none translate-y-3 opacity-0",
+        )}
       >
         {open ? <X className="size-5" aria-hidden /> : <MessageCircle className="size-5" aria-hidden />}
         <span className="text-sm">{open ? "Close" : "Ask"}</span>

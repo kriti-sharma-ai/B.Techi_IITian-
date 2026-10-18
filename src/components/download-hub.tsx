@@ -6,7 +6,7 @@
 
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
-import { ArrowUpRight, ChevronDown, Download, FileText, LoaderCircle, Search } from "lucide-react";
+import { ChevronDown, Download, LoaderCircle, Search } from "lucide-react";
 import { normalize } from "@/lib/guide";
 import { SAVE_PDF_HASH, printWithImages } from "@/lib/print";
 import type { PyqLevel } from "@/lib/pyq-urls";
@@ -175,40 +175,44 @@ export function DownloadHub({ courses, levels }: { courses: DownloadCourse[]; le
                 // Searching or filtering opens every course that still has matches.
                 const expanded = filtering || open.has(c.slug);
                 return (
-                  <li key={c.slug} className="overflow-hidden rounded-xl border border-border bg-surface">
-                    <button
-                      type="button"
-                      onClick={() => toggle(c.slug)}
-                      aria-expanded={expanded}
-                      disabled={filtering}
-                      className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors enabled:hover:bg-surface-2"
-                    >
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-xs font-semibold text-muted">
-                          {c.code && <span className="font-mono">{c.code} · </span>}
-                          {c.short}
+                  <li key={c.slug} id={c.slug} className="scroll-mt-24 overflow-hidden rounded-xl border border-border bg-surface">
+                    <h3>
+                      <button
+                        type="button"
+                        onClick={() => toggle(c.slug)}
+                        aria-expanded={expanded}
+                        aria-controls={`${c.slug}-pdfs`}
+                        disabled={filtering}
+                        className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors enabled:hover:bg-surface-2"
+                      >
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-xs font-semibold text-muted">
+                            {c.code && <span className="font-mono">{c.code} · </span>}
+                            {c.short}
+                          </span>
+                          <span className="block truncate font-semibold">{c.name}</span>
                         </span>
-                        <span className="block truncate font-semibold">{c.name}</span>
-                      </span>
-                      <span className="shrink-0 text-xs text-muted tabular-nums">
-                        {count} {count === 1 ? "PDF" : "PDFs"}
-                      </span>
-                      {!filtering && <ChevronDown className={cn("size-4 shrink-0 text-muted transition-transform", expanded && "rotate-180")} aria-hidden />}
-                    </button>
-                    {expanded && (
-                      <div className="space-y-5 border-t border-border px-4 py-4">
-                        {sections.map((s) => (
-                          <div key={s.id}>
-                            <h3 className="mb-2 text-xs font-semibold tracking-wide text-muted uppercase">{s.label}</h3>
-                            <ul className="overflow-hidden rounded-lg border border-border">
-                              {s.items.map((i) => (
-                                <Row key={i.href} item={i} busy={busy === i.href} failed={failed === i.href} locked={!!busy} onDownload={download} />
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                        <span className="shrink-0 text-xs text-muted tabular-nums">
+                          {count} {count === 1 ? "PDF" : "PDFs"}
+                        </span>
+                        {!filtering && <ChevronDown className={cn("size-4 shrink-0 text-muted transition-transform", expanded && "rotate-180")} aria-hidden />}
+                      </button>
+                    </h3>
+                    {/* Always in the page, only hidden when folded: search engines read every PDF link. */}
+                    <div id={`${c.slug}-pdfs`} hidden={!expanded} className="space-y-5 border-t border-border px-4 py-4">
+                      {sections.map((s) => (
+                        <div key={s.id}>
+                          <h4 className="mb-2 text-xs font-semibold tracking-wide text-muted uppercase">
+                            {c.short} {s.label}
+                          </h4>
+                          <ul className="overflow-hidden rounded-lg border border-border">
+                            {s.items.map((i) => (
+                              <Row key={i.href} item={i} icons={expanded} busy={busy === i.href} failed={failed === i.href} locked={!!busy} onDownload={download} />
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
                   </li>
                 );
               })}
@@ -222,12 +226,15 @@ export function DownloadHub({ courses, levels }: { courses: DownloadCourse[]; le
 
 function Row({
   item,
+  icons,
   busy,
   failed,
   locked,
   onDownload,
 }: {
   item: DownloadItem;
+  /** Folded courses skip the icon: 700+ rows of SVG made the page heavy for phones. */
+  icons: boolean;
   busy: boolean;
   failed: boolean;
   locked: boolean;
@@ -235,19 +242,12 @@ function Row({
 }) {
   return (
     <li className="flex items-center gap-3 border-b border-border bg-bg/40 px-3 py-2.5 last:border-b-0">
-      <FileText className="size-4 shrink-0 text-muted" aria-hidden />
       <span className="min-w-0 flex-1">
-        <span className="line-clamp-2 text-sm font-medium">{item.title}</span>
+        <Link href={item.href} className="line-clamp-2 text-sm font-medium underline-offset-2 hover:underline">
+          {item.title}
+        </Link>
         <span className={cn("block truncate text-xs", failed ? "text-red" : "text-muted")}>{failed ? "Could not prepare the PDF. Try again." : item.meta}</span>
       </span>
-      <Link
-        href={item.href}
-        aria-label={`Open ${item.title}`}
-        title="Open"
-        className="grid size-8 shrink-0 place-items-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
-      >
-        <ArrowUpRight className="size-4" aria-hidden />
-      </Link>
       <button
         type="button"
         onClick={() => onDownload(item.href)}
@@ -255,7 +255,7 @@ function Row({
         aria-label={`Download ${item.title} as PDF`}
         className="flex h-8 shrink-0 items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 text-xs font-semibold transition-colors hover:border-fg/30 disabled:opacity-50"
       >
-        {busy ? <LoaderCircle className="size-3.5 animate-spin" aria-hidden /> : <Download className="size-3.5" aria-hidden />}
+        {busy ? <LoaderCircle className="size-3.5 animate-spin" aria-hidden /> : icons && <Download className="size-3.5" aria-hidden />}
         {busy ? "Preparing" : "PDF"}
       </button>
     </li>

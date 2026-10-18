@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps<"/qualifier/notes/[
   if (!sheet) return {};
   const subject = getSubject(sheet.subjectSlug)!;
   return pageMetadata({
-    title: `${sheet.short} Cheat Notes & ${sheetKind(sheet).replace(/^./, (c) => c.toUpperCase())} for the Qualifier`,
+    title: `${sheet.short} Cheat Notes PDF & ${sheetKind(sheet).replace(/^./, (c) => c.toUpperCase())} for the Qualifier`,
     description: `${sheet.description} Free revision notes for ${subject.name} (${subject.code}), IIT Madras BS qualifier, weeks 1–4.`,
     path: cheatSheetHref(sheet),
   });

@@ -72,7 +72,11 @@ export default async function CheatNotesPage({ searchParams }: PageProps<"/quali
         </div>
 
         <p className="border-t border-border/50 pt-4 text-xs text-muted">
-          BTechi is not affiliated with IIT Madras. Check cutoffs and syllabus in the official student handbook.
+          Want them offline?{" "}
+          <Link href="/downloads" className="font-medium text-fg underline-offset-2 hover:underline">
+            Download the notes and past papers as PDF
+          </Link>
+          . BTechi is not affiliated with IIT Madras. Check cutoffs and syllabus in the official student handbook.
         </p>
       </div>
     </>

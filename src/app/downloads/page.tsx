@@ -8,15 +8,15 @@ import { cheatSheetHref, cheatSheetStats, cheatSheets } from "@/lib/data/cheat-n
 import type { Params } from "@/lib/filters";
 import { PYQ_LEVELS } from "@/lib/pyq-index";
 import { getQuestionSheets, paperTitle } from "@/lib/pyq-sheets";
-import { pageMetadata } from "@/lib/seo";
+import { IITM_PROGRAMMES, pageMetadata } from "@/lib/seo";
+import { SITE_URL } from "@/lib/utils";
 import { getStudyScope, narrow, scopeLinks } from "@/lib/study-scope";
 
-export const metadata: Metadata = pageMetadata({
-  title: "IIT Madras BS PYQ PDF Download: Papers, Topic Wise, Most Repeated & Cheat Notes",
-  description:
-    "Download any IIT Madras BS previous year paper as a PDF, with the official answer key: paper wise, year wise, topic wise and most repeated, plus qualifier cheat notes. Free, organised by course.",
-  path: "/downloads",
-});
+const TITLE = "IIT Madras BS Notes & PYQ PDF Download (Free, with Answers)";
+const DESCRIPTION =
+  "Download IIT Madras BS notes and previous year papers as PDF, free: Maths, Stats, CT, English, Python, DBMS, PDSA and more. Year wise, topic wise and most repeated, with official answer keys.";
+
+export const metadata: Metadata = pageMetadata({ title: TITLE, description: DESCRIPTION, path: "/downloads" });
 
 // Papers come from Supabase; matches REFRESH_SECONDS in lib/papers.ts.
 export const revalidate = 300;
@@ -44,11 +44,47 @@ export default async function DownloadsPage({ searchParams }: { searchParams: Pr
       papers: course.papers.map((p) => ({ title: paperTitle(p), meta: `${n(p.questions, "question")} · ${p.marks} marks`, href: p.sheetHref })),
     };
   });
+  // A free collection of course PDFs, one entry per course (its sheets page), for search engines.
+  const all = sheets.sheetCourses();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${SITE_URL}/downloads`,
+        url: `${SITE_URL}/downloads`,
+        name: TITLE,
+        description: DESCRIPTION,
+        inLanguage: "en-IN",
+        isAccessibleForFree: true,
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        about: IITM_PROGRAMMES.map((name) => ({ "@type": "EducationalOccupationalProgram", name: `IIT Madras ${name}` })),
+        mainEntity: {
+          "@type": "ItemList",
+          numberOfItems: all.length,
+          itemListElement: all.map((s, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            url: `${SITE_URL}${s.href}`,
+            name: `${s.course.name}${s.course.code ? ` (${s.course.code})` : ""} PYQ PDF`,
+          })),
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: "Downloads", item: `${SITE_URL}/downloads` },
+        ],
+      },
+    ],
+  };
   const total = courses.reduce((sum, c) => sum + (c.notes ? 1 : 0) + (c.repeated ? 1 : 0) + c.topics.length + c.years.length + c.papers.length, 0);
 
   return (
     <>
-      <PageHeader title="Downloads" description={`${n(total, "PDF")}, every one with its answer key.`} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <PageHeader title="IITM BS PDF downloads" description={`${n(total, "free PDF")}: notes, past papers, topic wise and most repeated questions, each with its answer key.`} />
       <div className="container-page space-y-8 py-8">
         <ScopeSwitch list={scoped} links={scopeLinks("/downloads", sp)} />
         <DownloadHub courses={courses} levels={PYQ_LEVELS.map((l) => ({ slug: l.slug, name: l.name }))} />

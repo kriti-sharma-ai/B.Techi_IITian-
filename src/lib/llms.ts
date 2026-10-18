@@ -83,6 +83,7 @@ async function overview(full = false) {
     `- Topic-wise PYQs and the most repeated questions for ${plural(tagged.length, "course")}: every past question is tagged by topic, and repeated question types are ranked by how often they were asked.`,
     `- Qualifier mocks for the four qualifier courses (${QUALIFIER_SUBJECTS.map(subjectName).join(", ")}) with a pass/fail verdict against the General-category cutoff (at least ${QUALIFIER_CUTOFF.perSubject}% in every course and at least ${QUALIFIER_CUTOFF.average}% average).`,
     "- Cheat sheets built from recent PYQs: notes, formula sheets and common traps for each qualifier course, printable.",
+    `- PDF downloads (${SITE_URL}/downloads): every question sheet and cheat note in one place, by course, each saved as a PDF with its answer key.`,
     "- 100% free. No account is needed to take a mock exam or practise; signing up only saves progress across devices.",
     "- Name: BTechi (also written Btechi; the YouTube channel is BTechi IITian). Not the same as \"B.Tech\", the engineering degree.",
     "- Covers: the BS in Data Science and Applications and the BS in Management and Data Science; Qualifier papers for the four qualifier courses, and Quiz 1, Quiz 2 and End Term papers for courses at Foundation, Diploma and Degree level. It does not cover the BS in Electronic Systems or the BS in Aeronautics and Space Technology.",

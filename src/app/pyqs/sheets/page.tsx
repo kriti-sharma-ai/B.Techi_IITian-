@@ -108,7 +108,11 @@ export default async function QuestionSheetsPage({ searchParams }: PageProps<"/p
           <CheckCircle2 className="mt-0.5 size-3.5 shrink-0" aria-hidden />
           <span>
             Questions and answer keys are reproduced from the official IIT Madras BS papers; topics and repeated question types are BTechi&rsquo;s own
-            grouping. BTechi is not affiliated with IIT Madras. Prefer a timed test?{" "}
+            grouping. BTechi is not affiliated with IIT Madras. Every sheet and cheat note is also on{" "}
+            <Link href="/downloads" className="font-medium text-fg underline-offset-2 hover:underline">
+              PDF downloads
+            </Link>
+            . Prefer a timed test?{" "}
             <Link href="/pyqs" className="font-medium text-fg underline-offset-2 hover:underline">
               Sit any paper in the exam portal
             </Link>

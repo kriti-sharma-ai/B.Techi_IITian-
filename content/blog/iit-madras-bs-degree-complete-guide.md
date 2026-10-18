@@ -382,7 +382,7 @@ After a few exams, the logistics become routine. The first time, though, a calm 
 
 ## How much time it really takes
 
-The official FAQ estimates **about 15 hours a week per course**, covering videos, notes, activities, assignments and live sessions. That's the honest number, and it matches what we've seen among learners.
+The official FAQ estimates **about 15 hours a week per course**, covering videos, notes, activities, assignments and live sessions. That's the honest number.
 
 | Courses per term | Weekly hours (approx.) | Who it suits |
 |---|---|---|
@@ -453,7 +453,7 @@ You work full-time, with some weeks heavier than others. You can reliably give 1
 
 ## Who the IITM BS is a good fit for
 
-We've seen people from wildly different backgrounds do well in the programme. The common thread isn't marks or age; it's the ability to keep studying steadily for months without anyone checking on you.
+People from very different backgrounds do well in the programme. The common thread isn't marks or age; it's the ability to keep studying steadily for months without anyone checking on you.
 
 **It's a strong fit if you are:**
 
@@ -610,7 +610,7 @@ No degree does. The programme has a placement team and offers interview preparat
 
 You can re-attempt the qualifier exam within the same term (at a reduced fee) if you met the assignment cut-off, or apply again in a later term. Plenty of learners clear it on the second attempt, usually after changing how they prepare rather than simply trying harder.
 
-## Mistakes we see every term
+## Common mistakes to avoid
 
 These come up again and again, among learners who are otherwise perfectly capable:
 

@@ -527,7 +527,7 @@ On day 6, do the week 1–3 questions from a second past paper, now **timed**.
 
 ## Preparing from your background
 
-The same four weeks feel very different depending on where you're starting from. Here's how to adjust the plan for the backgrounds we see most often.
+The same four weeks feel very different depending on where you're starting from. Here's how to adjust the plan for the most common backgrounds.
 
 ### If you're from commerce or arts
 
@@ -657,7 +657,7 @@ Check your exam centre location before the day and plan to arrive well within th
 
 ## Mistakes that cost people the qualifier
 
-These are the patterns we see most often among people who didn't clear it the first time:
+These are common patterns among people who didn't clear it the first time:
 
 1. **Skipping CT** because it "doesn't have real coding", then scoring under 40.
 2. **Starting late.** Treating the first week as optional, then trying to catch up on three weeks of four courses at once.

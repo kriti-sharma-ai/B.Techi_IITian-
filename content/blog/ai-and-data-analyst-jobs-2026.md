@@ -16,7 +16,7 @@ featured: false
 That's the honest summary. The rest of this article unpacks it: what's actually changed, what the evidence says about hiring, which skills now matter most, and a practical plan for students and early-career analysts in India who want to be on the right side of the shift.
 
 > [!NOTE]
-> We've tried to separate what's measured from what's opinion. Where we cite numbers, we link the source. The task-by-task assessment is our own judgement from using these tools, and we say so.
+> We've tried to separate what's measured from what's opinion. Where we cite numbers, we link the source. The task-by-task assessment is our own judgement, and we say so.
 
 ## What's actually changed
 

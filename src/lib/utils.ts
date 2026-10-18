@@ -37,6 +37,12 @@ export const LINKEDIN_URL = "https://www.linkedin.com/company/btechi";
 /** BTechi's GitHub profile, listed in JSON-LD sameAs. */
 export const GITHUB_URL = "https://github.com/Btechi";
 
+/** BTechi's co-founders, named on the About page, in llms.txt and as `founder` in the site JSON-LD. Real facts only. */
+export const FOUNDERS: { name: string; linkedin: string; note?: string }[] = [
+  { name: "Masuddar Rahaman", note: "IIT Madras BS student", linkedin: "https://www.linkedin.com/in/masuddar-rahaman/" },
+  { name: "Kriti Sharma", linkedin: "https://www.linkedin.com/in/kriti-sharma-bba-hm/" },
+];
+
 /** Full-screen auth pages (components/auth-shell.tsx), which hide the footer and bottom nav. */
 export const isAuthPage = (pathname: string) => ["/login", "/signup", "/reset-password"].includes(pathname);
 

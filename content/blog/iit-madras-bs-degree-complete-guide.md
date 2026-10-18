@@ -19,7 +19,7 @@ That's the short version. The long version is below, because the details matter:
 We've written this guide for three kinds of readers: Class 12 students deciding what to do next, college students who want a second degree alongside their first, and working professionals who want a serious credential without quitting their job. Every fact about fees, cut-offs and structure comes from the official programme pages at [study.iitm.ac.in](https://study.iitm.ac.in/), which we checked in October 2026. Rules change between terms, so we link the source wherever it matters.
 
 > [!NOTE]
-> BTechi is run by IITM BS learners and alumni. We're not affiliated with IIT Madras. When this guide and the official site disagree, the official site wins, and we'd be grateful if you told us so we can fix it.
+> BTechi is run by two co-founders, one of them an IITM BS student. We're not affiliated with IIT Madras. When this guide and the official site disagree, the official site wins, and we'd be grateful if you told us so we can fix it.
 
 ## IIT Madras BS at a glance
 

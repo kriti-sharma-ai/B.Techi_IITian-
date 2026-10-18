@@ -180,7 +180,7 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
             <div className="text-sm">
               <p className="font-bold">{post.author}</p>
               <p className="mt-1 text-muted">
-                BTechi is built by IIT Madras BS learners and alumni. We check facts against official sources (the IITM BS website, student
+                BTechi is run by two co-founders, one of them an IIT Madras BS student. We check facts against official sources (the IITM BS website, student
                 handbook and published documentation) and update posts when things change. BTechi is not affiliated with IIT Madras.
               </p>
             </div>

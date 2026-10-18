@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { CONTACT_EMAIL, LINKEDIN_URL, SITE_URL, YOUTUBE_URL } from "@/lib/utils";
+import { CONTACT_EMAIL, FOUNDERS, LINKEDIN_URL, SITE_URL, YOUTUBE_URL } from "@/lib/utils";
 
 // Copy for the footer pages. The legal pages describe what the code actually
 // does (lib/store.ts, lib/supabase/sync.ts, supabase/schema.sql); update them,
 // and LEGAL_UPDATED, whenever that changes.
 
-export const LEGAL_UPDATED = "17 October 2026";
+export const LEGAL_UPDATED = "18 October 2026";
 
 export type InfoPage = {
   title: string;
@@ -41,6 +41,14 @@ export const PAGES: Record<string, InfoPage> = {
           The website exists because past papers were scattered across WhatsApp groups, Telegram channels and Drive
           links, with no way to practise them under exam conditions.
         </p>
+        <h2>Who runs BTechi</h2>
+        <ul>
+          {FOUNDERS.map((f) => (
+            <li key={f.name}>
+              <strong><a href={f.linkedin} target="_blank" rel="noopener">{f.name}</a></strong>, co-founder{f.note && ` and ${f.note}`}.
+            </li>
+          ))}
+        </ul>
         <h2>What you can do on BTechi</h2>
         <ul>
           <li>
@@ -471,6 +479,8 @@ export const PAGES: Record<string, InfoPage> = {
         </p>
         <p>
           <strong>Grievance Officer, BTechi</strong>
+          <br />
+          Name: Masuddar Rahaman
           <br />
           Email: <Mail subject="Grievance" />
         </p>

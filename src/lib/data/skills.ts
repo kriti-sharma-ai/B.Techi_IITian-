@@ -19,7 +19,7 @@ const L = (title: string, minutes: number, kind: SkillLecture["kind"] = "video",
   preview,
 });
 
-const BTECHI = { name: "BTechi IITian", title: "IIT Madras BS learners & alumni" };
+const BTECHI = { name: "BTechi IITian", title: "Co-founded by an IIT Madras BS student" };
 
 export const skillCourses: SkillCourse[] = [
   {

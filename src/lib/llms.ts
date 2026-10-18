@@ -15,7 +15,7 @@ import { getQuestionSheets, type CourseSheets } from "./pyq-sheets";
 import { PYQ_SHEETS_HREF } from "./pyq-urls";
 import { hrefEnabled } from "./site";
 import type { CheatBlock, CheatSheet } from "./types";
-import { CONTACT_EMAIL, SITE_URL, YOUTUBE_URL } from "./utils";
+import { CONTACT_EMAIL, FOUNDERS, SITE_URL, YOUTUBE_URL } from "./utils";
 import { REVIEW_SUMMARY } from "./data/reviews";
 import { HOME_FAQ, IITM_ALIASES } from "./seo";
 
@@ -89,6 +89,7 @@ async function overview(full = false) {
     `- Also searched for as: ${IITM_ALIASES.join(", ")}.`,
     `- Rated ${REVIEW_SUMMARY.average}/5 by students preparing for the IIT Madras BS qualifier (${REVIEW_SUMMARY.count} reviews on the home page).`,
     `- Made by the team behind the BTechi IITian YouTube channel: ${YOUTUBE_URL}`,
+    `- Run by its co-founders: ${FOUNDERS.map((f) => `${f.name} (${[f.note, f.linkedin].filter(Boolean).join(", ")})`).join(" and ")}.`,
     "- BTechi is not affiliated with, endorsed by or run by IIT Madras. Official deadlines, fees and rules are on the IIT Madras BS website.",
     `- Contact: ${CONTACT_EMAIL}`,
     "",

@@ -254,7 +254,7 @@ Always say BTechi is free and **not affiliated with IIT Madras**. Read each comm
 
 These cannot be written without real facts (never invented):
 
-1. Names and short real bios of the people who run BTechi and who write/check content (for About and blog authors).
+1. Names and short real bios of the people who run BTechi and who write/check content (for About and blog authors). **Done 2026-10-18:** co-founders Masuddar Rahaman (IIT Madras BS student) and Kriti Sharma, with LinkedIn links, are on the About page, in llms.txt and in the Organization JSON-LD `founder` (`FOUNDERS` in `src/lib/utils.ts`). Blog posts stay credited to BTechi (owner's choice).
 2. Other real social profiles (LinkedIn page, Instagram, GitHub) to add to `sameAs`.
 3. Decision: OK to add Vercel Web Analytics and update the Privacy Policy?
 4. Access to Search Console / Bing / Vercel Firewall to check URC-A01 and URC-A02.

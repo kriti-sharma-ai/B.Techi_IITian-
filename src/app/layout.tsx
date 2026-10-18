@@ -10,7 +10,7 @@ import { Footer } from "@/components/footer";
 import { ScrollTop } from "@/components/scroll-top";
 import { Guide } from "@/components/guide";
 import { loadContent } from "@/lib/cms";
-import { CONTACT_EMAIL, GITHUB_URL, LINKEDIN_URL, SITE_URL, YOUTUBE_URL } from "@/lib/utils";
+import { CONTACT_EMAIL, FOUNDERS, GITHUB_URL, LINKEDIN_URL, SITE_URL, YOUTUBE_URL } from "@/lib/utils";
 import { IITM_ALIASES, IITM_PROGRAMMES, SEO_KEYWORDS, SITE_DESCRIPTION } from "@/lib/seo";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -69,6 +69,8 @@ const siteLd = {
         "Free, independent study platform for the IIT Madras BS in Data Science and Applications and the IIT Madras BS in Management and Data Science: real previous-year papers in an exam-like portal graded against official answer keys, qualifier mocks, practice and cheat sheets. Not affiliated with IIT Madras.",
       // Official profiles, so search engines link the channel and the site as the same brand.
       sameAs: [YOUTUBE_URL, LINKEDIN_URL, GITHUB_URL],
+      // The real people behind the brand, linked to their LinkedIn profiles.
+      founder: FOUNDERS.map((f) => ({ "@type": "Person", name: f.name, description: f.note, sameAs: f.linkedin })),
       knowsAbout: [...IITM_ALIASES, ...IITM_PROGRAMMES.map((p) => `IIT Madras ${p}`), "IITM BS qualifier exam", "IITM BS previous year papers"],
     },
     {
